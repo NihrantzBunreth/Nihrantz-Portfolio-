@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physiology - Final Preparation | Glass Skin Quiz</title>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-highlight: rgba(255, 255, 255, 0.25);
+            --text-main: #ffffff;
+            --text-secondary: #e0e0e0;
+            --accent-primary: #00d2ff;
+            --accent-success: #00ff9d;
+            --accent-error: #ff4d4d;
+            --blur-amt: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; /* Prevent body scroll, handle inside app */
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-size: 400% 400%;
+            animation: gradientAnim 15s ease infinite;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes gradientAnim {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Main Glass Container --- */
+        .app-container {
+            width: 90%;
+            max-width: 800px;
+            height: 90vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amt));
+            -webkit-backdrop-filter: blur(var(--blur-amt));
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- Header --- */
+        header {
+            padding: 20px 30px;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-title h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #fff, #b4b4b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        /* --- Main Content Area --- */
+        main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Scrollbar styling */
+        main::-webkit-scrollbar {
+            width: 8px;
+        }
+        main::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.02);
+        }
+        main::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+        }
+
+        /* --- Quiz Elements --- */
+        .progress-indicator {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            color: var(--accent-primary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            font-weight: 600;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Option States */
+        .option-btn.correct {
+            background: rgba(0, 255, 157, 0.15);
+            border-color: var(--accent-success);
+            color: #fff;
+        }
+        .option-btn.correct::after {
+            content: '\f00c'; /* FontAwesome check */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 20px;
+            color: var(--accent-success);
+        }
+
+        .option-btn.wrong {
+            background: rgba(255, 77, 77, 0.15);
+            border-color: var(--accent-error);
+            color: #fff;
+        }
+        .option-btn.wrong::after {
+            content: '\f00d'; /* FontAwesome xmark */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 20px;
+            color: var(--accent-error);
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.7;
+        }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-left: 4px solid var(--accent-primary);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* --- Navigation Controls --- */
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .map-btn {
+            background: transparent;
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-primary);
+        }
+        .map-btn:hover {
+            background: var(--accent-primary);
+            color: #000;
+        }
+
+        /* --- Social Footer (Inside App) --- */
+        .social-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .credit-text {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-icon {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.2rem;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .social-icon.fb:hover { color: #1877F2; }
+        .social-icon.ig:hover { color: #E4405F; }
+        .social-icon.tg:hover { color: #0088cc; }
+
+        /* --- Question Map Overlay --- */
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            padding: 40px;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .map-overlay.active {
+            display: flex;
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .close-map {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 10px;
+            overflow-y: auto;
+            max-height: 60vh;
+            padding-bottom: 20px;
+        }
+
+        .map-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .map-item:hover { background: rgba(255,255,255,0.2); }
+        
+        .map-item.current {
+            border-color: var(--accent-primary);
+            background: rgba(0, 210, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+        }
+
+        .map-item.answered {
+            background: rgba(0, 255, 157, 0.2);
+            border-color: var(--accent-success);
+            color: #fff;
+        }
+        
+        .map-item.answered::after {
+            content: '✓';
+            margin-left: 4px;
+            font-size: 0.8em;
+        }
+
+        /* --- Result Screen --- */
+        #result-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(0,0,0,0.2);
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.2);
+        }
+
+        .score-number { font-size: 3rem; font-weight: 700; line-height: 1; }
+        .score-total { font-size: 1rem; opacity: 0.7; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .app-container { width: 100%; height: 100vh; border-radius: 0; border: none; }
+            .nav-controls { flex-wrap: wrap; gap: 10px; justify-content: center; }
+            .nav-btn { flex: 1; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <div class="brand-title">
+                <h1>Physiology Final Exam </h1>
+                <div class="brand-subtitle">Prepared by BUNRETH Nihrantz</div>
+            </div>
+            <!-- Simple visual indicator or logo could go here -->
+            <div style="font-size:1.5rem; color: var(--accent-primary);"><i class="fa-solid fa-dna"></i></div>
+        </header>
+
+        <main id="quiz-main">
+            <!-- Quiz View -->
+            <div id="quiz-view" style="display: flex; flex-direction: column; height: 100%;">
+                <div class="progress-indicator" id="question-counter">Question 1 / 40</div>
+                
+                <div class="question-card">
+                    <h2 id="question-text">Loading question...</h2>
+                </div>
+
+                <div class="options-grid" id="options-container">
+                    <!-- Options injected via JS -->
+                </div>
+
+                <div id="explanation-container"></div>
+
+                <div class="nav-controls">
+                    <button class="nav-btn" id="btn-prev"><i class="fa-solid fa-arrow-left"></i> Previous</button>
+                    <button class="nav-btn map-btn" id="btn-map"><i class="fa-solid fa-border-all"></i> Question Map</button>
+                    <button class="nav-btn" id="btn-next">Next <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+
+                <div class="social-footer">
+                    <div class="credit-text">Prepared by BUNRETH Nihrantz</div>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-icon fb" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-icon ig" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://t.me/Nihrantz" target="_blank" class="social-icon tg" title="Telegram"><i class="fa-brands fa-telegram"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result View -->
+            <div id="result-screen">
+                <div class="score-circle">
+                    <span class="score-number" id="final-score">0</span>
+                    <span class="score-total">/ 40</span>
+                </div>
+                <h2>Quiz Completed!</h2>
+                <p style="margin: 15px 0 30px 0; color: var(--text-secondary);">Great effort on reviewing Physiology.</p>
+                
+                <button class="nav-btn" id="btn-restart" style="background: var(--accent-primary); color: #000; border: none;">
+                    <i class="fa-solid fa-rotate-right"></i> Restart Quiz
+                </button>
+
+                <div class="social-footer" style="margin-top: 50px; width: 100%;">
+                    <div class="credit-text">Prepared by BUNRETH Nihrantz</div>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-icon fb"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-icon ig"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://t.me/Nihrantz" target="_blank" class="social-icon tg"><i class="fa-brands fa-telegram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Map Overlay -->
+        <div class="map-overlay" id="map-overlay">
+            <div class="map-header">
+                <h2>Question Map</h2>
+                <button class="close-map" id="close-map-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div style="margin-bottom: 15px; display: flex; gap: 15px; font-size: 0.8rem; color: #ccc;">
+                <span style="display:flex; align-items:center; gap:5px;"><div style="width:10px; height:10px; background:rgba(255,255,255,0.1); border:1px solid white; border-radius:2px;"></div> Unanswered</span>
+                <span style="display:flex; align-items:center; gap:5px;"><div style="width:10px; height:10px; background:rgba(0, 255, 157, 0.2); border:1px solid var(--accent-success); border-radius:2px;"></div> Answered</span>
+                <span style="display:flex; align-items:center; gap:5px;"><div style="width:10px; height:10px; background:rgba(0, 210, 255, 0.2); border:1px solid var(--accent-primary); border-radius:2px;"></div> Current</span>
+            </div>
+            <div class="map-grid" id="map-grid">
+                <!-- Grid items injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DATASET ---
+        const quizData = [
+            // Set 1
+            {
+                q: "What does the adrenal medulla secrete?",
+                options: ["Cortisol", "Aldosterone", "Adrenaline", "ACTH", "Renin"],
+                answer: 2,
+                explanation: "Cortisol & Aldosterone are from the cortex. ACTH is from the pituitary. Renin is from the kidney. The medulla secretes Adrenaline (Epinephrine)."
+            },
+            {
+                q: "What is the major stimulus for aldosterone secretion?",
+                options: ["ACTH", "Angiotensin II", "High cortisol", "Low K+", "CRH"],
+                answer: 1,
+                explanation: "Angiotensin II is the main trigger for aldosterone release via the RAAS system."
+            },
+            {
+                q: "How does cortisol mainly increase blood glucose?",
+                options: ["Decreasing glycogenolysis", "Increasing gluconeogenesis", "Increasing insulin secretion", "Increasing glucose uptake", "Stimulating glycolysis"],
+                answer: 1,
+                explanation: "Cortisol primarily promotes gluconeogenesis in the liver to raise blood sugar levels."
+            },
+            {
+                q: "What causes Addison's disease?",
+                options: ["Excess cortisol", "Lack of cortisol and aldosterone", "Excess ACTH", "High renin", "Low CRH"],
+                answer: 1,
+                explanation: "Addison's disease is characterized by adrenal insufficiency, specifically a lack of cortisol and aldosterone."
+            },
+            {
+                q: "What causes Cushing's syndrome?",
+                options: ["Low cortisol", "Excess cortisol", "Low ACTH", "Excess aldosterone", "Pituitary infarct"],
+                answer: 1,
+                explanation: "Cushing's syndrome is defined by prolonged exposure to high levels of cortisol."
+            },
+            {
+                q: "What is the main hormone secreted by the testes?",
+                options: ["FSH", "LH", "Testosterone", "Estrogen", "Inhibin"],
+                answer: 2,
+                explanation: "Testosterone is the primary androgen secreted by the Leydig cells of the testes."
+            },
+            {
+                q: "What do Leydig cells secrete?",
+                options: ["Testosterone", "FSH", "LH", "Progesterone", "Inhibin"],
+                answer: 0,
+                explanation: "Leydig cells are responsible for the production of testosterone."
+            },
+            {
+                q: "In males, what do FSH act on?",
+                options: ["Leydig cells", "Sertoli cells", "Adrenal cells", "Thyroid", "Prostate"],
+                answer: 1,
+                explanation: "FSH acts on Sertoli cells to support spermatogenesis."
+            },
+            {
+                q: "What stimulates testosterone secretion?",
+                options: ["ACTH", "LH", "FSH", "GH", "CRH"],
+                answer: 1,
+                explanation: "Luteinizing Hormone (LH) binds to receptors on Leydig cells to stimulate testosterone production."
+            },
+            {
+                q: "In females, what does FSH primarily stimulate?",
+                options: ["Ovulation", "Estrogen production", "Progesterone secretion", "Corpus luteum formation", "Menstruation"],
+                answer: 1,
+                explanation: "FSH stimulates follicular growth and estrogen production by granulosa cells."
+            },
+            {
+                q: "What does progesterone prepare the endometrium for?",
+                options: ["Ovulation", "Implantation", "Menstruation"],
+                answer: 1,
+                explanation: "Progesterone secreted by the corpus luteum thickens and stabilizes the endometrium for potential embryo implantation."
+            },
+            {
+                q: "What does inhibin (from Sertoli cells) inhibit?",
+                options: ["LH", "FSH", "ACTH", "TSH", "GH"],
+                answer: 1,
+                explanation: "Inhibin selectively provides negative feedback on FSH secretion."
+            },
+            {
+                q: "What does prostate gland fluid do?",
+                options: ["Is acidic", "Contains fructose", "Activates sperm motility", "Inhibits sperm", "Contains LH"],
+                answer: 2,
+                explanation: "Prostate fluid contains enzymes (like PSA) that help liquefy semen and activate sperm motility."
+            },
+            {
+                q: "What placental hormone maintains pregnancy?",
+                options: ["FSH", "hCG", "LH", "Estrogen", "Prolactin"],
+                answer: 1,
+                explanation: "Human Chorionic Gonadotropin (hCG) maintains the corpus luteum, which produces progesterone to sustain the early pregnancy."
+            },
+            {
+                q: "Human placental lactogen (hPL) resembles which hormone?",
+                options: ["ACTH", "GH", "FSH", "LH", "ADH"],
+                answer: 1,
+                explanation: "hPL has structural and functional similarity to Growth Hormone (GH)."
+            },
+            {
+                q: "During pregnancy, progesterone is mainly secreted by:",
+                options: ["Corpus luteum", "Fetus", "Placenta", "Ovary", "Pituitary"],
+                answer: 2,
+                explanation: "The placenta takes over progesterone production from the corpus luteum after the first trimester."
+            },
+            {
+                q: "What does estrogen cause?",
+                options: ["Increase in FSH", "Prolactin suppression", "Secondary sexual characteristics", "GH inhibition", "Sodium loss"],
+                answer: 2,
+                explanation: "Estrogen is responsible for the development of female secondary sexual characteristics."
+            },
+            {
+                q: "What does testosterone deficiency in adults cause?",
+                options: ["Infertility", "Gigantism", "Hypertension", "Hyperglycemia", "Goiter"],
+                answer: 0,
+                explanation: "Low testosterone impairs spermatogenesis, leading to infertility."
+            },
+            {
+                q: "When does the acrosome reaction occur?",
+                options: ["Spermatogenesis", "Fertilization", "Implantation", "Ovulation", "Ejaculation"],
+                answer: 1,
+                explanation: "The acrosome reaction occurs when the sperm contacts the zona pellucida of the oocyte, releasing enzymes to penetrate it."
+            },
+            {
+                q: "What is benign prostatic hyperplasia (BPH) dependent on?",
+                options: ["Estrogen", "DHT (Dihydrotestosterone)", "LH", "FSH", "Cortisol"],
+                answer: 1,
+                explanation: "BPH is dependent on the potent androgen DHT, which is converted from testosterone in the prostate."
+            },
+            // Set 2
+            {
+                q: "Which adrenal zone secretes aldosterone?",
+                options: ["Zona fasciculata", "Zona reticularis", "Adrenal medulla", "Zona glomerulosa", "Pituitary cortex"],
+                answer: 3,
+                explanation: "The Zona glomerulosa is the outer layer responsible for mineralocorticoid (aldosterone) production."
+            },
+            {
+                q: "Cortisol is primarily secreted by which adrenal layer?",
+                options: ["Zona glomerulosa", "Zona fasciculata", "Zona reticularis", "Adrenal medulla", "Capsule"],
+                answer: 1,
+                explanation: "The Zona fasciculata (middle layer) is the primary site of glucocorticoid (cortisol) secretion."
+            },
+            {
+                q: "Which part of the adrenal gland produces androgens?",
+                options: ["Zona glomerulosa", "Zona fasciculata", "Zona reticularis", "Adrenal medulla", "Hypothalamus"],
+                answer: 2,
+                explanation: "The Zona reticularis (innermost cortex) produces weak androgens like DHEA."
+            },
+            {
+                q: "Adrenaline (epinephrine) is secreted by:",
+                options: ["Zona glomerulosa", "Zona fasciculata", "Zona reticularis", "Adrenal cortex", "Adrenal medulla"],
+                answer: 4,
+                explanation: "The adrenal medulla, derived from neural tissue, secretes catecholamines (adrenaline and noradrenaline)."
+            },
+            {
+                q: "ACTH primarily stimulates the secretion of:",
+                options: ["Aldosterone", "Adrenaline", "Renin", "Cortisol", "Androstenedione"],
+                answer: 3,
+                explanation: "ACTH targets the Zona fasciculata and Zona reticularis, primarily stimulating cortisol secretion."
+            },
+            {
+                q: "The main function of prostate secretion is to:",
+                options: ["Provide fructose for sperm", "Acidify semen", "Liquefy semen after ejaculation", "Inhibit sperm motility", "Secrete testosterone"],
+                answer: 2,
+                explanation: "Prostate secretion contains PSA which liquefies the coagulated semen, allowing sperm to swim."
+            },
+            {
+                q: "PSA (Prostate-Specific Antigen) functions to:",
+                options: ["Stimulate testosterone synthesis", "Coagulate semen", "Liquefy semen", "Kill bacteria", "Activate FSH"],
+                answer: 2,
+                explanation: "PSA is a protease that breaks down the clotting proteins in semen, causing liquefaction."
+            },
+            {
+                q: "DHT (dihydrotestosterone) is most important for:",
+                options: ["Spermatogenesis", "Libido", "Prostate growth", "Muscle mass", "Voice deepening"],
+                answer: 2,
+                explanation: "While testosterone does many things, DHT is specifically critical for prostate growth and development."
+            },
+            {
+                q: "Fructose in semen is primarily contributed by the:",
+                options: ["Testes", "Prostate", "Epididymis", "Seminal vesicles", "Bulbourethral glands"],
+                answer: 3,
+                explanation: "Seminal vesicles produce the majority of semen volume, including fructose to nourish sperm."
+            },
+            {
+                q: "Benign prostatic hyperplasia (BPH) is mainly caused by excess:",
+                options: ["Testosterone", "Estrogen", "LH", "DHT", "FSH"],
+                answer: 3,
+                explanation: "Accumulation of DHT in the prostate drives cellular proliferation in BPH."
+            },
+            {
+                q: "FSH in females primarily stimulates:",
+                options: ["Ovulation", "Corpus luteum formation", "Follicular growth", "Progesterone secretion", "Endometrial shedding"],
+                answer: 2,
+                explanation: "FSH is responsible for recruiting and growing ovarian follicles during the follicular phase."
+            },
+            {
+                q: "The LH surge triggers:",
+                options: ["Follicular atresia", "Estrogen drop", "Ovulation", "Menstruation", "FSH rise"],
+                answer: 2,
+                explanation: "The mid-cycle surge in Luteinizing Hormone (LH) triggers the release of the oocyte (ovulation)."
+            },
+            {
+                q: "After ovulation, the corpus luteum mainly secretes:",
+                options: ["Estrogen only", "FSH", "LH", "Progesterone", "Inhibin"],
+                answer: 3,
+                explanation: "The corpus luteum secretes large amounts of progesterone to prepare the uterus for pregnancy."
+            },
+            {
+                q: "Estrogen promotes:",
+                options: ["Endometrial shedding", "Cervical mucus thickening", "Endometrial proliferation", "Progesterone dominance", "Ovarian quiescence"],
+                answer: 2,
+                explanation: "Estrogen causes the proliferation (growth) of the endometrial lining during the first half of the menstrual cycle."
+            },
+            {
+                q: "Menopause is defined as:",
+                options: ["Irregular periods", "High FSH with normal estrogen", "Cessation of ovarian function", "Onset of puberty", "Uterine fibroid formation"],
+                answer: 2,
+                explanation: "Menopause is the permanent cessation of ovarian function and menstruation."
+            },
+            {
+                q: "Leydig cells are responsible for secreting:",
+                options: ["Inhibin", "FSH", "Testosterone", "Estrogen", "LH"],
+                answer: 2,
+                explanation: "Leydig cells are the interstitial cells in the testes that produce testosterone."
+            },
+            {
+                q: "Sertoli cells primarily:",
+                options: ["Secrete testosterone", "Respond to LH", "Support spermatogenesis", "Produce DHT", "Secrete renin"],
+                answer: 2,
+                explanation: "Sertoli cells 'nurse' the developing sperm cells, providing support and nutrition."
+            },
+            {
+                q: "In males, FSH acts directly on:",
+                options: ["Leydig cells", "Seminal vesicles", "Prostate", "Sertoli cells", "Epididymis"],
+                answer: 3,
+                explanation: "FSH receptors are located on Sertoli cells."
+            },
+            {
+                q: "LH in males stimulates:",
+                options: ["Sertoli cells", "Seminal vesicles", "Leydig cells", "Prostate", "Pituitary"],
+                answer: 2,
+                explanation: "LH acts on Leydig cells to stimulate testosterone synthesis."
+            },
+            {
+                q: "Inhibin, produced by Sertoli cells, selectively inhibits:",
+                options: ["LH secretion", "ACTH secretion", "TSH secretion", "FSH secretion", "GH secretion"],
+                answer: 3,
+                explanation: "Inhibin provides specific negative feedback on the anterior pituitary to inhibit FSH secretion."
+            }
+        ];
+
+        // --- STATE MANAGEMENT ---
+        let currentIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null); 
+
+        // --- DOM ELEMENTS ---
+        const quizView = document.getElementById('quiz-view');
+        const resultScreen = document.getElementById('result-screen');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const explanationContainer = document.getElementById('explanation-container');
+        const questionCounter = document.getElementById('question-counter');
+        const mapOverlay = document.getElementById('map-overlay');
+        const mapGrid = document.getElementById('map-grid');
+
+        // Buttons
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const btnMap = document.getElementById('btn-map');
+        const closeMapBtn = document.getElementById('close-map-btn');
+        const btnRestart = document.getElementById('btn-restart');
+
+        // --- INITIALIZATION ---
+        function init() {
+            renderQuestion(currentIndex);
+            renderMap();
+            updateNavButtons();
+        }
+
+        // --- RENDER FUNCTIONS ---
+        function renderQuestion(index) {
+            const data = quizData[index];
+            questionCounter.textContent = `Question ${index + 1} / ${quizData.length}`;
+            questionText.textContent = data.q;
+            
+            // Clear previous content
+            optionsContainer.innerHTML = '';
+            explanationContainer.innerHTML = '';
+            explanationContainer.className = 'explanation-box'; 
+
+            // Generate Options
+            data.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                const letter = String.fromCharCode(65 + i);
+                btn.innerHTML = `<span style="font-weight:700; margin-right:10px; opacity:0.8;">${letter}.</span> ${opt}`;
+                
+                // Event Listener for Answering
+                btn.onclick = () => handleAnswer(index, i);
+
+                // If this question was already answered, restore state
+                if (userAnswers[index] !== null) {
+                    btn.disabled = true; 
+                    if (i === data.answer) {
+                        btn.classList.add('correct');
+                    } else if (i === userAnswers[index]) {
+                        btn.classList.add('wrong');
+                    }
+                }
+
+                optionsContainer.appendChild(btn);
+            });
+
+            // Show explanation if already answered
+            if (userAnswers[index] !== null) {
+                showExplanation(data.explanation);
+            }
+
+            // Update Map Highlight
+            updateMapVisuals();
+        }
+
+        function showExplanation(text) {
+            explanationContainer.innerHTML = `<strong><i class="fa-solid fa-circle-info"></i> Explanation:</strong><br>${text}`;
+            explanationContainer.style.display = 'block';
+        }
+
+        function renderMap() {
+            mapGrid.innerHTML = '';
+            quizData.forEach((_, i) => {
+                const item = document.createElement('div');
+                item.className = 'map-item';
+                item.textContent = i + 1;
+                item.onclick = () => jumpToQuestion(i);
+                mapGrid.appendChild(item);
+            });
+            updateMapVisuals();
+        }
+
+        function updateMapVisuals() {
+            const items = document.querySelectorAll('.map-item');
+            items.forEach((item, i) => {
+                item.classList.remove('current', 'answered');
+                if (i === currentIndex) item.classList.add('current');
+                if (userAnswers[i] !== null) item.classList.add('answered');
+            });
+        }
+
+        // --- INTERACTION LOGIC ---
+        function handleAnswer(qIndex, optIndex) {
+            // Save answer
+            userAnswers[qIndex] = optIndex;
+
+            // Update Visuals immediately
+            const data = quizData[qIndex];
+            const buttons = optionsContainer.children;
+
+            // Disable all buttons
+            for (let btn of buttons) {
+                btn.disabled = true;
+            }
+
+            // Highlight Correct
+            buttons[data.answer].classList.add('correct');
+
+            // Highlight Wrong (if selected)
+            if (optIndex !== data.answer) {
+                buttons[optIndex].classList.add('wrong');
+            }
+
+            // Show Explanation
+            showExplanation(data.explanation);
+
+            // Update Map
+            updateMapVisuals();
+        }
+
+        function jumpToQuestion(index) {
+            currentIndex = index;
+            renderQuestion(currentIndex);
+            updateNavButtons();
+            toggleMap(false);
+        }
+
+        function updateNavButtons() {
+            // Update Previous Button
+            btnPrev.disabled = currentIndex === 0;
+            // We set the onclick here to ensure no duplicate listeners
+            btnPrev.onclick = prevQuestion;
+
+            // Update Next Button
+            if (currentIndex === quizData.length - 1) {
+                btnNext.innerHTML = 'Finish <i class="fa-solid fa-flag-checkered"></i>';
+                btnNext.onclick = finishQuiz;
+            } else {
+                btnNext.innerHTML = 'Next <i class="fa-solid fa-arrow-right"></i>';
+                btnNext.onclick = nextQuestion;
+            }
+        }
+
+        function nextQuestion() {
+            // Strictly increment by 1
+            if (currentIndex < quizData.length - 1) {
+                currentIndex++;
+                renderQuestion(currentIndex);
+                updateNavButtons();
+            }
+        }
+
+        function prevQuestion() {
+            // Strictly decrement by 1
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion(currentIndex);
+                updateNavButtons();
+            }
+        }
+
+        function toggleMap(forceState) {
+            const isActive = mapOverlay.classList.contains('active');
+            const shouldShow = forceState !== undefined ? forceState : !isActive;
+
+            if (shouldShow) {
+                mapOverlay.classList.add('active');
+            } else {
+                mapOverlay.classList.remove('active');
+            }
+        }
+
+        function finishQuiz() {
+            let score = 0;
+            userAnswers.forEach((ans, i) => {
+                if (ans === quizData[i].answer) score++;
+            });
+
+            document.getElementById('final-score').textContent = score;
+            quizView.style.display = 'none';
+            resultScreen.style.display = 'flex';
+        }
+
+        function restartQuiz() {
+            currentIndex = 0;
+            userAnswers.fill(null);
+            resultScreen.style.display = 'none';
+            quizView.style.display = 'flex';
+            init();
+        }
+
+        // --- EVENT LISTENERS ---
+        // Only static listeners here. Dynamic navigation is handled in updateNavButtons
+        btnMap.addEventListener('click', () => toggleMap(true));
+        closeMapBtn.addEventListener('click', () => toggleMap(false));
+        btnRestart.addEventListener('click', restartQuiz);
+
+        // Start App
+        init();
+
+    </script>
+</body>
+</html>

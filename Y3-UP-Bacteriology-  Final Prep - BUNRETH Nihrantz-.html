@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bacteriology Final Prep - Glass Edition</title>
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --text-main: #ffffff;
+            --text-muted: #e0e0e0;
+            --accent-color: #00d2ff;
+            --correct-color: #00ff88;
+            --incorrect-color: #ff4b4b;
+            --blur-amount: 16px;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--text-main);
+            /* Vibrant Animated Background */
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #4a1c40, #1a0b2e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- GLASS CONTAINER --- */
+        .glass-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        /* --- QUESTION AREA --- */
+        .question-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        /* --- OPTIONS --- */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 15px 20px;
+            border-radius: 12px;
+            text-align: left;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-size: 1rem;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Instant Feedback States */
+        .option-btn.correct {
+            background: rgba(0, 255, 136, 0.25);
+            border-color: var(--correct-color);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .option-btn.incorrect {
+            background: rgba(255, 75, 75, 0.25);
+            border-color: var(--incorrect-color);
+            opacity: 0.7;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        /* --- FEEDBACK EXPLANATION --- */
+        .feedback-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border-left: 4px solid var(--accent-color);
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-title {
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feedback-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #f0f0f0;
+        }
+
+        /* --- NAVIGATION CONTROLS --- */
+        .controls-area {
+            margin-top: auto; /* Push to bottom */
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: var(--transition-speed);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .map-toggle-btn {
+            background: rgba(0, 210, 255, 0.2);
+            border-color: rgba(0, 210, 255, 0.4);
+            color: #00d2ff;
+        }
+        
+        .map-toggle-btn:hover {
+            background: rgba(0, 210, 255, 0.4);
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.3);
+        }
+
+        /* --- QUESTION MAP OVERLAY --- */
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .map-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 10px;
+            overflow-y: auto;
+            padding-right: 5px;
+            /* Custom Scrollbar */
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+
+        .map-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .map-item:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .map-item.current {
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .map-item.answered {
+            background: rgba(0, 255, 136, 0.2);
+            color: #fff;
+            border-color: var(--correct-color);
+        }
+
+        .map-item.answered-current {
+            background: rgba(0, 255, 136, 0.5);
+            border: 2px solid #fff;
+        }
+
+        /* --- FOOTER & BRANDING --- */
+        footer {
+            margin-top: 25px;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+        }
+        
+        .credit-text strong {
+            color: var(--accent-color);
+        }
+
+        .social-bar {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            border: 1px solid var(--glass-border);
+            text-decoration: none;
+            color: white;
+        }
+
+        .social-link svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        .social-link:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .social-link:hover svg {
+            fill: #24243e; /* Dark icon on white hover */
+        }
+
+        /* --- RESULT SCREEN --- */
+        .result-screen {
+            text-align: center;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 20px 0;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+            border: 4px solid var(--accent-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.2);
+        }
+
+        .score-number {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+
+        .score-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .restart-btn {
+            background: var(--accent-color);
+            color: #0f0c29;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .restart-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--accent-color);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 600px) {
+            .glass-container {
+                padding: 20px;
+                min-height: 80vh;
+            }
+            h1 { font-size: 1.4rem; }
+            .question-text { font-size: 1.1rem; }
+            .nav-btn span { display: none; } /* Hide text on small screens, show icons only if added */
+            .nav-btn { padding: 10px; }
+            .map-item { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-container">
+        
+        <!-- Header -->
+        <header>
+            <h1>Bacteriology Final Prep</h1>
+            <div class="subtitle">Course: Bacteriology • Exam Simulation</div>
+        </header>
+
+        <!-- Quiz View -->
+        <div id="quiz-view">
+            <!-- Progress -->
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
+            <div class="question-meta">
+                <span id="question-number">Question 1 of 33</span>
+                <span id="score-tracker">Score: 0</span>
+            </div>
+
+            <!-- Question Content -->
+            <div class="question-text" id="question-text">
+                Loading question...
+            </div>
+
+            <!-- Options -->
+            <div class="options-grid" id="options-container">
+                <!-- Buttons injected by JS -->
+            </div>
+
+            <!-- Feedback Box -->
+            <div class="feedback-box" id="feedback-box">
+                <div class="feedback-title" id="feedback-title"></div>
+                <div class="feedback-text" id="feedback-text"></div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls-area">
+                <button class="nav-btn" id="prev-btn" onclick="prevQuestion()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    Previous
+                </button>
+                
+                <button class="nav-btn map-toggle-btn" onclick="toggleMap()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    View All Quiz
+                </button>
+
+                <button class="nav-btn" id="next-btn" onclick="nextQuestion()">
+                    Next
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Result View (Hidden initially) -->
+        <div id="result-view" class="result-screen">
+            <div class="score-circle">
+                <div class="score-number" id="final-score">0</div>
+                <div class="score-label">Points</div>
+            </div>
+            <h2>Quiz Completed!</h2>
+            <p style="margin-top: 10px; color: #ccc;" id="result-message">Great effort on reviewing bacteriology.</p>
+            <button class="restart-btn" onclick="restartQuiz()">Take Again</button>
+        </div>
+
+        <!-- Footer / Branding -->
+        <footer>
+            <div class="credit-text">
+                Prepared by <strong>BUNRETH Nihrantz</strong>
+            </div>
+            
+            <div class="social-bar">
+                <!-- Facebook -->
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-link" aria-label="Facebook">
+                    <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                </a>
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-link" aria-label="Instagram">
+                    <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                </a>
+                <!-- Telegram -->
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-link" aria-label="Telegram">
+                    <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </a>
+            </div>
+        </footer>
+
+        <!-- Question Map Overlay -->
+        <div class="map-overlay" id="map-overlay">
+            <div class="map-header">
+                <h2>Question Map</h2>
+                <button class="nav-btn" onclick="toggleMap()">Close</button>
+            </div>
+            <div class="map-grid" id="map-grid">
+                <!-- Grid items injected by JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATA ---
+        const quizData = [
+            {
+                question: "What is the main laboratory test for early diagnosis of dengue (days 0–7)?",
+                options: ["IgG serology", "IgM serology", "NS1 antigen or RT-PCR", "Liver function tests"],
+                answer: 2, // Index of correct option
+                explanation: "During acute phase (days 0–7), the dengue virus is still circulating. NS1 antigen (non-structural protein 1) is detectable from day 1, peaking at days 1–3. RT-PCR detects viral RNA and is highly sensitive in first 5–7 days. IgM appears after day 4–5, so it’s less reliable very early."
+            },
+            {
+                question: "Which of the following is a key prevention strategy for arboviral diseases?",
+                options: ["Antibiotic prophylaxis", "Vaccination of all travelers", "Vector control", "Quarantine of infected patients"],
+                answer: 2,
+                explanation: "Arboviruses (arthropod-borne: dengue, Zika, chikungunya, West Nile) are transmitted by mosquitoes (Aedes, Culex). No universal vaccines exist for most; no human-to-human transmission (except rare cases like sexual Zika). Primary prevention: eliminate breeding sites, insecticides, bed nets → vector control."
+            },
+            {
+                question: "Which method is commonly used to detect viral antigens in patient samples?",
+                options: ["Western blot", "RT-PCR", "ELISA", "Culture"],
+                answer: 2,
+                explanation: "ELISA (Enzyme-Linked Immunosorbent Assay) uses enzyme-labeled antibodies to detect viral antigens (e.g., dengue NS1, rotavirus Ag, influenza Ag). Fast, high-throughput, cost-effective for screening. PCR detects nucleic acids; culture is slow; Western blot confirms proteins post-separation."
+            },
+            {
+                question: "What is the main host for most arboviruses?",
+                options: ["Reptiles", "Insects only", "Birds and mammals", "Humans only"],
+                answer: 2,
+                explanation: "Arboviruses maintain enzootic cycles between arthropod vectors (mosquitoes/ticks) and vertebrate reservoirs. West Nile: birds → mosquitoes → humans. Dengue/Zika: primates/humans → Aedes mosquitoes. Humans are usually dead-end hosts."
+            },
+            {
+                question: "Which test is most useful for confirming recent flavivirus infection after day 4?",
+                options: ["Viral culture", "NS1 antigen", "IgM serology", "IgG avidity"],
+                answer: 2,
+                explanation: "Flaviviruses (dengue, Zika, West Nile) induce IgM antibodies by day 4–5, peaking at ~2 weeks. IgM persists 2–3 months, indicating recent infection. Cross-reactivity among flaviviruses is common → confirm with PRNT if needed."
+            },
+            {
+                question: "What is the main clinical syndrome caused by Chikungunya virus?",
+                options: ["Hemorrhagic fever", "Encephalitis", "Arthritis and fever", "Jaundice"],
+                answer: 2,
+                explanation: "Chikungunya = 'to become contorted'. Classic triad: high fever, rash, severe polyarthralgia/arthritis (often symmetric, affecting small joints). Joint pain can persist months to years. Unlike dengue, bleeding and shock are rare."
+            },
+            {
+                question: "Which of the following is NOT a typical complication of dengue infection?",
+                options: ["Plasma leakage", "Thrombocytopenia", "Hepatitis", "Cirrhosis"],
+                answer: 3,
+                explanation: "Dengue complications include Dengue hemorrhagic fever (DHF) → plasma leakage, Thrombocytopenia → bleeding risk, and Liver involvement (mild hepatitis). Cirrhosis is chronic liver scarring from long-term injury (e.g., alcohol, HBV/HCV) — not caused by acute dengue."
+            },
+            {
+                question: "Which of the following is a common clinical manifestation of HSV-2?",
+                options: ["Cold sores", "Genital ulcers", "Keratoconjunctivitis", "Encephalitis"],
+                answer: 1,
+                explanation: "HSV-2 primarily causes genital herpes: painful vesicles/ulcers on genitals, perineum, or cervix. HSV-1 typically causes oral herpes (cold sores), but can cause genital infection via oral sex."
+            },
+            {
+                question: "What is a typical cytopathic effect of HSV in cell culture?",
+                options: ["Grape-like clusters", "Syncytia formation", "Floating cells", "Vacuolation"],
+                answer: 1,
+                explanation: "HSV induces multinucleated giant cells (syncytia) due to fusion of infected cells via glycoproteins (gB, gD). Other CPEs: rounding, clumping, lysis. Syncytia are characteristic of herpesviruses."
+            },
+            {
+                question: "Which of the following is a risk group for severe HSV disease?",
+                options: ["Healthy adults", "Immunocompromised individuals", "Adolescents", "Elderly without comorbidities"],
+                answer: 1,
+                explanation: "In HIV/AIDS, transplant recipients, or chemotherapy patients, HSV can cause chronic mucocutaneous ulcers, disseminated infection, esophagitis, pneumonitis, hepatitis. Neonates are also high-risk."
+            },
+            {
+                question: "Which hepatitis virus is most associated with outbreaks linked to contaminated water?",
+                options: ["Hepatitis A", "Hepatitis B", "Hepatitis C", "Hepatitis E"],
+                answer: 3,
+                explanation: "HEV is fecal-oral, often via contaminated water in endemic areas (Asia, Africa). It causes large waterborne outbreaks and can be severe in pregnant women. While HAV is also fecal-oral, HEV is classically linked to major outbreaks."
+            },
+            {
+                question: "What is the mainstay of treatment for acute hepatitis A?",
+                options: ["Antivirals", "Interferon", "Supportive care", "Corticosteroids"],
+                answer: 2,
+                explanation: "Hepatitis A is self-limiting (resolves in weeks to months). No antiviral therapy needed. Management: rest, hydration, avoid hepatotoxic drugs (e.g., acetaminophen). Prevention: vaccination."
+            },
+            {
+                question: "Where does replication of orthomyxovirus genomic RNA primarily occur?",
+                options: ["Cytoplasm", "Mitochondria", "Nucleus of infected cells", "Endoplasmic reticulum"],
+                answer: 2,
+                explanation: "Orthomyxoviruses (e.g., influenza) are unique among RNA viruses — they replicate in the nucleus. They use host RNA polymerase II to cap viral mRNA (cap-snatching)."
+            },
+            {
+                question: "What is a feature of bacteria?",
+                options: ["Membrane-bound organelles", "80S ribosomes", "Two types of nucleic acid + biosynthesis enzymes + reproduction by binary fission", "Linear chromosomes only"],
+                answer: 2,
+                explanation: "Bacteria have both DNA and RNA, complete metabolic machinery, and reproduce by binary fission. They lack nucleus and organelles (prokaryotes), have 70S ribosomes, and usually circular DNA."
+            },
+            {
+                question: "Which feature is NOT a eukaryotic cell’s feature?",
+                options: ["Membrane-bound nucleus", "Mitochondria", "80S ribosomes", "Without nucleus"],
+                answer: 3,
+                explanation: "Eukaryotes have a true nucleus, organelles, and 80S ribosomes. 'Without nucleus' describes prokaryotes (bacteria)."
+            },
+            {
+                question: "What is the energetic source of bacteria?",
+                options: ["Only glucose", "Light and chemical substances", "Oxygen only", "Host ATP"],
+                answer: 1,
+                explanation: "Bacteria can be Phototrophs (use light) or Chemotrophs (use chemicals - organic or inorganic). Energy sources define nutritional classification."
+            },
+            {
+                question: "The essential nutrients for bacterial growth include:",
+                options: ["Only carbon and nitrogen", "Glucose, C, H, O, N, and micronutrients (Fe, Mg, Ca, K)", "Vitamins only", "Water and oxygen"],
+                answer: 1,
+                explanation: "Bacteria need Macronutrients (C, H, O, N, S, P), Energy source (e.g., glucose), and Micronutrients like Fe, Mg, Ca, K. Not all need oxygen."
+            },
+            {
+                question: "Genetic variation in bacteria results from:",
+                options: ["Meiosis", "Change in one or more genes", "Sexual reproduction", "Mitosis"],
+                answer: 1,
+                explanation: "Bacteria evolve via Mutation and Horizontal gene transfer (conjugation, transformation, transduction). No meiosis/mitosis, but gene changes drive variation."
+            },
+            {
+                question: "What is conjugation?",
+                options: ["Uptake of free DNA", "Virus-mediated DNA transfer", "Transfer of DNA between two contiguous bacteria (donor to recipient)", "Spore formation"],
+                answer: 2,
+                explanation: "Conjugation requires direct contact via sex pilus. Mediated by plasmids (e.g., F factor). Major mechanism of antibiotic resistance spread."
+            },
+            {
+                question: "In what year was the bacteriophage discovered?",
+                options: ["1900", "1915", "1928", "1945"],
+                answer: 1,
+                explanation: "Frederick Twort (1915) and Félix d’Hérelle (1917) independently discovered bacteriophages. Twort observed glassy transformation of bacterial colonies; d’Hérelle coined 'bacteriophage'."
+            },
+            {
+                question: "Lytic infection (lytic cycle) is related to:",
+                options: ["Temperate phage", "Virulent phage", "Prophage", "Lysogeny"],
+                answer: 1,
+                explanation: "Lytic cycle: phage infects → replicates → lyses host → releases progeny. Performed by virulent phages (e.g., T4). Temperate phages can enter lysogeny."
+            },
+            {
+                question: "What is the importance of bacteriophage in biology research?",
+                options: ["Used as antibiotics", "Model for fundamental biological processes", "Vaccine vector", "Gene therapy tool"],
+                answer: 1,
+                explanation: "Phages were crucial in proving DNA is genetic material (Hershey-Chase, 1952), discovering mRNA, restriction enzymes, and gene regulation."
+            },
+            {
+                question: "What is a host?",
+                options: ["A pathogen", "Organism that harbors another organism", "Vector", "Reservoir only"],
+                answer: 1,
+                explanation: "Host: any organism that supports growth/replication of another (parasite, virus, symbiont). Can be definitive, intermediate, or accidental."
+            },
+            {
+                question: "How is genetic variation in bacteria identified?",
+                options: ["Microscopy", "Apparition of hereditary differences in structure or function", "Gram staining", "Colony morphology alone"],
+                answer: 1,
+                explanation: "Genetic variation manifests as antibiotic resistance, new virulence factors, or metabolic capabilities. Detected via phenotypic tests, PCR, sequencing."
+            },
+            {
+                question: "The two main factors influencing bacterial infection are:",
+                options: ["Temperature and pH", "Factors related to bacteria and to host", "Oxygen and nutrients", "Vector and environment"],
+                answer: 1,
+                explanation: "Infection = balance between pathogen virulence (bacterial factors) and host defense (host factors: immunity, age, comorbidities)."
+            },
+            {
+                question: "The main 4 parameters necessary for bacterial virulence are below, EXCEPT:",
+                options: ["Adherence", "Invasion", "Toxin production", "Toxin and endocytosis factor"],
+                answer: 3,
+                explanation: "Core virulence mechanisms: Adherence, Invasion, Toxin production, and Evasion of host immunity. 'Endocytosis factor' is not a standard category."
+            },
+            {
+                question: "The two bacterial toxins are:",
+                options: ["Neurotoxin and enterotoxin", "Endotoxin and exotoxin", "Cytotoxin and hemolysin", "A and C"],
+                answer: 1,
+                explanation: "Exotoxins: secreted proteins (e.g., tetanus, cholera). Endotoxin: LPS of Gram-negative outer membrane. Others are subtypes of exotoxins."
+            },
+            {
+                question: "The two important parameters for laboratory test assessment are:",
+                options: ["Precision and accuracy", "Sensitivity and specificity", "Positive and negative predictive value", "Reproducibility and robustness"],
+                answer: 1,
+                explanation: "Sensitivity: % of true positives. Specificity: % of true negatives. Fundamental for evaluating diagnostic performance."
+            },
+            {
+                question: "Match the virus to its primary mode of transmission: HAV, HBV, Dengue, HSV",
+                options: ["Fecal-oral, Bloodborne, Mosquito vector, Direct contact", "Bloodborne, Fecal-oral, Mosquito vector, Direct contact", "Mosquito vector, Bloodborne, Fecal-oral, Direct contact", "Direct contact, Bloodborne, Fecal-oral, Mosquito vector"],
+                answer: 0,
+                explanation: "HAV: Fecal-oral. HBV: Bloodborne. Dengue: Mosquito vector. HSV: Direct contact."
+            },
+            {
+                question: "How to distinguish hepatitis B immunity from vaccination vs. past infection?",
+                options: ["Vaccinated: anti-HBs⁺, anti-HBc⁻; Past infection: anti-HBs⁺, anti-HBc⁺", "Both show anti-HBs only", "Vaccinated: HBsAg⁺; Past infection: anti-HBc⁻", "No lab test can distinguish"],
+                answer: 0,
+                explanation: "Vaccination produces anti-HBs only. Natural infection produces anti-HBs AND anti-HBc (which persists for life)."
+            },
+            {
+                question: "Plasmids are genetic elements of ____ and not essential to life; they replicate ______ and faster than chromosome.",
+                options: ["large size; dependently", "small size; independently", "medium size; synchronously", "variable size; slowly"],
+                answer: 1,
+                explanation: "Plasmids are small, circular DNA. They carry non-essential genes (e.g., resistance) and replicate autonomously."
+            },
+            {
+                question: "Antigen detection (ELISA) principle: Antigen is detected by using __________ that can be identified by __________ (color change reaction).",
+                options: ["enzyme-linked antigen; antibody", "antibody binding to enzyme; substrate", "fluorescent probe; light", "DNA probe; amplification"],
+                answer: 1,
+                explanation: "In ELISA, detection antibody (linked to enzyme) binds antigen. Substrate is added → enzyme converts it → color change."
+            },
+            {
+                question: "Principle of detection of amplification products (amplicon)?",
+                options: ["Only gel electrophoresis", "Only fluorescence", "Electrophoresis with UV dye OR fluorophore-coupled probes (RT-PCR)", "Mass spectrometry"],
+                answer: 2,
+                explanation: "Conventional PCR uses gel electrophoresis with UV dye. Real-time RT-PCR uses fluorophore-coupled probes."
+            }
+        ];
+
+        // --- STATE ---
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null); // Stores index of selected option or null
+        let score = 0;
+
+        // --- DOM ELEMENTS ---
+        const quizView = document.getElementById('quiz-view');
+        const resultView = document.getElementById('result-view');
+        
+        const questionNumberEl = document.getElementById('question-number');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackText = document.getElementById('feedback-text');
+        
+        const progressBar = document.getElementById('progress-bar');
+        const scoreTracker = document.getElementById('score-tracker');
+        
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        
+        const mapOverlay = document.getElementById('map-overlay');
+        const mapGrid = document.getElementById('map-grid');
+
+        // --- FUNCTIONS ---
+
+        function initQuiz() {
+            renderMap();
+            loadQuestion(0);
+            updateScoreTracker();
+        }
+
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const data = quizData[index];
+
+            // Update Meta
+            questionNumberEl.innerText = `Question ${index + 1} of ${quizData.length}`;
+            questionTextEl.innerText = data.question;
+
+            // Update Progress Bar
+            const progress = ((index + 1) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            // Clear Options
+            optionsContainer.innerHTML = '';
+
+            // Render Options
+            data.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(i);
+                
+                // Restore state if answered
+                if (userAnswers[index] !== null) {
+                    btn.disabled = true; // Disable clicking again
+                    if (i === data.answer) {
+                        btn.classList.add('correct');
+                    } else if (i === userAnswers[index] && i !== data.answer) {
+                        btn.classList.add('incorrect');
+                    }
+                }
+
+                optionsContainer.appendChild(btn);
+            });
+
+            // Feedback Visibility
+            if (userAnswers[index] !== null) {
+                showFeedback(data.answer === userAnswers[index]);
+            } else {
+                feedbackBox.style.display = 'none';
+            }
+
+            // Button States
+            prevBtn.disabled = index === 0;
+            
+            if (index === quizData.length - 1) {
+                nextBtn.innerHTML = 'Finish <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5l10 -10"></path></svg>';
+                nextBtn.onclick = finishQuiz;
+            } else {
+                nextBtn.innerHTML = 'Next <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+                nextBtn.onclick = nextQuestion;
+            }
+
+            updateMapHighlight();
+        }
+
+        function selectOption(selectedIndex) {
+            // Prevent multiple answers
+            if (userAnswers[currentQuestionIndex] !== null) return;
+
+            const data = quizData[currentQuestionIndex];
+            const isCorrect = (selectedIndex === data.answer);
+            
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            
+            // Calculate score immediately
+            if (isCorrect) score++;
+            updateScoreTracker();
+
+            // Update UI Visuals
+            const buttons = optionsContainer.querySelectorAll('.option-btn');
+            buttons.forEach((btn, i) => {
+                btn.disabled = true;
+                if (i === data.answer) {
+                    btn.classList.add('correct');
+                } else if (i === selectedIndex && !isCorrect) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            showFeedback(isCorrect);
+            updateMapState(); // Update map grid color
+        }
+
+        function showFeedback(isCorrect) {
+            feedbackBox.style.display = 'block';
+            if (isCorrect) {
+                feedbackTitle.innerHTML = '<span style="color:var(--correct-color)">✅ Correct Answer</span>';
+            } else {
+                feedbackTitle.innerHTML = '<span style="color:var(--incorrect-color)">❌ Incorrect Answer</span>';
+            }
+            feedbackText.innerText = quizData[currentQuestionIndex].explanation;
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                loadQuestion(currentQuestionIndex + 1);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                loadQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        function updateScoreTracker() {
+            scoreTracker.innerText = `Score: ${score}`;
+        }
+
+        // --- MAP LOGIC ---
+
+        function renderMap() {
+            mapGrid.innerHTML = '';
+            quizData.forEach((_, i) => {
+                const item = document.createElement('div');
+                item.className = 'map-item';
+                item.innerText = i + 1;
+                item.onclick = () => {
+                    loadQuestion(i);
+                    toggleMap(); // Close map on select
+                };
+                mapGrid.appendChild(item);
+            });
+        }
+
+        function updateMapState() {
+            const items = mapGrid.querySelectorAll('.map-item');
+            items.forEach((item, i) => {
+                if (userAnswers[i] !== null) {
+                    item.classList.add('answered');
+                }
+            });
+        }
+
+        function updateMapHighlight() {
+            const items = mapGrid.querySelectorAll('.map-item');
+            items.forEach((item, i) => {
+                // Remove specific highlight classes
+                item.classList.remove('current', 'answered-current');
+                
+                if (i === currentQuestionIndex) {
+                    if (userAnswers[i] !== null) {
+                        item.classList.add('answered-current');
+                    } else {
+                        item.classList.add('current');
+                    }
+                }
+            });
+        }
+
+        function toggleMap() {
+            mapOverlay.classList.toggle('active');
+            updateMapState();
+            updateMapHighlight();
+        }
+
+        // --- FINISH LOGIC ---
+
+        function finishQuiz() {
+            // Check if all answered? (Optional constraint, but we allow free nav so maybe just show result)
+            // Requirement says "Full Navigation Freedom", so we allow finishing early if they click finish, 
+            // OR we could auto-advance. Let's just show results now.
+            
+            quizView.style.display = 'none';
+            resultView.style.display = 'flex';
+            document.querySelector('footer').style.display = 'flex'; // Ensure footer stays
+            
+            document.getElementById('final-score').innerText = `${score} / ${quizData.length}`;
+            
+            const percentage = (score / quizData.length) * 100;
+            let msg = "";
+            if(percentage === 100) msg = "Perfect! You're a Bacteriology Master! 🎉";
+            else if(percentage >= 80) msg = "Excellent work! Almost perfect. 🌟";
+            else if(percentage >= 60) msg = "Good job! Keep reviewing the explanations. 📚";
+            else msg = "Don't give up! Review the material and try again. 💪";
+            
+            document.getElementById('result-message').innerText = msg;
+        }
+
+        function restartQuiz() {
+            score = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            updateScoreTracker();
+            quizView.style.display = 'block';
+            resultView.style.display = 'none';
+            loadQuestion(0);
+            renderMap(); // Reset map visuals
+        }
+
+        // Initialize
+        initQuiz();
+
+    </script>
+</body>
+</html>
