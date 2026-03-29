@@ -3,874 +3,826 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parasitology Final MCQ  | Glassmorphism Edition</title>
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+    <title>Clinical Parasitology Assessment</title>
     <style>
-        /* --- CSS Reset & Variables --- */
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            --text-color: #ffffff;
-            --accent-color: #00d2ff;
-            --correct-color: rgba(40, 167, 69, 0.8);
-            --wrong-color: rgba(220, 53, 69, 0.8);
-            --highlight-bg: rgba(255, 255, 255, 0.25);
-        }
-
+        /* --- RESET & BASIC SETUP --- */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            color: var(--text-color);
-            min-height: 100vh;
-            /* Vibrant Animated Gradient Background */
-            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #4b134f, #1cb5e0);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
             display: flex;
             justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
+            min-height: 100vh;
             padding: 20px;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* --- Glass Container --- */
-        .glass-container {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            box-shadow: var(--glass-shadow);
+        /* --- CLINICAL CONTAINER --- */
+        .clinical-container {
+            background-color: #ffffff;
             width: 100%;
             max-width: 800px;
-            padding: 30px;
+            /* Medical chart paper texture effect */
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 31px,
+                #eef1f5 31px,
+                #eef1f5 32px
+            );
+            border: 2px solid #0056b3; /* Medical Blue */
+            box-shadow: 0 4px 15px rgba(0, 86, 179, 0.15);
             position: relative;
+            display: flex;
+            flex-direction: column;
+            border-radius: 4px;
             overflow: hidden;
-            transition: height 0.3s ease;
         }
 
-        /* --- Header --- */
+        /* --- HEADER --- */
         header {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 15px;
-        }
-
-        h1 {
-            font-weight: 700;
-            font-size: 1.8rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            margin-bottom: 5px;
-        }
-
-        .progress-indicator {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            letter-spacing: 1px;
-        }
-
-        /* --- Quiz Content --- */
-        .question-text {
-            font-size: 1.2rem;
-            margin-bottom: 25px;
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-
-        .option-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--glass-border);
+            background-color: #0056b3;
             color: white;
             padding: 15px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Hover Effect: Frosted Glass lights up */
-        .option-btn:hover:not(.disabled) {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border-color: rgba(255,255,255,0.5);
-        }
-
-        .option-btn.correct {
-            background: var(--correct-color) !important;
-            border-color: #28a745;
-            pointer-events: none;
-        }
-
-        .option-btn.wrong {
-            background: var(--wrong-color) !important;
-            border-color: #dc3545;
-            pointer-events: none;
-        }
-
-        /* Feedback Section */
-        .feedback-area {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.2);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            display: none; /* Hidden by default */
-            animation: fadeIn 0.5s ease;
-            border-left: 4px solid var(--accent-color);
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .feedback-title {
-            font-weight: 700;
-            margin-bottom: 5px;
-            color: var(--accent-color);
-        }
-
-        /* --- Navigation Controls --- */
-        .nav-controls {
+            border-bottom: 4px solid #003d80;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid var(--glass-border);
+            z-index: 10;
         }
 
-        .glass-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            color: white;
-            padding: 10px 25px;
-            border-radius: 30px;
+        h1 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* --- BUTTONS --- */
+        button {
+            font-family: Arial, sans-serif;
             cursor: pointer;
-            font-family: inherit;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            border: 1px solid #0056b3;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-nav {
+            background-color: white;
+            color: #0056b3;
+            padding: 8px 16px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border-radius: 2px;
+        }
+
+        .btn-nav:hover {
+            background-color: #e6f0fa;
+        }
+
+        .btn-nav:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            cursor: not-allowed;
+            background-color: #f9f9f9;
+        }
+
+        .btn-primary {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 2px;
+        }
+
+        .btn-primary:hover {
+            background-color: #004494;
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-bar-container {
+            background-color: #e0e0e0;
+            height: 6px;
+            width: 100%;
+        }
+
+        .progress-bar-fill {
+            background-color: #0056b3;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        main {
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+            min-height: 400px;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            padding-left: 5px;
+            border-left: 4px solid #0056b3;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 15px;
+            text-align: left;
+            font-size: 1rem;
+            color: #333;
+            border-radius: 2px;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #e6f0fa; /* Light blue hover */
+            border-color: #0056b3;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        /* Feedback Styling */
+        .feedback {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .correct {
+            color: #008000; /* Green */
+            border-color: #008000 !important;
+            background-color: #f0fff0 !important;
+        }
+
+        .incorrect {
+            color: #cc0000; /* Red */
+            border-color: #cc0000 !important;
+            background-color: #fff0f0 !important;
+        }
+
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px dashed #0056b3;
+            border-radius: 2px;
+            font-size: 0.95rem;
+            color: #444;
+            display: none; /* Hidden by default */
+            line-height: 1.5;
+        }
+
+        .explanation-box strong {
+            color: #0056b3;
+        }
+
+        /* --- RESULT SCREEN --- */
+        #result-screen {
+            display: none;
+            text-align: center;
+            padding-top: 40px;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            color: #0056b3;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #0056b3;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .score-display {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .score-label {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        /* --- FOOTER BRANDING --- */
+        footer {
+            border-top: 2px solid #0056b3;
+            padding: 15px 20px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .credit-text {
+            font-style: italic;
+            font-weight: bold;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .social-bar {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            border-radius: 0; /* Square buttons requested */
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
         }
 
-        .glass-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
+        .social-btn:hover {
+            background-color: #003d80;
         }
 
-        .glass-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .map-btn {
-            background: rgba(0, 210, 255, 0.2);
-            border-color: rgba(0, 210, 255, 0.4);
-        }
-        .map-btn:hover {
-            background: rgba(0, 210, 255, 0.4);
-        }
-
-        /* --- Question Map Overlay --- */
-        .overlay {
+        /* --- PATIENT LIST MODAL (GRID) --- */
+        .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            display: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none; /* Hidden by default */
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            z-index: 100;
         }
 
-        .overlay.active {
-            display: flex;
-            opacity: 1;
-        }
-
-        .map-container {
-            background: #1a1a2e;
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 30px;
+        .modal-content {
+            background-color: white;
             width: 90%;
             max-width: 600px;
             max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 2px solid #0056b3;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
         }
 
-        .map-header {
+        .modal-header {
+            background-color: #0056b3;
+            color: white;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
         }
 
-        .map-grid {
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
-            gap: 10px;
+            gap: 8px;
         }
 
-        .map-node {
+        .grid-item {
             width: 45px;
             height: 45px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            border: 1px solid #ccc;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             cursor: pointer;
-            font-weight: 600;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .map-node:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .map-node.current {
-            background: var(--accent-color);
-            color: #000;
-            box-shadow: 0 0 10px var(--accent-color);
-            border: 2px solid white;
-            transform: scale(1.1);
-        }
-
-        .map-node.answered {
-            background: var(--correct-color);
-            border: 1px solid #28a745;
-        }
-        
-        /* Marking incorrect answers on the map */
-        .map-node.answered.wrong-ans {
-            background: var(--wrong-color);
-            border: 1px solid #dc3545;
-        }
-
-        .map-legend {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            font-size: 0.85rem;
-            flex-wrap: wrap;
-        }
-        .legend-item { display: flex; align-items: center; gap: 5px; }
-        .dot { width: 12px; height: 12px; border-radius: 50%; }
-
-        /* --- Footer / Branding --- */
-        .branding-section {
-            margin-top: 30px;
-            text-align: center;
-            border-top: 1px solid var(--glass-border);
-            padding-top: 20px;
-        }
-
-        .credit-text {
+            font-weight: bold;
+            color: #333;
+            background-color: white;
+            border-radius: 2px;
             font-size: 0.9rem;
-            margin-bottom: 15px;
-            color: rgba(255,255,255,0.8);
         }
 
-        .credit-text span {
-            color: var(--accent-color);
-            font-weight: 700;
+        /* Grid Status Indicators */
+        .grid-item.current {
+            border: 2px solid #0056b3; /* Blue border */
+            background-color: white;
         }
 
-        .social-bar {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
+        .grid-item.answered {
+            background-color: #cce5ff; /* Light blue background */
+            border-color: #99ccff;
+            color: #003d80;
         }
 
-        .social-link {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
+        .grid-item:hover {
+            border-color: #0056b3;
         }
 
-        .social-link:hover {
-            background: white;
-            color: #0f0c29;
-            transform: rotate(360deg);
+        /* --- UTILITY CLASSES --- */
+        .hidden {
+            display: none !important;
         }
 
-        /* --- Result Screen --- */
-        .result-screen {
-            text-align: center;
-            display: none;
-        }
-
-        .score-card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 15px;
-            padding: 40px;
-            margin-bottom: 30px;
-        }
-
-        .score-circle {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            border: 5px solid var(--accent-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 0 auto 20px;
-            background: rgba(0,0,0,0.2);
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
-        }
-
-        .restart-btn {
-            background: var(--accent-color);
-            color: #0f0c29;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .restart-btn:hover { transform: scale(1.05); }
-
-        /* Responsive */
+        /* --- RESPONSIVE ADJUSTMENTS --- */
         @media (max-width: 600px) {
-            h1 { font-size: 1.5rem; }
+            h1 { font-size: 1.2rem; }
             .option-btn { padding: 12px; font-size: 0.95rem; }
-            .glass-btn { padding: 8px 15px; font-size: 0.9rem; }
+            .score-display { font-size: 3rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Main Glass Container -->
-    <main class="glass-container" id="mainContainer">
-        
-        <!-- Header -->
+    <div class="clinical-container">
         <header>
-            <h1>Parasitology Final MCQ</h1>
-            <div class="progress-indicator">Question <span id="currentQNum">1</span> of <span id="totalQNum">157</span></div>
+            <h1>Parasitology Final Prep Part I MCQs</h1>
+            <div class="header-controls">
+                <button class="btn-nav" id="view-list-btn" title="View Patient List">View List</button>
+            </div>
         </header>
 
-        <!-- Quiz View -->
-        <div id="quizView">
-            <div class="question-text" id="questionText">
-                <!-- Question loads here -->
-            </div>
-
-            <div class="options-grid" id="optionsContainer">
-                <!-- Options load here -->
-            </div>
-
-            <!-- Instant Feedback -->
-            <div class="feedback-area" id="feedbackArea">
-                <div class="feedback-title" id="feedbackTitle">Correct!</div>
-                <div id="feedbackText">Explanation goes here.</div>
-            </div>
-
-            <!-- Navigation -->
-            <div class="nav-controls">
-                <button class="glass-btn" id="prevBtn" onclick="changeQuestion(-1)">
-                    <i class="fas fa-chevron-left"></i> Prev
-                </button>
-                
-                <button class="glass-btn map-btn" onclick="toggleMap()">
-                    <i class="fas fa-border-all"></i> View Map
-                </button>
-
-                <button class="glass-btn" id="nextBtn" onclick="changeQuestion(1)">
-                    Next <i class="fas fa-chevron-right"></i>
-                </button>
-            </div>
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-fill"></div>
         </div>
 
-        <!-- Result View (Hidden initially) -->
-        <div id="resultView" class="result-screen">
-            <div class="score-card">
-                <div class="score-circle">
-                    <span id="finalScore">0</span>%
+        <main>
+            <!-- QUIZ INTERFACE -->
+            <div id="quiz-interface">
+                <div class="question-text" id="question-text">
+                    Question loading...
                 </div>
-                <h2>Quiz Completed!</h2>
-                <p style="margin-top: 10px; opacity: 0.8;">You answered <span id="correctCount">0</span> out of 157 questions correctly.</p>
-            </div>
 
-            <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
+                <div class="options-grid" id="options-container">
+                    <!-- Options injected via JS -->
+                </div>
 
-            <!-- Branding on Result Page -->
-            <div class="branding-section">
-                <p class="credit-text">Prepared by <span>BUNRETH Nihrantz</span></p>
-                <div class="social-bar">
-                    <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="https://t.me/Nihrantz" target="_blank" class="social-link" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
+                <div class="explanation-box" id="explanation-box">
+                    <strong>Explanation:</strong> <span id="explanation-text"></span>
                 </div>
             </div>
-        </div>
 
-        <!-- Branding on Quiz Page -->
-        <div class="branding-section" id="quizBranding">
-            <p class="credit-text">Prepared by <span>BUNRETH Nihrantz</span></p>
+            <!-- RESULT SCREEN -->
+            <div id="result-screen">
+                <div class="result-title">Test Result</div>
+                <div class="score-display" id="final-score">0</div>
+                <div class="score-label">out of <span id="total-questions">0</span> correct</div>
+                <button class="btn-primary" onclick="location.reload()">Restart Assessment</button>
+            </div>
+        </main>
+
+        <!-- NAVIGATION FOOTER -->
+        <footer id="quiz-footer">
+            <div class="credit-text">Prepared by BUNRETH Nihrantz</div>
+            
+            <div style="display: flex; justify-content: space-between; width: 100%; padding: 0 10px;">
+                <button class="btn-nav" id="prev-btn" disabled>Previous</button>
+                <button class="btn-nav" id="next-btn" disabled>Next</button>
+            </div>
+
             <div class="social-bar">
-                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="https://t.me/Nihrantz" target="_blank" class="social-link" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
             </div>
-        </div>
+        </footer>
+    </div>
 
-    </main>
-
-    <!-- Question Map Overlay -->
-    <div class="overlay" id="mapOverlay">
-        <div class="map-container">
-            <div class="map-header">
-                <h3>Question Map</h3>
-                <button class="glass-btn" onclick="toggleMap()" style="padding: 5px 15px;"><i class="fas fa-times"></i></button>
+    <!-- PATIENT LIST MODAL -->
+    <div class="modal-overlay" id="list-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Patient List (Question Overview)</span>
+                <button class="modal-close" id="close-modal">&times;</button>
             </div>
-            <div class="map-grid" id="mapGrid">
-                <!-- Generated by JS -->
-            </div>
-            <div class="map-legend">
-                <div class="legend-item"><div class="dot" style="background:var(--accent-color)"></div> Current</div>
-                <div class="legend-item"><div class="dot" style="background:var(--correct-color)"></div> Correct</div>
-                <div class="legend-item"><div class="dot" style="background:rgba(255,255,255,0.2)"></div> Unanswered</div>
+            <div class="modal-body">
+                <div class="grid-container" id="grid-container">
+                    <!-- Grid items injected via JS -->
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- Data: 157 Questions ---
+        // --- DATASET: 157 QUESTIONS ---
         const quizData = [
-            // --- 1-50: Filarial Worms ---
-            { q: "1. Hydrocele is most frequently associated with which species?", options: ["a. Brugia malayi", "b. Wuchereria bancrofti", "c. Loa loa", "d. Onchocerca volvulus"], answer: 1, explanation: "Hydrocele is a common manifestation of chronic lymphatic filariasis caused by Wuchereria bancrofti." },
-            { q: "2. Which parasite is associated with 'fugitive swellings'?", options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Loa loa", "d. Onchocerca volvulus"], answer: 2, explanation: "Fugitive swellings (Calabar swellings) are hallmark features of loiasis." },
-            { q: "3. What is the infective stage of filarial worms for humans?", options: ["a. Microfilaria", "b. L1 larva", "c. L3 larva", "d. Cercaria"], answer: 2, explanation: "Larvae develop into infective third-stage larvae (L3) in the vector, which enter the body via the bite wound." },
-            { q: "4. The presence of a 'sheath' is a diagnostic feature of the microfilariae of:", options: ["a. Onchocerca volvulus", "b. Wuchereria bancrofti", "c. Mansonella ozzardi", "d. Mansonella perstans"], answer: 1, explanation: "W. bancrofti microfilariae are surrounded by a thin, transparent membrane derived from the eggshell." },
-            { q: "5. Which stain is commonly used to study the morphology of microfilariae?", options: ["a. Gram stain", "b. Giemsa stain", "c. Acid-fast stain", "d. Iodine stain"], answer: 1, explanation: "Giemsa stain highlights nuclei, sheath, and tail morphology." },
-            { q: "6. The term 'lymphangitis' refers to:", options: ["a. Inflammation of lymph nodes", "b. Inflammation of lymphatic vessels", "c. Enlargement of the spleen", "d. Obstruction of the bile duct"], answer: 1, explanation: "Lymphangitis is acute inflammation of the lymphatic vessels." },
-            { q: "7. Which parasite’s microfilariae show 'diurnal periodicity'?", options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Loa loa", "d. Mansonella perstans"], answer: 2, explanation: "Loa loa microfilariae circulate during daylight hours." },
-            { q: "8. The vector for Brugia timori is:", options: ["a. Culex", "b. Anopheles", "c. Mansonia", "d. Simulium"], answer: 1, explanation: "B. timori is transmitted by Anopheles barbirostris." },
-            { q: "9. Calabar swellings are a characteristic feature of which infection?", options: ["a. Bancroftian filariasis", "b. Loiasis", "c. Onchocerciasis", "d. Malayan filariasis"], answer: 1, explanation: "They are caused by Loa loa migration." },
-            { q: "10. Which parasite produces microfilariae that are typically found in the skin, not blood?", options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Onchocerca volvulus", "d. Loa loa"], answer: 2, explanation: "O. volvulus microfilariae reside in the dermis." },
-            { q: "11. The life span of an adult Wuchereria bancrofti worm is approximately:", options: ["a. 1 month", "b. 1 year", "c. 5–10 years", "d. 20–30 years"], answer: 2, explanation: "Adults can survive 5–10 years in human lymphatics." },
-            { q: "12. The drug of choice for treating Onchocerciasis is:", options: ["a. Diethylcarbamazine (DEC)", "b. Ivermectin", "c. Praziquantel", "d. Albendazole"], answer: 1, explanation: "Ivermectin is effective against microfilariae." },
-            { q: "13. Microfilariae are:", options: ["a. Egg", "b. Embryos (advanced first-stage larvae)", "c. Adult worms", "d. Encysted larvae"], answer: 1, explanation: "They are pre-larval stages released by adult females." },
-            { q: "14. Chronic lymphatic obstruction in filariasis leads to:", options: ["a. High blood pressure", "b. Lymphedema", "c. Ascites", "d. Pulmonary edema"], answer: 1, explanation: "Obstruction causes protein-rich fluid accumulation in tissues." },
-            { q: "15. 'Sclerosing keratitis' is a complication of:", options: ["a. Bancroftian filariasis", "b. Onchocerciasis", "c. Loiasis", "d. Dracunculiasis"], answer: 1, explanation: "It is a leading cause of blindness in onchocerciasis." },
-            { q: "16. Where are 'onchocercomas' (subcutaneous nodules) found?", options: ["a. In the lungs", "b. Over bony prominences", "c. In the brain", "d. In the liver"], answer: 1, explanation: "They form near joints and over bony areas." },
-            { q: "17. Which mosquito genus is the primary vector for Brugia malayi?", options: ["a. Culex", "b. Mansonia", "c. Aedes", "d. Culiseta"], answer: 1, explanation: "Mansonia mosquitoes breed in water with aquatic plants." },
-            { q: "18. The 'Mazzotti reaction' is a severe allergic response seen during treatment of:", options: ["a. Bancroftian filariasis", "b. Onchocerciasis", "c. Loiasis", "d. Ascariasis"], answer: 1, explanation: "It occurs when ivermectin rapidly kills O. volvulus microfilariae." },
-            { q: "19. The 'skin snip' method is the primary diagnostic tool for:", options: ["a. Wuchereria bancrofti", "b. Loa loa", "c. Onchocerca volvulus", "d. Brugia malayi"], answer: 2, explanation: "Diagnosis relies on skin snips for O. volvulus." },
-            { q: "20. Filarial worms belong to the class:", options: ["a. Cestoda", "b. Trematoda", "c. Nematoda", "d. Protozoa"], answer: 2, explanation: "They are roundworms." },
-            { q: "21. Which mosquito genus is a major vector for W. bancrofti in urban areas?", options: ["a. Aedes", "b. Culex", "c. Mansonia", "d. Anopheles"], answer: 1, explanation: "Culex quinquefasciatus is primary in urban areas." },
-            { q: "22. What is the intermediate host/vector for Onchocerca volvulus?", options: ["a. Culex mosquito", "b. Anopheles mosquito", "c. Simulium (blackfly)", "d. Chrysops (deer fly)"], answer: 2, explanation: "Transmitted by female Simulium blackflies." },
-            { q: "23. What is the definitive host for Wuchereria bancrofti?", options: ["a. Mosquito", "b. Human", "c. Pig", "d. Cattle"], answer: 1, explanation: "Humans are the only natural definitive host." },
-            { q: "24. 'River blindness' is caused by which parasite?", options: ["a. Brugia malayi", "b. Loa loa", "c. Onchocerca volvulus", "d. Mansonella perstans"], answer: 2, explanation: "Onchocerciasis is caused by O. volvulus." },
-            { q: "25. Occult filariasis (Tropical Pulmonary Eosinophilia, TPE) is characterized by:", options: ["a. Presence of numerous microfilariae in blood", "b. Absence of microfilariae in blood", "c. Absence of antibodies", "d. Normal eosinophil count"], answer: 1, explanation: "TPE involves high IgE/eosinophilia but no detectable microfilariae." },
-            { q: "26. Which clinical sign involves the presence of milky white urine?", options: ["a. Hematuria", "b. Chyluria", "c. Proteinuria", "d. Glycosuria"], answer: 1, explanation: "Chyluria results from lymphatic leakage into urinary tract." },
-            { q: "27. What is the standard dose of DEC in the treatment of bancroftian filariasis?", options: ["a. 2 mg/kg for 1 day", "b. 6 mg/kg for 12 days", "c. 10 mg/kg for 30 days", "d. 100 mg/kg once"], answer: 1, explanation: "WHO recommends 6 mg/kg/day for 12 days." },
-            { q: "28. Mansonella perstans adult worms live in:", options: ["a. Subcutaneous tissue", "b. Body cavities (pleural/peritoneal)", "c. Lymphatic vessels", "d. Conjunctiva"], answer: 1, explanation: "They reside in serous cavities." },
-            { q: "29. Which of these is a non-periodic filarial worm?", options: ["a. Wuchereria bancrofti (Indian strain)", "b. Brugia malayi", "c. Onchocerca volvulus", "d. Loa loa"], answer: 2, explanation: "O. volvulus microfilariae are in skin, not blood." },
-            { q: "30. Which diagnostic test involves the concentration of microfilariae from blood?", options: ["a. Kato-Katz technique", "b. Knott’s concentration", "c. Baermann technique", "d. Formal-ether sedimentation"], answer: 1, explanation: "Knott’s method concentrates microfilariae." },
-            { q: "31. Which filarial worm is the most common cause of lymphatic filariasis?", options: ["a. Brugia malayi", "b. Wuchereria bancrofti", "c. Loa loa", "d. Onchocerca volvulus"], answer: 1, explanation: "W. bancrofti causes ~90% of cases." },
-            { q: "32. Which parasite is known as the 'eye worm'?", options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Loa loa", "d. Onchocerca volvulus"], answer: 2, explanation: "Loa loa can migrate across the conjunctiva." },
-            { q: "33. Which filarial worm is NOT found in the peripheral blood?", options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Onchocerca volvulus", "d. Loa loa"], answer: 2, explanation: "O. volvulus resides in skin." },
-            { q: "34. At what time is 'nocturnal periodicity' most evident for W. bancrofti microfilariae in blood?", options: ["a. 10 am to 2 pm", "b. 6 am to 10 am", "c. 10 pm to 2 am", "d. 2 pm to 6 pm"], answer: 2, explanation: "Peak density is between 10 PM and 2 AM." },
-            { q: "35. Tropical pulmonary eosinophilia (TPE) is an occult form of which infection?", options: ["a. Ascariasis", "b. Filariasis", "c. Hookworm", "d. Strongyloidiasis"], answer: 1, explanation: "It is a hypersensitivity to filarial antigens." },
-            { q: "36. Which drug is the primary treatment for lymphatic filariasis?", options: ["a. Praziquantel", "b. Diethylcarbamazine (DEC)", "c. Metronidazole", "d. Chloroquine"], answer: 1, explanation: "DEC is microfilaricidal and macrofilaricidal." },
-            { q: "37. 'Adenolymphangitis' (ADL) in filariasis refers to:", options: ["a. Chronic swelling", "b. Acute febrile episodes with painful lymphatics", "c. Internal organ failure", "d. Skin rashes"], answer: 1, explanation: "ADL involves acute inflammatory attacks." },
-            { q: "38. Which filarial species is mostly restricted to South and East Asia?", options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Loa loa", "d. Onchocerca volvulus"], answer: 1, explanation: "B. malayi is found in Asia." },
-            { q: "39. Brugia malayi microfilariae can be distinguished by having:", options: ["a. No nuclei in the tail", "b. Two terminal nuclei in the tail", "c. A single terminal nucleus", "d. A blunt tail without nuclei"], answer: 1, explanation: "They have two distinct nuclei at the tail tip." },
-            { q: "40. 'Leopard skin' (spotty depigmentation) is seen in:", options: ["a. Chronic bancroftian filariasis", "b. Chronic onchocerciasis", "c. Acute loiasis", "d. Malayan filariasis"], answer: 1, explanation: "It is a cutaneous hallmark of onchocerciasis." },
-            { q: "41. Which filarial worm is viviparous?", options: ["a. All filarial worms", "b. Only W. bancrofti", "c. Only Onchocerca", "d. None; they are all oviparous"], answer: 0, explanation: "All produce live microfilariae." },
-            { q: "42. What is the common name for the condition involving gross enlargement of the limbs in filariasis?", options: ["a. Löffler’s syndrome", "b. Elephantiasis", "c. Swimmer’s itch", "d. Katayama fever"], answer: 1, explanation: "Elephantiasis is severe swelling due to lymphatic obstruction." },
-            { q: "43. The DEC provocation test is used for:", options: ["a. Kill adult worms", "b. Bring microfilariae into peripheral blood during the day", "c. Treat elephantiasis", "d. Diagnose malaria"], answer: 1, explanation: "A small dose of DEC brings sequestered microfilariae into blood." },
-            { q: "44. Which filarial worm is primarily transmitted by Chrysops (deer flies)?", options: ["a. Wuchereria bancrofti", "b. Loa loa", "c. Onchocerca volvulus", "d. Brugia malayi"], answer: 1, explanation: "Loa loa is transmitted by deer flies." },
-            { q: "45. Which of the following is a classic manifestation of chronic filariasis?", options: ["a. Bloody diarrhea", "b. Hydrocele", "c. Iron deficiency anemia", "d. Clay pipe stem fibrosis"], answer: 1, explanation: "Hydrocele is a common manifestation." },
-            { q: "46. Which filarial worm is known to cause 'hanging groin'?", options: ["a. Wuchereria bancrofti", "b. Onchocerca volvulus", "c. Brugia malayi", "d. Loa loa"], answer: 0, explanation: "It is a complication of chronic bancroftian filariasis." },
-            { q: "47. Where do adult Wuchereria bancrofti worms typically reside?", options: ["a. Subcutaneous tissue", "b. Bloodstream", "c. Lymphatic vessels", "d. Small intestine"], answer: 2, explanation: "They live in lymphatic vessels and nodes." },
-            { q: "48. Which of the following is NOT a lymphatic filarial worm?", options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Brugia timori", "d. Loa loa"], answer: 3, explanation: "Loa loa is subcutaneous." },
-            { q: "49. Which condition is characterized by nocturnal cough, dyspnea, and high eosinophilia?", options: ["a. Cutaneous larva migrans", "b. Tropical pulmonary eosinophilia", "c. Visceral larva migrans", "d. Löffler’s syndrome"], answer: 1, explanation: "TPE presents with nocturnal cough and eosinophilia." },
-            { q: "50. 'Filarial dance sign' is a diagnostic finding seen on:", options: ["a. X-ray", "b. Ultrasonography", "c. CT scan", "d. MRI"], answer: 1, explanation: "It is a real-time ultrasound visualization of motile worms." },
-
-            // --- 51-100: Intestinal Nematodes & Trematodes ---
-            { q: "51. What is the shape of the pinworm egg?", options: ["a. Spherical", "b. Barrel-shape with plugs", "c. Elongated ovoid, flattened on one side", "d. Elliptical and bile-stained"], answer: 2, explanation: "Enterobius vermicularis eggs are asymmetrical and flattened on one side." },
-            { q: "52. What is a distinctive morphological feature of the female pinworm?", options: ["a. A curved posterior end", "b. A double-bulb esophagus", "c. A long, whip-like tail", "d. A thin, pointed, pin-like tail"], answer: 3, explanation: "The female has a sharply pointed tail." },
-            { q: "53. What is the primary habitat of adult pinworms in the human body?", options: ["a. Small intestine", "b. Stomach", "c. Liver", "d. Caecum and appendix"], answer: 3, explanation: "They reside in the caecum and appendix." },
-            { q: "54. Which drug is stated as being more effective than albendazole for treating strongyloidiasis?", options: ["a. Mebendazole", "b. Praziquantel", "c. Ivermectin", "d. Metronidazole"], answer: 2, explanation: "Ivermectin is superior for Strongyloides." },
-            { q: "55. What is a key prophylactic measure against hookworm infection?", options: ["a. Vaccination", "b. Use of footwear", "c. Sleeping under insecticide-treated nets", "d. Boiling drinking water"], answer: 1, explanation: "Larvae penetrate bare skin." },
-            { q: "56. In which organ do the larvae grow and moult twice during their migration?", options: ["a. Liver", "b. Heart", "c. Lungs", "d. Brain"], answer: 2, explanation: "Larvae migrate to the lungs to moult." },
-            { q: "57. What is the characteristic shape of a Trichuris trichiura egg?", options: ["a. Spherical with a thin shell", "b. Oval with a rough surface", "c. Barrel-shaped with polar plugs", "d. Elongated with a pointed end"], answer: 2, explanation: "Trichuris eggs are barrel-shaped with polar plugs." },
-            { q: "58. What is the infective form of the parasite that penetrates the skin?", options: ["a. Rhabditiform larva", "b. Adult worm", "c. Egg", "d. Filariform larva"], answer: 3, explanation: "Filariform larvae penetrate skin." },
-            { q: "59. What is a key prophylactic measure against pinworm infection?", options: ["a. Taking a weekly vitamin supplement", "b. Frequent hand washing and nail-cleaning", "c. Avoiding leafy vegetables", "d. Drinking boiled water only"], answer: 1, explanation: "Hygiene prevents fecal-oral transmission." },
-            { q: "60. Which hookworm species is known as the “New World” hookworm?", options: ["a. Ancylostoma duodenale", "b. Necator americanus", "c. Ancylostoma braziliense", "d. Ancylostoma caninum"], answer: 1, explanation: "Necator americanus is the New World hookworm." },
-            { q: "61. What is a major fetal complication mentioned in the document that can occur during hyperinfection?", options: ["a. Liver cirrhosis", "b. Brain abscess and meningitis", "c. Cardiac arrest", "d. Kidney failure"], answer: 1, explanation: "Strongyloides hyperinfection can cause CNS dissemination." },
-            { q: "62. Where is the habitat of the adult Strongyloides stercoralis worm?", options: ["a. Large intestine", "b. Liver", "c. Small intestine", "d. Lung"], answer: 2, explanation: "Adults live in the duodenum and jejunum." },
-            { q: "63. What is the primary method for diagnosing trichuriasis?", options: ["a. Blood culture", "b. Stool examination for eggs", "c. Urinalysis", "d. Skin biopsy"], answer: 1, explanation: "Diagnosis is by finding barrel-shaped eggs in stool." },
-            { q: "64. What is the infective form of Enterobius vermicularis for humans?", options: ["a. Adult worm", "b. Larva", "c. Embryonated egg", "d. Unfertilized egg"], answer: 2, explanation: "Embryonated eggs are ingested." },
-            { q: "65. Which stage of Strongyloides stercoralis is responsible for infecting humans?", options: ["a. Rhabditiform larva", "b. Egg", "c. Adult female worm", "d. Filariform larva"], answer: 3, explanation: "Filariform larvae penetrate the skin." },
-            { q: "66. What is the infective form of the hookworm?", options: ["a. Egg", "b. Rhabditiform larva", "c. Adult worm", "d. Third stage filariform larva"], answer: 3, explanation: "L3 larvae are the infective stage." },
-            { q: "67. What is the most common clinical symptom of enterobiasis?", options: ["a. Diarrhea", "b. Intense perianal itching", "c. Abdominal pain", "d. Cough"], answer: 1, explanation: "Pruritus ani is the hallmark." },
-            { q: "68. Where do the adult worms primarily live in the human body?", options: ["a. Large intestine", "b. Small intestine", "c. Stomach", "d. Lungs"], answer: 1, explanation: "Ascaris, hookworm, and Strongyloides live in the small intestine." },
-            { q: "69. A heavy infection with T. trichiura can cause a condition where the rectum protrudes from the anus. What is this condition called?", options: ["a. Appendicitis", "b. Hemorrhoids", "c. Rectal prolapse", "d. Colitis"], answer: 2, explanation: "Severe whipworm can cause rectal prolapse." },
-            { q: "70. Which of these treatments is specifically noted as safe to use during pregnancy?", options: ["a. Albendazole", "b. Mebendazole", "c. Ivermectin", "d. Pyrantel pamoate"], answer: 3, explanation: "Pyrantel is considered safest in pregnancy." },
-            { q: "71. Why is it often advised to treat the whole family for pinworm?", options: ["a. It is a blood-borne infection", "b. The infection is usually spread within groups", "c. It is caused by a bacteria", "d. It is a genetic condition"], answer: 1, explanation: "Household transmission is common." },
-            { q: "72. What is the name of the pneumonia-like condition caused by larval migration in the lungs?", options: ["a. Cysticercosis", "b. Löffler’s syndrome", "c. Elephantiasis", "d. Chagas disease"], answer: 1, explanation: "Löffler’s syndrome is eosinophilic pneumonitis." },
-            { q: "73. How does the filariform larva primarily enter the human body?", options: ["a. Through ingestion of contaminated food", "b. By penetrating the skin", "c. Through the bite of a mosquito", "d. By inhalation"], answer: 1, explanation: "Filariform larvae penetrate intact skin." },
-            { q: "74. How can hookworm infection be directly diagnosed in a laboratory?", options: ["a. Blood culture", "b. Chest X-ray", "c. Finding eggs in a stool sample", "d. Urine analysis"], answer: 2, explanation: "Stool microscopy reveals characteristic eggs." },
-            { q: "75. Where in the human body do adult Trichuris trichiura worms primarily live?", options: ["a. Small intestine", "b. Large intestine", "c. Liver", "d. Blood vessels"], answer: 1, explanation: "They inhabit the cecum and ascending colon." },
-            { q: "76. Which larval stage is most commonly found in the feces in a routine stool examination?", options: ["a. Filariform larva", "b. Rhabditiform larva", "c. L3 larva", "d. Adult worm"], answer: 1, explanation: "Rhabditiform larvae are passed in stool." },
-            { q: "77. What is the specific name of the roundworm that causes ascariasis?", options: ["a. Enterobius vermicularis", "b. Ascaris lumbricoides", "c. Taenia solium", "d. Necator americanus"], answer: 1, explanation: "Ascaris lumbricoides is the roundworm." },
-            { q: "78. What is a serious surgical emergency that can occur if worms penetrate the intestinal wall?", options: ["a. Löffler’s syndrome", "b. Eosinophilia", "c. Peritonitis", "d. Urticaria"], answer: 2, explanation: "Perforation causes peritonitis." },
-            { q: "79. Which method is recommended for laboratory diagnosis of pinworm infection?", options: ["a. Stool examination", "b. Blood test", "c. Scotch tape method", "d. Urine analysis"], answer: 2, explanation: "The Scotch tape test collects perianal eggs." },
-            { q: "80. What is the common name for Trichuris trichiura?", options: ["a. Roundworm", "b. Hookworm", "c. Whipworm", "d. Tapeworm"], answer: 2, explanation: "It is called whipworm due to shape." },
-            { q: "81. What is the definitive laboratory diagnosis for ascariasis?", options: ["a. Antibody detection", "b. X-ray imaging", "c. Blood culture", "d. Demonstration of egg in feces"], answer: 3, explanation: "Eggs in stool confirm diagnosis." },
-            { q: "82. In which part of the human body do adult hookworms primarily live?", options: ["a. Large intestine", "b. Stomach", "c. Small intestine", "d. Liver"], answer: 2, explanation: "They attach to the jejunum/duodenum." },
-            { q: "83. What is the most serious pathological effect of a hookworm infection?", options: ["a. Liver abscess", "b. Neurological damage", "c. Anemia and protein deficiency", "d. Pulmonary fibrosis"], answer: 2, explanation: "Chronic blood loss causes anemia." },
-            { q: "84. Which of the following is a recommended treatment for hookworm?", options: ["a. Tetracycline", "b. Chloroquine", "c. Albendazole (400 mg single dose)", "d. Penicillin"], answer: 2, explanation: "Albendazole is WHO recommended." },
-            { q: "85. What is the common name for Enterobius vermicularis?", options: ["a. Roundworm", "b. Pinworm", "c. Hookworm", "d. Whipworm"], answer: 1, explanation: "It is the pinworm." },
-            { q: "86. Which of the following is a recommended single-dose treatment for pinworm?", options: ["a. Metronidazole", "b. Chloroquine", "c. Albendazole", "d. Penicillin"], answer: 2, explanation: "Albendazole is effective." },
-            { q: "87. Where does the adult Clonorchis sinensis worm live in the human body?", options: ["a. In the bloodstream", "b. In the lungs", "c. In the intestinal tract", "d. In the biliary tract"], answer: 3, explanation: "It resides in bile ducts." },
-            { q: "88. Which mollusk (snail) acts as the intermediate host for Schistosoma mansoni?", options: ["a. Bulinus sp.", "b. Oncomelania sp.", "c. Biomphalaria sp.", "d. Crab or crayfish"], answer: 2, explanation: "Biomphalaria snails host S. mansoni." },
-            { q: "89. What is the name of the larval stage that emerges from the snail and penetrates human skin?", options: ["a. Miracidium", "b. Sporocyst", "c. Cercaria", "d. Schistosomula"], answer: 2, explanation: "Cercariae penetrate the skin." },
-            { q: "90. Which aquatic vegetation-related structure is the infective stage for the definitive host?", options: ["a. Miracidium", "b. Cercaria", "c. Redia", "d. Metacercaria"], answer: 3, explanation: "Metacercariae on plants/fish are infective." },
-            { q: "91. What is the drug of choice for treating paragonimiasis?", options: ["a. Metronidazole", "b. Albendazole", "c. Praziquantel", "d. Niclosamide"], answer: 2, explanation: "Praziquantel treats lung fluke." },
-            { q: "92. In what type of host are the metacercariae of Paragonimus westermani found?", options: ["a. Freshwater snail", "b. Human", "c. Freshwater crab or crayfish", "d. Tiger"], answer: 2, explanation: "Found in crabs/crayfish." },
-            { q: "93. What is the infective form of Clonorchis sinensis for humans?", options: ["a. The egg", "b. The miracidium", "c. The metacercaria", "d. The adult worm"], answer: 2, explanation: "Metacercariae in fish are infective." },
-            { q: "94. In which organ of the definitive host does the adult Fasciola hepatica reside?", options: ["a. Lungs", "b. Intestines", "c. Liver and biliary passages", "d. Blood vessels"], answer: 2, explanation: "Adults live in large bile ducts." },
-            { q: "95. What is the drug of choice for treating schistosomiasis?", options: ["a. Metrifonate", "b. Praziquantel", "c. Albendazole", "d. Chloroquine"], answer: 1, explanation: "Praziquantel is effective." },
-            { q: "96. In which human veins do adult Schistosoma haematobium worms primarily live?", options: ["a. Inferior mesenteric vein", "b. Hepatic portal vein", "c. Vesical and pelvic plexuses", "d. Pulmonary arterioles"], answer: 2, explanation: "They reside in the vesical plexus." },
-            { q: "97. What is the drug of choice for treating clonorchiasis?", options: ["a. Metronidazole", "b. Chloroquine", "c. Praziquantel", "d. Ivermectin"], answer: 2, explanation: "Praziquantel is first-line." },
-            { q: "98. How do the schistosomulae first enter the body after skin penetration?", options: ["a. By migrating to the bladder", "b. By entering peripheral venules", "c. By being coughed up and swallowed", "d. By directly burrowing into the liver"], answer: 1, explanation: "They enter dermal capillaries/venules." },
-            { q: "99. Which Schistosoma species is primarily diagnosed by finding eggs in the urine?", options: ["a. Schistosoma mansoni", "b. Schistosoma japonicum", "c. Schistosoma mekongi", "d. Schistosoma haematobium"], answer: 3, explanation: "S. haematobium eggs are in urine." },
-            { q: "100. Which of the following is a symptom of the acute phase of fascioliasis?", options: ["a. Gallstones", "b. Eosinophilia", "c. Biliary cirrhosis", "d. Obstructive jaundice"], answer: 1, explanation: "Acute phase features marked eosinophilia." },
-
-            // --- 101-157: Trematodes & Cestodes ---
-            { q: "101. Which medication is the treatment of choice for fascioliasis?", options: ["a. Praziquantel", "b. Bithionol", "c. Triclabendazole", "d. Prednisolone"], answer: 2, explanation: "Triclabendazole is effective against Fasciola." },
-            { q: "102. What is the infective form of Paragonimus westermani for humans?", options: ["a. Cercaria", "b. Egg", "c. Metacercaria", "d. Adult worm"], answer: 2, explanation: "Metacercariae in crabs are ingested." },
-            { q: "103. What is a key prophylactic measure for schistosomiasis?", options: ["a. Vaccination of at-risk populations", "b. Prophylactic use of praziquantel", "c. Eradication of the intermediate snail hosts", "d. Avoiding contact with cats"], answer: 2, explanation: "Snail control is critical." },
-            { q: "104. What species of Schistosoma is associated with a terminal spine on its egg?", options: ["a. S. mansoni", "b. S. japonicum", "c. S. mekongi", "d. S. haematobium"], answer: 3, explanation: "S. haematobium eggs have a terminal spine." },
-            { q: "105. How do humans acquire clonorchiasis?", options: ["a. Contaminated egg", "b. Freshwater fish", "c. Infected soil", "d. Mosquito"], answer: 1, explanation: "Eating raw freshwater fish." },
-            { q: "106. What is the common name for Clonorchis sinensis?", options: ["a. The blood fluke", "b. The Chinese liver fluke", "c. The lung fluke", "d. The intestinal fluke"], answer: 1, explanation: "It is the Chinese liver fluke." },
-            { q: "107. In chronic Schistosoma haematobium infection, what bladder pathology is it associated with?", options: ["a. Clay pipe-stem fibrosis", "b. Squamous cell carcinoma", "c. Cor pulmonale", "d. White clay-pipe-stem fibrosis"], answer: 1, explanation: "It increases risk of bladder cancer." },
-            { q: "108. Where do adult Paragonimus westermani worms primarily reside in the human body?", options: ["a. The liver", "b. The intestine", "c. The lungs", "d. The blood vessels"], answer: 2, explanation: "They live in lung parenchyma." },
-            { q: "109. The eggs of Fasciola hepatica are indistinguishable from those of which other fluke?", options: ["a. Clonorchis sinensis", "b. Schistosoma mansoni", "c. Fasciolopsis buski", "d. Paragonimus westermani"], answer: 2, explanation: "Eggs are morphologically identical to F. buski." },
-            { q: "110. What is the common name for Paragonimus westermani?", options: ["a. Liver fluke", "b. Oriental lung fluke", "c. Blood fluke", "d. Intestinal fluke"], answer: 1, explanation: "It is the Oriental lung fluke." },
-            { q: "111. Which two intermediate hosts are required for the life cycle of Clonorchis sinensis?", options: ["a. A fly and a cow", "b. A snail and a fish", "c. A pig and a crab", "d. A tick and a bird"], answer: 1, explanation: "Snail is first, fish is second." },
-            { q: "112. How do humans typically become infected with Fasciola hepatica?", options: ["a. Infected mosquito", "b. Aquatic vegetation", "c. Water cercariae", "d. Infected sheep"], answer: 1, explanation: "Metacercariae on watercress." },
-            { q: "113. What is the common name for Fasciola hepatica?", options: ["a. Intestinal fluke", "b. Blood fluke", "c. Sheep liver fluke", "d. Lung fluke"], answer: 2, explanation: "It is the sheep liver fluke." },
-            { q: "114. Which species of Schistosoma is known for frequently involving the host’s central nervous system?", options: ["a. S. haematobium", "b. S. mansoni", "c. S. japonicum", "d. S. intercalatum"], answer: 2, explanation: "S. japonicum eggs can embolize to the brain." },
-            { q: "115. What is the first intermediate host in the life cycle of Paragonimus westermani?", options: ["a. Freshwater crab", "b. Freshwater snail", "c. Crayfish", "d. Tiger"], answer: 1, explanation: "Snails are the first host." },
-            { q: "116. What is the first intermediate host in the life cycle of F. hepatica?", options: ["a. A crab or crayfish", "b. An aquatic plant", "c. A snail of the genus Lymnaea", "d. A mosquito"], answer: 2, explanation: "Lymnaea snails are the host." },
-            { q: "117. Which of the following is a potential extrapulmonary site for paragonimiasis?", options: ["a. The skin", "b. The brain", "c. The bone", "d. The spleen"], answer: 1, explanation: "Juvenile flukes can migrate to the brain." },
-            { q: "118. Chronic Clonorchis infection has been linked to which type of cancer?", options: ["a. Hepatocellular carcinoma", "b. Cholangiocarcinoma", "c. Pancreatic cancer", "d. Gastric cancer"], answer: 1, explanation: "It is a Group 1 carcinogen for cholangiocarcinoma." },
-            { q: "119. What is the critical thermal point (temperature and time) to kill cysticerci in meat?", options: ["a. 37°C for 30 minutes", "b. 0°C for 24 hours", "c. 56°C for 5 minutes", "d. 100°C for 1 minute"], answer: 2, explanation: "Heating to 56°C kills cysticerci." },
-            { q: "120. What serious disease is caused by the larval stage of T. solium in humans?", options: ["a. Taeniasis", "b. Schistosomiasis", "c. Cysticercosis", "d. Hydatid disease"], answer: 2, explanation: "Ingestion of eggs causes cysticercosis." },
-            { q: "121. Which of the following is the first intermediate host in the life cycle?", options: ["a. Human", "b. Copepod (cyclops or diaptomus)", "c. Snail", "d. Freshwater fish"], answer: 1, explanation: "For Diphyllobothrium, the copepod is the first host." },
-            { q: "122. What serious condition can result from the rupture of a hydatid cyst and the release of the fluid?", options: ["a. Anaphylaxis", "b. Chronic fever", "c. Autoimmune reaction", "d. Organ failure"], answer: 0, explanation: "Cyst fluid is highly antigenic." },
-            { q: "123. What is the recommended treatment for the infection?", options: ["a. Albendazole for 3 days", "b. Mebendazole", "c. Metronidazole", "d. Single dose of praziquantel (10 mg/kg)"], answer: 3, explanation: "Praziquantel is first-line for taeniasis." },
-            { q: "124. Besides humans, which animal is a common host for Hymenolepis diminuta?", options: ["a. Cattle", "b. Rodents", "c. Fish", "d. Dogs"], answer: 1, explanation: "Rodents are the primary hosts." },
-            { q: "125. What is the name of the larval stage of Taenia saginata?", options: ["a. Oncosphere", "b. Cysticercus bovis", "c. Cysticercus cellulosae", "d. Hydatid cyst"], answer: 1, explanation: "C. bovis is the larval stage in cattle." },
-            { q: "126. What is the typical habitat of the adult Hymenolepis nana worm in humans?", options: ["a. The liver", "b. The large intestine", "c. The stomach", "d. The proximal ileum"], answer: 3, explanation: "It lives in the upper small intestine." },
-            { q: "127. What organ is most commonly affected in neurocysticercosis (NCC)?", options: ["a. Liver", "b. Lungs", "c. Brain", "d. Heart"], answer: 2, explanation: "NCC involves the CNS." },
-            { q: "128. What is the primary method for laboratory diagnosis of diphyllobothriasis?", options: ["a. Urine analysis", "b. Radiographic imaging", "c. Stool microscopy to demonstrate eggs", "d. Serological blood test"], answer: 2, explanation: "Eggs are found in stool." },
-            { q: "129. What type of anemia can result from Diphyllobothrium latum infection?", options: ["a. Hemolytic anemia", "b. Iron deficiency anemia", "c. Bothriocephalus anemia (Vitamin B12 deficiency)", "d. Sickle cell anemia"], answer: 2, explanation: "It causes megaloblastic anemia via B12 absorption." },
-            { q: "130. In which part of the human small intestine do adult Taenia worms primarily live?", options: ["a. Jejunum", "b. Cecum", "c. Duodenum", "d. Ileum"], answer: 0, explanation: "They attach to the jejunum." },
-            { q: "131. What is the common name for Diphyllobothrium latum?", options: ["a. Fish tapeworm / broad tapeworm", "b. Pork tapeworm", "c. Beef tapeworm", "d. Dwarf tapeworm"], answer: 0, explanation: "It is the fish tapeworm." },
-            { q: "132. What is the primary mode of transmission to humans?", options: ["a. Direct contact with an infected dog", "b. Drinking contaminated water", "c. Ingestion of undercooked fish containing the plerocercoid larva", "d. Inhaling airborne eggs"], answer: 2, explanation: "Eating undercooked fish." },
-            { q: "133. What is the most common site for a primary hydatid cyst in humans?", options: ["a. Liver", "b. Lungs", "c. Brain", "d. Bones"], answer: 0, explanation: "The liver is the most common site (70%)." },
-            { q: "134. What is the name of the pork tapeworm?", options: ["a. Taenia asiatica", "b. Hymenolepis nana", "c. Taenia saginata", "d. Taenia solium"], answer: 3, explanation: "T. solium is the pork tapeworm." },
-            { q: "135. Which drug is mentioned as a preferred treatment for intestinal taeniasis?", options: ["a. Clonorchis", "b. Albendazole", "c. Ivermectin", "d. Metronidazole"], answer: 1, explanation: "Albendazole is effective." },
-            { q: "136. What is the name given to sterile cysts or brood capsules that do not produce scolices?", options: ["a. Acephalocystis", "b. Protoscolices", "c. Gemmules", "d. Oncospheres"], answer: 0, explanation: "Acephalocystis are sterile cysts." },
-            { q: "137. What is the best imaging method for detecting non-calcified and ventricular cysts in the brain?", options: ["a. Ultrasound", "b. X-ray", "c. CT scan", "d. MRI scan"], answer: 3, explanation: "MRI is superior for NCC imaging." },
-            { q: "138. According to the document, which imaging technique is the diagnostic procedure of choice for hydatid cysts?", options: ["a. Plain X-ray", "b. Ultrasonography (USG)", "c. CT scan", "d. MRI"], answer: 1, explanation: "Ultrasound is first-line for abdominal cysts." },
-            { q: "139. What is the ideal intermediate host for Echinococcus?", options: ["a. Horse", "b. Sheep", "c. Cattle", "d. Man"], answer: 1, explanation: "Sheep are the primary intermediate host." },
-            { q: "140. According to the document, what is the primary method for laboratory diagnosis of hymenolepiasis?", options: ["a. Radiographic imaging", "b. Characteristic eggs", "c. Serological test", "d. Blood culture"], answer: 1, explanation: "Diagnosis is by finding eggs." },
-            { q: "141. What is one of the key prevention methods mentioned if fish is to be consumed raw?", options: ["a. Marinating the fish in lemon juice", "b. Deep freezing the fish at –10°C for 24–28 hours", "c. Washing the fish thoroughly", "d. Salting the fish"], answer: 1, explanation: "Freezing kills plerocercoids." },
-            { q: "142. Where in the human body does the adult Diphyllobothrium latum reside?", options: ["a. Large intestine", "b. Liver", "c. Small intestine (ileum)", "d. Stomach"], answer: 2, explanation: "It attaches to the ileum." },
-            { q: "143. Which structure on the scolex is present in T. solium but absent in T. saginata?", options: ["a. Neck", "b. Bothrium", "c. Suckers", "d. Rostellum with hooks"], answer: 3, explanation: "T. solium has a rostellum with hooks." },
-            { q: "144. What structure on the scolex does the adult worm use for attachment?", options: ["a. Oral hooks", "b. Two slit-like sucking grooves (bothria)", "c. A rostellum with hooks", "d. Four circular suckers"], answer: 3, explanation: "Taenia uses four suckers." },
-            { q: "145. What is the first larval stage that develops after the egg is ingested?", options: ["a. Cysticercus", "b. Hydatid cyst", "c. Oncosphere", "d. Cysticercoid larvae"], answer: 2, explanation: "The hexacanth embryo is the oncosphere." },
-            { q: "146. How do eggs from the gravid proglottids leave the definitive host?", options: ["a. In the saliva", "b. In the feces", "c. Through the skin", "d. In the urine"], answer: 1, explanation: "Eggs are excreted in feces." },
-            { q: "147. What is the drug of choice for treating hymenolepiasis?", options: ["a. Nitazoxanide", "b. Albendazole", "c. Mebendazole", "d. Praziquantel"], answer: 3, explanation: "Praziquantel is effective." },
-            { q: "148. What is the length range of an adult Taenia saginata worm?", options: ["a. 1–2 meters", "b. 2–3 meters", "c. 5–10 meters", "d. Less than 1 meter"], answer: 2, explanation: "It is very long (4-12m)." },
-            { q: "149. What is the infective stage of Taenia solium for pigs?", options: ["a. Egg", "b. Cysticercus cellulosae", "c. Adult worm", "d. Proglottid"], answer: 0, explanation: "Pigs ingest eggs from human feces." },
-            { q: "150. How can you macroscopically differentiate a T. solium proglottid from a T. saginata proglottid?", options: ["a. By its thickness", "b. By the presence of a genital pore", "c. By the number of lateral uterine branches", "d. By its color"], answer: 2, explanation: "T. solium has 7-13 branches, T. saginata has 15-30." },
-            { q: "151. In which part of the definitive host (dog) does the adult Echinococcus worm live?", options: ["a. Lungs", "b. Jejunum and duodenum", "c. Large intestine", "d. Stomach"], answer: 1, explanation: "Adults live in the small intestine." },
-            { q: "152. What is the shape and size of a typical Diphyllobothrium latum egg?", options: ["a. Broadly ovoid, about 65 µm by 45 µm", "b. Elongated with a spine, 150 µm", "c. Barrel-shaped, 50 µm", "d. Spherical, 35 µm"], answer: 0, explanation: "Oval and operculated." },
-            { q: "153. Besides surgery, what class of chemotherapeutic agents is mentioned as being used for hydatid cysts?", options: ["a. Aminoglycosides", "b. Tetracyclines", "c. Benzimidazoles", "d. Macrolides"], answer: 2, explanation: "Albendazole is a benzimidazole." },
-            { q: "154. According to the text, what is a common symptom of neurocysticercosis?", options: ["a. Hemoptysis", "b. Jaundice", "c. Epileptic seizures", "d. Diarrhea"], answer: 2, explanation: "Seizures are the most common symptom." },
-            { q: "155. Which species is known as the “dwarf tapeworm”?", options: ["a. Echinococcus granulosus", "b. Hymenolepis diminuta", "c. Hymenolepis nana", "d. Taenia solium"], answer: 2, explanation: "H. nana is the dwarf tapeworm." },
-            { q: "156. Which microscopic feature is used to distinguish an egg of Hymenolepis nana from Hymenolepis diminuta?", options: ["a. Presence of a six-hooked oncosphere", "b. Presence of polar filaments", "c. Thick, transparent shell", "d. Spherical shape"], answer: 1, explanation: "H. nana has polar filaments." },
-            { q: "157. How many uterine branches does a gravid proglottid of T. solium typically have?", options: ["a. More than 30", "b. 5–10", "c. 20–25", "d. 15–30"], answer: 1, explanation: "Typically 7-13 (5-10)." }
+            { q: "Hydrocele is most frequently associated with which species?", options: ["Brugia malayi", "Wuchereria bancrofti", "Loa loa", "Onchocerca volvulus"], a: 1, exp: "Hydrocele is a common manifestation of chronic lymphatic filariasis caused by Wuchereria bancrofti." },
+            { q: "Which parasite is associated with 'fugitive swellings'?", options: ["Wuchereria bancrofti", "Brugia malayi", "Loa loa", "Onchocerca volvulus"], a: 2, exp: "Fugitive swellings (Calabar swellings) are transient, localized edematous swellings that migrate across subcutaneous tissues, hallmark of loiasis." },
+            { q: "What is the infective stage of filarial worms for humans?", options: ["Microfilaria", "L1 larva", "L3 larva", "Cercaria"], a: 2, exp: "Filarial nematodes require an arthropod vector. Within the vector, microfilariae develop into infective third-stage larvae (L3)." },
+            { q: "The presence of a 'sheath' is a diagnostic feature of the microfilariae of:", options: ["Onchocerca volvulus", "Wuchereria bancrofti", "Mansonella ozzardi", "Mansonella perstans"], a: 1, exp: "Microfilariae of W. bancrofti are sheathed, meaning they are surrounded by a thin, transparent membrane derived from the eggshell." },
+            { q: "Which stain is commonly used to study the morphology of microfilariae?", options: ["Gram stain", "Giemsa stain", "Acid-fast stain", "Iodine stain"], a: 1, exp: "Giemsa stain is a Romanowsky-type stain that differentially colors cellular components, highlighting nuclei and sheath." },
+            { q: "The term 'lymphangitis' refers to:", options: ["Inflammation of lymph nodes", "Inflammation of lymphatic vessels", "Enlargement of the spleen", "Obstruction of the bile duct"], a: 1, exp: "Lymphangitis is acute inflammation of the lymphatic vessels, often presenting as red, tender, cord-like streaks." },
+            { q: "Which parasite’s microfilariae show 'diurnal periodicity'?", options: ["Wuchereria bancrofti", "Brugia malayi", "Loa loa", "Mansonella perstans"], a: 2, exp: "Loa loa microfilariae exhibit diurnal periodicity—circulating in peripheral blood during daylight hours." },
+            { q: "The vector for Brugia timori is:", options: ["Culex", "Anopheles", "Mansonia", "Simulium"], a: 1, exp: "Brugia timori, found primarily in Indonesia, is transmitted by Anopheles barbirostris mosquitoes." },
+            { q: "Calabar swellings are a characteristic feature of which infection?", options: ["Bancroftian filariasis", "Loiasis", "Onchocerciasis", "Malayan filariasis"], a: 1, exp: "Calabar swellings are transient, angioedema-like subcutaneous swellings caused by Loa loa migration." },
+            { q: "Which parasite produces microfilariae that are typically found in the skin, not blood?", options: ["Wuchereria bancrofti", "Brugia malayi", "Onchocerca volvulus", "Loa loa"], a: 2, exp: "Onchocerca volvulus microfilariae reside in the dermis and do not circulate in peripheral blood." },
+            { q: "The life span of an adult Wuchereria bancrofti worm is approximately:", options: ["1 month", "1 year", "5–10 years", "20–30 years"], a: 2, exp: "Adult filarial worms are long-lived. W. bancrofti adults can survive 5–10 years in human lymphatics." },
+            { q: "The drug of choice for treating Onchocerciasis is:", options: ["Diethylcarbamazine (DEC)", "Ivermectin", "Praziquantel", "Albendazole"], a: 1, exp: "Ivermectin is the drug of choice because it paralyzes and kills microfilariae, preventing ocular damage." },
+            { q: "Microfilariae are:", options: ["Egg", "Embryos (advanced first-stage larvae)", "Adult worms", "Encysted larvae"], a: 1, exp: "Microfilariae are pre-larval stages released by adult female filarial worms. They are technically advanced first-stage larvae (L1)." },
+            { q: "Chronic lymphatic obstruction in filariasis leads to:", options: ["High blood pressure", "Lymphedema", "Ascites", "Pulmonary edema"], a: 1, exp: "Persistent inflammation and fibrosis from adult worms block lymphatic vessels, causing protein-rich fluid accumulation in tissues." },
+            { q: "“Sclerosing keratitis” is a complication of:", options: ["Bancroftian filariasis", "Onchocerciasis", "Loiasis", "Dracunculiasis"], a: 1, exp: "Sclerosing keratitis is a leading cause of blindness in onchocerciasis ('river blindness')." },
+            { q: "Where are 'onchocercomas' (subcutaneous nodules) found?", options: ["In the lungs", "Over bony prominences", "In the brain", "In the liver"], a: 1, exp: "Onchocercomas are fibrous nodules containing adult O. volvulus worms, forming near joints and over bony areas." },
+            { q: "Which mosquito genus is the primary vector for Brugia malayi?", options: ["Culex", "Mansonia", "Aedes", "Culiseta"], a: 1, exp: "Mansonia mosquitoes are the main vectors for B. malayi in rural Southeast Asia." },
+            { q: "The “Mazzotti reaction” is a severe allergic response seen during treatment of:", options: ["Bancroftian filariasis", "Onchocerciasis", "Loiasis", "Ascariasis"], a: 1, exp: "The Mazzotti reaction occurs when ivermectin rapidly kills O. volvulus microfilariae, triggering intense inflammation." },
+            { q: "The “skin snip” method is the primary diagnostic tool for:", options: ["Wuchereria bancrofti", "Loa loa", "Onchocerca volvulus", "Brugia malayi"], a: 2, exp: "Since O. volvulus microfilariae reside in skin, diagnosis relies on skin snips examined for emerging microfilariae." },
+            { q: "Filarial worms belong to the class:", options: ["Cestoda", "Trematoda", "Nematoda", "Protozoa"], a: 2, exp: "Filarial worms are roundworms, classified under phylum Nematoda." },
+            { q: "Which mosquito genus is a major vector for W. bancrofti in urban areas?", options: ["Aedes", "Culex", "Mansonia", "Anopheles"], a: 1, exp: "In urban settings, Culex quinquefasciatus is the primary vector for W. bancrofti." },
+            { q: "What is the intermediate host/vector for Onchocerca volvulus?", options: ["Culex mosquito", "Anopheles mosquito", "Simulium (blackfly)", "Chrysops (deer fly)"], a: 2, exp: "Onchocerca volvulus is transmitted by female Simulium blackflies." },
+            { q: "What is the definitive host for Wuchereria bancrofti?", options: ["Mosquito", "Human", "Pig", "Cattle"], a: 1, exp: "The definitive host harbors the sexually mature stage. In W. bancrofti, humans are the only natural definitive host." },
+            { q: "“River blindness” is caused by which parasite?", options: ["Brugia malayi", "Loa loa", "Onchocerca volvulus", "Mansonella perstans"], a: 2, exp: "Onchocerciasis, or river blindness, is caused by O. volvulus." },
+            { q: "Occult filariasis (Tropical Pulmonary Eosinophilia, TPE) is characterized by:", options: ["Presence of numerous microfilariae in blood", "Absence of microfilariae in blood", "Absence of antibodies", "Normal eosinophil count"], a: 1, exp: "TPE is a hypersensitivity reaction to filarial antigens. Patients have high IgE and eosinophilia but no detectable microfilariae." },
+            { q: "Which clinical sign involves the presence of milky white urine?", options: ["Hematuria", "Chyluria", "Proteinuria", "Glycosuria"], a: 1, exp: "Chyluria results from lymphatic leakage into the urinary tract due to filarial-induced lymphatic rupture." },
+            { q: "What is the standard dose of DEC in the treatment of bancroftian filariasis?", options: ["2 mg/kg for 1 day", "6 mg/kg for 12 days", "10 mg/kg for 30 days", "100 mg/kg once"], a: 1, exp: "The WHO-recommended regimen is DEC at 6 mg/kg/day orally for 12 days." },
+            { q: "Mansonella perstans adult worms live in:", options: ["Subcutaneous tissue", "Body cavities (pleural/peritoneal)", "Lymphatic vessels", "Conjunctiva"], a: 1, exp: "Unlike other filariae, M. perstans adults reside in serous cavities." },
+            { q: "Which of these is a non-periodic filarial worm?", options: ["Wuchereria bancrofti (Indian strain)", "Brugia malayi", "Onchocerca volvulus", "Loa loa"], a: 2, exp: "O. volvulus microfilariae are in skin—not blood—so they are considered non-periodic." },
+            { q: "Which diagnostic test involves the concentration of microfilariae from blood?", options: ["Kato-Katz technique", "Knott’s concentration", "Baermann technique", "Formal-ether sedimentation"], a: 1, exp: "Knott’s method uses centrifugation of lysed blood to concentrate microfilariae." },
+            { q: "Which filarial worm is the most common cause of lymphatic filariasis?", options: ["Brugia malayi", "Wuchereria bancrofti", "Loa loa", "Onchocerca volvulus"], a: 1, exp: "Wuchereria bancrofti accounts for approximately 90% of all lymphatic filariasis cases worldwide." },
+            { q: "Which parasite is known as the “eye worm”?", options: ["Wuchereria bancrofti", "Brugia malayi", "Loa loa", "Onchocerca volvulus"], a: 2, exp: "Loa loa is called the 'eye worm' because adult worms can migrate across the conjunctiva." },
+            { q: "Which filarial worm is NOT found in the peripheral blood?", options: ["Wuchereria bancrofti", "Brugia malayi", "Onchocerca volvulus", "Loa loa"], a: 2, exp: "Onchocerca volvulus microfilariae reside exclusively in the skin and eyes." },
+            { q: "At what time is “nocturnal periodicity” most evident for W. bancrofti microfilariae in blood?", options: ["10 am to 2 pm", "6 am to 10 am", "10 pm to 2 am", "2 pm to 6 pm"], a: 2, exp: "Peak microfilarial density in peripheral blood is between 10 PM and 2 AM." },
+            { q: "Tropical pulmonary eosinophilia (TPE) is an occult form of which infection?", options: ["Ascariasis", "Filariasis", "Hookworm", "Strongyloidiasis"], a: 1, exp: "TPE is a hypersensitivity reaction to microfilarial antigens (usually from W. bancrofti)." },
+            { q: "Which drug is the primary treatment for lymphatic filariasis?", options: ["Praziquantel", "Diethylcarbamazine (DEC)", "Metronidazole", "Chloroquine"], a: 1, exp: "DEC is microfilaricidal and partially macrofilaricidal against W. bancrofti and Brugia spp." },
+            { q: "“Adenolymphangitis” (ADL) in filariasis refers to:", options: ["Chronic swelling", "Acute febrile episodes with painful lymphatics", "Internal organ failure", "Skin rashes"], a: 1, exp: "ADL episodes are acute inflammatory attacks involving fever, pain, redness, and tenderness along lymphatic channels." },
+            { q: "Which filarial species is mostly restricted to South and East Asia?", options: ["Wuchereria bancrofti", "Brugia malayi", "Loa loa", "Onchocerca volvulus"], a: 1, exp: "Brugia malayi is endemic in India, China, Indonesia, Malaysia, Philippines, and Thailand." },
+            { q: "Brugia malayi microfilariae can be distinguished by having:", options: ["No nuclei in the tail", "Two terminal nuclei in the tail", "A single terminal nucleus", "A blunt tail without nuclei"], a: 1, exp: "Brugia malayi microfilariae have two distinct nuclei at the tip of the tail." },
+            { q: "“Leopard skin” (spotty depigmentation) is seen in:", options: ["Chronic bancroftian filariasis", "Chronic onchocerciasis", "Acute loiasis", "Malayan filariasis"], a: 1, exp: "“Leopard skin” refers to patchy depigmentation of the shins due to chronic inflammation by O. volvulus." },
+            { q: "Which filarial worm is viviparous?", options: ["All filarial worms", "Only W. bancrofti", "Only Onchocerca", "None; they are all oviparous"], a: 0, exp: "All medically important filarial nematodes are viviparous—they produce live microfilariae." },
+            { q: "What is the common name for the condition involving gross enlargement of the limbs in filariasis?", options: ["Löffler’s syndrome", "Elephantiasis", "Swimmer’s itch", "Katayama fever"], a: 1, exp: "Elephantiasis describes severe, disfiguring swelling and thickening of skin and underlying tissues." },
+            { q: "The DEC provocation test is used for:", options: ["Kill adult worms", "Bring microfilariae into peripheral blood during the day", "Treat elephantiasis", "Diagnose malaria"], a: 1, exp: "A small dose of DEC causes microfilariae to appear in peripheral blood within 30–60 minutes if they are present." },
+            { q: "Which filarial worm is primarily transmitted by Chrysops (deer flies)?", options: ["Wuchereria bancrofti", "Loa loa", "Onchocerca volvulus", "Brugia malayi"], a: 1, exp: "Loa loa is transmitted by day-biting Chrysops spp. in rainforest areas." },
+            { q: "Which of the following is a classic manifestation of chronic filariasis?", options: ["Bloody diarrhea", "Hydrocele", "Iron deficiency anemia", "Clay pipe stem fibrosis"], a: 1, exp: "Hydrocele is one of the most common chronic manifestations of W. bancrofti infection." },
+            { q: "Which filarial worm is known to cause “hanging groin”?", options: ["Wuchereria bancrofti", "Onchocerca volvulus", "Brugia malayi", "Loa loa"], a: 0, exp: "“Hanging groin” refers to massive inguinal lymphedema caused by chronic bancroftian filariasis." },
+            { q: "Where do adult Wuchereria bancrofti worms typically reside in the human body?", options: ["Subcutaneous tissue", "Bloodstream", "Lymphatic vessels", "Small intestine"], a: 2, exp: "Adult W. bancrofti worms live coiled within lymphatic vessels and lymph nodes." },
+            { q: "Which of the following is NOT a lymphatic filarial worm?", options: ["Wuchereria bancrofti", "Brugia malayi", "Brugia timori", "Loa loa"], a: 3, exp: "Loa loa is a subcutaneous filarial worm, not lymphatic." },
+            { q: "Which condition is characterized by nocturnal cough, dyspnea, and high eosinophilia?", options: ["Cutaneous larva migrans", "Tropical pulmonary eosinophilia", "Visceral larva migrans", "Löffler’s syndrome"], a: 1, exp: "TPE presents with paroxysmal nocturnal cough, wheezing, dyspnea, and marked eosinophilia." },
+            { q: "“Filarial dance sign” is a diagnostic finding seen on:", options: ["X-ray", "Ultrasonography", "CT scan", "MRI"], a: 1, exp: "The “filarial dance sign” is real-time ultrasonographic visualization of motile adult worms in dilated lymphatics." },
+            { q: "What is the shape of the pinworm egg?", options: ["Spherical", "Barrel-shape with plugs", "Elongated ovoid, flattened on one side", "Elliptical and bile-stained"], a: 2, exp: "Enterobius vermicularis eggs are asymmetrical, elongated ovals flattened on one side." },
+            { q: "What is a distinctive morphological feature of the female pinworm?", options: ["A curved posterior end", "A double-bulb esophagus", "A long, whip-like tail", "A thin, pointed, pin-like tail"], a: 3, exp: "The female Enterobius has a characteristic sharply pointed (pin-like) tail." },
+            { q: "What is the primary habitat of adult pinworms in the human body?", options: ["Small intestine", "Stomach", "Liver", "Caecum and appendix"], a: 3, exp: "Adult pinworms reside primarily in the caecum, appendix, and adjacent ileum/colon." },
+            { q: "Which drug is stated as being more effective than albendazole for treating strongyloidiasis?", options: ["Mebendazole", "Praziquantel", "Ivermectin", "Metronidazole"], a: 2, exp: "Ivermectin is the drug of choice for Strongyloides stercoralis due to superior efficacy." },
+            { q: "What is a key prophylactic measure against hookworm infection?", options: ["Vaccination", "Use of footwear", "Sleeping under insecticide-treated nets", "Boiling drinking water"], a: 1, exp: "Hookworm larvae penetrate bare skin, usually feet. Wearing shoes prevents this." },
+            { q: "In which organ do the larvae grow and moult twice during their migration?", options: ["Liver", "Heart", "Lungs", "Brain"], a: 2, exp: "After skin penetration, larvae travel via blood to the lungs, where they break into alveoli and moult." },
+            { q: "What is the characteristic shape of a Trichuris trichiura egg?", options: ["Spherical with a thin shell", "Oval with a rough surface", "Barrel-shaped with polar plugs", "Elongated with a pointed end"], a: 2, exp: "Trichuris eggs are barrel-shaped, brown, and have prominent mucoid polar plugs." },
+            { q: "What is the infective form of the parasite that penetrates the skin?", options: ["Rhabditiform larva", "Adult worm", "Egg", "Filariform larva"], a: 3, exp: "The filariform (L3) larva is the infective stage for skin-penetrating nematodes." },
+            { q: "What is a key prophylactic measure against pinworm infection?", options: ["Taking a weekly vitamin supplement", "Frequent hand washing and nail-cleaning", "Avoiding leafy vegetables", "Drinking boiled water only"], a: 1, exp: "Pinworm spreads via fecal-oral route or inhalation. Hand hygiene reduces transmission." },
+            { q: "Which hookworm species is known as the “New World” hookworm?", options: ["Ancylostoma duodenale", "Necator americanus", "Ancylostoma braziliense", "Ancylostoma caninum"], a: 1, exp: "Necator americanus is called the “New World hookworm”." },
+            { q: "What is a major complication mentioned in the document that can occur during hyperinfection?", options: ["Liver cirrhosis", "Brain abscess and meningitis", "Cardiac arrest", "Kidney failure"], a: 1, exp: "In strongyloidiasis hyperinfection, larvae can disseminate to the CNS, causing meningitis." },
+            { q: "Where is the habitat of the adult Strongyloides stercoralis worm in the human body?", options: ["Large intestine", "Liver", "Small intestine", "Lung"], a: 2, exp: "Adult female S. stercoralis live embedded in the mucosa of the duodenum and jejunum." },
+            { q: "What is the primary method for diagnosing trichuriasis?", options: ["Blood culture", "Stool examination for eggs", "Urinalysis", "Skin biopsy"], a: 1, exp: "Diagnosis relies on microscopic identification of characteristic barrel-shaped eggs in stool." },
+            { q: "What is the infective form of Enterobius vermicularis for humans?", options: ["Adult worm", "Larva", "Embryonated egg", "Unfertilized egg"], a: 2, exp: "Humans ingest embryonated eggs from contaminated hands or surfaces." },
+            { q: "Which stage of Strongyloides stercoralis is responsible for infecting humans?", options: ["Rhabditiform larva", "Egg", "Adult female worm", "Filariform larva"], a: 3, exp: "Free-living filariform (L3) larvae in soil penetrate intact skin to initiate infection." },
+            { q: "What is the infective form of the hookworm?", options: ["Egg", "Rhabditiform larva", "Adult worm", "Third stage filariform larva"], a: 3, exp: "Hookworm eggs hatch to release rhabditiform larvae, which moult to become infective filariform (L3) larvae." },
+            { q: "What is the most common clinical symptom of enterobiasis?", options: ["Diarrhea", "Intense perianal itching", "Abdominal pain", "Cough"], a: 1, exp: "Pruritus ani (intense perianal itching), especially at night, is the hallmark of pinworm infection." },
+            { q: "Where do the adult worms primarily live in the human body?", options: ["Large intestine", "Small intestine", "Stomach", "Lungs"], a: 1, exp: "For hookworms, Strongyloides, and Ascaris, the primary adult habitat is the small intestine." },
+            { q: "A heavy infection with T. trichiura can cause a condition where the rectum protrudes from the anus. What is this condition called?", options: ["Appendicitis", "Hemorrhoids", "Rectal prolapse", "Colitis"], a: 2, exp: "In severe trichuriasis, chronic inflammation and straining can lead to rectal prolapse." },
+            { q: "Which of these treatments is specifically noted as safe to use during pregnancy?", options: ["Albendazole", "Mebendazole", "Ivermectin", "Pyrantel pamoate"], a: 3, exp: "Pyrantel pamoate is considered the safest anthelmintic in pregnancy when treatment is necessary." },
+            { q: "Why is it often advised to treat the whole family for pinworm?", options: ["It is a blood-borne infection", "The infection is usually spread within groups", "It is caused by a bacteria", "It is a genetic condition"], a: 1, exp: "Pinworm spreads easily through close contact, contaminated bedding, or airborne eggs." },
+            { q: "What is the name of the pneumonia-like condition caused by larval migration in the lungs?", options: ["Cysticercosis", "Löffler’s syndrome", "Elephantiasis", "Chagas disease"], a: 1, exp: "Löffler’s syndrome is a transient eosinophilic pneumonitis caused by larval migration." },
+            { q: "How does the filariform larva primarily enter the human body?", options: ["Through ingestion of contaminated food", "By penetrating the skin", "Through the bite of a mosquito", "By inhalation"], a: 1, exp: "The filariform (L3) larva of hookworms and Strongyloides actively penetrates intact skin." },
+            { q: "How can hookworm infection be directly diagnosed in a laboratory?", options: ["Blood culture", "Chest X-ray", "Finding eggs in a stool sample", "Urine analysis"], a: 2, exp: "Hookworm diagnosis relies on microscopic identification of characteristic eggs in fresh stool." },
+            { q: "Where in the human body do adult Trichuris trichiura worms primarily live?", options: ["Small intestine", "Large intestine", "Liver", "Blood vessels"], a: 1, exp: "Adult Trichuris trichiura embed their anterior ends into the mucosa of the cecum and colon." },
+            { q: "Which larval stage is most commonly found in the feces in a routine stool examination?", options: ["Filariform larva", "Rhabditiform larva", "L3 larva", "Adult worm"], a: 1, exp: "In strongyloidiasis, the rhabditiform (L1) larva is passed in stool." },
+            { q: "What is the specific name of the roundworm that causes ascariasis?", options: ["Enterobius vermicularis", "Ascaris lumbricoides", "Taenia solium", "Necator americanus"], a: 1, exp: "Ascaris lumbricoides is the largest intestinal nematode of humans." },
+            { q: "What is a serious surgical emergency that can occur if worms penetrate the intestinal wall?", options: ["Löffler’s syndrome", "Eosinophilia", "Peritonitis", "Urticaria"], a: 2, exp: "Heavy Ascaris infections can lead to intestinal perforation, causing acute peritonitis." },
+            { q: "Which method is recommended for laboratory diagnosis of pinworm infection?", options: ["Stool examination", "Blood test", "Scotch tape method", "Urine analysis"], a: 2, exp: "The Scotch tape test involves pressing tape against the perianal skin to collect eggs." },
+            { q: "What is the common name for Trichuris trichiura?", options: ["Roundworm", "Hookworm", "Whipworm", "Tapeworm"], a: 2, exp: "Trichuris trichiura is called whipworm due to its whip-like anterior end." },
+            { q: "What is the definitive laboratory diagnosis for ascariasis?", options: ["Antibody detection", "X-ray imaging", "Blood culture", "Demonstration of egg in feces"], a: 3, exp: "Diagnosis is confirmed by identifying fertilized or unfertilized Ascaris eggs in stool." },
+            { q: "In which part of the human body do adult hookworms primarily live?", options: ["Large intestine", "Stomach", "Small intestine", "Liver"], a: 2, exp: "Adult hookworms attach to the mucosa of the jejunum and duodenum." },
+            { q: "What is the most serious pathological effect of a hookworm infection?", options: ["Liver abscess", "Neurological damage", "Anemia and protein deficiency", "Pulmonary fibrosis"], a: 2, exp: "Hookworms cause chronic blood loss, leading to iron-deficiency anemia and hypoalbuminemia." },
+            { q: "Which of the following is a recommended treatment for hookworm?", options: ["Tetracycline", "Chloroquine", "Albendazole (400 mg single dose)", "Penicillin"], a: 2, exp: "Albendazole 400 mg single dose is WHO-recommended for hookworm." },
+            { q: "What is the common name for Enterobius vermicularis?", options: ["Roundworm", "Pinworm", "Hookworm", "Whipworm"], a: 1, exp: "Enterobius vermicularis is universally known as the pinworm." },
+            { q: "Which of the following is a recommended single-dose treatment for pinworm?", options: ["Metronidazole", "Chloroquine", "Albendazole", "Penicillin"], a: 2, exp: "Albendazole 400 mg single dose is effective for pinworm." },
+            { q: "Where does the adult Clonorchis sinensis worm live in the human body?", options: ["In the bloodstream", "In the lungs", "In the intestinal tract", "In the biliary tract"], a: 3, exp: "Adult Clonorchis sinensis resides in the small and medium intrahepatic bile ducts." },
+            { q: "Which mollusk (snail) acts as the intermediate host for Schistosoma mansoni?", options: ["Bulinus sp.", "Oncomelania sp.", "Biomphalaria sp.", "Crab or crayfish"], a: 2, exp: "Schistosoma mansoni uses freshwater snails of the genus Biomphalaria as its intermediate host." },
+            { q: "What is the name of the larval stage that emerges from the snail and penetrates human skin?", options: ["Miracidium", "Sporocyst", "Cercaria", "Schistosomula"], a: 2, exp: "The cercaria is the free-swimming larval stage released by infected snails." },
+            { q: "Which aquatic vegetation-related structure is the infective stage for the definitive host?", options: ["Miracidium", "Cercaria", "Redia", "Metacercaria"], a: 3, exp: "For trematodes like Fasciola and Clonorchis, the metacercaria is the encysted stage on aquatic plants." },
+            { q: "What is the drug of choice for treating paragonimiasis?", options: ["Metronidazole", "Albendazole", "Praziquantel", "Niclosamide"], a: 2, exp: "Praziquantel is the drug of choice for Paragonimus lung fluke infection." },
+            { q: "In what type of host are the metacercariae of Paragonimus westermani found?", options: ["Freshwater snail", "Human", "Freshwater crab or crayfish", "Tiger"], a: 2, exp: "Humans acquire Paragonimus by eating raw or undercooked freshwater crabs or crayfish." },
+            { q: "What is the infective form of Clonorchis sinensis for humans?", options: ["The egg", "The miracidium", "The metacercaria", "The adult worm"], a: 2, exp: "Humans become infected by ingesting metacercariae encysted in raw freshwater fish." },
+            { q: "In which organ of the definitive host does the adult Fasciola hepatica reside?", options: ["Lungs", "Intestines", "Liver and biliary passages", "Blood vessels"], a: 2, exp: "Fasciola hepatica migrates through the liver parenchyma, then settles in the large bile ducts." },
+            { q: "What is the drug of choice for treating schistosomiasis?", options: ["Metrifonate", "Praziquantel", "Albendazole", "Chloroquine"], a: 1, exp: "Praziquantel is effective against all major Schistosoma species." },
+            { q: "In which human veins do adult Schistosoma haematobium worms primarily live?", options: ["Inferior mesenteric vein", "Hepatic portal vein", "Vesical and pelvic plexuses", "Pulmonary arterioles"], a: 2, exp: "S. haematobium adults reside in the venous plexus of the bladder and ureters." },
+            { q: "What is the drug of choice for treating clonorchiasis?", options: ["Metronidazole", "Chloroquine", "Praziquantel", "Ivermectin"], a: 2, exp: "Praziquantel is first-line for Clonorchis sinensis and Opisthorchis." },
+            { q: "How do the schistosomulae first enter the body after skin penetration?", options: ["By migrating to the bladder", "By entering peripheral venules", "By being coughed up and swallowed", "By directly burrowing into the liver"], a: 1, exp: "After cercariae penetrate skin, they enter dermal capillaries and venules." },
+            { q: "Which Schistosoma species is primarily diagnosed by finding eggs in the urine?", options: ["Schistosoma mansoni", "Schistosoma japonicum", "Schistosoma mekongi", "Schistosoma haematobium"], a: 3, exp: "S. haematobium eggs have a terminal spine and are excreted in urine." },
+            { q: "Which of the following is a symptom of the acute phase of fascioliasis?", options: ["Gallstones", "Eosinophilia", "Biliary cirrhosis", "Obstructive jaundice"], a: 1, exp: "The acute phase features fever, RUQ pain, hepatomegaly, and marked eosinophilia." },
+            { q: "Which medication is the treatment of choice for fascioliasis?", options: ["Praziquantel", "Bithionol", "Triclabendazole", "Prednisolone"], a: 2, exp: "Triclabendazole is the drug of choice for Fasciola hepatica." },
+            { q: "What is the infective form of Paragonimus westermani for humans?", options: ["Cercaria", "Egg", "Metacercaria", "Adult worm"], a: 2, exp: "Humans acquire Paragonimus by ingesting metacercariae in freshwater crabs or crayfish." },
+            { q: "What is a key prophylactic measure for schistosomiasis?", options: ["Vaccination", "Prophylactic praziquantel", "Eradication of snail hosts", "Avoiding cats"], a: 2, exp: "Snail control is a cornerstone of schistosomiasis prevention." },
+            { q: "What species of Schistosoma is associated with a terminal spine on its egg?", options: ["S. mansoni", "S. japonicum", "S. mekongi", "S. haematobium"], a: 3, exp: "S. haematobium eggs have a prominent terminal spine." },
+            { q: "How do humans acquire clonorchiasis?", options: ["Contaminated egg", "Freshwater fish", "Infected soil", "Mosquito"], a: 1, exp: "Clonorchiasis results from eating raw, undercooked freshwater fish." },
+            { q: "What is the common name for Clonorchis sinensis?", options: ["The blood fluke", "The Chinese liver fluke", "The lung fluke", "The intestinal fluke"], a: 1, exp: "Clonorchis sinensis is widely known as the Chinese liver fluke." },
+            { q: "In chronic Schistosoma haematobium infection, what bladder pathology is it associated with?", options: ["Clay pipe-stem fibrosis", "Squamous cell carcinoma", "Cor pulmonale", "White clay-pipe-stem fibrosis"], a: 1, exp: "Chronic S. haematobium infection significantly increases the risk of squamous cell carcinoma of the bladder." },
+            { q: "Where do adult Paragonimus westermani worms primarily reside in the human body?", options: ["The liver", "The intestine", "The lungs", "The blood vessels"], a: 2, exp: "Adult Paragonimus westermani live encapsulated in lung parenchyma." },
+            { q: "The eggs of Fasciola hepatica are indistinguishable from those of which other fluke?", options: ["Clonorchis sinensis", "Schistosoma mansoni", "Fasciolopsis buski", "Paragonimus westermani"], a: 2, exp: "Eggs of Fasciola hepatica and Fasciolopsis buski are morphologically identical." },
+            { q: "What is the common name for Paragonimus westermani?", options: ["Liver fluke", "Oriental lung fluke", "Blood fluke", "Intestinal fluke"], a: 1, exp: "Paragonimus westermani is commonly called the Oriental lung fluke." },
+            { q: "Which two intermediate hosts are required for the life cycle of Clonorchis sinensis?", options: ["A fly and a cow", "A snail and a fish", "A pig and a crab", "A tick and a bird"], a: 1, exp: "The life cycle involves a freshwater snail and a freshwater cyprinoid fish." },
+            { q: "How do humans typically become infected with Fasciola hepatica?", options: ["Infected mosquito", "Aquatic vegetation", "Water cercariae", "Infected sheep"], a: 1, exp: "Humans ingest metacercariae encysted on aquatic plants like watercress." },
+            { q: "What is the common name for Fasciola hepatica?", options: ["Intestinal fluke", "Blood fluke", "Sheep liver fluke", "Lung fluke"], a: 2, exp: "Fasciola hepatica is known as the sheep liver fluke." },
+            { q: "Which species of Schistosoma is known for frequently involving the host’s central nervous system?", options: ["S. haematobium", "S. mansoni", "S. japonicum", "S. intercalatum"], a: 2, exp: "S. japonicum eggs can embolize to the brain or spinal cord." },
+            { q: "What is the first intermediate host in the life cycle of Paragonimus westermani?", options: ["Freshwater crab", "Freshwater snail", "Crayfish", "Tiger"], a: 1, exp: "The first intermediate host is a freshwater snail." },
+            { q: "What is the first intermediate host in the life cycle of F. hepatica?", options: ["A crab or crayfish", "An aquatic plant", "A snail of the genus Lymnaea", "A mosquito"], a: 2, exp: "Lymnaea spp. serve as the first intermediate host for Fasciola hepatica." },
+            { q: "Which of the following is a potential extrapulmonary site for paragonimiasis?", options: ["The skin", "The brain", "The bone", "The spleen"], a: 1, exp: "Juvenile flukes may migrate to the brain, causing seizures." },
+            { q: "Chronic Clonorchis infection has been linked to which type of cancer?", options: ["Hepatocellular carcinoma", "Cholangiocarcinoma", "Pancreatic cancer", "Gastric cancer"], a: 1, exp: "Chronic inflammation leads to cholangiocarcinoma (bile duct cancer)." },
+            { q: "What is the critical thermal point to kill cysticerci in meat?", options: ["37°C for 30 minutes", "0°C for 24 hours", "56°C for 5 minutes", "100°C for 1 minute"], a: 2, exp: "Cysticercus larvae are killed by heating meat to 56°C for at least 5 minutes." },
+            { q: "What serious disease is caused by the larval stage of T. solium in humans?", options: ["Taeniasis", "Schistosomiasis", "Cysticercosis", "Hydatid disease"], a: 2, exp: "When humans ingest T. solium eggs, oncospheres develop into cysticerci in tissues." },
+            { q: "Which of the following is the first intermediate host in the life cycle?", options: ["Human", "Copepod", "Snail", "Freshwater fish"], a: 1, exp: "For Diphyllobothrium latum, the first intermediate host is a freshwater copepod." },
+            { q: "What serious condition can result from the rupture of a hydatid cyst?", options: ["Anaphylaxis", "Chronic fever", "Autoimmune reaction", "Organ failure"], a: 0, exp: "Hydatid cyst fluid is highly antigenic. Rupture can trigger acute anaphylactic shock." },
+            { q: "What is the recommended treatment for the infection?", options: ["Albendazole for 3 days", "Mebendazole", "Metronidazole", "Single dose of praziquantel"], a: 3, exp: "Praziquantel 5–10 mg/kg single dose is first-line for taeniasis." },
+            { q: "Besides humans, which animal is a common host for Hymenolepis diminuta?", options: ["Cattle", "Rodents", "Fish", "Dogs"], a: 1, exp: "Hymenolepis diminuta uses rodents as primary definitive hosts." },
+            { q: "What is the name of the larval stage of Taenia saginata?", options: ["Oncosphere", "Cysticercus bovis", "Cysticercus cellulosae", "Hydatid cyst"], a: 1, exp: "T. saginata larval stage is Cysticercus bovis." },
+            { q: "What is the typical habitat of the adult Hymenolepis nana worm in humans?", options: ["The liver", "The large intestine", "The stomach", "The proximal ileum"], a: 3, exp: "Adult Hymenolepis nana resides in the upper small intestine." },
+            { q: "What organ is most commonly affected in neurocysticercosis (NCC)?", options: ["Liver", "Lungs", "Brain", "Heart"], a: 2, exp: "Neurocysticercosis refers specifically to T. solium cysticerci in the CNS." },
+            { q: "What is the primary method for laboratory diagnosis of diphyllobothriasis?", options: ["Urine analysis", "Radiographic imaging", "Stool microscopy", "Serological blood test"], a: 2, exp: "Diagnosis is by identifying operculated, ovoid eggs in stool." },
+            { q: "What type of anemia can result from Diphyllobothrium latum infection?", options: ["Hemolytic anemia", "Iron deficiency anemia", "Vitamin B12 deficiency", "Sickle cell anemia"], a: 2, exp: "D. latum absorbs vitamin B12 in the gut, leading to megaloblastic anemia." },
+            { q: "In which part of the human small intestine do adult Taenia worms primarily live?", options: ["Jejunum", "Cecum", "Duodenum", "Ileum"], a: 0, exp: "Adult Taenia spp. attach to the mucosa of the jejunum." },
+            { q: "What is the common name for Diphyllobothrium latum?", options: ["Fish tapeworm", "Pork tapeworm", "Beef tapeworm", "Dwarf tapeworm"], a: 0, exp: "Diphyllobothrium latum is commonly called the fish tapeworm." },
+            { q: "What is the primary mode of transmission to humans?", options: ["Direct contact with dog", "Drinking contaminated water", "Ingestion of undercooked fish", "Inhaling airborne eggs"], a: 2, exp: "Humans acquire D. latum by eating raw or undercooked freshwater fish." },
+            { q: "What is the most common site for a primary hydatid cyst in humans?", options: ["Liver", "Lungs", "Brain", "Bones"], a: 0, exp: "~70% of hydatid cysts develop in the liver." },
+            { q: "What is the name of the pork tapeworm?", options: ["Taenia asiatica", "Hymenolepis nana", "Taenia saginata", "Taenia solium"], a: 3, exp: "Taenia solium is the pork tapeworm." },
+            { q: "Which drug is mentioned as a preferred treatment for intestinal taeniasis?", options: ["Clonorchis", "Albendazole", "Ivermectin", "Metronidazole"], a: 1, exp: "Albendazole 400 mg single dose is also effective for Taenia spp." },
+            { q: "What is the name given to sterile cysts that do not produce scolices?", options: ["Acephalocystis", "Protoscolices", "Gemmules", "Oncospheres"], a: 0, exp: "Acephalocystis refers to sterile hydatid cysts lacking protoscolices." },
+            { q: "What is the best imaging method for detecting non-calcified and ventricular cysts in the brain?", options: ["Ultrasound", "X-ray", "CT scan", "MRI scan"], a: 3, exp: "MRI is superior for visualizing non-calcified parenchymal cysts." },
+            { q: "According to the document, which imaging technique is the diagnostic procedure of choice for hydatid cysts?", options: ["Plain X-ray", "Ultrasonography (USG)", "CT scan", "MRI"], a: 1, exp: "Ultrasonography is the first-line imaging modality for abdominal hydatid cysts." },
+            { q: "What is the ideal intermediate host for Echinococcus?", options: ["Horse", "Sheep", "Cattle", "Man"], a: 1, exp: "In the life cycle of Echinococcus granulosus, sheep are the primary intermediate host." },
+            { q: "According to the document, what is the primary method for laboratory diagnosis of hymenolepiasis?", options: ["Radiographic imaging", "Characteristic eggs", "Serological test", "Blood culture"], a: 1, exp: "Diagnosis is by microscopic identification of eggs in stool." },
+            { q: "What is one of the key prevention methods mentioned if fish is to be consumed raw?", options: ["Marinating in lemon juice", "Deep freezing", "Washing thoroughly", "Salting"], a: 1, exp: "Fish should be frozen at –10°C for at least 24–48 hours." },
+            { q: "Where in the human body does the adult Diphyllobothrium latum reside?", options: ["Large intestine", "Liver", "Small intestine (ileum)", "Stomach"], a: 2, exp: "Adult D. latum attaches to the mucosa of the jejunum and ileum." },
+            { q: "Which structure on the scolex is present in T. solium but absent in T. saginata?", options: ["Neck", "Bothrium", "Suckers", "Rostellum with hooks"], a: 3, exp: "T. solium has a rostellum armed with hooks, while T. saginata does not." },
+            { q: "What structure on the scolex does the adult worm use for attachment?", options: ["Oral hooks", "Bothria", "Rostellum", "Four circular suckers"], a: 3, exp: "Taenia spp. use four muscular suckers on the scolex to attach." },
+            { q: "What is the first larval stage that develops after the egg is ingested?", options: ["Cysticercus", "Hydatid cyst", "Oncosphere", "Cysticercoid larvae"], a: 2, exp: "After ingestion, the hexacanth embryo hatches and is called an oncosphere." },
+            { q: "How do eggs from the gravid proglottids leave the definitive host?", options: ["In the saliva", "In the feces", "Through the skin", "In the urine"], a: 1, exp: "Gravid proglottids detach and pass intact in feces." },
+            { q: "What is the drug of choice for treating hymenolepiasis?", options: ["Nitazoxanide", "Albendazole", "Mebendazole", "Praziquantel"], a: 3, exp: "Praziquantel is the drug of choice for Hymenolepis nana." },
+            { q: "What is the length range of an adult Taenia saginata worm?", options: ["1–2 meters", "2–3 meters", "5–10 meters", "Less than 1 meter"], a: 2, exp: "Taenia saginata is typically 4–12 meters long." },
+            { q: "What is the infective stage of Taenia solium for pigs?", options: ["Egg", "Cysticercus cellulosae", "Adult worm", "Proglottid"], a: 0, exp: "Pigs become infected by ingesting T. solium eggs from human feces." },
+            { q: "How can you macroscopically differentiate a T. solium proglottid from a T. saginata proglottid?", options: ["By its thickness", "By the presence of a genital pore", "By the number of lateral uterine branches", "By its color"], a: 2, exp: "T. solium has 7–13 branches; T. saginata has 15–30." },
+            { q: "In which part of the definitive host (dog) does the adult Echinococcus worm live?", options: ["Lungs", "Jejunum and duodenum", "Large intestine", "Stomach"], a: 1, exp: "Adult Echinococcus granulosus resides in the small intestine of canids." },
+            { q: "What is the shape and size of a typical Diphyllobothrium latum egg?", options: ["Broadly ovoid, ~65x45 µm", "Elongated with a spine, 150 µm", "Barrel-shaped, 50 µm", "Spherical, 35 µm"], a: 0, exp: "D. latum eggs are yellowish-brown, ovoid, and measure ~65x45 µm." },
+            { q: "Besides surgery, what class of chemotherapeutic agents is mentioned for hydatid cysts?", options: ["Aminoglycosides", "Tetracyclines", "Benzimidazoles", "Macrolides"], a: 2, exp: "Benzimidazoles—specifically albendazole—are used for hydatid disease." },
+            { q: "According to the text, what is a common symptom of neurocysticercosis?", options: ["Hemoptysis", "Jaundice", "Epileptic seizures", "Diarrhea"], a: 2, exp: "Seizures are the most common clinical manifestation of parenchymal neurocysticercosis." },
+            { q: "Which species is known as the “dwarf tapeworm”?", options: ["Echinococcus granulosus", "Hymenolepis diminuta", "Hymenolepis nana", "Taenia solium"], a: 2, exp: "Hymenolepis nana is called the dwarf tapeworm." },
+            { q: "Which microscopic feature distinguishes H. nana from H. diminuta eggs?", options: ["Six-hooked oncosphere", "Polar filaments", "Thick shell", "Spherical shape"], a: 1, exp: "H. nana eggs have polar filaments; H. diminuta eggs do not." },
+            { q: "How many uterine branches does a gravid proglottid of T. solium typically have?", options: ["More than 30", "5–10", "20–25", "15–30"], a: 1, exp: "T. solium has 7–13 (typically 5–10) primary lateral uterine branches." }
         ];
 
-        // --- State Management ---
+        // --- STATE MANAGEMENT ---
         let currentQuestionIndex = 0;
-        let userAnswers = new Array(quizData.length).fill(null); 
-        let hasAnswered = new Array(quizData.length).fill(false);
+        let userAnswers = new Array(quizData.length).fill(null); // Stores index of selected option, or null
+        let score = 0;
 
-        // --- DOM Elements ---
-        const quizView = document.getElementById('quizView');
-        const resultView = document.getElementById('resultView');
-        const quizBranding = document.getElementById('quizBranding');
-        const questionText = document.getElementById('questionText');
-        const optionsContainer = document.getElementById('optionsContainer');
-        const currentQNumEl = document.getElementById('currentQNum');
-        const totalQNumEl = document.getElementById('totalQNum');
-        const feedbackArea = document.getElementById('feedbackArea');
-        const feedbackTitle = document.getElementById('feedbackTitle');
-        const feedbackText = document.getElementById('feedbackText');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const mapOverlay = document.getElementById('mapOverlay');
-        const mapGrid = document.getElementById('mapGrid');
+        // --- DOM ELEMENTS ---
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const progressBar = document.getElementById('progress-fill');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const quizInterface = document.getElementById('quiz-interface');
+        const quizFooter = document.getElementById('quiz-footer');
+        const resultScreen = document.getElementById('result-screen');
+        
+        // Modal Elements
+        const modal = document.getElementById('list-modal');
+        const viewListBtn = document.getElementById('view-list-btn');
+        const closeModalBtn = document.getElementById('close-modal');
+        const gridContainer = document.getElementById('grid-container');
 
-        // --- Initialization ---
-        totalQNumEl.innerText = quizData.length;
-        renderMap();
-        loadQuestion(0);
+        // --- INITIALIZATION ---
+        function initQuiz() {
+            renderQuestion();
+            updateProgress();
+            updateNavButtons();
+        }
 
-        // --- Core Functions ---
-
-        function loadQuestion(index) {
-            currentQuestionIndex = index;
-            const data = quizData[index];
-
-            // Update Text
-            questionText.innerText = data.q;
-            currentQNumEl.innerText = index + 1;
-
-            // Reset Buttons
+        // --- RENDER QUESTION ---
+        function renderQuestion() {
+            const data = quizData[currentQuestionIndex];
+            
+            // Reset UI
+            questionTextEl.textContent = `${currentQuestionIndex + 1}. ${data.q}`;
             optionsContainer.innerHTML = '';
-            feedbackArea.style.display = 'none';
-
+            explanationBox.style.display = 'none';
+            
             // Render Options
-            data.options.forEach((opt, i) => {
+            data.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                btn.innerText = opt;
-                btn.onclick = () => selectOption(i);
-
-                // Restore State if already answered
-                if (userAnswers[index] !== null) {
-                    btn.classList.add('disabled'); 
-                    if (i === data.answer) {
-                        btn.classList.add('correct');
-                    } else if (i === userAnswers[index]) {
-                        btn.classList.add('wrong'); 
-                    }
-                }
+                btn.innerHTML = `<span>${String.fromCharCode(97 + index)}. ${opt}</span>`;
                 
+                // If this question was already answered
+                if (userAnswers[currentQuestionIndex] !== null) {
+                    btn.disabled = true; // Disable re-answering
+                    
+                    const selectedIdx = userAnswers[currentQuestionIndex];
+                    const correctIdx = data.a;
+
+                    // Show Feedback Text if this is the selected button
+                    if (index === selectedIdx) {
+                        const feedbackSpan = document.createElement('span');
+                        feedbackSpan.className = 'feedback';
+                        if (selectedIdx === correctIdx) {
+                            btn.classList.add('correct');
+                            feedbackSpan.textContent = 'CORRECT';
+                        } else {
+                            btn.classList.add('incorrect');
+                            feedbackSpan.textContent = 'INCORRECT';
+                        }
+                        btn.appendChild(feedbackSpan);
+                    }
+
+                    // Highlight correct answer if wrong was chosen (optional helpful visual)
+                    if (index === correctIdx && selectedIdx !== correctIdx) {
+                         btn.classList.add('correct');
+                    }
+                } else {
+                    // Click Handler for active question
+                    btn.onclick = () => handleAnswer(index);
+                }
+
                 optionsContainer.appendChild(btn);
             });
 
-            // Show feedback if already answered
-            if (hasAnswered[index]) {
-                showFeedback(data, userAnswers[index]);
+            // Show Explanation if answered
+            if (userAnswers[currentQuestionIndex] !== null) {
+                explanationText.textContent = data.exp;
+                explanationBox.style.display = 'block';
             }
 
-            // Handle Navigation Buttons
-            prevBtn.disabled = index === 0;
-            // Change Next button text to Finish if last question
-            if (index === quizData.length - 1) {
-                nextBtn.innerHTML = 'Finish <i class="fas fa-flag-checkered"></i>';
-                nextBtn.onclick = showResults;
-            } else {
-                nextBtn.innerHTML = 'Next <i class="fas fa-chevron-right"></i>';
-                nextBtn.onclick = () => changeQuestion(1);
-            }
-
-            // Update Map Visuals
-            updateMapVisuals();
+            // Update Navigation Buttons State
+            updateNavButtons();
+            updateGridStatus();
         }
 
-        function selectOption(selectedIndex) {
+        // --- HANDLE ANSWER ---
+        function handleAnswer(selectedIndex) {
             const data = quizData[currentQuestionIndex];
-            
-            // Save answer
             userAnswers[currentQuestionIndex] = selectedIndex;
-            hasAnswered[currentQuestionIndex] = true;
 
-            // UI Updates for buttons
-            const buttons = optionsContainer.children;
-            for (let i = 0; i < buttons.length; i++) {
-                buttons[i].classList.add('disabled'); 
-                buttons[i].onclick = null; 
-
-                if (i === data.answer) {
-                    buttons[i].classList.add('correct');
-                } else if (i === selectedIndex) {
-                    buttons[i].classList.add('wrong');
-                }
+            if (selectedIndex === data.a) {
+                score++;
             }
 
-            // Show Instant Feedback
-            showFeedback(data, selectedIndex);
-            
-            // Update Map
-            updateMapVisuals();
+            // Re-render to show feedback and explanation
+            renderQuestion();
+            updateProgress();
         }
 
-        function showFeedback(data, selectedIndex) {
-            feedbackArea.style.display = 'block';
-            if (selectedIndex === data.answer) {
-                feedbackTitle.innerText = "Correct!";
-                feedbackTitle.style.color = "#28a745";
+        // --- NAVIGATION ---
+        prevBtn.onclick = () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        };
+
+        nextBtn.onclick = () => {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
             } else {
-                feedbackTitle.innerText = "Incorrect";
-                feedbackTitle.style.color = "#dc3545";
+                showResults();
             }
-            feedbackText.innerText = data.explanation;
-        }
+        };
 
-        function changeQuestion(direction) {
-            const newIndex = currentQuestionIndex + direction;
-            if (newIndex >= 0 && newIndex < quizData.length) {
-                loadQuestion(newIndex);
-            }
-        }
-
-        function jumpToQuestion(index) {
-            loadQuestion(index);
-            toggleMap(); // Close map
-        }
-
-        // --- Map Functions ---
-
-        function renderMap() {
-            mapGrid.innerHTML = '';
-            quizData.forEach((_, i) => {
-                const node = document.createElement('div');
-                node.className = 'map-node';
-                node.innerText = i + 1;
-                node.id = `map-node-${i}`;
-                node.onclick = () => jumpToQuestion(i);
-                mapGrid.appendChild(node);
-            });
-        }
-
-        function updateMapVisuals() {
-            // Clear all states first
-            quizData.forEach((_, i) => {
-                const node = document.getElementById(`map-node-${i}`);
-                node.className = 'map-node'; // reset
-            });
-
-            // Mark current
-            const current = document.getElementById(`map-node-${currentQuestionIndex}`);
-            if (current) current.classList.add('current');
-
-            // Mark answered
-            userAnswers.forEach((ans, i) => {
-                if (ans !== null) {
-                    const node = document.getElementById(`map-node-${i}`);
-                    const correct = quizData[i].answer;
-                    if (ans === correct) {
-                        node.classList.add('answered');
-                    } else {
-                        node.classList.add('answered', 'wrong-ans');
-                    }
+        function updateNavButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            // Determine Next Button text/state
+            if (currentQuestionIndex === quizData.length - 1) {
+                // If it's the last question
+                if (userAnswers[currentQuestionIndex] !== null) {
+                    nextBtn.textContent = "Finish Test";
+                    nextBtn.disabled = false;
+                } else {
+                    nextBtn.textContent = "Next";
+                    nextBtn.disabled = true; // Must answer last question to finish
                 }
-            });
-        }
-
-        function toggleMap() {
-            mapOverlay.classList.toggle('active');
-            // Always refresh map visuals when opening
-            if (mapOverlay.classList.contains('active')) {
-                updateMapVisuals();
+            } else {
+                nextBtn.textContent = "Next";
+                // Allow navigation forward even if not answered? 
+                // Usually yes for "Full Navigation Freedom", but standard behavior often requires answer.
+                // Given "Full Navigation Freedom", let's allow it, but disable "Finish" on last page if no answer.
+                nextBtn.disabled = false;
             }
         }
 
-        // --- Result Functions ---
+        function updateProgress() {
+            const answeredCount = userAnswers.filter(a => a !== null).length;
+            const percentage = (answeredCount / quizData.length) * 100;
+            progressBar.style.width = `${percentage}%`;
+        }
 
+        // --- RESULTS ---
         function showResults() {
-            quizView.style.display = 'none';
-            quizBranding.style.display = 'none';
-            resultView.style.display = 'block';
-
-            let correctCount = 0;
-            userAnswers.forEach((ans, i) => {
-                if (ans === quizData[i].answer) {
-                    correctCount++;
-                }
-            });
-
-            const percentage = Math.round((correctCount / quizData.length) * 100);
-            document.getElementById('finalScore').innerText = percentage;
-            document.getElementById('correctCount').innerText = correctCount;
+            quizInterface.style.display = 'none';
+            quizFooter.style.display = 'none'; // Hide nav controls
+            viewListBtn.style.display = 'none'; // Hide list button
+            
+            resultScreen.style.display = 'block';
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('total-questions').textContent = quizData.length;
         }
 
-        function restartQuiz() {
-            userAnswers.fill(null);
-            hasAnswered.fill(false);
-            currentQuestionIndex = 0;
-            
-            resultView.style.display = 'none';
-            quizView.style.display = 'block';
-            quizBranding.style.display = 'block';
-            
-            loadQuestion(0);
-        }
+        // --- PATIENT LIST MODAL & GRID ---
+        
+        // Open Modal
+        viewListBtn.onclick = () => {
+            renderGrid();
+            modal.style.display = 'flex';
+        };
 
-        // Close map if clicking outside the box
-        mapOverlay.addEventListener('click', (e) => {
-            if (e.target === mapOverlay) {
-                toggleMap();
+        // Close Modal
+        closeModalBtn.onclick = () => {
+            modal.style.display = 'none';
+        };
+
+        // Close on outside click
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
             }
-        });
+        };
+
+        // Render Grid
+        function renderGrid() {
+            gridContainer.innerHTML = '';
+            quizData.forEach((_, index) => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.textContent = index + 1;
+
+                // Status Styling
+                if (index === currentQuestionIndex) {
+                    item.classList.add('current');
+                } else if (userAnswers[index] !== null) {
+                    item.classList.add('answered');
+                }
+
+                // Jump Action
+                item.onclick = () => {
+                    currentQuestionIndex = index;
+                    renderQuestion();
+                    modal.style.display = 'none'; // Close modal on selection
+                };
+
+                gridContainer.appendChild(item);
+            });
+        }
+
+        // Update Grid Styling without re-rendering content (performance)
+        function updateGridStatus() {
+            // Only if modal is open (or we could just update class lists in DOM)
+            // For simplicity, we just re-render if opened. 
+            // But if we want real-time updates while taking quiz:
+            if (modal.style.display === 'flex') {
+                renderGrid();
+            }
+        }
+
+        // Start
+        initQuiz();
 
     </script>
 </body>
