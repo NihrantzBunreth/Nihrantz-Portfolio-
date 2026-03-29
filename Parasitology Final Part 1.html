@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Filarial Quiz | Glassmorphism Edition</title>
+    <title>Advanced Parasitology Quiz | Glassmorphism Edition</title>
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -400,8 +400,8 @@
         
         <!-- Header -->
         <header>
-            <h1>Parasitology Quiz: Filarial Worms</h1>
-            <div class="progress-indicator">Question <span id="currentQNum">1</span> of <span id="totalQNum">50</span></div>
+            <h1>Parasitology Master Quiz</h1>
+            <div class="progress-indicator">Question <span id="currentQNum">1</span> of <span id="totalQNum">100</span></div>
         </header>
 
         <!-- Quiz View -->
@@ -443,7 +443,7 @@
                     <span id="finalScore">0</span>%
                 </div>
                 <h2>Quiz Completed!</h2>
-                <p style="margin-top: 10px; opacity: 0.8;">You answered <span id="correctCount">0</span> out of 50 questions correctly.</p>
+                <p style="margin-top: 10px; opacity: 0.8;">You answered <span id="correctCount">0</span> out of 100 questions correctly.</p>
             </div>
 
             <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
@@ -490,19 +490,20 @@
     </div>
 
     <script>
-        // --- Data: 50 Questions ---
+        // --- Data: 100 Questions (Combined List) ---
         const quizData = [
+            // Part 1: Filarial Worms (1-50)
             {
                 q: "1. Hydrocele is most frequently associated with which species?",
                 options: ["a. Brugia malayi", "b. Wuchereria bancrofti", "c. Loa loa", "d. Onchocerca volvulus"],
-                answer: 1, // Index of correct option (0-3)
-                explanation: "Hydrocele (accumulation of fluid in the tunica vaginalis of the scrotum) is a common manifestation of chronic lymphatic filariasis caused by Wuchereria bancrofti. This parasite primarily affects the lymphatic system of the lower limbs and genitalia. While Brugia malayi can also cause lymphatic disease, it rarely involves the genitalia, making hydrocele far more characteristic of W. bancrofti infection."
+                answer: 1,
+                explanation: "Hydrocele (accumulation of fluid in the tunica vaginalis of the scrotum) is a common manifestation of chronic lymphatic filariasis caused by Wuchereria bancrofti. This parasite primarily affects the lymphatic system of the lower limbs and genitalia."
             },
             {
                 q: "2. Which parasite is associated with 'fugitive swellings'?",
                 options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Loa loa", "d. Onchocerca volvulus"],
                 answer: 2,
-                explanation: "'Fugitive swellings' (also called Calabar swellings) are transient, localized, non-pitting edematous swellings that migrate across subcutaneous tissues. They are hallmark features of loiasis, caused by Loa loa. These swellings result from inflammatory reactions to migrating adult worms."
+                explanation: "'Fugitive swellings' (also called Calabar swellings) are transient, localized, non-pitting edematous swellings that migrate across subcutaneous tissues. They are hallmark features of loiasis, caused by Loa loa."
             },
             {
                 q: "3. What is the infective stage of filarial worms for humans?",
@@ -514,19 +515,19 @@
                 q: "4. The presence of a 'sheath' is a diagnostic feature of the microfilariae of:",
                 options: ["a. Onchocerca volvulus", "b. Wuchereria bancrofti", "c. Mansonella ozzardi", "d. Mansonella perstans"],
                 answer: 1,
-                explanation: "Microfilariae of W. bancrofti are sheathed, meaning they are surrounded by a thin, transparent membrane derived from the eggshell. This sheath stains pink with Giemsa and helps differentiate them from unsheathed species like Mansonella perstans or Onchocerca volvulus."
+                explanation: "Microfilariae of W. bancrofti are sheathed, meaning they are surrounded by a thin, transparent membrane derived from the eggshell. This sheath stains pink with Giemsa and helps differentiate them from unsheathed species."
             },
             {
                 q: "5. Which stain is commonly used to study the morphology of microfilariae?",
                 options: ["a. Gram stain", "b. Giemsa stain", "c. Acid-fast stain", "d. Iodine stain"],
                 answer: 1,
-                explanation: "Giemsa stain is a Romanowsky-type stain that differentially colors cellular components. It clearly highlights the nuclei, sheath (if present), and tail morphology of microfilariae in blood smears, making it the standard for species identification."
+                explanation: "Giemsa stain is a Romanowsky-type stain that differentially colors cellular components. It clearly highlights the nuclei, sheath (if present), and tail morphology of microfilariae in blood smears."
             },
             {
                 q: "6. The term 'lymphangitis' refers to:",
                 options: ["a. Inflammation of lymph nodes", "b. Inflammation of lymphatic vessels", "c. Enlargement of the spleen", "d. Obstruction of the bile duct"],
                 answer: 1,
-                explanation: "Lymphangitis is acute inflammation of the lymphatic vessels, often presenting as red, tender, cord-like streaks under the skin. In filariasis, it results from immune responses to dying adult worms or secondary bacterial infections."
+                explanation: "Lymphangitis is acute inflammation of the lymphatic vessels, often presenting as red, tender, cord-like streaks under the skin. In filariasis, it results from immune responses to dying adult worms."
             },
             {
                 q: "7. Which parasite’s microfilariae show 'diurnal periodicity'?",
@@ -544,13 +545,13 @@
                 q: "9. Calabar swellings are a characteristic feature of which infection?",
                 options: ["a. Bancroftian filariasis", "b. Loiasis", "c. Onchocerciasis", "d. Malayan filariasis"],
                 answer: 1,
-                explanation: "Calabar swellings are transient, angioedema-like subcutaneous swellings caused by Loa loa migration. They are named after the region in Nigeria where they were first described and are pathognomonic for loiasis."
+                explanation: "Calabar swellings are transient, angioedema-like subcutaneous swellings caused by Loa loa migration. They are named after the region in Nigeria where they were first described."
             },
             {
                 q: "10. Which parasite produces microfilariae that are typically found in the skin, not blood?",
                 options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Onchocerca volvulus", "d. Loa loa"],
                 answer: 2,
-                explanation: "Onchocerca volvulus microfilariae reside in the dermis and do not circulate in peripheral blood. Diagnosis requires skin snips, where small pieces of skin are incubated to allow microfilariae to emerge."
+                explanation: "Onchocerca volvulus microfilariae reside in the dermis and do not circulate in peripheral blood. Diagnosis requires skin snips."
             },
             {
                 q: "11. The life span of an adult Wuchereria bancrofti worm is approximately:",
@@ -562,31 +563,31 @@
                 q: "12. The drug of choice for treating Onchocerciasis is:",
                 options: ["a. Diethylcarbamazine (DEC)", "b. Ivermectin", "c. Praziquantel", "d. Albendazole"],
                 answer: 1,
-                explanation: "Ivermectin is the drug of choice for onchocerciasis because it paralyzes and kills microfilariae, reducing transmission and preventing ocular damage. DEC is contraindicated due to risk of severe encephalopathy."
+                explanation: "Ivermectin is the drug of choice for onchocerciasis because it paralyzes and kills microfilariae, reducing transmission and preventing ocular damage."
             },
             {
                 q: "13. Microfilariae are:",
                 options: ["a. Egg", "b. Embryos (advanced first-stage larvae)", "c. Adult worms", "d. Encysted larvae"],
                 answer: 1,
-                explanation: "Microfilariae are pre-larval stages released by adult female filarial worms. They are technically advanced first-stage larvae (L1) that develop further only inside the arthropod vector."
+                explanation: "Microfilariae are pre-larval stages released by adult female filarial worms. They are technically advanced first-stage larvae (L1)."
             },
             {
                 q: "14. Chronic lymphatic obstruction in filariasis leads to:",
                 options: ["a. High blood pressure", "b. Lymphedema", "c. Ascites", "d. Pulmonary edema"],
                 answer: 1,
-                explanation: "Persistent inflammation and fibrosis from adult worms block lymphatic vessels, causing protein-rich fluid accumulation in tissues—lymphedema. If untreated, this progresses to elephantiasis."
+                explanation: "Persistent inflammation and fibrosis from adult worms block lymphatic vessels, causing protein-rich fluid accumulation in tissues—lymphedema."
             },
             {
                 q: "15. 'Sclerosing keratitis' is a complication of:",
                 options: ["a. Bancroftian filariasis", "b. Onchocerciasis", "c. Loiasis", "d. Dracunculiasis"],
                 answer: 1,
-                explanation: "Sclerosing keratitis is a leading cause of blindness in onchocerciasis ('river blindness'). It results from chronic inflammation triggered by O. volvulus microfilariae in the cornea."
+                explanation: "Sclerosing keratitis is a leading cause of blindness in onchocerciasis ('river blindness'). It results from chronic inflammation triggered by O. volvulus microfilariae."
             },
             {
                 q: "16. Where are 'onchocercomas' (subcutaneous nodules) found?",
                 options: ["a. In the lungs", "b. Over bony prominences", "c. In the brain", "d. In the liver"],
                 answer: 1,
-                explanation: "Onchocercomas are fibrous nodules containing adult O. volvulus worms. They form near joints and over bony areas (e.g., iliac crests, ribs, skull)."
+                explanation: "Onchocercomas are fibrous nodules containing adult O. volvulus worms. They form near joints and over bony areas (e.g., iliac crests, ribs)."
             },
             {
                 q: "17. Which mosquito genus is the primary vector for Brugia malayi?",
@@ -598,13 +599,13 @@
                 q: "18. The 'Mazzotti reaction' is a severe allergic response seen during treatment of:",
                 options: ["a. Bancroftian filariasis", "b. Onchocerciasis", "c. Loiasis", "d. Ascariasis"],
                 answer: 1,
-                explanation: "The Mazzotti reaction (fever, rash, itching, lymphadenopathy, and potentially encephalopathy) occurs when ivermectin rapidly kills O. volvulus microfilariae, triggering intense inflammation."
+                explanation: "The Mazzotti reaction occurs when ivermectin rapidly kills O. volvulus microfilariae, triggering intense inflammation."
             },
             {
                 q: "19. The 'skin snip' method is the primary diagnostic tool for:",
                 options: ["a. Wuchereria bancrofti", "b. Loa loa", "c. Onchocerca volvulus", "d. Brugia malayi"],
                 answer: 2,
-                explanation: "Since O. volvulus microfilariae reside in skin, diagnosis relies on skin snips—small pieces of skin clipped with a needle or scalpel, incubated in saline, and examined for emerging microfilariae."
+                explanation: "Since O. volvulus microfilariae reside in skin, diagnosis relies on skin snips—small pieces of skin clipped and examined for emerging microfilariae."
             },
             {
                 q: "20. Filarial worms belong to the class:",
@@ -616,61 +617,61 @@
                 q: "21. Which mosquito genus is a major vector for W. bancrofti in urban areas?",
                 options: ["a. Aedes", "b. Culex", "c. Mansonia", "d. Anopheles"],
                 answer: 1,
-                explanation: "In urban settings (e.g., India, Africa), Culex quinquefasciatus is the primary vector for W. bancrofti. It breeds in polluted water and bites at night."
+                explanation: "In urban settings, Culex quinquefasciatus is the primary vector for W. bancrofti. It breeds in polluted water and bites at night."
             },
             {
                 q: "22. What is the intermediate host/vector for Onchocerca volvulus?",
                 options: ["a. Culex mosquito", "b. Anopheles mosquito", "c. Simulium (blackfly)", "d. Chrysops (deer fly)"],
                 answer: 2,
-                explanation: "Onchocerca volvulus is transmitted by female Simulium blackflies, which breed near fast-flowing rivers—hence the name 'river blindness.'"
+                explanation: "Onchocerca volvulus is transmitted by female Simulium blackflies, which breed near fast-flowing rivers."
             },
             {
                 q: "23. What is the definitive host for Wuchereria bancrofti?",
                 options: ["a. Mosquito", "b. Human", "c. Pig", "d. Cattle"],
                 answer: 1,
-                explanation: "The definitive host harbors the sexually mature (adult) stage of the parasite. In W. bancrofti, humans are the only natural definitive host."
+                explanation: "The definitive host harbors the sexually mature (adult) stage. In W. bancrofti, humans are the only natural definitive host."
             },
             {
                 q: "24. 'River blindness' is caused by which parasite?",
                 options: ["a. Brugia malayi", "b. Loa loa", "c. Onchocerca volvulus", "d. Mansonella perstans"],
                 answer: 2,
-                explanation: "Onchocerciasis, or river blindness, is caused by O. volvulus. Microfilariae migrate through the eye, causing uveitis, chorioretinitis, and sclerosing keratitis."
+                explanation: "Onchocerciasis, or river blindness, is caused by O. volvulus. Microfilariae migrate through the eye, causing inflammation."
             },
             {
                 q: "25. Occult filariasis (Tropical Pulmonary Eosinophilia, TPE) is characterized by:",
                 options: ["a. Presence of numerous microfilariae in blood", "b. Absence of microfilariae in blood", "c. Absence of antibodies", "d. Normal eosinophil count"],
                 answer: 1,
-                explanation: "TPE is a hypersensitivity reaction to filarial antigens (usually W. bancrofti). Patients have high IgE, marked eosinophilia, and pulmonary symptoms—but no detectable microfilariae in blood due to immune clearance."
+                explanation: "TPE is a hypersensitivity reaction to filarial antigens. Patients have high IgE and eosinophilia—but no detectable microfilariae in blood due to immune clearance."
             },
             {
                 q: "26. Which clinical sign involves the presence of milky white urine?",
                 options: ["a. Hematuria", "b. Chyluria", "c. Proteinuria", "d. Glycosuria"],
                 answer: 1,
-                explanation: "Chyluria results from lymphatic leakage into urinary tract due to filarial-induced lymphatic rupture. The urine appears milky due to chyle (lymph + emulsified fats)."
+                explanation: "Chyluria results from lymphatic leakage into urinary tract due to filarial-induced lymphatic rupture. The urine appears milky due to chyle."
             },
             {
                 q: "27. What is the standard dose of DEC in the treatment of bancroftian filariasis?",
                 options: ["a. 2 mg/kg for 1 day", "b. 6 mg/kg for 12 days", "c. 10 mg/kg for 30 days", "d. 100 mg/kg once"],
                 answer: 1,
-                explanation: "The WHO-recommended regimen for individual treatment of lymphatic filariasis is DEC at 6 mg/kg/day orally for 12 days."
+                explanation: "The WHO-recommended regimen for individual treatment is DEC at 6 mg/kg/day orally for 12 days."
             },
             {
                 q: "28. Mansonella perstans adult worms live in:",
                 options: ["a. Subcutaneous tissue", "b. Body cavities (pleural/peritoneal)", "c. Lymphatic vessels", "d. Conjunctiva"],
                 answer: 1,
-                explanation: "Unlike other filariae, M. perstans adults reside in serous cavities (peritoneal, pleural, pericardial). Microfilariae circulate in blood but are often asymptomatic."
+                explanation: "M. perstans adults reside in serous cavities (peritoneal, pleural, pericardial). Microfilariae circulate in blood."
             },
             {
                 q: "29. Which of these is a non-periodic filarial worm?",
                 options: ["a. Wuchereria bancrofti (Indian strain)", "b. Brugia malayi", "c. Onchocerca volvulus", "d. Loa loa"],
                 answer: 2,
-                explanation: "Periodicity refers to rhythmic appearance of microfilariae in peripheral blood. O. volvulus microfilariae are in skin—not blood—so they are considered non-periodic."
+                explanation: "Periodicity refers to rhythmic appearance in blood. O. volvulus microfilariae are in skin—not blood—so they are considered non-periodic."
             },
             {
                 q: "30. Which diagnostic test involves the concentration of microfilariae from blood?",
                 options: ["a. Kato-Katz technique", "b. Knott’s concentration", "c. Baermann technique", "d. Formal-ether sedimentation"],
                 answer: 1,
-                explanation: "Knott’s method uses centrifugation of lysed blood (with 2% formalin) to concentrate microfilariae into a pellet for easier detection."
+                explanation: "Knott’s method uses centrifugation of lysed blood to concentrate microfilariae into a pellet for easier detection."
             },
             {
                 q: "31. Which filarial worm is the most common cause of lymphatic filariasis?",
@@ -682,7 +683,7 @@
                 q: "32. Which parasite is known as the 'eye worm'?",
                 options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Loa loa", "d. Onchocerca volvulus"],
                 answer: 2,
-                explanation: "Loa loa is called the 'eye worm' because adult worms can migrate across the conjunctiva of the eye, which is visible and often causes transient irritation."
+                explanation: "Loa loa is called the 'eye worm' because adult worms can migrate across the conjunctiva of the eye."
             },
             {
                 q: "33. Which filarial worm is NOT found in the peripheral blood?",
@@ -691,114 +692,414 @@
                 explanation: "Onchocerca volvulus microfilariae reside exclusively in the skin and eyes, not in peripheral blood."
             },
             {
-                q: "34. At what time is 'nocturnal periodicity' most evident for W. bancrofti microfilariae in blood?",
+                q: "34. At what time is 'nocturnal periodicity' most evident for W. bancrofti?",
                 options: ["a. 10 am to 2 pm", "b. 6 am to 10 am", "c. 10 pm to 2 am", "d. 2 pm to 6 pm"],
                 answer: 2,
-                explanation: "In regions like India and Africa, W. bancrofti exhibits nocturnal periodicity, with peak microfilarial density in peripheral blood between 10 PM and 2 AM."
+                explanation: "In many regions, W. bancrofti exhibits nocturnal periodicity, with peak density between 10 PM and 2 AM."
             },
             {
                 q: "35. Tropical pulmonary eosinophilia (TPE) is an occult form of which infection?",
                 options: ["a. Ascariasis", "b. Filariasis", "c. Hookworm", "d. Strongyloidiasis"],
                 answer: 1,
-                explanation: "TPE is a hypersensitivity reaction to microfilarial antigens (usually from W. bancrofti). Patients present with nocturnal cough, wheezing, marked eosinophilia, and elevated IgE."
+                explanation: "TPE is a hypersensitivity reaction to microfilarial antigens (usually from W. bancrofti)."
             },
             {
                 q: "36. Which drug is the primary treatment for lymphatic filariasis?",
                 options: ["a. Praziquantel", "b. Diethylcarbamazine (DEC)", "c. Metronidazole", "d. Chloroquine"],
                 answer: 1,
-                explanation: "DEC is microfilaricidal and partially macrofilaricidal against W. bancrofti and Brugia spp. It remains the drug of choice for individual treatment."
+                explanation: "DEC is microfilaricidal and partially macrofilaricidal against W. bancrofti and Brugia spp."
             },
             {
                 q: "37. 'Adenolymphangitis' (ADL) in filariasis refers to:",
                 options: ["a. Chronic swelling", "b. Acute febrile episodes with painful lymphatics", "c. Internal organ failure", "d. Skin rashes"],
                 answer: 1,
-                explanation: "ADL episodes are acute inflammatory attacks involving fever, pain, redness, and tenderness along lymphatic channels and nodes."
+                explanation: "ADL episodes are acute inflammatory attacks involving fever, pain, redness, and tenderness along lymphatic channels."
             },
             {
                 q: "38. Which filarial species is mostly restricted to South and East Asia?",
                 options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Loa loa", "d. Onchocerca volvulus"],
                 answer: 1,
-                explanation: "Brugia malayi is endemic in India, China, Indonesia, Malaysia, Philippines, and Thailand. It does not occur in Africa or the Americas."
+                explanation: "Brugia malayi is endemic in India, China, Indonesia, Malaysia, Philippines, and Thailand."
             },
             {
                 q: "39. Brugia malayi microfilariae can be distinguished by having:",
                 options: ["a. No nuclei in the tail", "b. Two terminal nuclei in the tail", "c. A single terminal nucleus", "d. A blunt tail without nuclei"],
                 answer: 1,
-                explanation: "Brugia malayi microfilariae are sheathed and have two distinct nuclei at the tip of the tail, which do not extend to the very end."
+                explanation: "Brugia malayi microfilariae are sheathed and have two distinct nuclei at the tip of the tail."
             },
             {
                 q: "40. 'Leopard skin' (spotty depigmentation) is seen in:",
                 options: ["a. Chronic bancroftian filariasis", "b. Chronic onchocerciasis", "c. Acute loiasis", "d. Malayan filariasis"],
                 answer: 1,
-                explanation: "'Leopard skin' refers to patchy depigmentation of the shins due to chronic inflammation and destruction of melanocytes by O. volvulus microfilariae."
+                explanation: "'Leopard skin' refers to patchy depigmentation of the shins due to chronic inflammation by O. volvulus."
             },
             {
                 q: "41. Which filarial worm is viviparous?",
                 options: ["a. All filarial worms", "b. Only W. bancrofti", "c. Only Onchocerca", "d. None; they are all oviparous"],
                 answer: 0,
-                explanation: "All medically important filarial nematodes are viviparous—they produce live microfilariae (not eggs)."
+                explanation: "All medically important filarial nematodes are viviparous—they produce live microfilariae."
             },
             {
                 q: "42. What is the common name for the condition involving gross enlargement of the limbs in filariasis?",
                 options: ["a. Löffler’s syndrome", "b. Elephantiasis", "c. Swimmer’s itch", "d. Katayama fever"],
                 answer: 1,
-                explanation: "Elephantiasis describes severe, disfiguring swelling and thickening of skin and underlying tissues due to chronic lymphatic obstruction and fibrosis."
+                explanation: "Elephantiasis describes severe, disfiguring swelling and thickening of skin due to chronic lymphatic obstruction."
             },
             {
                 q: "43. The DEC provocation test is used for:",
                 options: ["a. Kill adult worms", "b. Bring microfilariae into peripheral blood during the day", "c. Treat elephantiasis", "d. Diagnose malaria"],
                 answer: 1,
-                explanation: "In suspected occult filariasis (e.g., TPE), a small dose of DEC (50–100 mg) is given in the morning. If microfilariae are present but sequestered, they appear in peripheral blood within 30–60 minutes."
+                explanation: "In suspected occult filariasis, a small dose of DEC is given to bring sequestered microfilariae into peripheral blood."
             },
             {
                 q: "44. Which filarial worm is primarily transmitted by Chrysops (deer flies)?",
                 options: ["a. Wuchereria bancrofti", "b. Loa loa", "c. Onchocerca volvulus", "d. Brugia malayi"],
                 answer: 1,
-                explanation: "Loa loa is transmitted by day-biting Chrysops spp. (deer flies) in rainforest areas of West and Central Africa."
+                explanation: "Loa loa is transmitted by day-biting Chrysops spp. (deer flies)."
             },
             {
                 q: "45. Which of the following is a classic manifestation of chronic filariasis?",
                 options: ["a. Bloody diarrhea", "b. Hydrocele", "c. Iron deficiency anemia", "d. Clay pipe stem fibrosis"],
                 answer: 1,
-                explanation: "Hydrocele (fluid accumulation around the testis) is one of the most common chronic manifestations of W. bancrofti infection."
+                explanation: "Hydrocele is one of the most common chronic manifestations of W. bancrofti infection."
             },
             {
                 q: "46. Which filarial worm is known to cause 'hanging groin'?",
                 options: ["a. Wuchereria bancrofti", "b. Onchocerca volvulus", "c. Brugia malayi", "d. Loa loa"],
                 answer: 0,
-                explanation: "'Hanging groin' refers to massive inguinal lymphedema and fibrosis causing the scrotum and surrounding tissue to hang low. It is a severe complication of chronic bancroftian filariasis."
+                explanation: "'Hanging groin' refers to massive inguinal lymphedema and fibrosis. It is a complication of chronic bancroftian filariasis."
             },
             {
-                q: "47. Where do adult Wuchereria bancrofti worms typically reside in the human body?",
+                q: "47. Where do adult Wuchereria bancrofti worms typically reside?",
                 options: ["a. Subcutaneous tissue", "b. Bloodstream", "c. Lymphatic vessels", "d. Small intestine"],
                 answer: 2,
-                explanation: "Adult W. bancrofti worms live coiled within lymphatic vessels and lymph nodes, particularly in the lower limbs, genitalia, and retroperitoneum."
+                explanation: "Adult W. bancrofti worms live coiled within lymphatic vessels and lymph nodes."
             },
             {
                 q: "48. Which of the following is NOT a lymphatic filarial worm?",
                 options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Brugia timori", "d. Loa loa"],
                 answer: 3,
-                explanation: "Loa loa is a subcutaneous filarial worm, not lymphatic. It migrates through subcutaneous and connective tissues."
+                explanation: "Loa loa is a subcutaneous filarial worm, not lymphatic. It migrates through subcutaneous tissues."
             },
             {
                 q: "49. Which condition is characterized by nocturnal cough, dyspnea, and high eosinophilia?",
                 options: ["a. Cutaneous larva migrans", "b. Tropical pulmonary eosinophilia", "c. Visceral larva migrans", "d. Löffler’s syndrome"],
                 answer: 1,
-                explanation: "TPE presents with paroxysmal nocturnal cough, wheezing, dyspnea, fatigue, and marked eosinophilia. It is caused by immune reaction to filarial antigens."
+                explanation: "TPE presents with paroxysmal nocturnal cough, wheezing, and marked eosinophilia."
             },
             {
                 q: "50. 'Filarial dance sign' is a diagnostic finding seen on:",
                 options: ["a. X-ray", "b. Ultrasonography", "c. CT scan", "d. MRI"],
                 answer: 1,
-                explanation: "The 'filarial dance sign' is real-time ultrasonographic visualization of motile adult W. bancrofti worms in dilated lymphatics (e.g., scrotal lymphatics)."
+                explanation: "The 'filarial dance sign' is real-time ultrasonographic visualization of motile adult W. bancrofti worms in dilated lymphatics."
+            },
+
+            // Part 2: Intestinal Nematodes & Trematodes (51-100)
+            {
+                q: "51. What is the shape of the pinworm egg?",
+                options: ["a. Spherical", "b. Barrel-shape with plugs", "c. Elongated ovoid, flattened on one side", "d. Elliptical and bile-stained"],
+                answer: 2,
+                explanation: "Enterobius vermicularis eggs are asymmetrical, elongated ovals that are flattened on one side and convex on the other."
+            },
+            {
+                q: "52. What is a distinctive morphological feature of the female pinworm?",
+                options: ["a. A curved posterior end", "b. A double-bulb esophagus", "c. A long, whip-like tail", "d. A thin, pointed, pin-like tail"],
+                answer: 3,
+                explanation: "The female Enterobius has a characteristic sharply pointed (pin-like) tail, which gives the worm its common name."
+            },
+            {
+                q: "53. What is the primary habitat of adult pinworms in the human body?",
+                options: ["a. Small intestine", "b. Stomach", "c. Liver", "d. Caecum and appendix"],
+                answer: 3,
+                explanation: "Adult pinworms reside primarily in the caecum, appendix, and adjacent ileum/colon."
+            },
+            {
+                q: "54. Which drug is stated as being more effective than albendazole for treating strongyloidiasis?",
+                options: ["a. Mebendazole", "b. Praziquantel", "c. Ivermectin", "d. Metronidazole"],
+                answer: 2,
+                explanation: "Ivermectin is the drug of choice for Strongyloides stercoralis due to superior efficacy."
+            },
+            {
+                q: "55. What is a key prophylactic measure against hookworm infection?",
+                options: ["a. Vaccination", "b. Use of footwear", "c. Sleeping under insecticide-treated nets", "d. Boiling drinking water"],
+                answer: 1,
+                explanation: "Hookworm larvae (filariform) penetrate bare skin. Wearing shoes is the most effective preventive measure."
+            },
+            {
+                q: "56. In which organ do the larvae grow and moult twice during their migration?",
+                options: ["a. Liver", "b. Heart", "c. Lungs", "d. Brain"],
+                answer: 2,
+                explanation: "After skin penetration, larvae travel via blood to the lungs, break into alveoli, moult twice, and develop before ascending to the pharynx."
+            },
+            {
+                q: "57. What is the characteristic shape of a Trichuris trichiura egg?",
+                options: ["a. Spherical with a thin shell", "b. Oval with a rough surface", "c. Barrel-shaped with polar plugs", "d. Elongated with a pointed end"],
+                answer: 2,
+                explanation: "Trichuris eggs are barrel-shaped, brown, and have prominent mucoid polar plugs at each end."
+            },
+            {
+                q: "58. What is the infective form of the parasite that penetrates the skin?",
+                options: ["a. Rhabditiform larva", "b. Adult worm", "c. Egg", "d. Filariform larva"],
+                answer: 3,
+                explanation: "The filariform (L3) larva is the infective stage for skin-penetrating nematodes: hookworms and Strongyloides."
+            },
+            {
+                q: "59. What is a key prophylactic measure against pinworm infection?",
+                options: ["a. Taking a weekly vitamin supplement", "b. Frequent hand washing and nail-cleaning", "c. Avoiding leafy vegetables", "d. Drinking boiled water only"],
+                answer: 1,
+                explanation: "Pinworm spreads via fecal-oral route. Hand hygiene, short nails, and laundering bedding reduce transmission."
+            },
+            {
+                q: "60. Which hookworm species is known as the “New World” hookworm?",
+                options: ["a. Ancylostoma duodenale", "b. Necator americanus", "c. Ancylostoma braziliense", "d. Ancylostoma caninum"],
+                answer: 1,
+                explanation: "Necator americanus is called the “New World hookworm” because it predominates in the Americas."
+            },
+            {
+                q: "61. What is a major fetal complication mentioned in the document that can occur during hyperinfection?",
+                options: ["a. Liver cirrhosis", "b. Brain abscess and meningitis", "c. Cardiac arrest", "d. Kidney failure"],
+                answer: 1,
+                explanation: "In strongyloidiasis hyperinfection, larvae disseminate widely, including to the CNS, causing meningitis or brain abscesses."
+            },
+            {
+                q: "62. Where is the habitat of the adult Strongyloides stercoralis worm?",
+                options: ["a. Large intestine", "b. Liver", "c. Small intestine", "d. Lung"],
+                answer: 2,
+                explanation: "Adult female S. stercoralis live embedded in the mucosa of the duodenum and jejunum (upper small intestine)."
+            },
+            {
+                q: "63. What is the primary method for diagnosing trichuriasis?",
+                options: ["a. Blood culture", "b. Stool examination for eggs", "c. Urinalysis", "d. Skin biopsy"],
+                answer: 1,
+                explanation: "Diagnosis of Trichuris trichiura infection relies on microscopic identification of characteristic barrel-shaped eggs in stool samples."
+            },
+            {
+                q: "64. What is the infective form of Enterobius vermicularis for humans?",
+                options: ["a. Adult worm", "b. Larva", "c. Embryonated egg", "d. Unfertilized egg"],
+                answer: 2,
+                explanation: "Humans ingest embryonated eggs (containing L2 larva) from contaminated hands or surfaces."
+            },
+            {
+                q: "65. Which stage of Strongyloides stercoralis is responsible for infecting humans?",
+                options: ["a. Rhabditiform larva", "b. Egg", "c. Adult female worm", "d. Filariform larva"],
+                answer: 3,
+                explanation: "Free-living filariform (L3) larvae in soil penetrate intact skin to initiate infection."
+            },
+            {
+                q: "66. What is the infective form of the hookworm?",
+                options: ["a. Egg", "b. Rhabditiform larva", "c. Adult worm", "d. Third stage filariform larva"],
+                answer: 3,
+                explanation: "Hookworm eggs hatch to release rhabditiform larvae, which moult to become infective filariform (L3) larvae."
+            },
+            {
+                q: "67. What is the most common clinical symptom of enterobiasis?",
+                options: ["a. Diarrhea", "b. Intense perianal itching", "c. Abdominal pain", "d. Cough"],
+                answer: 1,
+                explanation: "Pruritus ani (intense perianal itching), especially at night, is the hallmark of pinworm infection."
+            },
+            {
+                q: "68. Where do the adult worms primarily live in the human body? (Context: Intestinal Nematodes)",
+                options: ["a. Large intestine", "b. Small intestine", "c. Stomach", "d. Lungs"],
+                answer: 1,
+                explanation: "For hookworms, Strongyloides, and Ascaris, the primary adult habitat is the small intestine."
+            },
+            {
+                q: "69. A heavy infection with T. trichiura can cause a condition where the rectum protrudes from the anus. What is this condition called?",
+                options: ["a. Appendicitis", "b. Hemorrhoids", "c. Rectal prolapse", "d. Colitis"],
+                answer: 2,
+                explanation: "In severe trichuriasis, chronic inflammation and straining can lead to rectal prolapse."
+            },
+            {
+                q: "70. Which of these treatments is specifically noted as safe to use during pregnancy?",
+                options: ["a. Albendazole", "b. Mebendazole", "c. Ivermectin", "d. Pyrantel pamoate"],
+                answer: 3,
+                explanation: "Pyrantel pamoate is considered the safest anthelmintic in pregnancy when treatment is necessary."
+            },
+            {
+                q: "71. Why is it often advised to treat the whole family for pinworm?",
+                options: ["a. It is a blood-borne infection", "b. The infection is usually spread within groups", "c. It is caused by a bacteria", "d. It is a genetic condition"],
+                answer: 1,
+                explanation: "Pinworm spreads easily through close contact, contaminated bedding, or airborne eggs. Household transmission is extremely common."
+            },
+            {
+                q: "72. What is the name of the pneumonia-like condition caused by larval migration in the lungs?",
+                options: ["a. Cysticercosis", "b. Löffler’s syndrome", "c. Elephantiasis", "d. Chagas disease"],
+                answer: 1,
+                explanation: "Löffler’s syndrome is a transient eosinophilic pneumonitis caused by larval migration of helminths through the lungs."
+            },
+            {
+                q: "73. How does the filariform larva primarily enter the human body?",
+                options: ["a. Through ingestion of contaminated food", "b. By penetrating the skin", "c. Through the bite of a mosquito", "d. By inhalation"],
+                answer: 1,
+                explanation: "The filariform (L3) larva of hookworms and Strongyloides actively penetrates intact skin."
+            },
+            {
+                q: "74. How can hookworm infection be directly diagnosed in a laboratory?",
+                options: ["a. Blood culture", "b. Chest X-ray", "c. Finding eggs in a stool sample", "d. Urine analysis"],
+                answer: 2,
+                explanation: "Hookworm diagnosis relies on microscopic identification of characteristic oval, thin-shelled eggs in fresh stool."
+            },
+            {
+                q: "75. Where in the human body do adult Trichuris trichiura worms primarily live?",
+                options: ["a. Small intestine", "b. Large intestine", "c. Liver", "d. Blood vessels"],
+                answer: 1,
+                explanation: "Adult Trichuris trichiura embed their anterior ends into the mucosa of the cecum and ascending colon."
+            },
+            {
+                q: "76. Which larval stage is most commonly found in the feces in a routine stool examination?",
+                options: ["a. Filariform larva", "b. Rhabditiform larva", "c. L3 larva", "d. Adult worm"],
+                answer: 1,
+                explanation: "In strongyloidiasis, the rhabditiform (L1) larva is passed in stool. The filariform (L3) is rarely seen unless there is hyperinfection."
+            },
+            {
+                q: "77. What is the specific name of the roundworm that causes ascariasis?",
+                options: ["a. Enterobius vermicularis", "b. Ascaris lumbricoides", "c. Taenia solium", "d. Necator americanus"],
+                answer: 1,
+                explanation: "Ascaris lumbricoides is the largest intestinal nematode of humans."
+            },
+            {
+                q: "78. What is a serious surgical emergency that can occur if worms penetrate the intestinal wall?",
+                options: ["a. Löffler’s syndrome", "b. Eosinophilia", "c. Peritonitis", "d. Urticaria"],
+                answer: 2,
+                explanation: "Heavy Ascaris infections can lead to intestinal perforation, allowing gut contents to leak into the peritoneal cavity, causing acute peritonitis."
+            },
+            {
+                q: "79. Which method is recommended for laboratory diagnosis of pinworm infection?",
+                options: ["a. Stool examination", "b. Blood test", "c. Scotch tape method", "d. Urine analysis"],
+                answer: 2,
+                explanation: "The Scotch tape (cellophane tape) test involves pressing tape against perianal skin to collect eggs."
+            },
+            {
+                q: "80. What is the common name for Trichuris trichiura?",
+                options: ["a. Roundworm", "b. Hookworm", "c. Whipworm", "d. Tapeworm"],
+                answer: 2,
+                explanation: "Trichuris trichiura is called whipworm due to its morphology."
+            },
+            {
+                q: "81. What is the definitive laboratory diagnosis for ascariasis?",
+                options: ["a. Antibody detection", "b. X-ray imaging", "c. Blood culture", "d. Demonstration of egg in feces"],
+                answer: 3,
+                explanation: "Diagnosis is confirmed by identifying fertilized or unfertilized Ascaris eggs in stool."
+            },
+            {
+                q: "82. In which part of the human body do adult hookworms primarily live?",
+                options: ["a. Large intestine", "b. Stomach", "c. Small intestine", "d. Liver"],
+                answer: 2,
+                explanation: "Adult hookworms attach to the mucosa of the jejunum and duodenum (upper small intestine)."
+            },
+            {
+                q: "83. What is the most serious pathological effect of a hookworm infection?",
+                options: ["a. Liver abscess", "b. Neurological damage", "c. Anemia and protein deficiency", "d. Pulmonary fibrosis"],
+                answer: 2,
+                explanation: "Hookworms cause chronic blood loss. Heavy infections lead to iron-deficiency anemia and protein-energy malnutrition."
+            },
+            {
+                q: "84. Which of the following is a recommended treatment for hookworm?",
+                options: ["a. Tetracycline", "b. Chloroquine", "c. Albendazole (400 mg single dose)", "d. Penicillin"],
+                answer: 2,
+                explanation: "Albendazole 400 mg single dose is WHO-recommended for hookworm."
+            },
+            {
+                q: "85. What is the common name for Enterobius vermicularis?",
+                options: ["a. Roundworm", "b. Pinworm", "c. Hookworm", "d. Whipworm"],
+                answer: 1,
+                explanation: "Enterobius vermicularis is universally known as the pinworm."
+            },
+            {
+                q: "86. Which of the following is a recommended single-dose treatment for pinworm?",
+                options: ["a. Metronidazole", "b. Chloroquine", "c. Albendazole", "d. Penicillin"],
+                answer: 2,
+                explanation: "Albendazole 400 mg single dose is effective for pinworm. A second dose after 2 weeks is recommended."
+            },
+            {
+                q: "87. Where does the adult Clonorchis sinensis worm live in the human body?",
+                options: ["a. In the bloodstream", "b. In the lungs", "c. In the intestinal tract", "d. In the biliary tract"],
+                answer: 3,
+                explanation: "Adult Clonorchis sinensis (Chinese liver fluke) resides in the small and medium intrahepatic bile ducts."
+            },
+            {
+                q: "88. Which mollusk (snail) acts as the intermediate host for Schistosoma mansoni?",
+                options: ["a. Bulinus sp.", "b. Oncomelania sp.", "c. Biomphalaria sp.", "d. Crab or crayfish"],
+                answer: 2,
+                explanation: "Schistosoma mansoni uses freshwater snails of the genus Biomphalaria as its intermediate host."
+            },
+            {
+                q: "89. What is the name of the larval stage that emerges from the snail and penetrates human skin?",
+                options: ["a. Miracidium", "b. Sporocyst", "c. Cercaria", "d. Schistosomula"],
+                answer: 2,
+                explanation: "The cercaria is the free-swimming, fork-tailed larval stage released by infected snails that penetrates human skin."
+            },
+            {
+                q: "90. Which aquatic vegetation-related structure is the infective stage for the definitive host?",
+                options: ["a. Miracidium", "b. Cercaria", "c. Redia", "d. Metacercaria"],
+                answer: 3,
+                explanation: "For trematodes like Fasciola and Clonorchis, the metacercaria is the encysted stage on aquatic plants or crustaceans."
+            },
+            {
+                q: "91. What is the drug of choice for treating paragonimiasis?",
+                options: ["a. Metronidazole", "b. Albendazole", "c. Praziquantel", "d. Niclosamide"],
+                answer: 2,
+                explanation: "Praziquantel is the drug of choice for Paragonimus lung fluke infection."
+            },
+            {
+                q: "92. In what type of host are the metacercariae of Paragonimus westermani found?",
+                options: ["a. Freshwater snail", "b. Human", "c. Freshwater crab or crayfish", "d. Tiger"],
+                answer: 2,
+                explanation: "Humans acquire Paragonimus by eating raw or undercooked freshwater crabs or crayfish containing metacercariae."
+            },
+            {
+                q: "93. What is the infective form of Clonorchis sinensis for humans?",
+                options: ["a. The egg", "b. The miracidium", "c. The metacercaria", "d. The adult worm"],
+                answer: 2,
+                explanation: "Humans become infected by ingesting metacercariae encysted in the flesh of raw or undercooked freshwater fish."
+            },
+            {
+                q: "94. In which organ of the definitive host does the adult Fasciola hepatica reside?",
+                options: ["a. Lungs", "b. Intestines", "c. Liver and biliary passages", "d. Blood vessels"],
+                answer: 2,
+                explanation: "Fasciola hepatica (sheep liver fluke) migrates through the liver parenchyma and settles in the large bile ducts."
+            },
+            {
+                q: "95. What is the drug of choice for treating schistosomiasis?",
+                options: ["a. Metrifonate", "b. Praziquantel", "c. Albendazole", "d. Chloroquine"],
+                answer: 1,
+                explanation: "Praziquantel is effective against all major Schistosoma species."
+            },
+            {
+                q: "96. In which human veins do adult Schistosoma haematobium worms primarily live?",
+                options: ["a. Inferior mesenteric vein", "b. Hepatic portal vein", "c. Vesical and pelvic plexuses", "d. Pulmonary arterioles"],
+                answer: 2,
+                explanation: "S. haematobium adults reside in the venous plexus of the bladder and ureters."
+            },
+            {
+                q: "97. What is the drug of choice for treating clonorchiasis?",
+                options: ["a. Metronidazole", "b. Chloroquine", "c. Praziquantel", "d. Ivermectin"],
+                answer: 2,
+                explanation: "Praziquantel is first-line for Clonorchis sinensis and Opisthorchis."
+            },
+            {
+                q: "98. How do the schistosomulae first enter the body after skin penetration?",
+                options: ["a. By migrating to the bladder", "b. By entering peripheral venules", "c. By being coughed up and swallowed", "d. By directly burrowing into the liver"],
+                answer: 1,
+                explanation: "After cercariae penetrate skin and transform into schistosomulae, they enter dermal capillaries and venules."
+            },
+            {
+                q: "99. Which Schistosoma species is primarily diagnosed by finding eggs in the urine?",
+                options: ["a. Schistosoma mansoni", "b. Schistosoma japonicum", "c. Schistosoma mekongi", "d. Schistosoma haematobium"],
+                answer: 3,
+                explanation: "S. haematobium eggs have a terminal spine and are excreted in urine."
+            },
+            {
+                q: "100. Which of the following is a symptom of the acute phase of fascioliasis?",
+                options: ["a. Gallstones", "b. Eosinophilia", "c. Biliary cirrhosis", "d. Obstructive jaundice"],
+                answer: 1,
+                explanation: "The acute phase of Fasciola hepatica infection features fever, RUQ pain, hepatomegaly, and marked eosinophilia."
             }
         ];
 
         // --- State Management ---
         let currentQuestionIndex = 0;
-        // Array to store user answers. null = unanswered, 0-3 = index of option, -1 = visited but unanswered (logic uses null for unanswered)
         let userAnswers = new Array(quizData.length).fill(null); 
-        // To track if we showed feedback for a question already (so it doesn't pop up again if we come back)
         let hasAnswered = new Array(quizData.length).fill(false);
 
         // --- DOM Elements ---
@@ -845,11 +1146,11 @@
 
                 // Restore State if already answered
                 if (userAnswers[index] !== null) {
-                    btn.classList.add('disabled'); // Disable clicking again
+                    btn.classList.add('disabled'); 
                     if (i === data.answer) {
                         btn.classList.add('correct');
                     } else if (i === userAnswers[index]) {
-                        btn.classList.add('wrong'); // Highlight wrong choice if user picked it
+                        btn.classList.add('wrong'); 
                     }
                 }
                 
@@ -886,8 +1187,8 @@
             // UI Updates for buttons
             const buttons = optionsContainer.children;
             for (let i = 0; i < buttons.length; i++) {
-                buttons[i].classList.add('disabled'); // Lock all buttons
-                buttons[i].onclick = null; // Remove click handler
+                buttons[i].classList.add('disabled'); 
+                buttons[i].onclick = null; 
 
                 if (i === data.answer) {
                     buttons[i].classList.add('correct');
