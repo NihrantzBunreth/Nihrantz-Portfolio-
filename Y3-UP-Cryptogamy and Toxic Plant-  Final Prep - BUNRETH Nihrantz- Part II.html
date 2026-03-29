@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toxicology MCQ Quiz - Clinical Edition</title>
+    <style>
+        /* 
+         * PART 1: CLEAN CLINICAL DESIGN 
+         * Font: Arial exclusively.
+         * Colors: Medical Blue (#0056b3), White (#ffffff), Light Grey (#f0f0f0).
+         * Sterile Background: Resembles medical chart paper.
+         */
+        :root {
+            --clinical-blue: #0056b3;
+            --clinical-light-blue: #e6f0ff;
+            --clinical-bg: #ffffff;
+            --clinical-text: #333333;
+            --clinical-border: #0056b3;
+            --success-green: #28a745;
+            --error-red: #dc3545;
+            --grid-line: #e0e0e0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f8;
+            color: var(--clinical-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Subtle light grey horizontal lines to resemble medical chart paper */
+            background-image: linear-gradient(var(--grid-line) 1px, transparent 1px);
+            background-size: 100% 30px;
+        }
+
+        /* Container: Digital tablet / Clipboard style */
+        #app-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--clinical-bg);
+            border: 2px solid var(--clinical-border);
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            min-height: 600px;
+            max-height: 95vh;
+            overflow: hidden;
+        }
+
+        header {
+            background-color: var(--clinical-bg);
+            border-bottom: 2px solid var(--clinical-border);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--clinical-blue);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        /* Main Content Area */
+        main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Question Styles */
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            padding: 15px;
+            text-align: left;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            background-color: var(--clinical-light-blue);
+            border-color: var(--clinical-blue);
+        }
+
+        /* Interactive States */
+        .option-btn.correct {
+            border-color: var(--success-green);
+            background-color: #f0fff4;
+        }
+
+        .option-btn.incorrect {
+            border-color: var(--error-red);
+            background-color: #fff5f5;
+        }
+
+        .option-btn.disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        /* Instant Feedback Text */
+        .feedback-label {
+            font-weight: 900;
+            font-size: 14px;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .text-green { color: var(--success-green); }
+        .text-red { color: var(--error-red); }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--clinical-blue);
+            font-size: 14px;
+            line-height: 1.5;
+            color: #444;
+            display: none; /* Hidden by default */
+        }
+
+        /* PART 3: Navigation & Progress */
+        .controls-area {
+            padding: 20px 30px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fcfcfc;
+        }
+
+        .nav-btn {
+            background-color: #fff;
+            border: 1px solid var(--clinical-blue);
+            color: var(--clinical-blue);
+            padding: 10px 20px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            min-width: 100px;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--clinical-blue);
+            color: #fff;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background-color: #fff;
+            cursor: not-allowed;
+        }
+
+        .list-btn {
+            background-color: var(--clinical-blue);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .list-btn:hover {
+            background-color: #004494;
+        }
+
+        /* Question Overview Modal (Grid) */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.98);
+            z-index: 10;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 10px;
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            background-color: #fff;
+            border-radius: 2px;
+            font-size: 14px;
+        }
+
+        /* Grid Status Indicators */
+        .grid-item.current {
+            border: 2px solid var(--clinical-blue);
+            box-shadow: 0 0 5px rgba(0,86,179,0.3);
+        }
+
+        .grid-item.answered {
+            background-color: var(--clinical-light-blue);
+            border-color: var(--clinical-blue);
+            color: var(--clinical-blue);
+        }
+
+        .grid-item:hover:not(.current) {
+            background-color: #eef;
+        }
+
+        .close-modal-btn {
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Result Screen */
+        .result-screen {
+            text-align: center;
+            padding-top: 40px;
+            display: none;
+        }
+
+        .score-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--clinical-blue);
+            margin: 20px 0;
+        }
+
+        .result-details {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        /* PART 2: Branding & Social Media */
+        .branding-footer {
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+            padding: 15px 30px;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-style: italic;
+            color: #555;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 36px;
+            height: 36px;
+            background-color: var(--clinical-blue);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 2px; /* Slightly rounded/Square */
+            transition: background 0.2s;
+        }
+
+        .social-btn:hover {
+            background-color: #003d80;
+        }
+
+        /* Responsive Tweaks */
+        @media (max-width: 600px) {
+            h1 { font-size: 18px; }
+            .option-btn { padding: 12px; font-size: 14px; }
+            .controls-area { flex-direction: column-reverse; gap: 15px; }
+            .nav-group { width: 100%; display: flex; justify-content: space-between; gap: 10px; }
+            .nav-btn { flex: 1; }
+            .list-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+    <header>
+        <h1>Cryptogamy and Toxic Plants Year 3 S1 Part II</h1>
+        <div class="progress-text" id="progress-tracker">Question 1 / 300</div>
+    </header>
+
+    <!-- Main Question View -->
+    <main id="quiz-view">
+        <div id="question-container">
+            <div class="question-text" id="question-text">Loading...</div>
+            <div class="options-grid" id="options-container">
+                <!-- Options injected via JS -->
+            </div>
+            <div class="explanation-box" id="explanation-box"></div>
+        </div>
+    </main>
+
+    <!-- Result View -->
+    <div id="result-view" class="result-screen">
+        <h2>Test Result</h2>
+        <div class="score-display" id="final-score">0 / 300</div>
+        <div class="result-details" id="result-message">Assessment Complete.</div>
+        <button class="nav-btn" onclick="restartQuiz()">Restart Assessment</button>
+    </div>
+
+    <!-- Grid Modal -->
+    <div class="modal-overlay" id="grid-modal">
+        <div class="modal-header">
+            <h2>Patient List (Question Overview)</h2>
+            <button class="close-modal-btn" onclick="toggleGrid()">&times;</button>
+        </div>
+        <div style="margin-bottom: 15px; font-size: 14px; color: #666;">
+            <span style="display:inline-block; width:15px; height:15px; background:var(--clinical-light-blue); border:1px solid var(--clinical-blue); vertical-align:middle; margin-right:5px;"></span> Answered
+            <span style="display:inline-block; width:15px; height:15px; border:1px solid #ccc; vertical-align:middle; margin-left:15px; margin-right:5px;"></span> Unanswered
+            <span style="display:inline-block; width:15px; height:15px; border:2px solid var(--clinical-blue); vertical-align:middle; margin-left:15px; margin-right:5px;"></span> Current
+        </div>
+        <div class="grid-container" id="grid-container">
+            <!-- Grid items injected via JS -->
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls-area" id="controls-area">
+        <button class="nav-btn" id="prev-btn" onclick="prevQuestion()" disabled>Previous</button>
+        <button class="list-btn" onclick="toggleGrid()">View List</button>
+        <button class="nav-btn" id="next-btn" onclick="nextQuestion()">Next</button>
+    </div>
+
+    <!-- Branding Footer -->
+    <footer class="branding-footer">
+        <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+        <div class="social-bar">
+            <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+            <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+            <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+        </div>
+    </footer>
+</div>
+
+<script>
+    // Full Question Data Set (300 Questions)
+    const rawQuestions = [
+        // LESSON 1 (Questions 1-30)
+        { q: "1. What defines a poison in toxicology?", options: ["A) Any synthetic chemical used in industry", "B) Any substance that causes injury, illness, or death when introduced to a living organism", "C) Only plant-derived substances that cause skin irritation", "D) Any substance that tastes bitter"], correct: 1, expl: "The lesson defines a poison as any substance that can cause injury, illness, or death when introduced to a living organism, regardless of origin." },
+        { q: "2. Which of the following is NOT a standard classification criterion for poisons?", options: ["A) Physical form", "B) Target site in the body", "C) Color of the substance", "D) Chemical nature"], correct: 2, expl: "Poisons are classified by origin, physical form, chemical nature, chemical activity, target site, and use — not by color." },
+        { q: "3. Abrin, found in Rosary Pea, is an example of a toxin derived from which source?", options: ["A) Microbial", "B) Animal", "C) Plant", "D) Synthetic"], correct: 2, expl: "Abrus precatorius (Rosary Pea) is a toxic plant, and abrin is its natural plant-derived protein toxin." },
+        { q: "4. Which element is part of the “Four Essential Elements of Poisoning”?", options: ["A) Time of day exposure occurs", "B) The poisoned organism", "C) Geographic location", "D) Age of the toxin"], correct: 1, expl: "The four elements are: the poison, the poisoned organism, cellular injury, and symptoms/death." },
+        { q: "5. Vitamin A toxicity illustrates that:", options: ["A) Only synthetic substances can be poisonous", "B) Even essential nutrients can act as poisons in excess", "C) Vitamins are never toxic", "D) Toxicity only occurs via ingestion"], correct: 1, expl: "The lesson states that vitamins like A or D can be toxic in excess, showing that “natural” or essential substances aren’t always safe." },
+        { q: "6. Photosensitization caused by St. John’s Wort involves:", options: ["A) Direct DNA damage from plant enzymes", "B) Liver damage leading to pigment accumulation + sunlight-triggered skin reaction", "C) Immediate anaphylactic shock", "D) Neurological paralysis"], correct: 1, expl: "Photosensitizing plants like St. John’s Wort cause liver damage, allowing photodynamic pigments to build up; sunlight then triggers severe skin reactions." },
+        { q: "7. Which plant’s toxin can cause fatal respiratory paralysis similar to curare?", options: ["A) Belladonna", "B) Strychnos toxifera (Curare)", "C) Corn Cockle", "D) Buckwheat"], correct: 1, expl: "Curare (Strychnos toxifera) contains alkaloids like toxiferine that cause flaccid paralysis of respiratory muscles, leading to death without support." },
+        { q: "8. Exposure to Euphorbia sap may result in:", options: ["A) Mild itching only", "B) Eye irritation potentially leading to blindness", "C) Temporary euphoria", "D) Increased heart rate only"], correct: 1, expl: "Euphorbia species produce a milky sap that causes severe eye irritation and can lead to blindness, along with skin blistering." },
+        { q: "9. What is “githagism”?", options: ["A) Liver failure from pyrrolizidine alkaloids", "B) A condition from chronic Corn Cockle ingestion: burning/prickling in legs and paralysis", "C) Hallucinations from mescaline", "D) Skin blackening from Poisonwood"], correct: 1, expl: "Githagism is the syndrome caused by chronic ingestion of Agrostemma githago (Corn Cockle), featuring burning sensations, paralysis, and potential death." },
+        { q: "10. Locoweed primarily affects:", options: ["A) The human liver", "B) Livestock, causing neurological and muscular deterioration", "C) Bird respiratory systems", "D) Aquatic life only"], correct: 1, expl: "Astragalus spp. (Locoweed) contains locoine, which causes dullness, impaired vision, loss of muscle control, and emaciation in grazing livestock." },
+        { q: "11. Which toxic effect is described as “flaccid muscle paralysis due to blocked nerve signals”?", options: ["A) Hepatotoxic", "B) Teratogenic", "C) Curarizing", "D) Abortive"], correct: 2, expl: "Curarizing refers to paralysis mimicking curare’s action — blocking neuromuscular transmission, potentially stopping breathing." },
+        { q: "12. Belladonna poisoning typically presents with:", options: ["A) Profuse salivation and diarrhea", "B) Dry mouth, flushed face, and delirium", "C) Severe photosensitivity", "D) Instant skin blistering"], correct: 1, expl: "Belladonna contains tropane alkaloids (atropine, scopolamine) that cause anticholinergic effects: dry mouth, flushed skin, blurred vision, and possible coma." },
+        { q: "13. Poisonwood exposure leads to:", options: ["A) Immediate cardiac arrest", "B) Skin turning black and blistering", "C) Permanent blindness only if ingested", "D) Mild sneezing"], correct: 1, expl: "Metopium toxiferum (Poisonwood) causes skin to turn black, with blisters and rash; its smoke can cause temporary blindness." },
+        { q: "14. Which compound class includes atropine and scopolamine?", options: ["A) Saponins", "B) Cardiac glycosides", "C) Tropane alkaloids", "D) Pyrrolizidine alkaloids"], correct: 2, expl: "Belladonna and Jimsonweed contain tropane alkaloids, including hyoscyamine (atropine) and hyoscine (scopolamine)." },
+        { q: "15. Chronic toxicity differs from acute toxicity primarily in:", options: ["A) The route of exposure", "B) The speed and duration of exposure and effect", "C) The type of organism affected", "D) The color of the toxin"], correct: 1, expl: "Chronic toxicity results from long-term, low-dose exposure with cumulative damage (e.g., liver scarring from comfrey), unlike acute (single high-dose) effects." },
+        { q: "16. Which plant toxin is associated with irreversible liver damage?", options: ["A) Abrin", "B) Aconitine", "C) Pyrrolizidine alkaloids", "D) Hypericin"], correct: 2, expl: "Pyrrolizidine alkaloids (in ragwort, comfrey) cause slow, cumulative, often irreversible liver damage." },
+        { q: "17. The LD₅₀ in toxicology refers to:", options: ["A) Lowest dose causing allergy", "B) Lethal dose for 50% of a test population", "C) Legal dosage limit for medicines", "D) Longest duration of toxin detection"], correct: 1, expl: "LD₅₀ (Lethal Dose 50%) is the standard measure of acute toxicity potency in animal assays." },
+        { q: "18. Which analytical method is best for identifying volatile toxins with high precision?", options: ["A) HPLC", "B) ELISA", "C) GC-MS", "D) PCR"], correct: 2, expl: "GC-MS (Gas Chromatography-Mass Spectrometry) is used to identify and quantify volatile toxins in forensic and food safety contexts." },
+        { q: "19. Teratogenic toxins primarily affect:", options: ["A) Adult liver function", "B) Fetal development, causing birth defects", "C) Skin upon sunlight exposure", "D) Respiratory muscle control"], correct: 1, expl: "Teratogens disrupt fetal organ formation, leading to birth defects (e.g., thalidomide causing limb malformations)." },
+        { q: "20. Which plant causes symptoms delayed by 6–48 hours after ingestion?", options: ["A) Aconite", "B) Rosary Pea", "C) Belladonna", "D) Locoweed"], correct: 1, expl: "Rosary Pea (Abrus precatorius) poisoning shows delayed symptoms (6–48 hours), including vomiting, convulsions, and possible death." },
+        { q: "21. Airborne allergies from Poison Ivy are caused by:", options: ["A) Pollen only", "B) Oleoresin and water-soluble antigens", "C) Spores from fungal contamination", "D) Volatile alkaloids"], correct: 1, expl: "Poison Ivy relatives release oleoresin and water-soluble antigens that cause hay fever and eczematous dermatitis." },
+        { q: "22. Thebaine, from Opium Poppy, differs from morphine because it:", options: ["A) Causes sedation", "B) Is non-toxic", "C) Can induce seizures due to stimulant-like effects", "D) Only affects the digestive system"], correct: 2, expl: "Unlike morphine, thebaine is stimulant-like and can cause convulsions or seizures." },
+        { q: "23. Cyclopamine is notable because it:", options: ["A) Is used as a pesticide", "B) Causes photosensitization", "C) Is a teratogen but studied for cancer therapy", "D) Treats liver disease"], correct: 2, expl: "Cyclopamine (from corn lily) is a teratogen that disrupts development but is also researched for cancer treatment via Hedgehog pathway inhibition." },
+        { q: "24. Which statement about natural toxins is TRUE?", options: ["A) They are always safer than synthetic ones", "B) Their activity is independent of chemical structure", "C) Modifying their structure often abolishes biological activity", "D) They cannot be used in medicine"], correct: 2, expl: "The lesson states that modifying the active chemical structure of a natural toxin usually cancels its biological activity — key in drug design." },
+        { q: "25. Batrachotoxin, from poison dart frogs, kills by:", options: ["A) Inhibiting acetylcholinesterase", "B) Keeping sodium channels permanently open", "C) Blocking calcium absorption", "D) Destroying red blood cells"], correct: 1, expl: "Batrachotoxin prevents sodium channel closure → permanent depolarization → paralysis and heart failure." },
+        { q: "26. Subchronic toxicity typically involves exposure over:", options: ["A) Minutes to hours", "B) Weeks to months", "C) Years", "D) A single lifetime dose"], correct: 1, expl: "Subchronic toxicity results from repeated exposure over weeks to months, with effects appearing gradually." },
+        { q: "27. Which plant’s dried leaves are processed to reduce toxicity for medicinal use?", options: ["A) Rosary Pea", "B) Belladonna", "C) Locoweed", "D) Spurge Nettle"], correct: 1, expl: "Belladonna is grown in France, and its dried leaves/roots are processed to reduce toxicity for safe medical use (e.g., atropine extraction)." },
+        { q: "28. Intestinal irritation from toxic plants commonly causes:", options: ["A) Dry mouth and blurred vision", "B) Diarrhea, cramping, and bloating", "C) Muscle rigidity", "D) Photosensitivity"], correct: 1, expl: "Intestinal irritants (e.g., senna, toxic seeds) cause diarrhea, cramping, and bloating, distinct from gastric irritation (which affects the stomach)." },
+        { q: "29. Amatoxins, found in Amanita mushrooms, primarily damage the:", options: ["A) Heart", "B) Lungs", "C) Liver", "D) Skin"], correct: 2, expl: "Amatoxins cause fulminant liver failure and are among the deadliest mushroom toxins." },
+        { q: "30. Most poisonous higher plants belong to which group?", options: ["A) Gymnosperms", "B) Ferns", "C) Angiosperms", "D) Mosses"], correct: 2, expl: "The lesson notes that most poisonous higher plants are angiosperms (flowering plants), though only a small percentage are actually toxic." },
+        // LESSON 2 (31-60)
+        { q: "31. Why are fungi classified in their own kingdom, separate from plants and animals?", options: ["A) They reproduce only asexually", "B) They have chlorophyll but don’t use sunlight", "C) Fundamental differences in cell structure, nutrition, and genetics", "D) They only grow in dark environments"], correct: 2, expl: "Fungi are distinct due to differences in cell wall composition (chitin vs. cellulose), heterotrophic nutrition, and genetic makeup." },
+        { q: "32. How do fungi obtain nutrients?", options: ["A) By photosynthesis using fungal chloroplasts", "B) By ingesting food like animals", "C) By secreting enzymes to break down organic matter externally and absorbing the products", "D) By fixing atmospheric nitrogen"], correct: 2, expl: "Fungi are heterotrophs that secrete digestive enzymes into their environment and absorb broken-down nutrients." },
+        { q: "33. Which nutritional lifestyle describes fungi that feed on dead organic matter?", options: ["A) Parasitic", "B) Symbiotic", "C) Autotrophic", "D) Saprophytic"], correct: 3, expl: "Saprophytic fungi decompose dead or decaying matter (e.g., fallen logs, leaf litter) and are vital for nutrient cycling." },
+        { q: "34. Mycorrhizae represent which type of fungal relationship?", options: ["A) Parasitic", "B) Saprophytic", "C) Symbiotic", "D) Pathogenic"], correct: 2, expl: "Mycorrhizae are mutually beneficial associations between fungal hyphae and plant roots." },
+        { q: "35. What is the primary function of mycelium?", options: ["A) Spore production", "B) Photosynthesis", "C) Vegetative growth and nutrient absorption", "D) Defense against predators"], correct: 2, expl: "Mycelium—a network of hyphae—is the main feeding structure of fungi." },
+        { q: "36. The mushroom we see is best described as:", options: ["A) The main body of the fungus", "B) A parasitic infection", "C) The reproductive (fruiting) body", "D) A type of spore"], correct: 2, expl: "The mushroom is the fruiting body, produced only for spore dispersal; the mycelium is the vegetative part." },
+        { q: "37. Which of the following is an example of a pathogenic fungus in humans?", options: ["A) Saccharomyces cerevisiae", "B) Penicillium chrysogenum", "C) Candida albicans", "D) Agaricus bisporus"], correct: 2, expl: "Candida albicans causes yeast infections (e.g., oral thrush, vaginal candidiasis) and can be life-threatening in immunocompromised individuals." },
+        { q: "38. Amanita phalloides is dangerous because it contains:", options: ["A) Psilocybin", "B) Muscarine", "C) Alpha-amanitin", "D) Ergot alkaloids"], correct: 2, expl: "The Death Cap mushroom contains alpha-amanitin, a toxin that inhibits RNA polymerase, leading to liver failure." },
+        { q: "39. Most toxic mushrooms belong to which two phyla?", options: ["A) Zygomycota and Chytridiomycota", "B) Basidiomycota and Ascomycota", "C) Glomeromycota and Deuteromycota", "D) Oomycota and Myxomycota"], correct: 1, expl: "The majority of poisonous mushrooms are in Basidiomycota (e.g., Amanita) and Ascomycota (e.g., false morels)." },
+        { q: "40. Yeasts are best defined as:", options: ["A) Multicellular filamentous fungi", "B) Photosynthetic microorganisms", "C) Unicellular fungi", "D) Bacterial symbionts"], correct: 2, expl: "Yeasts are unicellular fungi, such as Saccharomyces cerevisiae and Candida albicans." },
+        { q: "41. Which process is used to produce CO₂ for bread rising?", options: ["A) Lactic acid fermentation", "B) Alcoholic fermentation by yeast", "C) Aerobic respiration in molds", "D) Enzymatic browning"], correct: 1, expl: "Saccharomyces cerevisiae performs alcoholic fermentation, converting sugars to ethanol and CO₂." },
+        { q: "42. Lichens are a symbiotic association between:", options: ["A) Fungi and bacteria", "B) Fungi and algae or cyanobacteria", "C) Two different fungal species", "D) Plants and bacteria"], correct: 1, expl: "In lichens, the fungus provides structure and protection, while the algal/cyanobacterial partner performs photosynthesis." },
+        { q: "43. What triggers mushroom formation from mycelium?", options: ["A) High sugar concentration alone", "B) Presence of competing bacteria", "C) Environmental cues like moisture, temperature, and nutrients", "D) Exposure to UV light only"], correct: 2, expl: "Mushroom formation requires specific environmental conditions—often seasonal changes like rain or temperature shifts." },
+        { q: "44. Which fungus is used to produce penicillin?", options: ["A) Aspergillus niger", "B) Rhizopus stolonifer", "C) Penicillium chrysogenum", "D) Candida tropicalis"], correct: 2, expl: "Penicillium species produce the antibiotic penicillin, revolutionizing medicine." },
+        { q: "45. False morels are toxic and belong to which phylum?", options: ["A) Basidiomycota", "B) Ascomycota", "C) Zygomycota", "D) Chytridiomycota"], correct: 1, expl: "False morels (e.g., Gyromitra) are Ascomycota and contain gyromitrin, a toxin that can cause neurological damage." },
+        { q: "46. Which statement about yeast extract production is TRUE?", options: ["A) It always uses strong acids to maximize yield", "B) Autolysis involves the yeast digesting itself using its own enzymes", "C) It cannot be made from brewery waste", "D) Nucleic acid content is removed entirely for safety"], correct: 1, expl: "Autolysis is a common method where heat triggers yeast cells to self-digest using endogenous enzymes." },
+        { q: "47. What is a key safety concern in yeast extract quality control?", options: ["A) Sugar content", "B) Heavy metal contamination (e.g., Pb, As, Cd)", "C) Chlorophyll levels", "D) Spore count"], correct: 1, expl: "Heavy metals must be monitored in yeast products to ensure they are below toxic thresholds." },
+        { q: "48. Which ecological role is NOT performed by fungi?", options: ["A) Decomposition of organic matter", "B) Nitrogen fixation", "C) Symbiotic nutrient exchange with plants", "D) Causing plant diseases"], correct: 1, expl: "Fungi do not fix nitrogen; this is primarily done by certain bacteria (e.g., Rhizobium)." },
+        { q: "49. Where are Saccharomycetaceae commonly found?", options: ["A) Only in laboratory cultures", "B) Exclusively in human blood", "C) On fruits, in soil, in fermenting beverages, and as human flora", "D) Only in marine deep-sea vents"], correct: 2, expl: "The Saccharomycetaceae family is ubiquitous: found on grape skins, in soil, beer/wine, bread, and as commensals or pathogens." },
+        { q: "50. What makes visual identification of wild mushrooms risky?", options: ["A) All mushrooms are toxic", "B) Edible and deadly species often look nearly identical", "C) Mushrooms change color when touched", "D) Spores are invisible to the naked eye"], correct: 1, expl: "Many deadly mushrooms (e.g., Death Cap) closely resemble edible species, making expert identification essential." },
+        { q: "51. Which product is NOT derived from industrial fungi?", options: ["A) Soy sauce", "B) Penicillin", "C) Insulin (human recombinant)", "D) Bread"], correct: 2, expl: "While yeast (S. cerevisiae) is used to produce recombinant insulin, insulin itself is a human protein, not a direct fungal product." },
+        { q: "52. What is the main component of fungal cell walls?", options: ["A) Cellulose", "B) Peptidoglycan", "C) Chitin", "D) Silica"], correct: 2, expl: "Unlike plants (cellulose) or bacteria (peptidoglycan), fungal cell walls contain chitin." },
+        { q: "53. Which fungus is a common cause of bread spoilage?", options: ["A) Saccharomyces", "B) Aspergillus", "C) Rhizopus", "D) Candida"], correct: 2, expl: "Rhizopus stolonifer is the classic black bread mold, a fast-growing saprophytic fungus." },
+        { q: "54. Beta-glucans in yeast extracts are valued for their:", options: ["A) Sweet taste", "B) Role in causing allergies", "C) Immune-modulating properties", "D) Ability to kill bacteria"], correct: 2, expl: "Beta-glucans (polysaccharides in yeast) are known to support immune function and are used in nutraceuticals." },
+        { q: "55. Spore prints are used primarily to:", options: ["A) Measure mushroom toxicity", "B) Determine edibility", "C) Aid in species identification based on spore color", "D) Estimate age of the mycelium"], correct: 2, expl: "Spore prints reveal spore color (white, brown, black, etc.), a key taxonomic feature for mushroom identification." },
+        { q: "56. Which condition is required for mycelium to form a mushroom?", options: ["A) Complete darkness", "B) Accumulation of sufficient nutrients and favorable environmental conditions", "C) Presence of animal hosts", "D) High salt concentration"], correct: 1, expl: "The mycelium must store enough energy and encounter the right moisture, temperature, and nutrients to initiate fruiting." },
+        { q: "57. Which of the following is a benefit of fungi in agriculture?", options: ["A) Causing root rot", "B) Producing mycotoxins in grain", "C) Forming mycorrhizae to enhance plant nutrient uptake", "D) Competing with crops for sunlight"], correct: 2, expl: "Mycorrhizal fungi significantly improve phosphorus and water absorption in crop plants." },
+        { q: "58. What distinguishes Basidiomycota from Ascomycota?", options: ["A) Basidiomycota produce spores in sacs; Ascomycota on club-shaped cells", "B) Basidiomycota produce spores on basidia; Ascomycota in asci", "C) Only Ascomycota include yeasts", "D) Only Basidiomycota are toxic"], correct: 1, expl: "Basidiomycota produce spores on basidia (club-shaped cells); Ascomycota produce spores inside asci (sacs)." },
+        { q: "59. Yeast extract is rich in all EXCEPT:", options: ["A) B vitamins", "B) Amino acids", "C) Chlorophyll", "D) Trace minerals"], correct: 2, expl: "Yeast extract contains proteins, B vitamins, amino acids, and minerals, but no chlorophyll—fungi lack photosynthetic pigments." },
+        { q: "60. Which statement best reflects the dual nature of fungi?", options: ["A) They are always harmful to humans", "B) They only decompose dead matter", "C) They provide essential benefits but can also cause disease and poisoning", "D) They are primarily used in weapon development"], correct: 2, expl: "Fungi are ecologically vital and industrially useful (food, medicine), yet some cause crop blights, human disease, or fatal poisonings." },
+        // LESSON 3 (61-90)
+        { q: "61. What is the primary medical use of morphine?", options: ["A) Treating bacterial infections", "B) Relieving moderate to severe pain", "C) Stimulating appetite in cancer patients", "D) Reducing fever"], correct: 1, expl: "Morphine is a potent opioid analgesic used medically for moderate to severe pain." },
+        { q: "62. From which plant is morphine naturally extracted?", options: ["A) Cannabis sativa", "B) Atropa belladonna", "C) Papaver somniferum", "D) Erythroxylum coca"], correct: 2, expl: "Morphine is derived from the opium poppy (Papaver somniferum)." },
+        { q: "63. Why are poppy seeds considered safe for consumption?", options: ["A) They contain synthetic morphine analogs", "B) Narcotic alkaloids are absent in mature seeds", "C) They are irradiated before sale", "D) Cooking destroys all toxins"], correct: 1, expl: "The narcotic compounds are only present in the latex of unripe pods, not in mature poppy seeds." },
+        { q: "64. Which historical use of opium is correctly described?", options: ["A) As an antibiotic in ancient Rome", "B) To induce sleep and relieve pain in Greek/Roman times", "C) As a pesticide in medieval Europe", "D) To enhance athletic performance"], correct: 1, expl: "Opium was historically used to relieve pain, induce sleep, and treat diarrhea." },
+        { q: "65. What limits the bioavailability of oral morphine?", options: ["A) Poor solubility in stomach acid", "B) First-pass metabolism in the liver and gut", "C) Rapid excretion by kidneys", "D) Inability to cross the blood-brain barrier"], correct: 1, expl: "Oral morphine undergoes extensive first-pass metabolism, so only ~40% reaches systemic circulation." },
+        { q: "66. Which sign is part of the classic opioid overdose triad?", options: ["A) Dilated pupils", "B) Hypertension", "C) Pinpoint pupils", "D) Hyperactive reflexes"], correct: 2, expl: "The triad of opioid overdose includes: pinpoint pupils, unconsciousness, and respiratory depression." },
+        { q: "67. What is the immediate antidote for morphine overdose?", options: ["A) Flumazenil", "B) Naloxone (Narcan)", "C) Atropine", "D) Activated charcoal"], correct: 1, expl: "Naloxone is an opioid receptor antagonist that rapidly reverses respiratory depression." },
+        { q: "68. Codeine is chemically best described as:", options: ["A) Acetylated morphine", "B) Methylated morphine", "C) Hydrogenated thebaine", "D) Oxidized heroin"], correct: 1, expl: "Codeine is methylmorphine—a methylated derivative of morphine." },
+        { q: "69. Oxycodone is synthesized from which opium alkaloid?", options: ["A) Morphine", "B) Codeine", "C) Thebaine", "D) Papaverine"], correct: 2, expl: "Oxycodone is a semi-synthetic opioid produced by chemical modification of thebaine." },
+        { q: "70. Heroin’s faster brain entry compared to morphine is due to:", options: ["A) Higher water solubility", "B) Greater lipid solubility from acetylation", "C) Stronger binding to plasma proteins", "D) Resistance to liver enzymes"], correct: 1, expl: "Acetylation of morphine to form heroin (diacetylmorphine) increases its lipid solubility, allowing rapid crossing of the blood-brain barrier." },
+        { q: "71. Which effect is NOT commonly caused by morphine?", options: ["A) Constipation", "B) Drowsiness", "C) Diarrhea", "D) Itching"], correct: 2, expl: "Morphine slows gut motility, causing constipation—not diarrhea." },
+        { q: "72. Chronic morphine use leads to all EXCEPT:", options: ["A) Tolerance", "B) Physical dependence", "C) Increased pain sensitivity", "D) Psychological dependence"], correct: 2, expl: "Chronic use causes tolerance, physical dependence, and psychological dependence." },
+        { q: "73. Which opioid is classified as Schedule I (no medical use, high abuse potential)?", options: ["A) Morphine", "B) Codeine", "C) Oxycodone", "D) Heroin"], correct: 3, expl: "Heroin is a Schedule I controlled substance, meaning it has no accepted medical use and high abuse potential." },
+        { q: "74. “Chasing the dragon” refers to:", options: ["A) Injecting heroin intravenously", "B) Snorting powdered heroin", "C) Smoking heroin vapor", "D) Using naloxone to reverse overdose"], correct: 2, expl: "“Chasing the dragon” is slang for heating and inhaling heroin vapor." },
+        { q: "75. Which long-term effect is associated with IV heroin use?", options: ["A) Loss of smell", "B) Collapsed veins", "C) Photosensitivity", "D) Liver enzyme inhibition"], correct: 1, expl: "Repeated IV injection causes vein damage, collapsed veins, abscesses, and endocarditis." },
+        { q: "76. Fentanyl is dangerous when mixed with street heroin because it is:", options: ["A) Non-addictive", "B) 50–100 times more potent than morphine", "C) Easily detectable by taste", "D) A natural plant alkaloid"], correct: 1, expl: "Fentanyl is a synthetic opioid 50–100x stronger than morphine." },
+        { q: "77. Morphine’s use in pulmonary edema (e.g., heart failure) is primarily due to its ability to:", options: ["A) Increase heart contractility", "B) Dilate bronchioles", "C) Reduce anxiety and breathing effort", "D) Promote fluid excretion"], correct: 2, expl: "In acute pulmonary edema, morphine helps by reducing anxiety and the sensation of air hunger." },
+        { q: "78. Which brain function is NOT directly affected by heroin binding to mu-opioid receptors?", options: ["A) Pain perception", "B) Breathing regulation", "C) Visual acuity", "D) Reward/pleasure"], correct: 2, expl: "Heroin affects pain, breathing, reward, and sleep via mu-opioid receptors—but not visual processing directly." },
+        { q: "79. What causes the “rush” experienced after heroin use?", options: ["A) Histamine release", "B) Massive dopamine release in reward pathways", "C) Adrenaline surge", "D) Serotonin depletion"], correct: 1, expl: "The intense euphoria (“rush”) results from heroin triggering massive dopamine release in the brain’s reward system." },
+        { q: "80. Which statement about codeine is TRUE?", options: ["A) It is more potent than morphine", "B) It is only used for severe cancer pain", "C) It is commonly used as a cough suppressant", "D) It cannot cause dependence"], correct: 2, expl: "Codeine is less potent than morphine and widely used in prescription cough syrups." },
+        { q: "81. Thebaine differs from morphine in that it:", options: ["A) Is a strong sedative", "B) Causes seizures due to stimulant-like effects", "C) Has no biological activity", "D) Is used to treat constipation"], correct: 1, expl: "Unlike morphine, thebaine is convulsant and stimulant-like." },
+        { q: "82. Which organ accumulates high concentrations of morphine after distribution?", options: ["A) Brain only", "B) Liver, kidneys, lungs, spleen", "C) Skin and hair", "D) Pancreas"], correct: 1, expl: "After absorption, morphine distributes widely, with high concentrations in the liver, kidneys, lungs, and spleen." },
+        { q: "83. Tolerance to opioids means that:", options: ["A) The body eliminates the drug faster", "B) Higher doses are needed to achieve the same effect", "C) Side effects disappear completely", "D) Addiction is impossible"], correct: 1, expl: "Tolerance is a physiological adaptation where increasing doses are required to produce the original effect." },
+        { q: "84. Which cutting agent in street heroin can cause organ damage by blocking blood vessels?", options: ["A) Fentanyl", "B) Sugar or starch", "C) Ethanol", "D) Caffeine"], correct: 1, expl: "Inert fillers like sugar or starch do not dissolve in blood and can clog capillaries." },
+        { q: "85. Opioid-induced respiratory depression occurs because opioids:", options: ["A) Paralyze diaphragm muscles", "B) Suppress brainstem respiratory centers", "C) Cause lung fluid buildup", "D) Block oxygen binding to hemoglobin"], correct: 1, expl: "Opioids depress the brainstem’s respiratory centers, reducing the drive to breathe." },
+        { q: "86. Which reproductive effect is linked to chronic heroin use in men?", options: ["A) Increased sperm motility", "B) Elevated testosterone", "C) Sexual dysfunction", "D) Enhanced libido"], correct: 2, expl: "Long-term heroin use causes sexual dysfunction and low testosterone." },
+        { q: "87. Why was heroin originally marketed by Bayer in 1898?", options: ["A) As a treatment for tuberculosis", "B) As a non-addictive substitute for morphine", "C) As a vitamin supplement", "D) As an antiseptic"], correct: 1, expl: "Bayer falsely promoted heroin as a “non-addictive morphine substitute” and cough remedy." },
+        { q: "88. Which form of heroin is described as a dark, sticky substance?", options: ["A) White powder", "B) Brown powder", "C) Black tar heroin", "D) Crystal heroin"], correct: 2, expl: "Black tar heroin is a crude, sticky, dark form commonly found on the U.S. West Coast." },
+        { q: "89. Substance Use Disorder (SUD) involving opioids is characterized by:", options: ["A) Occasional recreational use without consequences", "B) Continued use despite harm to health, relationships, or work", "C) Use only under medical supervision", "D) Complete immunity to tolerance"], correct: 1, expl: "SUD involves compulsive use despite negative consequences, loss of control, and neglect of responsibilities." },
+        { q: "90. What makes morphine the “gold standard” in pain management?", options: ["A) It is the cheapest opioid available", "B) It has no side effects", "C) All other analgesics are compared to its efficacy", "D) It works instantly in all patients"], correct: 2, expl: "Morphine is the benchmark for opioid potency—other painkillers are measured against its effectiveness." },
+        // LESSON 4 (91-120)
+        { q: "91. Which family do potatoes, tomatoes, and deadly nightshade belong to?", options: ["A) Rosaceae", "B) Brassicaceae", "C) Solanaceae", "D) Fabaceae"], correct: 2, expl: "The Solanaceae family, also known as the nightshade family, includes both edible plants and toxic species." },
+        { q: "92. What are the two primary glycoalkaloids found in potatoes?", options: ["A) Capsaicin and solanine", "B) Solanine and chaconine", "C) Atropine and scopolamine", "D) Nicotine and caffeine"], correct: 1, expl: "Solanine and chaconine are the major glycoalkaloids in Solanum tuberosum (potato)." },
+        { q: "93. What triggers increased glycoalkaloid production in potatoes?", options: ["A) Refrigeration", "B) Exposure to light", "C) Freezing", "D) Vacuum sealing"], correct: 1, expl: "Light exposure causes greening due to chlorophyll synthesis, which coincides with increased solanine/chaconine production." },
+        { q: "94. Which part of the potato contains the highest concentration of glycoalkaloids?", options: ["A) Flesh (inner pulp)", "B) Eyes (sprout buds)", "C) Skin (peel)", "D) Roots"], correct: 2, expl: "Although the skin makes up only 2–3% of potato mass, it contains 30–80% of total glycoalkaloids." },
+        { q: "95. What is the generally accepted safe upper limit of glycoalkaloids in potatoes (mg per 100 g fresh weight)?", options: ["A) 5 mg", "B) 10 mg", "C) 20 mg", "D) 50 mg"], correct: 2, expl: "Commercial potatoes typically contain 2–10 mg/100 g. ≥20 mg/100 g is considered the toxic threshold." },
+        { q: "96. Solanine is chemically classified as a:", options: ["A) Terpene", "B) Flavonoid", "C) Saponin", "D) Tannin"], correct: 2, expl: "Solanine is a steroidal glycoalkaloid saponin." },
+        { q: "97. Which symptom is NOT typically associated with solanine poisoning?", options: ["A) Diarrhea", "B) Hallucinations", "C) Hypertension", "D) Dizziness"], correct: 2, expl: "Solanine poisoning causes GI distress, neurological effects, and autonomic disruption. Hypotension is more common." },
+        { q: "98. How does solanine exert its toxic effect at the cellular level?", options: ["A) Inhibits DNA replication", "B) Disrupts cell membranes", "C) Blocks protein synthesis", "D) Destroys mitochondria directly"], correct: 1, expl: "As a saponin, solanine binds to cholesterol in cell membranes, creating pores." },
+        { q: "99. What enzyme does solanine inhibit to cause neurological symptoms?", options: ["A) Monoamine oxidase", "B) Acetylcholinesterase", "C) Cytochrome P450", "D) Choline acetyltransferase"], correct: 1, expl: "Solanine inhibits acetylcholinesterase, leading to ACh accumulation and overstimulation." },
+        { q: "100. Why should green potatoes NOT be eaten?", options: ["A) They are unripe", "B) Green color indicates high glycoalkaloid content", "C) They contain excess starch", "D) They are genetically modified"], correct: 1, expl: "Greening = chlorophyll synthesis, which occurs alongside solanine/chaconine production." },
+        { q: "101. Which historical incident involved solanine poisoning due to cooking potato leaves?", options: ["A) Boston Tea Party", "B) Queen Elizabeth I’s banquet", "C) French Revolution famine", "D) Irish Potato Famine"], correct: 1, expl: "Legend states that Sir Walter Raleigh introduced potatoes to England, but cooks mistakenly used toxic aerial parts." },
+        { q: "102. What is the approximate toxic dose of solanine for a 70 kg adult?", options: ["A) 10–20 mg", "B) 50–100 mg", "C) 140–350 mg", "D) 500–1000 mg"], correct: 2, expl: "Toxicity threshold = 2–5 mg/kg. For 70kg: 140-350mg." },
+        { q: "103. Peeling a potato reduces glycoalkaloid content by approximately:", options: ["A) 5–10%", "B) 15–25%", "C) 30–80%", "D) 90–95%"], correct: 2, expl: "Since most glycoalkaloids concentrate in the peel, removal drastically lowers intake." },
+        { q: "104. Which condition does NOT promote glycoalkaloid accumulation in potatoes?", options: ["A) Bruising", "B) Warm, humid storage", "C) Dark, cool storage", "D) Sprouting"], correct: 2, expl: "Dark, cool, dry storage is recommended to minimize glycoalkaloid synthesis." },
+        { q: "105. Jaundice in severe solanine poisoning results from:", options: ["A) Kidney failure", "B) Liver damage", "C) Hemolysis", "D) Pancreatic inflammation"], correct: 1, expl: "Solanine is hepatotoxic—it damages liver cells." },
+        { q: "106. Why are children at higher risk of solanine poisoning?", options: ["A) They eat more potatoes", "B) Lower body weight means lower toxic threshold", "C) Immature taste buds", "D) Faster metabolism"], correct: 1, expl: "Toxic dose is per kg body weight. Children reach toxic levels much faster." },
+        { q: "107. Solanine and chaconine work together to:", options: ["A) Enhance flavor", "B) Increase nutritional value", "C) Exert synergistic toxicity", "D) Improve shelf life"], correct: 2, expl: "Their combined effect is stronger than either alone." },
+        { q: "108. What is the backbone structure of solanine called?", options: ["A) Cholesterol", "B) Solanidine", "C) Glucose", "D) Capsaicin"], correct: 1, expl: "Solanidine is the steroidal alkaloid aglycone core." },
+        { q: "109. Which of the following is a neurological symptom of solanine poisoning?", options: ["A) Vomiting", "B) Abdominal cramps", "C) Seizures", "D) Diarrhea"], correct: 2, expl: "Seizures result from neurotransmitter imbalance." },
+        { q: "110. Proper potato storage should avoid:", options: ["A) Cool temperatures", "B) Darkness", "C) Dry conditions", "D) Light exposure"], correct: 3, expl: "Light → greening → solanine synthesis." },
+        { q: "111. Bitter taste in potatoes indicates:", options: ["A) High starch content", "B) Presence of glycoalkaloids", "C) Spoilage by bacteria", "D) Overcooking"], correct: 1, expl: "Glycoalkaloids are bitter-tasting." },
+        { q: "112. Which plant part has the HIGHEST solanine concentration?", options: ["A) Potato tuber flesh", "B) Tomato fruit", "C) Potato sprouts", "D) Pepper seeds"], correct: 2, expl: "Sprouts, leaves, and stems contain far more glycoalkaloids than tubers." },
+        { q: "113. Solanine’s role in plants is primarily:", options: ["A) Photosynthesis", "B) Nutrient storage", "C) Chemical defense", "D) Pollination"], correct: 2, expl: "Plants use chemical warfare (solanine) to deter herbivores." },
+        { q: "114. Dilated pupils in solanine poisoning result from:", options: ["A) Visual cortex damage", "B) Autonomic nervous system disruption", "C) Dehydration", "D) Allergic reaction"], correct: 1, expl: "Solanine affects parasympathetic pathways (via AChE inhibition)." },
+        { q: "115. Cooking potatoes thoroughly:", options: ["A) Eliminates all solanine", "B) Reduces but does not destroy solanine", "C) Increases solanine concentration", "D) Converts solanine to vitamin C"], correct: 1, expl: "Glycoalkaloids are heat-stable—cooking reduces levels slightly." },
+        { q: "116. Hypothermia in severe solanine poisoning is due to:", options: ["A) External cold exposure", "B) Impaired brain thermoregulation", "C) Metabolic acidosis", "D) Thyroid suppression"], correct: 1, expl: "Solanine affects the hypothalamus, disrupting temperature control." },
+        { q: "117. How many documented deaths from solanine poisoning have been reported?", options: ["A) Less than 5", "B) About 30", "C) Over 500", "D) None confirmed"], correct: 1, expl: "Official records cite at least 30 deaths." },
+        { q: "118. Which statement about commercial potato varieties is TRUE?", options: ["A) They contain no glycoalkaloids", "B) They are bred for high glycoalkaloid content", "C) They are selected for low glycoalkaloid levels", "D) They are immune to greening"], correct: 2, expl: "Selective breeding prioritizes low-toxin cultivars." },
+        { q: "119. Loss of sensation in solanine poisoning is caused by:", options: ["A) Skin irritation", "B) Nerve conduction blockade", "C) Blood vessel constriction", "D) Muscle atrophy"], correct: 1, expl: "Solanine disrupts neuronal membranes and ion channels." },
+        { q: "120. What is the PRIMARY reason solanine poisoning is rare today?", options: ["A) Potatoes are no longer eaten", "B) Strict agricultural and food safety practices", "C) Genetic elimination of glycoalkaloids", "D) Universal peeling before sale"], correct: 1, expl: "Despite billions consuming potatoes, poisoning is rare due to safety practices." },
+        // LESSON 5 (121-150)
+        { q: "121. What are mycotoxins?", options: ["A) Volatile aromatic compounds from fungi", "B) Essential nutrients produced by molds", "C) Non-volatile toxic secondary metabolites from certain molds", "D) Beneficial enzymes used in food fermentation"], correct: 2, expl: "Mycotoxins are toxic, non-volatile secondary metabolites." },
+        { q: "122. Which environmental conditions favor mycotoxin production in crops?", options: ["A) Cold and dry", "B) Warm and humid", "C) Freezing and oxygen-rich", "D) Dark and acidic"], correct: 1, expl: "High temperature + moisture = ideal for mold growth." },
+        { q: "123. Why are mycotoxins difficult to eliminate from food?", options: ["A) They bind to packaging", "B) They are destroyed only by freezing", "C) They are chemically stable and heat-resistant", "D) They replicate after cooking"], correct: 2, expl: "Most mycotoxins withstand cooking, baking, frying, and industrial processing." },
+        { q: "124. Which of the following is a major producer of aflatoxins?", options: ["A) Rhizopus stolonifer", "B) Penicillium chrysogenum", "C) Aspergillus flavus", "D) Saccharomyces cerevisiae"], correct: 2, expl: "Aflatoxins are primarily produced by Aspergillus flavus and A. parasiticus." },
+        { q: "125. Aflatoxin B₁ is most strongly associated with which health effect?", options: ["A) Kidney failure", "B) Liver cancer", "C) Neurological paralysis", "D) Skin rashes"], correct: 1, expl: "Aflatoxin B₁ is a Group 1 human carcinogen (IARC)." },
+        { q: "126. Which food is MOST commonly contaminated with aflatoxins globally?", options: ["A) Rice", "B) Apples", "C) Peanuts and maize", "D) Dairy milk"], correct: 2, expl: "Peanuts and corn (maize) are high-risk crops." },
+        { q: "127. How can humans be indirectly exposed to aflatoxins?", options: ["A) Inhaling mold spores", "B) Drinking water from contaminated wells", "C) Consuming milk from cows fed contaminated feed", "D) Touching moldy bread"], correct: 2, expl: "Cows metabolize aflatoxin B₁ → aflatoxin M₁, excreted in milk." },
+        { q: "128. Ochratoxin A primarily damages which organ?", options: ["A) Liver", "B) Lungs", "C) Kidneys", "D) Brain"], correct: 2, expl: "Ochratoxin A is nephrotoxic." },
+        { q: "129. Which fungi produce Ochratoxin A in temperate climates?", options: ["A) Aspergillus flavus", "B) Fusarium graminearum", "C) Penicillium species", "D) Rhizopus species"], correct: 2, expl: "Penicillium produces ochratoxin A in cooler climates." },
+        { q: "130. Patulin is commonly found in which food product?", options: ["A) Roasted coffee", "B) Apple juice from rotting apples", "C) Peanut butter", "D) Wheat bread"], correct: 1, expl: "Patulin is produced by molds on rotting apples." },
+        { q: "131. Which mycotoxin is nicknamed “vomitoxin”?", options: ["A) Zearalenone", "B) Fumonisin B₁", "C) Deoxynivalenol (DON)", "D) Aflatoxin B₁"], correct: 2, expl: "DON (from Fusarium graminearum) causes vomiting." },
+        { q: "132. Zearalenone mimics which hormone in the body?", options: ["A) Insulin", "B) Cortisol", "C) Estrogen", "D) Thyroxine"], correct: 2, expl: "Zearalenone has estrogenic activity." },
+        { q: "133. Fumonisins disrupt metabolism of which lipids?", options: ["A) Triglycerides", "B) Cholesterol", "C) Sphingolipids", "D) Phospholipids"], correct: 2, expl: "Fumonisins inhibit ceramide synthase → disrupt sphingolipid metabolism." },
+        { q: "134. Are Zygomycetes major producers of dangerous mycotoxins?", options: ["A) Yes, they produce aflatoxins", "B) Yes, they produce ochratoxin A", "C) No, they mainly cause spoilage", "D) No, they are used in cheese-making"], correct: 2, expl: "Rhizopus and Mucor cause spoilage, not potent toxins." },
+        { q: "135. Which statement about mycotoxin detection is TRUE?", options: ["A) They have a strong bitter taste", "B) They emit a foul odor", "C) They are invisible, odorless, and tasteless", "D) They turn food bright green"], correct: 2, expl: "Mycotoxins cannot be detected by human senses." },
+        { q: "136. What is the primary strategy to control mycotoxin risk?", options: ["A) Boiling food for 30 minutes", "B) Adding vinegar during cooking", "C) Prevention via good agricultural and storage practices", "D) Freezing contaminated grains"], correct: 2, expl: "Since mycotoxins resist heat, prevention is key." },
+        { q: "137. Chronic exposure to aflatoxins can lead to all EXCEPT:", options: ["A) Liver cancer", "B) Immune suppression", "C) Acute kidney failure", "D) Growth impairment in children"], correct: 2, expl: "Aflatoxins target the liver, not kidneys." },
+        { q: "138. Which mycotoxin is found in pork products due to contaminated feed?", options: ["A) Aflatoxin B₁", "B) Patulin", "C) Ochratoxin A", "D) Deoxynivalenol"], correct: 2, expl: "Pigs fed contaminated grain accumulate ochratoxin A." },
+        { q: "139. Moisture content above what level in stored grains increases mycotoxin risk?", options: ["A) 5%", "B) 10%", "C) 14%", "D) 20%"], correct: 2, expl: ">14% moisture allows mold growth." },
+        { q: "140. Which population is MOST vulnerable to aflatoxin-induced liver cancer?", options: ["A) Elderly with diabetes", "B) Children with hepatitis B infection", "C) Athletes with high protein intake", "D) Vegetarians"], correct: 1, expl: "Hepatitis B + aflatoxin has a synergistic effect." },
+        { q: "141. What happens to aflatoxin B₁ when consumed by dairy cows?", options: ["A) It is completely broken down", "B) It is excreted unchanged in urine", "C) It is converted to aflatoxin M₁ in milk", "D) It accumulates in muscle tissue"], correct: 2, expl: "Hepatic metabolism converts B₁ → M₁ in milk." },
+        { q: "142. Which crop is most associated with fumonisin contamination?", options: ["A) Wheat", "B) Rice", "C) Corn (maize)", "D) Soybeans"], correct: 2, expl: "Fusarium verticillioides infects corn." },
+        { q: "143. Deoxynivalenol (DON) is produced by which fungus?", options: ["A) Aspergillus parasiticus", "B) Penicillium expansum", "C) Fusarium graminearum", "D) Rhizopus oryzae"], correct: 2, expl: "Fusarium graminearum produces DON." },
+        { q: "144. Which mycotoxin is NOT classified as a carcinogen?", options: ["A) Aflatoxin B₁", "B) Ochratoxin A", "C) Patulin", "D) Fumonisin B₁"], correct: 2, expl: "Patulin is not classified as carcinogenic by IARC." },
+        { q: "145. Eating bread with black mold (Rhizopus) typically causes:", options: ["A) Liver failure", "B) Kidney damage", "C) Mild digestive discomfort", "D) Hallucinations"], correct: 2, expl: "Rhizopus causes spoilage, not potent toxins." },
+        { q: "146. Which mycotoxin affects sphingolipid metabolism and is linked to birth defects?", options: ["A) Zearalenone", "B) Ochratoxin A", "C) Fumonisin B₁", "D) Patulin"], correct: 2, expl: "Fumonisin B₁ disrupts sphingolipid biosynthesis." },
+        { q: "147. Global regulations for mycotoxins are set by all EXCEPT:", options: ["A) WHO", "B) FAO", "C) CDC", "D) EU and FDA"], correct: 2, expl: "CDC monitors outbreaks but does not set standards." },
+        { q: "148. Which condition does NOT promote Aspergillus growth on stored crops?", options: ["A) Temperature of 30°C", "B) Humidity >80%", "C) Moisture content of 16%", "D) Refrigeration at 4°C"], correct: 3, expl: "Aspergillus thrives in warmth; cold storage inhibits growth." },
+        { q: "149. Estrogenic effects in livestock are caused by:", options: ["A) Aflatoxins", "B) Ochratoxin A", "C) Zearalenone", "D) Patulin"], correct: 2, expl: "Zearalenone binds to estrogen receptors." },
+        { q: "150. The best way to reduce patulin exposure is to:", options: ["A) Peel apples before juicing", "B) Use only non-moldy apples for juice production", "C) Boil apple juice for 10 minutes", "D) Add sugar to neutralize toxins"], correct: 1, expl: "Patulin spreads beyond visible mold. Prevention is key." },
+        // LESSON 6 (151-180)
+        { q: "151. What does the name “Cryptococcaceae” derive from?", options: ["A) Latin words for “hidden fungus”", "B) Greek kryptos (“hidden”) and kokkos (“berry/grain”)", "C) Arabic terms for “microscopic yeast”", "D) Sanskrit for “invisible spore”"], correct: 1, expl: "The name comes from Greek: kryptos = hidden, kokkos = berry/grain." },
+        { q: "152. Why are Cryptococcaceae considered “anamorphic”?", options: ["A) They reproduce only sexually", "B) They lack a known sexual stage and exist asexually", "C) They form complex fruiting bodies", "D) They alternate between plant and fungal forms"], correct: 1, expl: "Anamorphic fungi reproduce asexually (budding yeasts)." },
+        { q: "153. Which environment is NOT a typical reservoir for Cryptococcaceae?", options: ["A) Soil", "B) Bird droppings (guano)", "C) Medicinal plants", "D) Deep ocean sediments"], correct: 3, expl: "Deep ocean sediments are not typical reservoirs." },
+        { q: "154. To which fungal group does Cryptococcaceae belong?", options: ["A) Ascomycota", "B) Basidiomycota", "C) Deuteromycota", "D) Zygomycota"], correct: 2, expl: "Classified under Deuteromycota due to absence of sexual stage." },
+        { q: "155. Which enzyme produced by Cryptococcus damages the blood–brain barrier?", options: ["A) Laccase", "B) Protease", "C) Urease", "D) Phospholipase"], correct: 2, expl: "Urease produces ammonia, disrupting the BBB." },
+        { q: "156. What are GXM and GalXM?", options: ["A) Antifungal drugs", "B) Capsular polysaccharides with immunomodulatory effects", "C) Types of melanin", "D) Enzymes that degrade collagen"], correct: 1, expl: "Glucuronoxylomannan (GXM) and Galactoxylomannan (GalXM) are major capsular components." },
+        { q: "157. How do phospholipases contribute to virulence?", options: ["A) By synthesizing melanin", "B) By degrading lung surfactant and host cell membranes", "C) By neutralizing stomach acid", "D) By enhancing capsule thickness"], correct: 1, expl: "Phospholipases damage lung surfactant and cell membranes." },
+        { q: "158. What role does laccase play in Cryptococcus?", options: ["A) Digests antibodies", "B) Catalyzes melanin synthesis", "C) Breaks down urea", "D) Inhibits T-cell activation"], correct: 1, expl: "Laccase produces melanin—a protective shield." },
+        { q: "159. Which tribe includes Cryptococcus neoformans?", options: ["A) Trichosporeae", "B) Torulopsideae", "C) Cryptococceae", "D) Aspergilleae"], correct: 2, expl: "Cryptococcus is the key genus of Tribe Cryptococceae." },
+        { q: "160. Cryptococcal meningitis is a leading cause of death in which patient group?", options: ["A) Diabetics", "B) Elderly with hypertension", "C) HIV/AIDS patients", "D) Asthma patients"], correct: 2, expl: "Due to severe immunosuppression, HIV/AIDS patients are highly vulnerable." },
+        { q: "161. What is the primary route of Cryptococcus infection?", options: ["A) Skin abrasion", "B) Ingestion of contaminated water", "C) Inhalation of spores from soil/bird droppings", "D) Sexual transmission"], correct: 2, expl: "Infection begins in the lungs after inhaling spores." },
+        { q: "162. Which disease is caused by Trichosporon?", options: ["A) Vaginitis", "B) White Piedra", "C) Meningitis", "D) Athlete’s foot"], correct: 1, expl: "White Piedra is a superficial hair infection." },
+        { q: "163. Invasive trichosporonosis most commonly affects which population?", options: ["A) Healthy children", "B) Immunocompromised patients with indwelling catheters", "C) Pregnant women", "D) Vegetarians"], correct: 1, expl: "It causes life-threatening fungemia in immunocompromised individuals." },
+        { q: "164. Torulopsis is now mostly reclassified as:", options: ["A) Aspergillus fumigatus", "B) Candida glabrata", "C) Saccharomyces cerevisiae", "D) Rhizopus oryzae"], correct: 1, expl: "Torulopsis species have been reassigned to Candida glabrata." },
+        { q: "165. Which condition is associated with Candida glabrata?", options: ["A) Meningitis", "B) White Piedra", "C) Urinary tract infections (UTIs)", "D) Ringworm"], correct: 2, expl: "C. glabrata commonly causes UTIs." },
+        { q: "166. What unique virulence factor does Torulopsis/C. glabrata produce?", options: ["A) Melanin", "B) Capsular polysaccharides", "C) Killer toxins (mycocins)", "D) Urease"], correct: 2, expl: "Mycocins are protein toxins that kill competing fungi." },
+        { q: "167. Which tribe uses biofilm formation as a key virulence strategy?", options: ["A) Cryptococceae", "B) Trichosporeae", "C) Torulopsideae", "D) All of the above"], correct: 1, expl: "Trichosporon forms robust biofilms on medical devices." },
+        { q: "168. Which feature is characteristic of Cryptococcus morphology?", options: ["A) Pseudohyphae", "B) Arthroconidia", "C) Budding yeast with a thick capsule", "D) Septate hyphae"], correct: 2, expl: "Cryptococcus appears as encapsulated budding yeast." },
+        { q: "169. Which organism lacks pseudohyphae?", options: ["A) Trichosporon", "B) Candida albicans", "C) Candida glabrata", "D) Aspergillus"], correct: 2, expl: "C. glabrata (formerly Torulopsis) grows as small budding yeast." },
+        { q: "170. Proteases produced by Trichosporon primarily target:", options: ["A) DNA polymerase", "B) Collagen, antibodies, and complement proteins", "C) Ribosomal RNA", "D) Fungal cell walls"], correct: 1, expl: "These enzymes degrade host structural and immune proteins." },
+        { q: "171. How does melanin protect pathogenic fungi?", options: ["A) By enhancing phagocytosis", "B) By acting as a ROS scavenger and binding antifungals", "C) By promoting capsule shedding", "D) By increasing replication rate"], correct: 1, expl: "Melanin neutralizes ROS and reduces antifungal drug efficacy." },
+        { q: "172. The polysaccharide capsule of Cryptococcus prevents phagocytosis mainly by:", options: ["A) Producing heat", "B) Having a negative charge that repels immune cells", "C) Secreting acid", "D) Mimicking human cells"], correct: 1, expl: "The negatively charged capsule electrostatically repels phagocytes." },
+        { q: "173. GXM (Glucuronoxylomannan) contributes to pathogenesis by:", options: ["A) Stimulating T-cell proliferation", "B) Inducing apoptosis of immune cells and suppressing immunity", "C) Enhancing antibody production", "D) Activating complement cascade"], correct: 1, expl: "GXM is immunosuppressive." },
+        { q: "174. Are Cryptococcaceae common contaminants in herbal medicinal products?", options: ["A) Yes, they are the most frequent fungal contaminant", "B) No, more typical contaminants are Aspergillus and Penicillium", "C) Only in tropical regions", "D) Only in powdered herbs"], correct: 1, expl: "Cryptococcaceae are not typical primary contaminants; Aspergillus and Penicillium are." },
+        { q: "175. Which antifungal class is Candida glabrata naturally resistant to?", options: ["A) Echinocandins", "B) Polyenes", "C) Azoles", "D) Allylamines"], correct: 2, expl: "C. glabrata exhibits intrinsic resistance to azoles." },
+        { q: "176. Which tribe is associated with device-related bloodstream infections?", options: ["A) Cryptococceae", "B) Trichosporeae", "C) Torulopsideae", "D) None"], correct: 1, expl: "Trichosporon causes catheter-associated fungemia." },
+        { q: "177. “Torula yeast” used in nutritional supplements refers to:", options: ["A) Cryptococcus neoformans", "B) Trichosporon asahii", "C) Candida glabrata (formerly Torulopsis)", "D) Saccharomyces boulardii"], correct: 2, expl: "Some strains of C. glabrata (historically Torulopsis) are used as “Torula yeast”." },
+        { q: "178. Which virulence factor is shared by both Cryptococcus and Aspergillus niger?", options: ["A) Capsule", "B) Biofilm", "C) Melanin", "D) Mycocins"], correct: 2, expl: "Both produce melanin." },
+        { q: "179. What makes Cryptococcaceae “toxic” despite not being chemical poisons?", options: ["A) They secrete heavy metals", "B) They act as biological pathogens with toxin-like virulence factors", "C) They produce aflatoxins", "D) They release endotoxins"], correct: 1, expl: "Their virulence factors (capsule, enzymes, melanin) act like biological toxins." },
+        { q: "180. Which statement best summarizes pharmaceutical relevance of Cryptococcaceae?", options: ["A) They are used to produce antibiotics", "B) They are harmless commensals in the gut", "C) They cause opportunistic infections in immunocompromised patients", "D) They enhance vaccine efficacy"], correct: 2, expl: "These yeasts are significant opportunistic pathogens." },
+        // LESSON 7 (181-210)
+        { q: "181. What is the most common causative agent of levuroses?", options: ["A. Cryptococcus neoformans", "B. Candida glabrata", "C. Candida albicans", "D. Aspergillus fumigatus"], correct: 2, expl: "Candida albicans is the primary yeast responsible for most cases of candidiasis." },
+        { q: "182. Levuroses are best described as:", options: ["A. Viral infections of mucosal surfaces", "B. Opportunistic fungal infections caused by yeasts", "C. Bacterial biofilm-related skin disorders", "D. Autoimmune mucocutaneous syndromes"], correct: 1, expl: "Levuroses refer to yeast infections that occur when host defenses are disrupted." },
+        { q: "183. Which of the following is a classic sign of oropharyngeal candidiasis?", options: ["A. Vesicular lesions on the lips", "B. White, curd-like patches on the tongue or buccal mucosa", "C. Diffuse erythema without exudate", "D. Ulcerative gingivostomatitis"], correct: 1, expl: "Oral thrush presents as adherent white plaques." },
+        { q: "184. Vulvovaginal candidiasis typically presents with:", options: ["A. Frothy, greenish discharge", "B. Thin, gray discharge with fishy odor", "C. Thick, white, clumpy discharge and intense itching", "D. Purulent cervical discharge"], correct: 2, expl: "This is the hallmark presentation of vaginal yeast infection." },
+        { q: "185. Candidal diaper dermatitis is characterized by:", options: ["A. Dry, scaly plaques without inflammation", "B. Bright red rash with satellite pustules", "C. Annular, ring-shaped lesions", "D. Painful fissures without surrounding erythema"], correct: 1, expl: "Satellite lesions around the main rash area are diagnostic." },
+        { q: "186. Cutaneous candidiasis most commonly occurs in:", options: ["A. Exposed sun-damaged skin", "B. Warm, moist intertriginous areas", "C. Palms and soles", "D. Scalp hair follicles"], correct: 1, expl: "Skin folds provide ideal conditions for Candida overgrowth." },
+        { q: "187. Which form of candidiasis can affect nails, causing thickening and separation from the nail bed?", options: ["A. Intertrigo", "B. Onychomycosis", "C. Paronychia", "D. Tinea unguium"], correct: 1, expl: "Candida can cause onychomycosis." },
+        { q: "188. The presence of Candida in the bloodstream is termed:", options: ["A. Candiduria", "B. Candidemia", "C. Candidosis", "D. Candidiasis cutis"], correct: 1, expl: "Candidemia indicates systemic infection." },
+        { q: "189. Which organ system involvement in invasive candidiasis can lead to vision loss?", options: ["A. Renal", "B. Cardiac", "C. Ocular", "D. Pulmonary"], correct: 2, expl: "Endogenous endophthalmitis can cause retinitis." },
+        { q: "190. Endocarditis caused by Candida most commonly affects:", options: ["A. Native mitral valves in IV drug users", "B. Prosthetic heart valves", "C. Tricuspid valves only", "D. Aortic valves in elderly patients"], correct: 1, expl: "Candida forms biofilms on artificial surfaces." },
+        { q: "191. Which of the following is NOT a typical manifestation of invasive candidiasis?", options: ["A. Hepatosplenic abscesses", "B. Osteomyelitis", "C. Vesicular skin rash", "D. Pyelonephritis"], correct: 2, expl: "Vesicular rashes are viral. Invasive candidiasis causes macronodular lesions." },
+        { q: "192. Mortality associated with invasive candidiasis in hospitalized patients can reach:", options: ["A. 10%", "B. 25%", "C. 40%", "D. 70%"], correct: 2, expl: "Invasive candidiasis carries high mortality, especially in ICU settings." },
+        { q: "193. The primary source of Candida infection is usually:", options: ["A. Contaminated water", "B. Person-to-person contact", "C. Endogenous flora", "D. Inhalation of spores"], correct: 2, expl: "Most infections arise from the patient’s own microbiota." },
+        { q: "194. Which of the following is a major risk factor for candidiasis due to disruption of protective bacterial flora?", options: ["A. Antiviral therapy", "B. Broad-spectrum antibiotics", "C. Antihypertensive drugs", "D. NSAIDs"], correct: 1, expl: "Antibiotics reduce competing bacteria, allowing Candida to overgrow." },
+        { q: "195. Why does diabetes mellitus predispose to candidiasis?", options: ["A. It causes neutropenia", "B. High tissue glucose promotes yeast growth", "C. It reduces skin pH", "D. It increases IgE levels"], correct: 1, expl: "Glucose in secretions serves as a nutrient for Candida." },
+        { q: "196. Which medical device is most associated with biofilm-related candidemia?", options: ["A. Endotracheal tube", "B. Peripheral IV catheter", "C. Central venous catheter", "D. Nasogastric tube"], correct: 2, expl: "Long-term indwelling central lines provide surfaces for biofilm." },
+        { q: "197. Which test reveals budding yeast and pseudohyphae by dissolving human cells?", options: ["A. Gram stain", "B. India ink", "C. KOH preparation", "D. Acid-fast stain"], correct: 2, expl: "KOH clears keratin and human cells." },
+        { q: "198. The germ tube test is used primarily to identify:", options: ["A. Candida tropicalis", "B. Candida krusei", "C. Candida albicans", "D. Cryptococcus neoformans"], correct: 2, expl: "Incubation in serum induces germ tube formation in C. albicans." },
+        { q: "199. On Gram stain, Candida appears as:", options: ["A. Gram-negative rods", "B. Gram-positive budding yeasts", "C. Acid-fast bacilli", "D. Gram-variable cocci"], correct: 1, expl: "Candida retains crystal violet and appears purple." },
+        { q: "200. First-line treatment for uncomplicated vulvovaginal candidiasis is:", options: ["A. IV caspofungin", "B. Oral fluconazole (single dose)", "C. Topical nystatin cream", "D. Amphotericin B deoxycholate"], correct: 1, expl: "Fluconazole is effective and convenient." },
+        { q: "201. Which antifungal class is preferred for invasive candidiasis?", options: ["A. Azoles", "B. Polyenes", "C. Echinocandins", "D. Allylamines"], correct: 2, expl: "Echinocandins are first-line for invasive disease." },
+        { q: "202. Nystatin is commonly used for:", options: ["A. Systemic candidemia", "B. Oral or cutaneous candidiasis", "C. Cryptococcal meningitis", "D. Hepatosplenic candidiasis"], correct: 1, expl: "Nystatin is not absorbed systemically, ideal for topical use." },
+        { q: "203. Cryptococcosis is primarily acquired through:", options: ["A. Direct skin contact", "B. Ingestion of contaminated food", "C. Inhalation of environmental spores", "D. Vertical transmission"], correct: 2, expl: "Spores from soil (pigeon droppings) are inhaled." },
+        { q: "204. Which population is at highest risk for severe cryptococcosis?", options: ["A. Healthy children", "B. Pregnant women", "C. HIV/AIDS patients with CD4 < 100", "D. Elderly with hypertension"], correct: 2, expl: "Profound T-cell deficiency allows uncontrolled fungal replication." },
+        { q: "205. Which Cryptococcus species is more likely to infect immunocompetent hosts?", options: ["A. C. neoformans", "B. C. gattii", "C. C. albicans", "D. C. krusei"], correct: 1, expl: "C. gattii is associated with tropical regions and can infect healthy individuals." },
+        { q: "206. Cryptococcal meningitis differs from bacterial meningitis in that it typically presents with:", options: ["A. Sudden onset and high fever", "B. Prominent neck stiffness and petechiae", "C. Subacute headache and mild meningeal signs", "D. Rapid progression to septic shock"], correct: 2, expl: "Symptoms develop over days to weeks." },
+        { q: "207. The gold standard for diagnosing cryptococcosis is:", options: ["A. India ink prep", "B. CSF culture", "C. Cryptococcal antigen (CrAg) testing", "D. PCR for fungal DNA"], correct: 2, expl: "CrAg has >95% sensitivity and specificity." },
+        { q: "208. India ink preparation is primarily used on which specimen?", options: ["A. Blood", "B. Urine", "C. Sputum", "D. Cerebrospinal fluid (CSF)"], correct: 3, expl: "India ink highlights the capsule in CSF." },
+        { q: "209. Which antifungal combination is recommended for induction therapy of cryptococcal meningitis?", options: ["A. Fluconazole + flucytosine", "B. Amphotericin B + flucytosine", "C. Caspofungin + voriconazole", "D. Itraconazole + amphotericin B"], correct: 1, expl: "Amphotericin B + flucytosine achieves high CNS penetration." },
+        { q: "210. Why are echinocandins NOT used to treat cryptococcal meningitis?", options: ["A. They cause hepatotoxicity", "B. They do not cross the blood-brain barrier", "C. Cryptococcus is intrinsically resistant", "D. They interact with antiretrovirals"], correct: 1, expl: "Echinocandins have poor CNS penetration." },
+        // LESSON 8 (211-240)
+        { q: "211. To which fungal phylum does the family Aspergillaceae belong?", options: ["A. Basidiomycota", "B. Zygomycota", "C. Ascomycota", "D. Chytridiomycota"], correct: 2, expl: "Aspergillaceae are sac fungi (Ascomycota)." },
+        { q: "212. Which of the following is a defining microscopic feature of Aspergillus?", options: ["A. Spiral hyphae", "B. Conidiophore with a vesicle bearing radiating sterigmata", "C. Arthroconidia in chains", "D. Spherules containing endospores"], correct: 1, expl: "This “sprinkler-like” structure is diagnostic." },
+        { q: "213. The conidia of Aspergillaceae are primarily dispersed by:", options: ["A. Water", "B. Insects", "C. Air", "D. Direct contact"], correct: 2, expl: "Lightweight conidiospores become airborne easily." },
+        { q: "214. Which class includes the order Eurotiales and family Aspergillaceae?", options: ["A. Sordariomycetes", "B. Dothideomycetes", "C. Eurotiomycetes", "D. Leotiomycetes"], correct: 2, expl: "Eurotiomycetes contains Aspergillus and Penicillium." },
+        { q: "215. Members of Aspergillaceae typically have what type of mycelium?", options: ["A. Coenocytic (non-septate)", "B. Septate and branched", "C. Rhizoidal", "D. Dimorphic only"], correct: 1, expl: "Their hyphae are divided by septa." },
+        { q: "216. Which species is most commonly associated with invasive aspergillosis in immunocompromised patients?", options: ["A. Aspergillus niger", "B. Aspergillus flavus", "C. Aspergillus fumigatus", "D. Aspergillus terreus"], correct: 2, expl: "A. fumigatus is the leading cause of invasive pulmonary aspergillosis." },
+        { q: "217. Allergic Bronchopulmonary Aspergillosis (ABPA) is most commonly seen in patients with:", options: ["A. Diabetes mellitus", "B. Hypertension", "C. Asthma or cystic fibrosis", "D. Rheumatoid arthritis"], correct: 2, expl: "ABPA is a hypersensitivity reaction prevalent in individuals with airway disease." },
+        { q: "218. Which Aspergillus species produces aflatoxins, potent hepatocarcinogens?", options: ["A. A. niger", "B. A. terreus", "C. A. fumigatus", "D. A. flavus"], correct: 3, expl: "A. flavus produces aflatoxin B₁." },
+        { q: "219. Otomycosis (fungal ear infection) is most commonly caused by:", options: ["A. Aspergillus fumigatus", "B. Aspergillus niger", "C. Penicillium chrysogenum", "D. Talaromyces marneffei"], correct: 1, expl: "A. niger is a frequent cause of external otomycosis." },
+        { q: "220. Which organism is thermally dimorphic and endemic to Southeast Asia?", options: ["A. Aspergillus terreus", "B. Paecilomyces lilacinus", "C. Talaromyces marneffei", "D. Penicillium citrinum"], correct: 2, expl: "T. marneffei grows as a mold at 25°C and yeast at 37°C." },
+        { q: "221. Which species is notable for intrinsic resistance to amphotericin B?", options: ["A. Aspergillus flavus", "B. Aspergillus terreus", "C. Aspergillus niger", "D. Aspergillus fumigatus"], correct: 1, expl: "A. terreus is resistant to amphotericin B." },
+        { q: "222. Fungal keratitis linked to contact lens use is often caused by:", options: ["A. Aspergillus fumigatus", "B. Paecilomyces lilacinus", "C. Penicillium chrysogenum", "D. Talaromyces marneffei"], correct: 1, expl: "P. lilacinus causes severe eye infections." },
+        { q: "223. Aflatoxin B₁ causes liver cancer primarily by:", options: ["A. Inhibiting protein synthesis", "B. Forming DNA adducts after hepatic activation", "C. Disrupting mitochondrial function", "D. Inducing autoimmune hepatitis"], correct: 1, expl: "Liver enzymes convert AFB₁ to a reactive epoxide that binds DNA." },
+        { q: "224. Which food is at highest risk for aflatoxin contamination?", options: ["A. Rice", "B. Peanuts", "C. Apples", "D. Milk (pasteurized)"], correct: 1, expl: "Peanuts and corn stored in warm, humid conditions are prime substrates." },
+        { q: "225. Chronic aflatoxin exposure in children is associated with:", options: ["A. Precocious puberty", "B. Stunted growth and cognitive impairment", "C. Hyperactivity disorder", "D. Dental fluorosis"], correct: 1, expl: "Aflatoxins suppress immunity and impair nutrient absorption." },
+        { q: "226. The 2004 aflatoxicosis outbreak in Kenya resulted in over 100 deaths due to consumption of contaminated:", options: ["A. Wheat flour", "B. Maize (corn)", "C. Cassava", "D. Soybeans"], correct: 1, expl: "Poor storage of maize led to massive A. flavus contamination." },
+        { q: "227. KOH preparation is used in mycology to:", options: ["A. Stain fungal DNA", "B. Dissolve human cells to reveal fungal elements", "C. Detect galactomannan", "D. Culture fungi rapidly"], correct: 1, expl: "KOH clears keratin and cellular debris." },
+        { q: "228. Galactomannan testing is most useful for diagnosing:", options: ["A. Vulvovaginal candidiasis", "B. Cryptococcal meningitis", "C. Invasive aspergillosis", "D. Tinea capitis"], correct: 2, expl: "Galactomannan is a cell wall component of Aspergillus." },
+        { q: "229. On Sabouraud Dextrose Agar, Aspergillus niger colonies appear:", options: ["A. Bright yellow with red reverse", "B. White turning jet-black", "C. Green with powdery texture", "D. Pink and mucoid"], correct: 1, expl: "Dark conidia give colonies a black, pepper-like appearance." },
+        { q: "230. Which diagnostic method provides the fastest species identification?", options: ["A. Culture", "B. KOH mount", "C. PCR", "D. Galactomannan ELISA"], correct: 2, expl: "Molecular methods like PCR can identify species within hours." },
+        { q: "231. Citric acid used in food and beverages is primarily produced by:", options: ["A. Penicillium chrysogenum", "B. Aspergillus terreus", "C. Aspergillus niger", "D. Talaromyces marneffei"], correct: 2, expl: "A. niger is the industrial workhorse for citric acid fermentation." },
+        { q: "232. Lovastatin, the first cholesterol-lowering statin, was isolated from:", options: ["A. Aspergillus fumigatus", "B. Aspergillus terreus", "C. Penicillium citrinum", "D. Paecilomyces lilacinus"], correct: 1, expl: "Lovastatin inhibits HMG-CoA reductase." },
+        { q: "233. Penicillin is industrially produced by:", options: ["A. Penicillium notatum", "B. Penicillium chrysogenum", "C. Aspergillus flavus", "D. Talaromyces funiculosus"], correct: 1, expl: "P. chrysogenum is a high-yield strain." },
+        { q: "234. Which enzyme produced by Aspergillus is used in baking and brewing?", options: ["A. Lipase", "B. Amylase", "C. Catalase", "D. Urease"], correct: 1, expl: "Amylases break down starch into fermentable sugars." },
+        { q: "235. Invasive aspergillosis most commonly originates in the:", options: ["A. Skin", "B. Gastrointestinal tract", "C. Lungs", "D. Urinary tract"], correct: 2, expl: "Inhalation of conidia leads to pulmonary infection." },
+        { q: "236. Which condition is NOT caused by Aspergillaceae?", options: ["A. Otomycosis", "B. Keratitis", "C. Oral thrush", "D. Allergic bronchopulmonary aspergillosis"], correct: 2, expl: "Oral thrush is caused by Candida." },
+        { q: "237. Indoor growth of Aspergillus is favored by:", options: ["A. Cold, dry environments", "B. UV light exposure", "C. Damp walls and poor ventilation", "D. High salt concentration"], correct: 2, expl: "Moisture and organic material support mold growth." },
+        { q: "238. False-positive galactomannan tests can occur with which antibiotic?", options: ["A. Vancomycin", "B. Ceftriaxone", "C. Piperacillin-tazobactam", "D. Doxycycline"], correct: 2, expl: "Some beta-lactams contain fungal cell wall components." },
+        { q: "239. Aflatoxin contamination is minimized by:", options: ["A. Refrigerating grains immediately after harvest", "B. Storing crops in dry, well-ventilated conditions", "C. Irradiating all nuts before sale", "D. Adding vinegar to stored corn"], correct: 1, expl: "Low moisture and temperature inhibit fungal growth." },
+        { q: "240. Which statement about Aspergillaceae is TRUE?", options: ["A. All members are pathogenic to humans", "B. They cannot reproduce sexually", "C. They include both harmful pathogens and beneficial industrial fungi", "D. They lack cell walls"], correct: 2, expl: "While some cause disease, others are vital in biotechnology." },
+        // LESSON 9 (241-270)
+        { q: "241. What is the correct term for fungal infections of keratinized tissues?", options: ["A. Mycosis fungoides", "B. Dermatophytosis", "C. Sporotrichosis", "D. Chromoblastomycosis"], correct: 1, expl: "Dermatophytosis (tinea or ringworm) refers to infections caused by dermatophytes." },
+        { q: "242. Despite its name, “ringworm” is caused by:", options: ["A. Parasitic worms", "B. Bacteria", "C. Fungi", "D. Viruses"], correct: 2, expl: "“Ringworm” describes the ring-like rash caused by dermatophyte fungi." },
+        { q: "243. Which protein do dermatophytes uniquely digest to cause infection?", options: ["A. Collagen", "B. Elastin", "C. Keratin", "D. Albumin"], correct: 2, expl: "Dermatophytes secrete keratinase enzymes." },
+        { q: "244. Modern taxonomy places dermatophytes in which family?", options: ["A. Aspergillaceae", "B. Gymnoascaceae", "C. Arthrodermataceae", "D. Trichocomaceae"], correct: 2, expl: "Dermatophytes are now classified under Arthrodermataceae." },
+        { q: "245. The sexual (teleomorph) stage of Microsporum gypseum is known as:", options: ["A. Aspergillus gypseus", "B. Penicillium gypseum", "C. Arthroderma gypseum", "D. Talaromyces gypseum"], correct: 2, expl: "Dermatophytes have dual naming: asexual (anamorph) and sexual (teleomorph)." },
+        { q: "246. Which genus infects skin and hair but NOT nails?", options: ["A. Trichophyton", "B. Epidermophyton", "C. Microsporum", "D. Candida"], correct: 2, expl: "Microsporum targets skin and hair." },
+        { q: "247. Smooth, club-shaped macroconidia in clusters are characteristic of:", options: ["A. Trichophyton rubrum", "B. Microsporum canis", "C. Epidermophyton floccosum", "D. Aspergillus niger"], correct: 2, expl: "Epidermophyton produces distinctive smooth, clavate macroconidia." },
+        { q: "248. Which genus is the most common cause of human dermatophytosis?", options: ["A. Microsporum", "B. Epidermophyton", "C. Trichophyton", "D. Paecilomyces"], correct: 2, expl: "Trichophyton species cause the majority of tinea infections." },
+        { q: "249. Abundant microconidia are a hallmark of which genus?", options: ["A. Epidermophyton", "B. Microsporum", "C. Trichophyton", "D. Fusarium"], correct: 2, expl: "Trichophyton often lacks prominent macroconidia but produces numerous microconidia." },
+        { q: "250. Rough, spindle-shaped macroconidia are seen in:", options: ["A. Trichophyton", "B. Epidermophyton", "C. Microsporum", "D. Candida albicans"], correct: 2, expl: "These thick-walled, multicellular macroconidia help differentiate Microsporum." },
+        { q: "251. Anthropophilic dermatophytes primarily spread through:", options: ["A. Soil contact", "B. Animal bites", "C. Human-to-human contact or fomites", "D. Inhalation of spores"], correct: 2, expl: "Anthropophilic species thrive on humans and spread via contact." },
+        { q: "252. Zoophilic dermatophytes typically cause infections that are:", options: ["A. Asymptomatic and chronic", "B. Mild with minimal inflammation", "C. Severe, acute, and inflammatory", "D. Systemic and life-threatening"], correct: 2, expl: "Due to poor host adaptation, zoophilic fungi provoke strong immune reactions." },
+        { q: "253. Geophilic dermatophytes are commonly found in:", options: ["A. Human scalp", "B. Hospital ventilation systems", "C. Soil rich in keratin debris", "D. Refrigerated food"], correct: 2, expl: "Geophilic species decompose hair, feathers, and skin in soil." },
+        { q: "254. Which ecological group causes the mildest symptoms in humans?", options: ["A. Zoophilic", "B. Geophilic", "C. Anthropophilic", "D. All cause equally severe disease"], correct: 2, expl: "Anthropophilic fungi are well-adapted to humans, causing chronic but less inflammatory infections." },
+        { q: "255. The classic “ring” appearance in tinea corporis results from:", options: ["A. Bacterial co-infection", "B. Central necrosis due to toxins", "C. Active fungal growth at the periphery with central healing", "D. Autoimmune destruction of the center"], correct: 2, expl: "Hyphae advance outward seeking fresh keratin." },
+        { q: "256. Dermatophytes normally infect only:", options: ["A. Living epidermal cells", "B. Subcutaneous fat", "C. Dead, keratinized tissue", "D. Blood vessels"], correct: 2, expl: "They cannot invade living tissue under normal conditions." },
+        { q: "257. Majocchi’s granuloma occurs when dermatophytes invade:", options: ["A. The lungs", "B. Hair follicles and dermis", "C. The central nervous system", "D. Bone marrow"], correct: 1, expl: "This deep form occurs in immunocompromised individuals." },
+        { q: "258. Adherence of dermatophytes to skin occurs within:", options: ["A. 24–48 hours", "B. 5–10 minutes", "C. 2–3 hours", "D. 1 week"], correct: 2, expl: "Arthroconidia bind rapidly to corneocytes via surface adhesins." },
+        { q: "259. The primary target of most antifungal drugs used against dermatophytes is:", options: ["A. DNA replication", "B. Protein synthesis", "C. Ergosterol in the cell membrane", "D. Cell wall chitin"], correct: 2, expl: "Ergosterol is essential for fungal membrane integrity." },
+        { q: "260. Terbinafine is classified as a(n):", options: ["A. Azole", "B. Polyene", "C. Allylamine", "D. Echinocandin"], correct: 2, expl: "Terbinafine inhibits squalene epoxidase." },
+        { q: "261. Griseofulvin works by:", options: ["A. Inhibiting ergosterol synthesis", "B. Disrupting microtubule function during mitosis", "C. Binding to DNA", "D. Blocking RNA polymerase"], correct: 1, expl: "It interferes with spindle formation, halting fungal cell division." },
+        { q: "262. Which drug is preferred for tinea capitis in children?", options: ["A. Fluconazole", "B. Clotrimazole", "C. Griseofulvin", "D. Caspofungin"], correct: 2, expl: "It deposits into growing hair, preventing reinvasion." },
+        { q: "263. Azoles exert which type of antifungal effect?", options: ["A. Fungicidal", "B. Bacteriostatic", "C. Fungistatic", "D. Virucidal"], correct: 2, expl: "Azoles inhibit ergosterol synthesis but don’t kill fungi outright." },
+        { q: "264. Topical antifungals are generally sufficient for:", options: ["A. Tinea capitis", "B. Onychomycosis", "C. Tinea corporis", "D. Majocchi’s granuloma"], correct: 2, expl: "Superficial skin infections respond well to topicals." },
+        { q: "265. For onychomycosis, treatment duration is typically:", options: ["A. 3–7 days", "B. 2–4 weeks", "C. 6–12 weeks", "D. 6–12 months"], correct: 2, expl: "Oral terbinafine is usually given for ~12 weeks for toenails." },
+        { q: "266. When applying topical antifungals for tinea corporis, you should:", options: ["A. Apply only to the red border", "B. Cover the entire body", "C. Extend application 2 cm beyond the visible rash", "D. Use only at night"], correct: 2, expl: "This ensures coverage of advancing hyphae." },
+        { q: "267. Reinfection in tinea pedis can be reduced by:", options: ["A. Wearing occlusive boots daily", "B. Treating shoes with antifungal powder", "C. Avoiding all foot washing", "D. Using corticosteroid creams"], correct: 1, expl: "Fungal spores persist in footwear; decontamination is key." },
+        { q: "268. The host immune response in dermatophytosis is primarily:", options: ["A. Type I hypersensitivity", "B. Type II cytotoxic reaction", "C. Type IV delayed-type hypersensitivity", "D. Complement-mediated lysis"], correct: 2, expl: "Symptoms like itching peak at 48–72 hours due to T-cell-mediated inflammation." },
+        { q: "269. Which statement about dermatophytes is TRUE?", options: ["A. They produce aflatoxins", "B. They invade living tissue routinely", "C. They play a role in ecological keratin recycling", "D. They are part of the normal gut flora"], correct: 2, expl: "Geophilic species decompose hair, feathers, and skin in nature." },
+        { q: "270. Why are topical antifungals ineffective for tinea capitis?", options: ["A. Scalp pH neutralizes the drug", "B. They cannot penetrate the hair shaft", "C. Trichophyton is resistant to all topicals", "D. The infection is viral"], correct: 1, expl: "The fungus resides inside the hair follicle and shaft—systemic drugs are required." },
+        // LESSON 10 (271-300)
+        { q: "271. To which plant family does Ricinus communis belong?", options: ["A. Solanaceae", "B. Euphorbiaceae", "C. Fabaceae", "D. Asteraceae"], correct: 1, expl: "Ricinus communis (castor oil plant) is a member of the spurge family, Euphorbiaceae." },
+        { q: "272. What is the primary toxic component in castor seeds?", options: ["A. Ricinoleic acid", "B. Ricinin", "C. Ricin", "D. Nudiflorin"], correct: 2, expl: "Ricin is a highly potent glycoprotein toxin." },
+        { q: "273. Why is commercial castor oil safe for human use?", options: ["A. It contains no fatty acids", "B. Ricin is lipid-soluble and removed during filtration", "C. Ricin is water-soluble and denatured by heat during processing", "D. The seeds used are genetically modified to be toxin-free"], correct: 2, expl: "Ricin does not dissolve in oil, and industrial heating destroys it." },
+        { q: "274. Which compound gives castor oil its laxative effect?", options: ["A. Ricin", "B. Ricinin", "C. Ricinoleic acid", "D. Agglutinin RCA120"], correct: 2, expl: "Ricinoleic acid stimulates intestinal motility." },
+        { q: "275. The seeds of Ricinus communis are dangerous only if:", options: ["A. Swallowed whole", "B. Inhaled as dust", "C. Chewed or crushed", "D. Touched with bare hands"], correct: 2, expl: "The hard seed coat protects against digestion; mechanical disruption releases ricin." },
+        { q: "276. Ricin is classified as a:", options: ["A. Neurotoxin", "B. Hemolysin", "C. Type 2 Ribosome-Inactivating Protein (RIP)", "D. Ion channel blocker"], correct: 2, expl: "Ricin has an A-B structure that inactivates ribosomes." },
+        { q: "277. The B-chain of ricin functions to:", options: ["A. Cleave ribosomal RNA", "B. Bind to galactose residues on cell surfaces", "C. Activate caspases", "D. Inhibit ATP synthase"], correct: 1, expl: "This binding triggers endocytosis." },
+        { q: "278. Ricin’s A-chain enzymatically removes an adenine base from:", options: ["A. mRNA", "B. tRNA", "C. 28S rRNA in the 60S ribosomal subunit", "D. DNA promoter regions"], correct: 2, expl: "This depurination blocks elongation factor binding." },
+        { q: "279. How many ribosomes can a single ricin molecule inactivate per minute?", options: ["A. 1–10", "B. ~100", "C. Thousands", "D. Millions"], correct: 2, expl: "Ricin is extremely efficient." },
+        { q: "280. Cell death from ricin exposure occurs primarily via:", options: ["A. Necrosis only", "B. Apoptosis or necrosis", "C. Autophagy", "D. Pyroptosis"], correct: 1, expl: "Depending on dose and cell type, ricin can trigger programmed or uncontrolled cell death." },
+        { q: "281. Ingestion of whole, intact castor seeds typically results in:", options: ["A. Severe ricin poisoning", "B. No toxicity", "C. Mild allergic reaction", "D. Immediate respiratory distress"], correct: 1, expl: "The seed coat resists digestion, preventing ricin release." },
+        { q: "282. Onset of symptoms after ingestion of chewed castor seeds is usually within:", options: ["A. 30 minutes", "B. 1–2 hours", "C. 4–10 hours", "D. 24–48 hours"], correct: 2, expl: "Gastrointestinal symptoms appear several hours after ricin absorption begins." },
+        { q: "283. Which symptom is NOT typical of ricin ingestion?", options: ["A. Bloody diarrhea", "B. Violent vomiting", "C. Seizures", "D. Severe abdominal pain"], correct: 2, expl: "Ricin causes GI, hepatic, and renal damage—but not direct CNS effects like seizures." },
+        { q: "284. Inhalation of ricin leads to:", options: ["A. Skin blistering", "B. Pulmonary edema and respiratory failure", "C. Acute liver necrosis within 1 hour", "D. Hemolytic anemia"], correct: 1, expl: "Inhaled ricin damages alveolar cells, causing fluid leakage." },
+        { q: "285. Injection of ricin is particularly lethal because it:", options: ["A. Causes immediate cardiac arrest", "B. Bypasses natural barriers and delivers toxin directly into circulation", "C. Triggers anaphylaxis", "D. Induces massive cytokine storm"], correct: 1, expl: "This route leads to rapid systemic distribution." },
+        { q: "286. As of 2026, is there an approved antidote for ricin poisoning?", options: ["A. Yes – monoclonal antibody therapy", "B. Yes – small-molecule inhibitor", "C. No – only supportive care is available", "D. Yes – ricin vaccine"], correct: 2, expl: "No clinically approved antidote exists." },
+        { q: "287. Activated charcoal is most effective in ricin ingestion if given:", options: ["A. Within 1 hour", "B. Within 6 hours", "C. Only after vomiting stops", "D. Never—it doesn’t bind ricin"], correct: 0, expl: "Early administration may reduce absorption." },
+        { q: "288. Gastric lavage is generally discouraged in ricin poisoning because of risk of:", options: ["A. Hypoglycemia", "B. Aspiration and mucosal injury", "C. Delayed liver metabolism", "D. Cardiac arrhythmia"], correct: 1, expl: "Violent vomiting increases aspiration risk." },
+        { q: "289. Key supportive treatment for ricin ingestion includes:", options: ["A. Corticosteroids", "B. Aggressive IV fluid resuscitation", "C. Antibiotics", "D. Anticonvulsants"], correct: 1, expl: "Fluid loss from vomiting/diarrhea can cause shock." },
+        { q: "290. Which lab test is essential to monitor in ricin poisoning?", options: ["A. Blood glucose", "B. Liver and renal function tests", "C. Coagulation profile", "D. Arterial blood gas only"], correct: 1, expl: "Ricin causes hepatotoxicity and nephrotoxicity." },
+        { q: "291. A child who chews one castor seed should be:", options: ["A. Observed at home", "B. Given syrup of ipecac", "C. Evaluated in an emergency department", "D. Treated with antibiotics"], correct: 2, expl: "Even partial ingestion poses risk in young children." },
+        { q: "292. “Homemade castor seed tea” is dangerous because it:", options: ["A. Contains high levels of ricinoleic acid", "B. Releases ricin when seeds are crushed and steeped", "C. Causes vitamin toxicity", "D. Is contaminated with bacteria"], correct: 1, expl: "Crushing bypasses the protective seed coat." },
+        { q: "293. Ricin is classified as a bioterror agent by the CDC under Category:", options: ["A. A", "B. B", "C. C", "D. Not classified"], correct: 1, expl: "Ricin is a Category B agent." },
+        { q: "294. In a suspected inhalational ricin exposure, first responders should:", options: ["A. Administer epinephrine immediately", "B. Decontaminate skin/eyes and remove clothing", "C. Give oral activated charcoal", "D. Perform tracheostomy on-site"], correct: 1, expl: "External decontamination prevents ongoing exposure." },
+        { q: "295. Post-mortem findings in ricin injection include all EXCEPT:", options: ["A. Local tissue necrosis at injection site", "B. Widespread organ apoptosis", "C. Severe gastrointestinal inflammation", "D. Ricin detectable in blood"], correct: 2, expl: "GI damage occurs only with ingestion." },
+        { q: "296. Which use of Ricinus communis is SAFE?", options: ["A. Making jewelry from raw seeds", "B. Brewing leaf tea for fever", "C. Using commercial castor oil as a laxative", "D. Burning dried stems for incense"], correct: 2, expl: "Properly processed castor oil contains no active ricin." },
+        { q: "297. Leaves of the castor plant can cause:", options: ["A. Ricin poisoning if eaten", "B. Allergic dermatitis", "C. Neurological paralysis", "D. Hemolysis"], correct: 1, expl: "Leaves contain allergenic proteins but negligible ricin." },
+        { q: "298. Public health efforts should discourage planting castor beans near:", options: ["A. Industrial zones", "B. Playgrounds and daycares", "C. Adult fitness centers", "D. Parking lots"], correct: 1, expl: "Curious children may handle or chew the seeds." },
+        { q: "299. Which statement about ricin detection is TRUE?", options: ["A. Rapid urine dipstick tests are widely available", "B. Diagnosis is clinical only—no lab confirmation possible", "C. Specialized immunoassays or mass spectrometry can detect ricin in serum/urine", "D. PCR detects ricin gene in patient blood"], correct: 2, expl: "Confirmation requires reference labs." },
+        { q: "300. The key reason ricin is so deadly is that it:", options: ["A. Destroys red blood cells", "B. Paralyzes respiratory muscles", "C. Irreversibly halts cellular protein synthesis", "D. Causes massive histamine release"], correct: 2, expl: "Without new proteins, cells cannot function or repair." }
+    ];
+
+    // State Variables
+    let currentQuestionIndex = 0;
+    let userAnswers = new Array(rawQuestions.length).fill(null); // Stores index of selected answer
+    let score = 0;
+
+    // DOM Elements
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const explanationBox = document.getElementById('explanation-box');
+    const progressTracker = document.getElementById('progress-tracker');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const quizView = document.getElementById('quiz-view');
+    const resultView = document.getElementById('result-view');
+    const controlsArea = document.getElementById('controls-area');
+    const finalScoreEl = document.getElementById('final-score');
+    const resultMessageEl = document.getElementById('result-message');
+    
+    // Modal Elements
+    const gridModal = document.getElementById('grid-modal');
+    const gridContainer = document.getElementById('grid-container');
+
+    // Initialize Quiz
+    function initQuiz() {
+        currentQuestionIndex = 0;
+        userAnswers = new Array(rawQuestions.length).fill(null);
+        score = 0;
+        quizView.style.display = 'block';
+        resultView.style.display = 'none';
+        controlsArea.style.display = 'flex';
+        renderQuestion();
+        renderGrid();
+    }
+
+    // Render Question
+    function renderQuestion() {
+        const q = rawQuestions[currentQuestionIndex];
+        
+        // Update Text
+        questionText.textContent = q.q;
+        progressTracker.textContent = `Question ${currentQuestionIndex + 1} / ${rawQuestions.length}`;
+        
+        // Clear previous options
+        optionsContainer.innerHTML = '';
+        explanationBox.style.display = 'none';
+
+        // Render Options
+        q.options.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            
+            // Option Label
+            const label = document.createElement('span');
+            label.textContent = opt;
+            btn.appendChild(label);
+
+            // Check if already answered
+            const selected = userAnswers[currentQuestionIndex];
+            
+            if (selected !== null) {
+                btn.classList.add('disabled');
+                
+                // Show Feedback
+                const feedback = document.createElement('span');
+                feedback.className = 'feedback-label';
+
+                if (index === q.correct) {
+                    btn.classList.add('correct');
+                    feedback.textContent = 'CORRECT';
+                    feedback.classList.add('text-green');
+                    btn.appendChild(feedback);
+                } else if (index === selected) {
+                    btn.classList.add('incorrect');
+                    feedback.textContent = 'INCORRECT';
+                    feedback.classList.add('text-red');
+                    btn.appendChild(feedback);
+                }
+            } else {
+                // Add Click Event
+                btn.onclick = () => handleAnswer(index);
+            }
+
+            optionsContainer.appendChild(btn);
+        });
+
+        // Show Explanation if answered
+        if (userAnswers[currentQuestionIndex] !== null) {
+            explanationBox.textContent = `Explanation: ${q.expl}`;
+            explanationBox.style.display = 'block';
+        }
+
+        // Update Nav Buttons
+        prevBtn.disabled = currentQuestionIndex === 0;
+        
+        if (currentQuestionIndex === rawQuestions.length - 1) {
+            nextBtn.textContent = 'Finish';
+            nextBtn.onclick = finishQuiz;
+        } else {
+            nextBtn.textContent = 'Next';
+            nextBtn.onclick = nextQuestion;
+        }
+
+        // Update Grid Highlight
+        updateGridStatus();
+    }
+
+    // Handle Answer Click
+    function handleAnswer(selectedIndex) {
+        const q = rawQuestions[currentQuestionIndex];
+        userAnswers[currentQuestionIndex] = selectedIndex;
+
+        if (selectedIndex === q.correct) {
+            score++;
+        }
+
+        renderQuestion(); // Re-render to show feedback
+        renderGrid(); // Update grid colors
+    }
+
+    // Navigation
+    function nextQuestion() {
+        if (currentQuestionIndex < rawQuestions.length - 1) {
+            currentQuestionIndex++;
+            renderQuestion();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            renderQuestion();
+        }
+    }
+
+    // Finish Quiz
+    function finishQuiz() {
+        quizView.style.display = 'none';
+        controlsArea.style.display = 'none';
+        resultView.style.display = 'block';
+        
+        finalScoreEl.textContent = `${score} / ${rawQuestions.length}`;
+        
+        let percentage = (score / rawQuestions.length) * 100;
+        if (percentage >= 80) resultMessageEl.textContent = "Excellent performance.";
+        else if (percentage >= 50) resultMessageEl.textContent = "Good effort. Review missed questions.";
+        else resultMessageEl.textContent = "Needs improvement.";
+    }
+
+    // Restart
+    function restartQuiz() {
+        initQuiz();
+    }
+
+    // Grid Logic
+    function renderGrid() {
+        gridContainer.innerHTML = '';
+        rawQuestions.forEach((_, index) => {
+            const item = document.createElement('div');
+            item.className = 'grid-item';
+            item.textContent = index + 1;
+            item.onclick = () => jumpToQuestion(index);
+            
+            if (userAnswers[index] !== null) {
+                item.classList.add('answered');
+            }
+            
+            if (index === currentQuestionIndex) {
+                item.classList.add('current');
+            }
+            
+            gridContainer.appendChild(item);
+        });
+    }
+
+    function updateGridStatus() {
+        // Just re-render class changes without destroying DOM
+        const items = gridContainer.children;
+        for (let i = 0; i < items.length; i++) {
+            items[i].classList.remove('current');
+            if (i === currentQuestionIndex) {
+                items[i].classList.add('current');
+            }
+        }
+    }
+
+    function toggleGrid() {
+        if (gridModal.style.display === 'flex') {
+            gridModal.style.display = 'none';
+        } else {
+            renderGrid(); // Ensure fresh state
+            gridModal.style.display = 'flex';
+        }
+    }
+
+    function jumpToQuestion(index) {
+        currentQuestionIndex = index;
+        renderQuestion();
+        toggleGrid(); // Close modal
+    }
+
+    // Start App
+    initQuiz();
+
+</script>
+</body>
+</html>
