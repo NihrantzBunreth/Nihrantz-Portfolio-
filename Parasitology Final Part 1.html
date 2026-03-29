@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Filarial Quiz | Glassmorphism Edition</title>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS Reset & Variables --- */
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --text-color: #ffffff;
+            --accent-color: #00d2ff;
+            --correct-color: rgba(40, 167, 69, 0.8);
+            --wrong-color: rgba(220, 53, 69, 0.8);
+            --highlight-bg: rgba(255, 255, 255, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+            /* Vibrant Animated Gradient Background */
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #4b134f, #1cb5e0);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- Glass Container --- */
+        .glass-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--glass-shadow);
+            width: 100%;
+            max-width: 800px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: height 0.3s ease;
+        }
+
+        /* --- Header --- */
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
+        }
+
+        .progress-indicator {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        /* --- Quiz Content --- */
+        .question-text {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Hover Effect: Frosted Glass lights up */
+        .option-btn:hover:not(.disabled) {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .option-btn.correct {
+            background: var(--correct-color) !important;
+            border-color: #28a745;
+            pointer-events: none;
+        }
+
+        .option-btn.wrong {
+            background: var(--wrong-color) !important;
+            border-color: #dc3545;
+            pointer-events: none;
+        }
+
+        /* Feedback Section */
+        .feedback-area {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feedback-title {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--accent-color);
+        }
+
+        /* --- Navigation Controls --- */
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .glass-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .map-btn {
+            background: rgba(0, 210, 255, 0.2);
+            border-color: rgba(0, 210, 255, 0.4);
+        }
+        .map-btn:hover {
+            background: rgba(0, 210, 255, 0.4);
+        }
+
+        /* --- Question Map Overlay --- */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .map-container {
+            background: #1a1a2e;
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .map-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 10px;
+        }
+
+        .map-node {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .map-node:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .map-node.current {
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: 0 0 10px var(--accent-color);
+            border: 2px solid white;
+            transform: scale(1.1);
+        }
+
+        .map-node.answered {
+            background: var(--correct-color);
+            border: 1px solid #28a745;
+        }
+        
+        /* Marking incorrect answers on the map (Optional but helpful) */
+        .map-node.answered.wrong-ans {
+            background: var(--wrong-color);
+            border: 1px solid #dc3545;
+        }
+
+        .map-legend {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+        }
+        .legend-item { display: flex; align-items: center; gap: 5px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+
+        /* --- Footer / Branding --- */
+        .branding-section {
+            margin-top: 30px;
+            text-align: center;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 20px;
+        }
+
+        .credit-text {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .credit-text span {
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: white;
+            color: #0f0c29;
+            transform: rotate(360deg);
+        }
+
+        /* --- Result Screen --- */
+        .result-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .score-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid var(--accent-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 auto 20px;
+            background: rgba(0,0,0,0.2);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
+        }
+
+        .restart-btn {
+            background: var(--accent-color);
+            color: #0f0c29;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .restart-btn:hover { transform: scale(1.05); }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            .option-btn { padding: 12px; font-size: 0.95rem; }
+            .glass-btn { padding: 8px 15px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Glass Container -->
+    <main class="glass-container" id="mainContainer">
+        
+        <!-- Header -->
+        <header>
+            <h1>Parasitology Quiz: Filarial Worms</h1>
+            <div class="progress-indicator">Question <span id="currentQNum">1</span> of <span id="totalQNum">50</span></div>
+        </header>
+
+        <!-- Quiz View -->
+        <div id="quizView">
+            <div class="question-text" id="questionText">
+                <!-- Question loads here -->
+            </div>
+
+            <div class="options-grid" id="optionsContainer">
+                <!-- Options load here -->
+            </div>
+
+            <!-- Instant Feedback -->
+            <div class="feedback-area" id="feedbackArea">
+                <div class="feedback-title" id="feedbackTitle">Correct!</div>
+                <div id="feedbackText">Explanation goes here.</div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="nav-controls">
+                <button class="glass-btn" id="prevBtn" onclick="changeQuestion(-1)">
+                    <i class="fas fa-chevron-left"></i> Prev
+                </button>
+                
+                <button class="glass-btn map-btn" onclick="toggleMap()">
+                    <i class="fas fa-border-all"></i> View Map
+                </button>
+
+                <button class="glass-btn" id="nextBtn" onclick="changeQuestion(1)">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Result View (Hidden initially) -->
+        <div id="resultView" class="result-screen">
+            <div class="score-card">
+                <div class="score-circle">
+                    <span id="finalScore">0</span>%
+                </div>
+                <h2>Quiz Completed!</h2>
+                <p style="margin-top: 10px; opacity: 0.8;">You answered <span id="correctCount">0</span> out of 50 questions correctly.</p>
+            </div>
+
+            <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
+
+            <!-- Branding on Result Page -->
+            <div class="branding-section">
+                <p class="credit-text">Prepared by <span>BUNRETH Nihrantz</span></p>
+                <div class="social-bar">
+                    <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://t.me/Nihrantz" target="_blank" class="social-link" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Branding on Quiz Page -->
+        <div class="branding-section" id="quizBranding">
+            <p class="credit-text">Prepared by <span>BUNRETH Nihrantz</span></p>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-link" title="Telegram"><i class="fab fa-telegram-plane"></i></a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Question Map Overlay -->
+    <div class="overlay" id="mapOverlay">
+        <div class="map-container">
+            <div class="map-header">
+                <h3>Question Map</h3>
+                <button class="glass-btn" onclick="toggleMap()" style="padding: 5px 15px;"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="map-grid" id="mapGrid">
+                <!-- Generated by JS -->
+            </div>
+            <div class="map-legend">
+                <div class="legend-item"><div class="dot" style="background:var(--accent-color)"></div> Current</div>
+                <div class="legend-item"><div class="dot" style="background:var(--correct-color)"></div> Correct</div>
+                <div class="legend-item"><div class="dot" style="background:rgba(255,255,255,0.2)"></div> Unanswered</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Data: 50 Questions ---
+        const quizData = [
+            {
+                q: "1. Hydrocele is most frequently associated with which species?",
+                options: ["a. Brugia malayi", "b. Wuchereria bancrofti", "c. Loa loa", "d. Onchocerca volvulus"],
+                answer: 1, // Index of correct option (0-3)
+                explanation: "Hydrocele (accumulation of fluid in the tunica vaginalis of the scrotum) is a common manifestation of chronic lymphatic filariasis caused by Wuchereria bancrofti. This parasite primarily affects the lymphatic system of the lower limbs and genitalia. While Brugia malayi can also cause lymphatic disease, it rarely involves the genitalia, making hydrocele far more characteristic of W. bancrofti infection."
+            },
+            {
+                q: "2. Which parasite is associated with 'fugitive swellings'?",
+                options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Loa loa", "d. Onchocerca volvulus"],
+                answer: 2,
+                explanation: "'Fugitive swellings' (also called Calabar swellings) are transient, localized, non-pitting edematous swellings that migrate across subcutaneous tissues. They are hallmark features of loiasis, caused by Loa loa. These swellings result from inflammatory reactions to migrating adult worms."
+            },
+            {
+                q: "3. What is the infective stage of filarial worms for humans?",
+                options: ["a. Microfilaria", "b. L1 larva", "c. L3 larva", "d. Cercaria"],
+                answer: 2,
+                explanation: "Filarial nematodes require an arthropod vector. Within the vector, microfilariae develop into infective third-stage larvae (L3). When the vector takes a blood meal, L3 larvae are deposited onto human skin and penetrate the bite wound to enter the body."
+            },
+            {
+                q: "4. The presence of a 'sheath' is a diagnostic feature of the microfilariae of:",
+                options: ["a. Onchocerca volvulus", "b. Wuchereria bancrofti", "c. Mansonella ozzardi", "d. Mansonella perstans"],
+                answer: 1,
+                explanation: "Microfilariae of W. bancrofti are sheathed, meaning they are surrounded by a thin, transparent membrane derived from the eggshell. This sheath stains pink with Giemsa and helps differentiate them from unsheathed species like Mansonella perstans or Onchocerca volvulus."
+            },
+            {
+                q: "5. Which stain is commonly used to study the morphology of microfilariae?",
+                options: ["a. Gram stain", "b. Giemsa stain", "c. Acid-fast stain", "d. Iodine stain"],
+                answer: 1,
+                explanation: "Giemsa stain is a Romanowsky-type stain that differentially colors cellular components. It clearly highlights the nuclei, sheath (if present), and tail morphology of microfilariae in blood smears, making it the standard for species identification."
+            },
+            {
+                q: "6. The term 'lymphangitis' refers to:",
+                options: ["a. Inflammation of lymph nodes", "b. Inflammation of lymphatic vessels", "c. Enlargement of the spleen", "d. Obstruction of the bile duct"],
+                answer: 1,
+                explanation: "Lymphangitis is acute inflammation of the lymphatic vessels, often presenting as red, tender, cord-like streaks under the skin. In filariasis, it results from immune responses to dying adult worms or secondary bacterial infections."
+            },
+            {
+                q: "7. Which parasite’s microfilariae show 'diurnal periodicity'?",
+                options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Loa loa", "d. Mansonella perstans"],
+                answer: 2,
+                explanation: "Loa loa microfilariae exhibit diurnal periodicity—they circulate in peripheral blood during daylight hours (peaking around noon) to coincide with the biting activity of its vector, Chrysops (deer fly)."
+            },
+            {
+                q: "8. The vector for Brugia timori is:",
+                options: ["a. Culex", "b. Anopheles", "c. Mansonia", "d. Simulium"],
+                answer: 1,
+                explanation: "Brugia timori, found primarily in Indonesia (Timor and nearby islands), is transmitted by Anopheles barbirostris mosquitoes. This differs from B. malayi, which is mainly spread by Mansonia species."
+            },
+            {
+                q: "9. Calabar swellings are a characteristic feature of which infection?",
+                options: ["a. Bancroftian filariasis", "b. Loiasis", "c. Onchocerciasis", "d. Malayan filariasis"],
+                answer: 1,
+                explanation: "Calabar swellings are transient, angioedema-like subcutaneous swellings caused by Loa loa migration. They are named after the region in Nigeria where they were first described and are pathognomonic for loiasis."
+            },
+            {
+                q: "10. Which parasite produces microfilariae that are typically found in the skin, not blood?",
+                options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Onchocerca volvulus", "d. Loa loa"],
+                answer: 2,
+                explanation: "Onchocerca volvulus microfilariae reside in the dermis and do not circulate in peripheral blood. Diagnosis requires skin snips, where small pieces of skin are incubated to allow microfilariae to emerge."
+            },
+            {
+                q: "11. The life span of an adult Wuchereria bancrofti worm is approximately:",
+                options: ["a. 1 month", "b. 1 year", "c. 5–10 years", "d. 20–30 years"],
+                answer: 2,
+                explanation: "Adult filarial worms are long-lived. W. bancrofti adults can survive 5–10 years in human lymphatics, continuously producing microfilariae."
+            },
+            {
+                q: "12. The drug of choice for treating Onchocerciasis is:",
+                options: ["a. Diethylcarbamazine (DEC)", "b. Ivermectin", "c. Praziquantel", "d. Albendazole"],
+                answer: 1,
+                explanation: "Ivermectin is the drug of choice for onchocerciasis because it paralyzes and kills microfilariae, reducing transmission and preventing ocular damage. DEC is contraindicated due to risk of severe encephalopathy."
+            },
+            {
+                q: "13. Microfilariae are:",
+                options: ["a. Egg", "b. Embryos (advanced first-stage larvae)", "c. Adult worms", "d. Encysted larvae"],
+                answer: 1,
+                explanation: "Microfilariae are pre-larval stages released by adult female filarial worms. They are technically advanced first-stage larvae (L1) that develop further only inside the arthropod vector."
+            },
+            {
+                q: "14. Chronic lymphatic obstruction in filariasis leads to:",
+                options: ["a. High blood pressure", "b. Lymphedema", "c. Ascites", "d. Pulmonary edema"],
+                answer: 1,
+                explanation: "Persistent inflammation and fibrosis from adult worms block lymphatic vessels, causing protein-rich fluid accumulation in tissues—lymphedema. If untreated, this progresses to elephantiasis."
+            },
+            {
+                q: "15. 'Sclerosing keratitis' is a complication of:",
+                options: ["a. Bancroftian filariasis", "b. Onchocerciasis", "c. Loiasis", "d. Dracunculiasis"],
+                answer: 1,
+                explanation: "Sclerosing keratitis is a leading cause of blindness in onchocerciasis ('river blindness'). It results from chronic inflammation triggered by O. volvulus microfilariae in the cornea."
+            },
+            {
+                q: "16. Where are 'onchocercomas' (subcutaneous nodules) found?",
+                options: ["a. In the lungs", "b. Over bony prominences", "c. In the brain", "d. In the liver"],
+                answer: 1,
+                explanation: "Onchocercomas are fibrous nodules containing adult O. volvulus worms. They form near joints and over bony areas (e.g., iliac crests, ribs, skull)."
+            },
+            {
+                q: "17. Which mosquito genus is the primary vector for Brugia malayi?",
+                options: ["a. Culex", "b. Mansonia", "c. Aedes", "d. Culiseta"],
+                answer: 1,
+                explanation: "Mansonia mosquitoes breed in water with aquatic plants (e.g., Pistia). They are the main vectors for B. malayi in rural Southeast Asia."
+            },
+            {
+                q: "18. The 'Mazzotti reaction' is a severe allergic response seen during treatment of:",
+                options: ["a. Bancroftian filariasis", "b. Onchocerciasis", "c. Loiasis", "d. Ascariasis"],
+                answer: 1,
+                explanation: "The Mazzotti reaction (fever, rash, itching, lymphadenopathy, and potentially encephalopathy) occurs when ivermectin rapidly kills O. volvulus microfilariae, triggering intense inflammation."
+            },
+            {
+                q: "19. The 'skin snip' method is the primary diagnostic tool for:",
+                options: ["a. Wuchereria bancrofti", "b. Loa loa", "c. Onchocerca volvulus", "d. Brugia malayi"],
+                answer: 2,
+                explanation: "Since O. volvulus microfilariae reside in skin, diagnosis relies on skin snips—small pieces of skin clipped with a needle or scalpel, incubated in saline, and examined for emerging microfilariae."
+            },
+            {
+                q: "20. Filarial worms belong to the class:",
+                options: ["a. Cestoda", "b. Trematoda", "c. Nematoda", "d. Protozoa"],
+                answer: 2,
+                explanation: "Filarial worms (e.g., Wuchereria, Loa, Onchocerca) are roundworms, classified under phylum Nematoda."
+            },
+            {
+                q: "21. Which mosquito genus is a major vector for W. bancrofti in urban areas?",
+                options: ["a. Aedes", "b. Culex", "c. Mansonia", "d. Anopheles"],
+                answer: 1,
+                explanation: "In urban settings (e.g., India, Africa), Culex quinquefasciatus is the primary vector for W. bancrofti. It breeds in polluted water and bites at night."
+            },
+            {
+                q: "22. What is the intermediate host/vector for Onchocerca volvulus?",
+                options: ["a. Culex mosquito", "b. Anopheles mosquito", "c. Simulium (blackfly)", "d. Chrysops (deer fly)"],
+                answer: 2,
+                explanation: "Onchocerca volvulus is transmitted by female Simulium blackflies, which breed near fast-flowing rivers—hence the name 'river blindness.'"
+            },
+            {
+                q: "23. What is the definitive host for Wuchereria bancrofti?",
+                options: ["a. Mosquito", "b. Human", "c. Pig", "d. Cattle"],
+                answer: 1,
+                explanation: "The definitive host harbors the sexually mature (adult) stage of the parasite. In W. bancrofti, humans are the only natural definitive host."
+            },
+            {
+                q: "24. 'River blindness' is caused by which parasite?",
+                options: ["a. Brugia malayi", "b. Loa loa", "c. Onchocerca volvulus", "d. Mansonella perstans"],
+                answer: 2,
+                explanation: "Onchocerciasis, or river blindness, is caused by O. volvulus. Microfilariae migrate through the eye, causing uveitis, chorioretinitis, and sclerosing keratitis."
+            },
+            {
+                q: "25. Occult filariasis (Tropical Pulmonary Eosinophilia, TPE) is characterized by:",
+                options: ["a. Presence of numerous microfilariae in blood", "b. Absence of microfilariae in blood", "c. Absence of antibodies", "d. Normal eosinophil count"],
+                answer: 1,
+                explanation: "TPE is a hypersensitivity reaction to filarial antigens (usually W. bancrofti). Patients have high IgE, marked eosinophilia, and pulmonary symptoms—but no detectable microfilariae in blood due to immune clearance."
+            },
+            {
+                q: "26. Which clinical sign involves the presence of milky white urine?",
+                options: ["a. Hematuria", "b. Chyluria", "c. Proteinuria", "d. Glycosuria"],
+                answer: 1,
+                explanation: "Chyluria results from lymphatic leakage into urinary tract due to filarial-induced lymphatic rupture. The urine appears milky due to chyle (lymph + emulsified fats)."
+            },
+            {
+                q: "27. What is the standard dose of DEC in the treatment of bancroftian filariasis?",
+                options: ["a. 2 mg/kg for 1 day", "b. 6 mg/kg for 12 days", "c. 10 mg/kg for 30 days", "d. 100 mg/kg once"],
+                answer: 1,
+                explanation: "The WHO-recommended regimen for individual treatment of lymphatic filariasis is DEC at 6 mg/kg/day orally for 12 days."
+            },
+            {
+                q: "28. Mansonella perstans adult worms live in:",
+                options: ["a. Subcutaneous tissue", "b. Body cavities (pleural/peritoneal)", "c. Lymphatic vessels", "d. Conjunctiva"],
+                answer: 1,
+                explanation: "Unlike other filariae, M. perstans adults reside in serous cavities (peritoneal, pleural, pericardial). Microfilariae circulate in blood but are often asymptomatic."
+            },
+            {
+                q: "29. Which of these is a non-periodic filarial worm?",
+                options: ["a. Wuchereria bancrofti (Indian strain)", "b. Brugia malayi", "c. Onchocerca volvulus", "d. Loa loa"],
+                answer: 2,
+                explanation: "Periodicity refers to rhythmic appearance of microfilariae in peripheral blood. O. volvulus microfilariae are in skin—not blood—so they are considered non-periodic."
+            },
+            {
+                q: "30. Which diagnostic test involves the concentration of microfilariae from blood?",
+                options: ["a. Kato-Katz technique", "b. Knott’s concentration", "c. Baermann technique", "d. Formal-ether sedimentation"],
+                answer: 1,
+                explanation: "Knott’s method uses centrifugation of lysed blood (with 2% formalin) to concentrate microfilariae into a pellet for easier detection."
+            },
+            {
+                q: "31. Which filarial worm is the most common cause of lymphatic filariasis?",
+                options: ["a. Brugia malayi", "b. Wuchereria bancrofti", "c. Loa loa", "d. Onchocerca volvulus"],
+                answer: 1,
+                explanation: "Wuchereria bancrofti accounts for approximately 90% of all lymphatic filariasis cases worldwide."
+            },
+            {
+                q: "32. Which parasite is known as the 'eye worm'?",
+                options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Loa loa", "d. Onchocerca volvulus"],
+                answer: 2,
+                explanation: "Loa loa is called the 'eye worm' because adult worms can migrate across the conjunctiva of the eye, which is visible and often causes transient irritation."
+            },
+            {
+                q: "33. Which filarial worm is NOT found in the peripheral blood?",
+                options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Onchocerca volvulus", "d. Loa loa"],
+                answer: 2,
+                explanation: "Onchocerca volvulus microfilariae reside exclusively in the skin and eyes, not in peripheral blood."
+            },
+            {
+                q: "34. At what time is 'nocturnal periodicity' most evident for W. bancrofti microfilariae in blood?",
+                options: ["a. 10 am to 2 pm", "b. 6 am to 10 am", "c. 10 pm to 2 am", "d. 2 pm to 6 pm"],
+                answer: 2,
+                explanation: "In regions like India and Africa, W. bancrofti exhibits nocturnal periodicity, with peak microfilarial density in peripheral blood between 10 PM and 2 AM."
+            },
+            {
+                q: "35. Tropical pulmonary eosinophilia (TPE) is an occult form of which infection?",
+                options: ["a. Ascariasis", "b. Filariasis", "c. Hookworm", "d. Strongyloidiasis"],
+                answer: 1,
+                explanation: "TPE is a hypersensitivity reaction to microfilarial antigens (usually from W. bancrofti). Patients present with nocturnal cough, wheezing, marked eosinophilia, and elevated IgE."
+            },
+            {
+                q: "36. Which drug is the primary treatment for lymphatic filariasis?",
+                options: ["a. Praziquantel", "b. Diethylcarbamazine (DEC)", "c. Metronidazole", "d. Chloroquine"],
+                answer: 1,
+                explanation: "DEC is microfilaricidal and partially macrofilaricidal against W. bancrofti and Brugia spp. It remains the drug of choice for individual treatment."
+            },
+            {
+                q: "37. 'Adenolymphangitis' (ADL) in filariasis refers to:",
+                options: ["a. Chronic swelling", "b. Acute febrile episodes with painful lymphatics", "c. Internal organ failure", "d. Skin rashes"],
+                answer: 1,
+                explanation: "ADL episodes are acute inflammatory attacks involving fever, pain, redness, and tenderness along lymphatic channels and nodes."
+            },
+            {
+                q: "38. Which filarial species is mostly restricted to South and East Asia?",
+                options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Loa loa", "d. Onchocerca volvulus"],
+                answer: 1,
+                explanation: "Brugia malayi is endemic in India, China, Indonesia, Malaysia, Philippines, and Thailand. It does not occur in Africa or the Americas."
+            },
+            {
+                q: "39. Brugia malayi microfilariae can be distinguished by having:",
+                options: ["a. No nuclei in the tail", "b. Two terminal nuclei in the tail", "c. A single terminal nucleus", "d. A blunt tail without nuclei"],
+                answer: 1,
+                explanation: "Brugia malayi microfilariae are sheathed and have two distinct nuclei at the tip of the tail, which do not extend to the very end."
+            },
+            {
+                q: "40. 'Leopard skin' (spotty depigmentation) is seen in:",
+                options: ["a. Chronic bancroftian filariasis", "b. Chronic onchocerciasis", "c. Acute loiasis", "d. Malayan filariasis"],
+                answer: 1,
+                explanation: "'Leopard skin' refers to patchy depigmentation of the shins due to chronic inflammation and destruction of melanocytes by O. volvulus microfilariae."
+            },
+            {
+                q: "41. Which filarial worm is viviparous?",
+                options: ["a. All filarial worms", "b. Only W. bancrofti", "c. Only Onchocerca", "d. None; they are all oviparous"],
+                answer: 0,
+                explanation: "All medically important filarial nematodes are viviparous—they produce live microfilariae (not eggs)."
+            },
+            {
+                q: "42. What is the common name for the condition involving gross enlargement of the limbs in filariasis?",
+                options: ["a. Löffler’s syndrome", "b. Elephantiasis", "c. Swimmer’s itch", "d. Katayama fever"],
+                answer: 1,
+                explanation: "Elephantiasis describes severe, disfiguring swelling and thickening of skin and underlying tissues due to chronic lymphatic obstruction and fibrosis."
+            },
+            {
+                q: "43. The DEC provocation test is used for:",
+                options: ["a. Kill adult worms", "b. Bring microfilariae into peripheral blood during the day", "c. Treat elephantiasis", "d. Diagnose malaria"],
+                answer: 1,
+                explanation: "In suspected occult filariasis (e.g., TPE), a small dose of DEC (50–100 mg) is given in the morning. If microfilariae are present but sequestered, they appear in peripheral blood within 30–60 minutes."
+            },
+            {
+                q: "44. Which filarial worm is primarily transmitted by Chrysops (deer flies)?",
+                options: ["a. Wuchereria bancrofti", "b. Loa loa", "c. Onchocerca volvulus", "d. Brugia malayi"],
+                answer: 1,
+                explanation: "Loa loa is transmitted by day-biting Chrysops spp. (deer flies) in rainforest areas of West and Central Africa."
+            },
+            {
+                q: "45. Which of the following is a classic manifestation of chronic filariasis?",
+                options: ["a. Bloody diarrhea", "b. Hydrocele", "c. Iron deficiency anemia", "d. Clay pipe stem fibrosis"],
+                answer: 1,
+                explanation: "Hydrocele (fluid accumulation around the testis) is one of the most common chronic manifestations of W. bancrofti infection."
+            },
+            {
+                q: "46. Which filarial worm is known to cause 'hanging groin'?",
+                options: ["a. Wuchereria bancrofti", "b. Onchocerca volvulus", "c. Brugia malayi", "d. Loa loa"],
+                answer: 0,
+                explanation: "'Hanging groin' refers to massive inguinal lymphedema and fibrosis causing the scrotum and surrounding tissue to hang low. It is a severe complication of chronic bancroftian filariasis."
+            },
+            {
+                q: "47. Where do adult Wuchereria bancrofti worms typically reside in the human body?",
+                options: ["a. Subcutaneous tissue", "b. Bloodstream", "c. Lymphatic vessels", "d. Small intestine"],
+                answer: 2,
+                explanation: "Adult W. bancrofti worms live coiled within lymphatic vessels and lymph nodes, particularly in the lower limbs, genitalia, and retroperitoneum."
+            },
+            {
+                q: "48. Which of the following is NOT a lymphatic filarial worm?",
+                options: ["a. Wuchereria bancrofti", "b. Brugia malayi", "c. Brugia timori", "d. Loa loa"],
+                answer: 3,
+                explanation: "Loa loa is a subcutaneous filarial worm, not lymphatic. It migrates through subcutaneous and connective tissues."
+            },
+            {
+                q: "49. Which condition is characterized by nocturnal cough, dyspnea, and high eosinophilia?",
+                options: ["a. Cutaneous larva migrans", "b. Tropical pulmonary eosinophilia", "c. Visceral larva migrans", "d. Löffler’s syndrome"],
+                answer: 1,
+                explanation: "TPE presents with paroxysmal nocturnal cough, wheezing, dyspnea, fatigue, and marked eosinophilia. It is caused by immune reaction to filarial antigens."
+            },
+            {
+                q: "50. 'Filarial dance sign' is a diagnostic finding seen on:",
+                options: ["a. X-ray", "b. Ultrasonography", "c. CT scan", "d. MRI"],
+                answer: 1,
+                explanation: "The 'filarial dance sign' is real-time ultrasonographic visualization of motile adult W. bancrofti worms in dilated lymphatics (e.g., scrotal lymphatics)."
+            }
+        ];
+
+        // --- State Management ---
+        let currentQuestionIndex = 0;
+        // Array to store user answers. null = unanswered, 0-3 = index of option, -1 = visited but unanswered (logic uses null for unanswered)
+        let userAnswers = new Array(quizData.length).fill(null); 
+        // To track if we showed feedback for a question already (so it doesn't pop up again if we come back)
+        let hasAnswered = new Array(quizData.length).fill(false);
+
+        // --- DOM Elements ---
+        const quizView = document.getElementById('quizView');
+        const resultView = document.getElementById('resultView');
+        const quizBranding = document.getElementById('quizBranding');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const currentQNumEl = document.getElementById('currentQNum');
+        const totalQNumEl = document.getElementById('totalQNum');
+        const feedbackArea = document.getElementById('feedbackArea');
+        const feedbackTitle = document.getElementById('feedbackTitle');
+        const feedbackText = document.getElementById('feedbackText');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const mapOverlay = document.getElementById('mapOverlay');
+        const mapGrid = document.getElementById('mapGrid');
+
+        // --- Initialization ---
+        totalQNumEl.innerText = quizData.length;
+        renderMap();
+        loadQuestion(0);
+
+        // --- Core Functions ---
+
+        function loadQuestion(index) {
+            currentQuestionIndex = index;
+            const data = quizData[index];
+
+            // Update Text
+            questionText.innerText = data.q;
+            currentQNumEl.innerText = index + 1;
+
+            // Reset Buttons
+            optionsContainer.innerHTML = '';
+            feedbackArea.style.display = 'none';
+
+            // Render Options
+            data.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(i);
+
+                // Restore State if already answered
+                if (userAnswers[index] !== null) {
+                    btn.classList.add('disabled'); // Disable clicking again
+                    if (i === data.answer) {
+                        btn.classList.add('correct');
+                    } else if (i === userAnswers[index]) {
+                        btn.classList.add('wrong'); // Highlight wrong choice if user picked it
+                    }
+                }
+                
+                optionsContainer.appendChild(btn);
+            });
+
+            // Show feedback if already answered
+            if (hasAnswered[index]) {
+                showFeedback(data, userAnswers[index]);
+            }
+
+            // Handle Navigation Buttons
+            prevBtn.disabled = index === 0;
+            // Change Next button text to Finish if last question
+            if (index === quizData.length - 1) {
+                nextBtn.innerHTML = 'Finish <i class="fas fa-flag-checkered"></i>';
+                nextBtn.onclick = showResults;
+            } else {
+                nextBtn.innerHTML = 'Next <i class="fas fa-chevron-right"></i>';
+                nextBtn.onclick = () => changeQuestion(1);
+            }
+
+            // Update Map Visuals
+            updateMapVisuals();
+        }
+
+        function selectOption(selectedIndex) {
+            const data = quizData[currentQuestionIndex];
+            
+            // Save answer
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            hasAnswered[currentQuestionIndex] = true;
+
+            // UI Updates for buttons
+            const buttons = optionsContainer.children;
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.add('disabled'); // Lock all buttons
+                buttons[i].onclick = null; // Remove click handler
+
+                if (i === data.answer) {
+                    buttons[i].classList.add('correct');
+                } else if (i === selectedIndex) {
+                    buttons[i].classList.add('wrong');
+                }
+            }
+
+            // Show Instant Feedback
+            showFeedback(data, selectedIndex);
+            
+            // Update Map
+            updateMapVisuals();
+        }
+
+        function showFeedback(data, selectedIndex) {
+            feedbackArea.style.display = 'block';
+            if (selectedIndex === data.answer) {
+                feedbackTitle.innerText = "Correct!";
+                feedbackTitle.style.color = "#28a745";
+            } else {
+                feedbackTitle.innerText = "Incorrect";
+                feedbackTitle.style.color = "#dc3545";
+            }
+            feedbackText.innerText = data.explanation;
+        }
+
+        function changeQuestion(direction) {
+            const newIndex = currentQuestionIndex + direction;
+            if (newIndex >= 0 && newIndex < quizData.length) {
+                loadQuestion(newIndex);
+            }
+        }
+
+        function jumpToQuestion(index) {
+            loadQuestion(index);
+            toggleMap(); // Close map
+        }
+
+        // --- Map Functions ---
+
+        function renderMap() {
+            mapGrid.innerHTML = '';
+            quizData.forEach((_, i) => {
+                const node = document.createElement('div');
+                node.className = 'map-node';
+                node.innerText = i + 1;
+                node.id = `map-node-${i}`;
+                node.onclick = () => jumpToQuestion(i);
+                mapGrid.appendChild(node);
+            });
+        }
+
+        function updateMapVisuals() {
+            // Clear all states first
+            quizData.forEach((_, i) => {
+                const node = document.getElementById(`map-node-${i}`);
+                node.className = 'map-node'; // reset
+            });
+
+            // Mark current
+            const current = document.getElementById(`map-node-${currentQuestionIndex}`);
+            if (current) current.classList.add('current');
+
+            // Mark answered
+            userAnswers.forEach((ans, i) => {
+                if (ans !== null) {
+                    const node = document.getElementById(`map-node-${i}`);
+                    const correct = quizData[i].answer;
+                    if (ans === correct) {
+                        node.classList.add('answered');
+                    } else {
+                        node.classList.add('answered', 'wrong-ans');
+                    }
+                }
+            });
+        }
+
+        function toggleMap() {
+            mapOverlay.classList.toggle('active');
+            // Always refresh map visuals when opening
+            if (mapOverlay.classList.contains('active')) {
+                updateMapVisuals();
+            }
+        }
+
+        // --- Result Functions ---
+
+        function showResults() {
+            quizView.style.display = 'none';
+            quizBranding.style.display = 'none';
+            resultView.style.display = 'block';
+
+            let correctCount = 0;
+            userAnswers.forEach((ans, i) => {
+                if (ans === quizData[i].answer) {
+                    correctCount++;
+                }
+            });
+
+            const percentage = Math.round((correctCount / quizData.length) * 100);
+            document.getElementById('finalScore').innerText = percentage;
+            document.getElementById('correctCount').innerText = correctCount;
+        }
+
+        function restartQuiz() {
+            userAnswers.fill(null);
+            hasAnswered.fill(false);
+            currentQuestionIndex = 0;
+            
+            resultView.style.display = 'none';
+            quizView.style.display = 'block';
+            quizBranding.style.display = 'block';
+            
+            loadQuestion(0);
+        }
+
+        // Close map if clicking outside the box
+        mapOverlay.addEventListener('click', (e) => {
+            if (e.target === mapOverlay) {
+                toggleMap();
+            }
+        });
+
+    </script>
+</body>
+</html>
