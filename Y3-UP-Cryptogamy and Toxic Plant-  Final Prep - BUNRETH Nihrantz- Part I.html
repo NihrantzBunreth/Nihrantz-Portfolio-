@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toxic Plant Botany - Clinical Edition</title>
+    <style>
+        /* 
+         * PART 1: CLEAN CLINICAL DESIGN 
+         * Font: Arial
+         * Colors: White, Light Grey Lines, Medical Blue (#0056b3)
+         */
+        :root {
+            --med-blue: #0056b3;
+            --med-blue-hover: #004494;
+            --med-light-blue: #e6f0fa;
+            --med-red: #d32f2f;
+            --med-green: #2e7d32;
+            --bg-color: #ffffff;
+            --line-color: #e0e0e0;
+            --text-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            /* Sterile Background: Medical chart paper effect */
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 27px,
+                var(--line-color) 28px
+            );
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* Container: Clean clipboard/digital tablet look */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            border: 2px solid var(--med-blue);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            position: relative;
+            margin-top: 20px;
+            margin-bottom: 80px;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            border-bottom: 2px solid var(--med-blue);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-family: Arial, sans-serif;
+            color: var(--med-blue);
+            margin: 0;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-text {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            color: var(--med-blue);
+        }
+
+        /* Question Area */
+        .question-area {
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* Interactive Elements */
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-left: 4px solid #ccc;
+            padding: 15px;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            background-color: var(--med-light-blue);
+            border-left-color: var(--med-blue);
+        }
+
+        .option-btn.selected-correct {
+            background-color: var(--med-light-blue);
+            border-color: var(--med-green);
+            border-left-color: var(--med-green);
+        }
+
+        .option-btn.selected-wrong {
+            background-color: #ffebee;
+            border-color: var(--med-red);
+            border-left-color: var(--med-red);
+        }
+
+        .option-btn.disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        /* Instant Feedback Text */
+        .feedback {
+            font-weight: bold;
+            font-size: 14px;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .feedback.correct { color: var(--med-green); }
+        .feedback.wrong { color: var(--med-red); }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--med-blue);
+            display: none;
+            font-size: 15px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .explanation-title {
+            font-weight: bold;
+            color: var(--med-blue);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Navigation Area */
+        .nav-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            border: 1px solid var(--med-blue);
+            color: var(--med-blue);
+            padding: 10px 20px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--med-blue);
+            color: white;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background-color: transparent;
+            cursor: not-allowed;
+        }
+
+        .view-list-btn {
+            background-color: var(--med-blue);
+            color: white;
+            border: none;
+        }
+
+        .view-list-btn:hover {
+            background-color: var(--med-blue-hover);
+        }
+
+        /* Result Screen */
+        .result-screen {
+            text-align: center;
+            display: none;
+            padding: 40px 20px;
+        }
+
+        .score-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--med-blue);
+            margin: 20px 0;
+        }
+
+        .result-details {
+            font-size: 18px;
+            color: #555;
+        }
+
+        /* 
+         * PART 2: BRANDING & SOCIAL MEDIA 
+         */
+        .branding-footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-family: Arial, sans-serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            background-color: var(--med-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 0;
+            transition: background 0.3s;
+        }
+
+        .social-btn:hover {
+            background-color: var(--med-blue-hover);
+        }
+
+        /* 
+         * PART 3: QUESTION OVERLAY (GRID)
+         */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .overlay-content {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            border: 2px solid var(--med-blue);
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .overlay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--med-blue);
+            cursor: pointer;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+
+        .patient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            background: #fff;
+            transition: all 0.2s;
+        }
+
+        .grid-item.current {
+            border: 2px solid var(--med-blue);
+            box-shadow: 0 0 5px rgba(0,86,179, 0.4);
+        }
+
+        .grid-item.answered {
+            background-color: var(--med-light-blue);
+            color: var(--med-blue);
+            border-color: var(--med-blue);
+        }
+        
+        .grid-item:hover {
+            transform: scale(1.05);
+            border-color: var(--med-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="quiz-container">
+        <header>
+            <h1>Cryptogamy and Toxic Plants Year 3 S1 Part I</h1>
+            <span class="progress-text" id="progress-text">Q 1 / 37</span>
+        </header>
+
+        <!-- Quiz Interface -->
+        <div id="quiz-view">
+            <div class="question-area">
+                <div class="question-text" id="question-text">Loading...</div>
+                <div class="options-grid" id="options-container">
+                    <!-- Options injected via JS -->
+                </div>
+                <div class="explanation-box" id="explanation-box">
+                    <span class="explanation-title">Explanation:</span>
+                    <span id="explanation-text"></span>
+                </div>
+            </div>
+
+            <div class="nav-area">
+                <button class="nav-btn" id="prev-btn" disabled>Previous</button>
+                <button class="nav-btn view-list-btn" id="view-list-btn">View List</button>
+                <button class="nav-btn" id="next-btn">Next</button>
+            </div>
+        </div>
+
+        <!-- Result Interface -->
+        <div id="result-view" class="result-screen">
+            <h2>Test Result</h2>
+            <div class="score-display" id="final-score">0 / 37</div>
+            <div class="result-details" id="result-message">Review your answers.</div>
+            <div class="nav-area" style="justify-content: center;">
+                <button class="nav-btn view-list-btn" onclick="location.reload()">Restart Quiz</button>
+            </div>
+        </div>
+
+        <!-- Branding & Social Media -->
+        <footer class="branding-footer">
+            <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Question Overview Overlay -->
+    <div class="overlay" id="grid-overlay">
+        <div class="overlay-content">
+            <div class="overlay-header">
+                <h3 style="margin:0; color:var(--med-blue);">Question Overview</h3>
+                <button class="close-btn" id="close-overlay">✕</button>
+            </div>
+            <p style="font-size:14px; color:#666; margin-bottom:20px;">
+                <span style="display:inline-block; width:15px; height:15px; border:2px solid var(--med-blue); vertical-align:middle;"></span> Current &nbsp;
+                <span style="display:inline-block; width:15px; height:15px; background:var(--med-light-blue); border:1px solid var(--med-blue); vertical-align:middle;"></span> Answered
+            </p>
+            <div class="patient-grid" id="grid-container">
+                <!-- Grid items injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* 
+         * DATA SET - Toxic Plant Botany
+         * 37 Questions extracted from the provided text.
+         */
+        const quizData = [
+            // Abrus precatorius
+            {
+                q: "What is the primary toxic compound found in Abrus precatorius seeds?",
+                options: ["A. Racin", "B. Abrin", "C. Strychnine", "D. Atropine"],
+                answer: 1,
+                explanation: "Abrin is a potent ribosome-inactivating protein (RIP), structurally and functionally similar to ricin but derived from Abrus precatorius."
+            },
+            {
+                q: "What is the typical route of poisoning for Abrus precatorius?",
+                options: ["A. Inhalation", "B. Ingestion", "C. Injection", "D. Topical"],
+                answer: 1,
+                explanation: "Most human poisonings occur when seeds are chewed or swallowed—especially by children attracted to their bright appearance."
+            },
+            {
+                q: "Which organ system is most affected by Abrus precatorius poisoning?",
+                options: ["A. Renal", "B. Gastrointestinal", "C. Respiratory", "D. Musculoskeletal"],
+                answer: 1,
+                explanation: "Initial damage occurs in the GI tract due to direct mucosal injury, followed by systemic effects on liver and kidneys."
+            },
+            {
+                q: "What is a common initial symptom of Abrus precatorius poisoning?",
+                options: ["A. Skin rash", "B. Visual disturbances", "C. Vomiting and diarrhea", "D. Seizures"],
+                answer: 2,
+                explanation: "These appear within hours of ingestion and may be bloody, reflecting severe mucosal necrosis."
+            },
+            {
+                q: "The seeds of Abrus precatorius are sometimes called:",
+                options: ["A. Castor beans", "B. Belladonna berries", "C. Rosary Peas", "D. Bitter almonds"],
+                answer: 2,
+                explanation: "Their red-and-black coloration makes them popular in jewelry and prayer beads—hence 'rosary peas'."
+            },
+            {
+                q: "Which is the most appropriate initial management for Abrus precatorius ingestion?",
+                options: ["A. Supportive care and monitoring", "B. Specific antidote administration", "C. Induced hypothermia", "D. Bone marrow transplant"],
+                answer: 0,
+                explanation: "No antidote exists; treatment focuses on fluid resuscitation, electrolyte correction, and organ support."
+            },
+            {
+                q: "Abrin causes toxicity by:",
+                options: ["A. Inhibiting DNA replication", "B. Inhibiting protein synthesis", "C. Stimulating neurotransmitter release", "D. Blocking potassium channels"],
+                answer: 1,
+                explanation: "Like ricin, abrin is a type 2 RIP that enzymatically inactivates 28S rRNA, halting translation."
+            },
+            {
+                q: "The onset of symptoms after ingesting Abrus precatorius seeds is typically:",
+                options: ["A. Immediate (within minutes)", "B. Delayed (hours to days)", "C. One week", "D. Only after chronic exposure"],
+                answer: 1,
+                explanation: "Symptoms usually begin 6–24 hours post-ingestion, depending on whether the seed coat was broken."
+            },
+            {
+                q: "Which laboratory finding is most likely in severe Abrus poisoning?",
+                options: ["A. Hyperkalemia", "B. Leukocytosis", "C. Elevated liver enzymes", "D. Low blood glucose"],
+                answer: 2,
+                explanation: "Hepatocellular damage leads to increased ALT/AST; renal failure may also cause elevated creatinine."
+            },
+            {
+                q: "What is the risk if the seed coat of Abrus precatorius is not broken?",
+                options: ["A. Low risk, as toxin is not absorbed", "B. High risk of immediate poisoning", "C. Risk of skin necrosis", "D. No effect"],
+                answer: 0,
+                explanation: "Intact seeds pass through the GI tract undigested—mechanical disruption is required for toxicity."
+            },
+            // Brucea javanica
+            {
+                q: "The main toxic compound in Brucea javanica is:",
+                options: ["A. Alkaloids", "B. Saponins", "C. Quassinoids", "D. Glycosides"],
+                answer: 2,
+                explanation: "Quassinoids (e.g., bruceantin) are bitter, bioactive compounds responsible for both medicinal and toxic effects."
+            },
+            {
+                q: "Brucea javanica is traditionally used in some cultures to treat:",
+                options: ["A. Malaria", "B. Hypertension", "C. Diabetes", "D. Asthma"],
+                answer: 0,
+                explanation: "It has been used in traditional Asian medicine for febrile illnesses, including malaria-like syndromes."
+            },
+            {
+                q: "Which organ is most commonly affected by Brucea javanica toxicity?",
+                options: ["A. Heart", "B. Liver", "C. Brain", "D. Kidney"],
+                answer: 1,
+                explanation: "Hepatotoxicity is the hallmark of overdose, with elevated transaminases and potential jaundice."
+            },
+            {
+                q: "An overdose of Brucea javanica may present with all EXCEPT:",
+                options: ["A. Nausea and vomiting", "B. Hypertension", "C. Liver dysfunction", "D. Abdominal pain"],
+                answer: 1,
+                explanation: "Hypotension—not hypertension—is more likely due to systemic toxicity and dehydration."
+            },
+            {
+                q: "The appropriate management of Brucea javanica poisoning is:",
+                options: ["A. Specific antidote", "B. Supportive care", "C. Hemodialysis", "D. Activated charcoal always"],
+                answer: 1,
+                explanation: "No antidote exists; activated charcoal may be considered early, but supportive care (fluids, liver monitoring) is key."
+            },
+            // Heliotropium indicum
+            {
+                q: "Which class of chemical compound is responsible for the hepatotoxicity of Heliotropium indicum?",
+                options: ["A. Cardiac glycosides", "B. Pyrrolizidine alkaloids (PAs)", "C. Saponins", "D. Anthraquinones"],
+                answer: 1,
+                explanation: "PAs like heliotrine are metabolized in the liver to toxic pyrroles that damage hepatocytes and endothelial cells."
+            },
+            {
+                q: "Why is Heliotropium indicum considered a “pro-toxin” that requires metabolic activation?",
+                options: ["A. It must be fermented in the rumen to become active", "B. It only becomes toxic when exposed to UV light on the skin", "C. The liver must convert PAs into reactive pyrroles via cytochrome P450 enzymes", "D. It requires stomach acid to break down its protective coating"],
+                answer: 2,
+                explanation: "PAs themselves are not toxic; hepatic oxidation creates electrophilic intermediates that bind cellular macromolecules."
+            },
+            {
+                q: "What is the most characteristic histological change in the liver from chronic Heliotropium poisoning?",
+                options: ["A. Massive fatty infiltration", "B. Megalocytosis (enlarged hepatocytes)", "C. Acute bacterial abscesses", "D. Rapid regeneration of healthy tissue"],
+                answer: 1,
+                explanation: "PA toxicity inhibits mitosis but not cell growth—leading to abnormally large, polyploid hepatocytes."
+            },
+            {
+                q: "In horses, “aimless wandering” and “head pressing” are signs of:",
+                options: ["A. Acute renal failure", "B. Hepatic encephalopathy", "C. Pulmonary hypertension", "D. Vitamin D deficiency"],
+                answer: 1,
+                explanation: "Liver failure impairs ammonia detoxification, leading to neurotoxicity and behavioral changes."
+            },
+            {
+                q: "Which part of Heliotropium indicum contains the highest concentration of toxic alkaloids?",
+                options: ["A. The woody taproot", "B. The mature stems", "C. The flowers and young leaves", "D. The underground tubers"],
+                answer: 2,
+                explanation: "Young, actively growing tissues accumulate the highest levels of PAs."
+            },
+            {
+                q: "Chronic exposure to H. indicum can cause Budd-Chiari syndrome, characterized by:",
+                options: ["A. Obstruction of the small intestine", "B. Occlusion of the hepatic veins (veno-occlusive disease)", "C. Sudden cardiac arrest", "D. Total loss of vision"],
+                answer: 1,
+                explanation: "PA metabolites damage sinusoidal endothelium, leading to hepatic veno-occlusive disease (VOD)."
+            },
+            {
+                q: "How are humans commonly poisoned by Heliotropium indicum?",
+                options: ["A. Handling leaves (dermal absorption)", "B. Inhaling pollen", "C. Consuming cereal grains contaminated with plant seeds", "D. Eating ripened fruits"],
+                answer: 2,
+                explanation: "Accidental mixing of Heliotropium seeds into wheat or millet during harvest causes outbreaks of liver disease."
+            },
+            {
+                q: "Which ocular sign is seen in livestock with advanced liver damage from this plant?",
+                options: ["A. Miosis", "B. Icterus (yellowing of sclera/conjunctiva)", "C. Corneal ulcers", "D. Nystagmus"],
+                answer: 1,
+                explanation: "Jaundice results from impaired bilirubin conjugation and excretion due to hepatocellular failure."
+            },
+            {
+                q: "Why is the prognosis poor once jaundice or ascites appears?",
+                options: ["A. Toxin is stored in bones forever", "B. Liver damage (cirrhosis/fibrosis) is extensive and irreversible", "C. No way to remove plant from stomach", "D. Causes immediate kidney failure"],
+                answer: 1,
+                explanation: "PA-induced fibrosis and vascular occlusion are progressive and non-reversible by the time clinical signs manifest."
+            },
+            // Cannabis
+            {
+                q: "Which compound in Cannabis is primarily responsible for psychoactive effects?",
+                options: ["A. Cannabidiol (CBD)", "B. Delta-9-tetrahydrocannabinol (THC)", "C. Cannabigerol (CBG)", "D. Linoleic acid"],
+                answer: 1,
+                explanation: "THC is the main psychoactive cannabinoid that binds CB1 receptors in the central nervous system."
+            },
+            {
+                q: "Which domestic species is notably more sensitive to THC toxicity?",
+                options: ["A. Horses", "B. Dogs", "C. Poultry", "D. Cattle"],
+                answer: 1,
+                explanation: "Dogs have a higher density of CB1 receptors in the brainstem, making them prone to severe CNS depression."
+            },
+            {
+                q: "What is the hallmark clinical sign of cannabis toxicity in small animals?",
+                options: ["A. Static ataxia (uncoordinated swaying)", "B. Acute liver failure", "C. Hemorrhagic diarrhea", "D. Sudden blindness"],
+                answer: 0,
+                explanation: "Affected dogs often stand with legs splayed, sway, dribble urine, and appear dazed—classic 'static ataxia'."
+            },
+            {
+                q: "Why is industrial hemp forage generally safe for livestock?",
+                options: ["A. Lacks all cannabinoids", "B. THC content is typically below 0.3%", "C. Contains natural antidotes", "D. Livestock cannot digest flowering parts"],
+                answer: 1,
+                explanation: "Legal industrial hemp is bred for low THC (<0.3%), minimizing psychoactive or toxic risk."
+            },
+            {
+                q: "Which plant part has the highest concentration of toxic resin glands (trichomes)?",
+                options: ["A. Roots", "B. Woody stems", "C. Flowering tops and bracts", "D. Germinated seeds"],
+                answer: 2,
+                explanation: "Trichomes (resin-producing glands) are densest on female flowers and adjacent bracts."
+            },
+            {
+                q: "Which ocular change is common in hemp toxicity?",
+                options: ["A. Miosis (pinpoint pupils)", "B. Mydriasis (dilated pupils)", "C. Cataracts", "D. Blue-tinted cornea"],
+                answer: 1,
+                explanation: "THC causes sympathetic stimulation or parasympathetic inhibition, leading to pupil dilation in many species."
+            },
+            {
+                q: "What risk is associated with feeding hempseed cake to livestock?",
+                options: ["A. Protein deficiency", "B. Accidental contamination with floral resin residues", "C. Vitamin A toxicity", "D. Excessive fiber fermentation"],
+                answer: 1,
+                explanation: "If processing is inadequate, residual THC-containing plant material may contaminate seed cake, causing intoxication."
+            }
+        ];
+
+        /* 
+         * STATE MANAGEMENT
+         */
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let score = 0;
+
+        /* 
+         * DOM ELEMENTS
+         */
+        const els = {
+            quizView: document.getElementById('quiz-view'),
+            resultView: document.getElementById('result-view'),
+            questionText: document.getElementById('question-text'),
+            optionsContainer: document.getElementById('options-container'),
+            explanationBox: document.getElementById('explanation-box'),
+            explanationText: document.getElementById('explanation-text'),
+            progressText: document.getElementById('progress-text'),
+            prevBtn: document.getElementById('prev-btn'),
+            nextBtn: document.getElementById('next-btn'),
+            viewListBtn: document.getElementById('view-list-btn'),
+            finalScore: document.getElementById('final-score'),
+            resultMessage: document.getElementById('result-message'),
+            gridOverlay: document.getElementById('grid-overlay'),
+            gridContainer: document.getElementById('grid-container'),
+            closeOverlay: document.getElementById('close-overlay')
+        };
+
+        /* 
+         * INITIALIZATION
+         */
+        function initQuiz() {
+            renderQuestion();
+            renderGrid();
+        }
+
+        /* 
+         * RENDER LOGIC 
+         */
+        function renderQuestion() {
+            const data = quizData[currentQuestionIndex];
+            
+            els.questionText.textContent = `${currentQuestionIndex + 1}. ${data.q}`;
+            els.progressText.textContent = `Q ${currentQuestionIndex + 1} / ${quizData.length}`;
+            
+            els.prevBtn.disabled = currentQuestionIndex === 0;
+            
+            els.optionsContainer.innerHTML = '';
+            els.explanationBox.style.display = 'none';
+
+            const hasAnswered = userAnswers[currentQuestionIndex] !== null;
+
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span>${opt}</span>`;
+                
+                const feedbackSpan = document.createElement('span');
+                feedbackSpan.className = 'feedback';
+                btn.appendChild(feedbackSpan);
+
+                if (hasAnswered) {
+                    btn.classList.add('disabled');
+                    if (index === data.answer) {
+                        btn.classList.add('selected-correct');
+                        feedbackSpan.textContent = 'CORRECT';
+                        feedbackSpan.classList.add('correct');
+                    } else if (index === userAnswers[currentQuestionIndex]) {
+                        btn.classList.add('selected-wrong');
+                        feedbackSpan.textContent = 'INCORRECT';
+                        feedbackSpan.classList.add('wrong');
+                    }
+                } else {
+                    btn.onclick = () => handleAnswerSelect(index, btn, feedbackSpan);
+                }
+
+                els.optionsContainer.appendChild(btn);
+            });
+
+            if (hasAnswered) {
+                els.explanationText.textContent = data.explanation;
+                els.explanationBox.style.display = 'block';
+            }
+        }
+
+        function handleAnswerSelect(selectedIndex, btnElement, feedbackElement) {
+            const data = quizData[currentQuestionIndex];
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            
+            const allBtns = els.optionsContainer.querySelectorAll('.option-btn');
+            allBtns.forEach(b => {
+                b.classList.add('disabled');
+                b.onclick = null;
+            });
+
+            if (selectedIndex === data.answer) {
+                score++;
+                btnElement.classList.add('selected-correct');
+                feedbackElement.textContent = 'CORRECT';
+                feedbackElement.classList.add('correct');
+            } else {
+                btnElement.classList.add('selected-wrong');
+                feedbackElement.textContent = 'INCORRECT';
+                feedbackElement.classList.add('wrong');
+                
+                const correctBtn = allBtns[data.answer];
+                const correctFeedback = correctBtn.querySelector('.feedback');
+                correctBtn.classList.add('selected-correct');
+                correctFeedback.textContent = 'CORRECT';
+                correctFeedback.classList.add('correct');
+            }
+
+            els.explanationText.textContent = data.explanation;
+            els.explanationBox.style.display = 'block';
+            renderGrid();
+        }
+
+        /* 
+         * NAVIGATION HANDLERS 
+         */
+        els.prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        });
+
+        els.nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        /* 
+         * GRID OVERLAY LOGIC
+         */
+        els.viewListBtn.addEventListener('click', () => {
+            renderGrid();
+            els.gridOverlay.style.display = 'flex';
+        });
+
+        els.closeOverlay.addEventListener('click', () => {
+            els.gridOverlay.style.display = 'none';
+        });
+
+        els.gridOverlay.addEventListener('click', (e) => {
+            if (e.target === els.gridOverlay) {
+                els.gridOverlay.style.display = 'none';
+            }
+        });
+
+        function renderGrid() {
+            els.gridContainer.innerHTML = '';
+            
+            quizData.forEach((_, index) => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.textContent = index + 1;
+
+                if (index === currentQuestionIndex) {
+                    item.classList.add('current');
+                }
+                if (userAnswers[index] !== null) {
+                    item.classList.add('answered');
+                }
+
+                item.onclick = () => {
+                    currentQuestionIndex = index;
+                    renderQuestion();
+                    els.gridOverlay.style.display = 'none';
+                };
+
+                els.gridContainer.appendChild(item);
+            });
+        }
+
+        /* 
+         * RESULTS LOGIC 
+         */
+        function showResults() {
+            els.quizView.style.display = 'none';
+            els.resultView.style.display = 'block';
+            els.finalScore.textContent = `${score} / ${quizData.length}`;
+            
+            let msg = "";
+            const percentage = (score / quizData.length) * 100;
+            if (percentage >= 90) msg = "Outstanding performance.";
+            else if (percentage >= 70) msg = "Good job.";
+            else if (percentage >= 50) msg = "Passing, but review is needed.";
+            else msg = "Further study required.";
+            
+            els.resultMessage.textContent = msg;
+        }
+
+        initQuiz();
+
+    </script>
+</body>
+</html>
