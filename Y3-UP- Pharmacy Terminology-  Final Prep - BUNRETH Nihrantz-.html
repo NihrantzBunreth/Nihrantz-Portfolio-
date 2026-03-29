@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Pathology & Pharmacy Settings - Clinical Edition</title>
+    <style>
+        /* 
+         * PART 1: CLEAN CLINICAL DESIGN 
+         * Font: Arial
+         * Colors: White, Light Grey Lines, Medical Blue (#0056b3)
+         */
+        :root {
+            --med-blue: #0056b3;
+            --med-blue-hover: #004494;
+            --med-light-blue: #e6f0fa;
+            --med-red: #d32f2f;
+            --med-green: #2e7d32;
+            --bg-color: #ffffff;
+            --line-color: #e0e0e0;
+            --text-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            /* Sterile Background: Medical chart paper effect */
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 27px,
+                var(--line-color) 28px
+            );
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* Container: Clean clipboard/digital tablet look */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            border: 2px solid var(--med-blue);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            position: relative;
+            margin-top: 20px;
+            margin-bottom: 80px;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            border-bottom: 2px solid var(--med-blue);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-family: Arial, sans-serif;
+            color: var(--med-blue);
+            margin: 0;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-text {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            color: var(--med-blue);
+        }
+
+        /* Question Area */
+        .question-area {
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* Interactive Elements */
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-left: 4px solid #ccc;
+            padding: 15px;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            background-color: var(--med-light-blue);
+            border-left-color: var(--med-blue);
+        }
+
+        .option-btn.selected-correct {
+            background-color: var(--med-light-blue);
+            border-color: var(--med-green);
+            border-left-color: var(--med-green);
+        }
+
+        .option-btn.selected-wrong {
+            background-color: #ffebee;
+            border-color: var(--med-red);
+            border-left-color: var(--med-red);
+        }
+
+        .option-btn.disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        /* Instant Feedback Text */
+        .feedback {
+            font-weight: bold;
+            font-size: 14px;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .feedback.correct { color: var(--med-green); }
+        .feedback.wrong { color: var(--med-red); }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--med-blue);
+            display: none;
+            font-size: 15px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .explanation-title {
+            font-weight: bold;
+            color: var(--med-blue);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Navigation Area */
+        .nav-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            border: 1px solid var(--med-blue);
+            color: var(--med-blue);
+            padding: 10px 20px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--med-blue);
+            color: white;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background-color: transparent;
+            cursor: not-allowed;
+        }
+
+        .view-list-btn {
+            background-color: var(--med-blue);
+            color: white;
+            border: none;
+        }
+
+        .view-list-btn:hover {
+            background-color: var(--med-blue-hover);
+        }
+
+        /* Result Screen */
+        .result-screen {
+            text-align: center;
+            display: none;
+            padding: 40px 20px;
+        }
+
+        .score-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--med-blue);
+            margin: 20px 0;
+        }
+
+        .result-details {
+            font-size: 18px;
+            color: #555;
+        }
+
+        /* 
+         * PART 2: BRANDING & SOCIAL MEDIA 
+         */
+        .branding-footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-family: Arial, sans-serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            background-color: var(--med-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 0;
+            transition: background 0.3s;
+        }
+
+        .social-btn:hover {
+            background-color: var(--med-blue-hover);
+        }
+
+        /* 
+         * PART 3: QUESTION OVERLAY (GRID)
+         */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .overlay-content {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            border: 2px solid var(--med-blue);
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .overlay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--med-blue);
+            cursor: pointer;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+
+        .patient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            background: #fff;
+            transition: all 0.2s;
+        }
+
+        .grid-item.current {
+            border: 2px solid var(--med-blue);
+            box-shadow: 0 0 5px rgba(0,86,179, 0.4);
+        }
+
+        .grid-item.answered {
+            background-color: var(--med-light-blue);
+            color: var(--med-blue);
+            border-color: var(--med-blue);
+        }
+        
+        .grid-item:hover {
+            transform: scale(1.05);
+            border-color: var(--med-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="quiz-container">
+        <header>
+            <h1>Pharmacy Terminology Year III S1 Final Prep</h1>
+            <span class="progress-text" id="progress-text">Q 1 / 73</span>
+        </header>
+
+        <!-- Quiz Interface -->
+        <div id="quiz-view">
+            <div class="question-area">
+                <div class="question-text" id="question-text">Loading...</div>
+                <div class="options-grid" id="options-container">
+                    <!-- Options injected via JS -->
+                </div>
+                <div class="explanation-box" id="explanation-box">
+                    <span class="explanation-title">Explanation:</span>
+                    <span id="explanation-text"></span>
+                </div>
+            </div>
+
+            <div class="nav-area">
+                <button class="nav-btn" id="prev-btn" disabled>Previous</button>
+                <button class="nav-btn view-list-btn" id="view-list-btn">View List</button>
+                <button class="nav-btn" id="next-btn">Next</button>
+            </div>
+        </div>
+
+        <!-- Result Interface -->
+        <div id="result-view" class="result-screen">
+            <h2>Test Result</h2>
+            <div class="score-display" id="final-score">0 / 73</div>
+            <div class="result-details" id="result-message">Review your answers.</div>
+            <div class="nav-area" style="justify-content: center;">
+                <button class="nav-btn view-list-btn" onclick="location.reload()">Restart Quiz</button>
+            </div>
+        </div>
+
+        <!-- Branding & Social Media -->
+        <footer class="branding-footer">
+            <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Question Overview Overlay -->
+    <div class="overlay" id="grid-overlay">
+        <div class="overlay-content">
+            <div class="overlay-header">
+                <h3 style="margin:0; color:var(--med-blue);">Question Overview</h3>
+                <button class="close-btn" id="close-overlay">✕</button>
+            </div>
+            <p style="font-size:14px; color:#666; margin-bottom:20px;">
+                <span style="display:inline-block; width:15px; height:15px; border:2px solid var(--med-blue); vertical-align:middle;"></span> Current &nbsp;
+                <span style="display:inline-block; width:15px; height:15px; background:var(--med-light-blue); border:1px solid var(--med-blue); vertical-align:middle;"></span> Answered
+            </p>
+            <div class="patient-grid" id="grid-container">
+                <!-- Grid items injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* 
+         * DATA SET - Medical Pathology & Pharmacy Settings
+         * 73 Questions extracted from the provided text.
+         */
+        const quizData = [
+            // CLO3: Medical & Pathological Conditions
+            {
+                q: "Accumulation of which of the following substances in the blood may result in the diabetic coma?",
+                options: ["a. Urea", "b. Catecholamine", "c. Bilirubin", "d. Ketone waste"],
+                answer: 3,
+                explanation: "In severe diabetes, lack of insulin leads to fat breakdown, producing ketones. High levels cause Diabetic Ketoacidosis (DKA)."
+            },
+            {
+                q: "Herpes zoster infection is the same virus that causes:",
+                options: ["a. The common cold", "b. Chicken pox", "c. Smallpox", "d. Influenza"],
+                answer: 1,
+                explanation: "Both are caused by the Varicella-Zoster Virus (VZV). Primary infection causes Chickenpox; reactivation causes Shingles."
+            },
+            {
+                q: "Tremors and muscle stiffness are seen in which of the following disorders?",
+                options: ["a. Diabetic coma", "b. Thyrotoxicosis", "c. Osteoporosis", "d. Parkinson's disease"],
+                answer: 3,
+                explanation: "Classic symptoms of Parkinson's include resting tremors, rigidity (stiffness), bradykinesia, and postural instability."
+            },
+            {
+                q: "Small bacteria incapable of living free of a host that may be found in ticks or mites are known as:",
+                options: ["a. Protozoa", "b. Fungi", "c. Rickettsiae", "d. Staphylococci"],
+                answer: 2,
+                explanation: "Rickettsiae are obligate intracellular parasites transmitted by arthropod vectors like ticks, fleas, and mites."
+            },
+            {
+                q: "Which of the following is the most common emboli in the lungs?",
+                options: ["a. Tissue fragment", "b. Thrombus", "c. A piece of fat", "d. Kidney stone"],
+                answer: 1,
+                explanation: "A Pulmonary Embolism (PE) is most commonly caused by a blood clot (thrombus) that breaks loose from deep veins (DVT)."
+            },
+            {
+                q: "A sudden blockage of a blood vessel in the brain is called:",
+                options: ["a. Thyrotoxicosis", "b. Pulmonary embolism", "c. Acute leukemia", "d. Stroke"],
+                answer: 3,
+                explanation: "A Stroke occurs when blood flow to part of the brain is interrupted (ischemic) or a vessel bursts (hemorrhagic)."
+            },
+            {
+                q: "Which of the following is the most common type of skin cancer?",
+                options: ["a. Basal cell carcinoma", "b. Squamous cell carcinoma", "c. Melanoma", "d. Lipoma"],
+                answer: 0,
+                explanation: "Basal Cell Carcinoma (BCC) is the most frequent skin cancer, usually slow-growing and rarely metastasizes."
+            },
+            {
+                q: "Which of the following terms means 'loss of memory'?",
+                options: ["a. Delusion", "b. Dementia", "c. Deterioration", "d. Amnesia"],
+                answer: 3,
+                explanation: "Amnesia specifically refers to the loss of memory. Dementia is a broader syndrome involving cognitive decline."
+            },
+            {
+                q: "Increased intraocular pressure is called:",
+                options: ["a. Pneumonia", "b. Glaucoma", "c. Presbyopia", "d. Polymyalgia"],
+                answer: 1,
+                explanation: "Glaucoma is a group of eye conditions damaging the optic nerve, often due to abnormally high pressure inside the eye."
+            },
+            {
+                q: "Which of the following usually occurs in women between ages 45 and 60 when they are unable to produce estrogen?",
+                options: ["a. Diabetes mellitus", "b. Glaucoma", "c. Thromboembolism", "d. Menopause"],
+                answer: 3,
+                explanation: "Menopause is the permanent cessation of menstruation, marked by a decline in estrogen production."
+            },
+            {
+                q: "Hallucinations, agitation, and anxiety are symptoms of which of the following disorders or conditions?",
+                options: ["a. Suicide", "b. Stroke", "c. Dementia", "d. Psychosis"],
+                answer: 3,
+                explanation: "Psychosis is a mental state characterized by a disconnection from reality, featuring hallucinations, delusions, and severe agitation."
+            },
+            {
+                q: "Which of the following causes prostate cancer in the elderly?",
+                options: ["a. The cause is not known", "b. Too much testosterone", "c. The aging process", "d. Cigarette smoking"],
+                answer: 0,
+                explanation: "The precise cause of prostate cancer is unknown, though aging and family history are significant risk factors."
+            },
+            {
+                q: "An inflammatory disorder characterized by widespread muscle aches and stiffness is referred to as:",
+                options: ["a. Degenerative osteoarthritis", "b. Osteoporosis", "c. Polymyalgia rheumatica", "d. Stroke"],
+                answer: 2,
+                explanation: "Polymyalgia Rheumatica (PMR) causes pain and stiffness in shoulders and hips, primarily in older adults."
+            },
+            {
+                q: "Which of the following is the third most common cause of cancer death in the United States for both males and females?",
+                options: ["a. Skin cancer", "b. Colorectal cancer", "c. Breast cancer", "d. Prostate cancer"],
+                answer: 1,
+                explanation: "Colorectal cancer is consistently ranked as the third leading cause of cancer-related deaths in the US."
+            },
+            {
+                q: "Which of the following disorders is the most common cause of deterioration in intellectual capacity?",
+                options: ["a. Thyrotoxicosis", "b. Alcoholism", "c. Alzheimer's disease", "d. Parkinson's disease"],
+                answer: 2,
+                explanation: "Alzheimer's disease accounts for 60–80% of dementia cases and is the primary cause of progressive intellectual decline in the elderly."
+            },
+            // CLO4: Pharmacy Settings & Nuclear Pharmacy
+            {
+                q: "Which of the following pharmacy settings is designed to care for terminally ill patients?",
+                options: ["a. Home infusion", "b. Home health care", "c. Ambulatory care", "d. Hospice care"],
+                answer: 3,
+                explanation: "Hospice care focuses on palliative (comfort) care for patients with terminal illnesses."
+            },
+            {
+                q: "A personal monitoring device that measures radiation exposure to an individual is referred to as a(n):",
+                options: ["a. Endoscope", "b. Dosimeter", "c. Pacemaker", "d. Microscope"],
+                answer: 1,
+                explanation: "A Dosimeter tracks cumulative radiation dose received by a worker (e.g., film badge or electronic dosimeter)."
+            },
+            {
+                q: "A closed-shop pharmacy is a facility that serves:",
+                options: ["a. Hospice residents", "b. Ambulatory care patient", "c. Mail-order patients", "d. Long-term care facility residents"],
+                answer: 3,
+                explanation: "Closed-shop pharmacies operate within institutions (like nursing homes) and serve only the residents/staff of that facility."
+            },
+            {
+                q: "A group of pharmacies contracted to provide services to pharmacy members in exchange for a specified reimbursement is called a(n):",
+                options: ["a. Pharmacy network", "b. Non-resident pharmacy", "c. Internet pharmacy", "d. In-house pharmacy"],
+                answer: 0,
+                explanation: "A Pharmacy Network is a group of independent or chain pharmacies that contract with insurance/PBM to provide services at negotiated rates."
+            },
+            {
+                q: "A pharmacy that mails, ships, or delivers prescriptions to patients from other states than where it is located is referred to as a(n):",
+                options: ["a. In-house pharmacy", "b. Outpatient pharmacy", "c. open-shop pharmacy", "d. Non-resident pharmacy"],
+                answer: 3,
+                explanation: "A Non-resident pharmacy is licensed in one state but operates/serves patients in another state (often via mail order)."
+            },
+            {
+                q: "Which type of pharmacy is also called radiopharmacy?",
+                options: ["a. Telepharmacy", "b. Nuclear pharmacy", "c. managed -care pharmacy", "d. mail-order pharmacy"],
+                answer: 1,
+                explanation: "Nuclear Pharmacy deals with radioactive drugs (radiopharmaceuticals) used for diagnosis and therapy."
+            },
+            {
+                q: "Home infusion pharmacy services include:",
+                options: ["a. Enteral nutrition therapy", "b. Injectable drug preparation", "c. Intravenous solution preparation", "d. All of the above"],
+                answer: 3,
+                explanation: "Home infusion covers IV antibiotics, TPN (total parenteral nutrition), chemotherapy, and other injectable therapies administered at home."
+            },
+            {
+                q: "The disintegration of a radionuclide as it returns to a stable state is referred to as:",
+                options: ["a. Radiopharmaceutical", "b. Radioactive", "c. Radioactive decay", "d. Radiopharmacy"],
+                answer: 2,
+                explanation: "Radioactive decay is the spontaneous emission of particles/energy from an unstable nucleus to reach stability."
+            },
+            {
+                q: "A federal pharmacist is a licensed pharmacist who works in:",
+                options: ["a. A mail-order pharmacy", "b. A pharmacy network", "c. A non-resident pharmacy", "d. A part of the federal government"],
+                answer: 3,
+                explanation: "Federal pharmacists work for agencies like the VA (Veterans Affairs), FDA, or Public Health Service."
+            },
+            {
+                q: "The area in a nuclear pharmacy where empty radiopharmaceutical containers are dismantled to be re-used is called:",
+                options: ["a. The breakdown area", "b. The clean room", "c. The anteroom", "d. The open-shop area"],
+                answer: 0,
+                explanation: "This area is designated for handling radioactive waste or preparing reusable shielding/containers after decay or cleaning."
+            },
+            // CLO5: Inventory, Budgeting, and Compounding Equipment
+            {
+                q: "Packaging of drug products from bulk containers into patient-specific containers is referred to as:",
+                options: ["a. Repackaging", "b. Record keeping", "c. Replacement therapy", "d. Unit-of-use packaging"],
+                answer: 0,
+                explanation: "Repackaging involves transferring medication from manufacturer bulk bottles into smaller, unit-dose or patient-specific containers for dispensing."
+            },
+            {
+                q: "The stock of medications that a pharmacy keeps so that it is immediately available, on hand, is called:",
+                options: ["a. Inventory control", "b. Inventory", "c. Assets", "d. Acquisition"],
+                answer: 1,
+                explanation: "Inventory refers to the actual goods and supplies currently held in stock."
+            },
+            {
+                q: "A calendar year is defined as:",
+                options: ["a. January 1 to June 1", "b. January 1 to July 1", "c. July 1 to December 31", "d. January 1 to December 31"],
+                answer: 3,
+                explanation: "A standard calendar year runs from Jan 1 to Dec 31."
+            },
+            {
+                q: "Expenditures of money are referred to as:",
+                options: ["a. Expenses", "b. Expenses budgets", "c. Budget monitors", "d. Fixed budgets"],
+                answer: 0,
+                explanation: "Expenses are the costs incurred in the operation of the business."
+            },
+            {
+                q: "The actual time that a purchase order is made is called a:",
+                options: ["a. Turnover", "b. Point-of-sale master", "c. Time purchase", "d. Just-in-time system"],
+                answer: 2,
+                explanation: "In inventory systems, the specific moment an order is generated is recorded as the time of purchase."
+            },
+            {
+                q: "Purchasing goods or services at the best possible cost, in the most correct situation, is referred to as:",
+                options: ["a. Group purchasing", "b. Turnover", "c. Prime supplier", "d. Procurement"],
+                answer: 3,
+                explanation: "Procurement is the strategic process of acquiring goods/services at the right price, quality, and time."
+            },
+            {
+                q: "Contacting and negotiating pricing with pharmaceutical manufacturers is called:",
+                options: ["a. Group purchasing", "b. Independent purchasing", "c. Financial planning", "d. Cost analysis"],
+                answer: 1,
+                explanation: "When a pharmacy negotiates directly with manufacturers without a group intermediary, it is often termed independent purchasing."
+            },
+            {
+                q: "A revenue budget is a type of budget that monitors actual financial performance against:",
+                options: ["a. Purchase orders", "b. Approved financial targets", "c. Approved personnel expenses", "d. The fiscal year"],
+                answer: 1,
+                explanation: "A Revenue Budget compares actual income against projected or approved financial goals/targets."
+            },
+            {
+                q: "A special form describing a purchase and the amount due is referred to as a(n):",
+                options: ["a. Want book", "b. Purchase order", "c. Invoice", "d. Material management form"],
+                answer: 2,
+                explanation: "An Invoice is the bill sent by the supplier detailing items purchased and the total amount due."
+            },
+            {
+                q: "Which of the following is/are important concerns of pharmaceutical organizations?",
+                options: ["a. Productivity", "b. Price", "c. Quality", "d. All of the above"],
+                answer: 3,
+                explanation: "Pharmacies must balance Productivity (efficiency), Price (cost control), and Quality (patient safety/outcomes)."
+            },
+            {
+                q: "Which of the following is the simplest and most common method of inventory control?",
+                options: ["a. Headheld electronic device", "b. Want book", "c. Ipod", "d. Recording voice"],
+                answer: 1,
+                explanation: "A Want Book (or requisition list) is a traditional, simple method where staff note items needed for restocking."
+            },
+            {
+                q: "Most states require pharmacies to keep controlled substance records for:",
+                options: ["a. 1 year", "b. 2 years", "c. 3 years", "d. 4 years"],
+                answer: 1,
+                explanation: "Federal law (DEA) requires controlled substance records to be kept for at least 2 years."
+            },
+            {
+                q: "Control of a pharmacy's inventory directly affects the pharmacy's return on:",
+                options: ["a. Investment", "b. Invoices", "c. Purchase order", "d. Turnover rate"],
+                answer: 0,
+                explanation: "Efficient inventory management improves cash flow and reduces waste, increasing the Return on Investment (ROI)."
+            },
+            {
+                q: "A budgeting system wherein all expenditures must be individually reviewed and approved is referred to as a(n):",
+                options: ["a. Revenue budget", "b. Fixed budget", "c. Zero-based budget", "d. Flexible budget"],
+                answer: 2,
+                explanation: "Zero-based budgeting requires justifying every expense from scratch each period."
+            },
+            {
+                q: "Inventory control is also called:",
+                options: ["a. Independent purchasing", "b. Perpetual inventory", "c. Revenue budget", "d. Inventory management"],
+                answer: 3,
+                explanation: "Inventory Management encompasses all strategies to maintain optimal stock levels."
+            },
+            // Compounding & Laboratory Equipment
+            {
+                q: "Which of the following devices resembles tweezers?",
+                options: ["a. Pestle", "b. Crimper", "c. Drying rack", "d. Forceps"],
+                answer: 3,
+                explanation: "Forceps are handheld, hinged tools used to grasp or hold objects, resembling tweezers."
+            },
+            {
+                q: "A ground glass object that provides a hard, non-absorbable surface for mixing substances is referred to as a(n):",
+                options: ["a. Stirring rod", "b. Spatula", "c. Tablet mold", "d. Ointment slab"],
+                answer: 3,
+                explanation: "An Ointment Slab (mortar top) is a flat, ground-glass surface used for mixing ointments and creams."
+            },
+            {
+                q: "Which of the following devices are worn to protect the eyes from chemicals?",
+                options: ["a. Safety gloves", "b. Safety goggles", "c. Safety masks", "d. Laboratory coats"],
+                answer: 1,
+                explanation: "Safety Goggles provide a seal around the eyes to prevent chemical splashes."
+            },
+            {
+                q: "Which of the following devices is used to crush or grind substances?",
+                options: ["a. Mortar", "b. Hommogenizer", "c. Graduate", "d. Funnel"],
+                answer: 0,
+                explanation: "A Mortar and Pestle is the classic tool for crushing and grinding solids into powders."
+            },
+            {
+                q: "Which of the following products is a solid, oil-based substance that melts at 93.2°F and commonly is used as a base for suppositories?",
+                options: ["a. Glassine paper", "b. Glycerin", "c. Glycol", "d. Cocoa butter"],
+                answer: 3,
+                explanation: "Cocoa Butter (Theobroma Oil) has a melting point close to body temperature and is ideal for suppositories."
+            },
+            {
+                q: "A sweet, colorless, oily fluid that is a pharmaceutical grade of glycerol is called:",
+                options: ["a. Ethanol", "b. Cocoa butter", "c. Glycerin", "d. Glycogen"],
+                answer: 2,
+                explanation: "Glycerin (Glycerol) is a viscous, sweet, colorless liquid used as a humectant and solvent."
+            },
+            {
+                q: "Utensils with long handles and flattened edges used for lifting substances during mixing spreading are referred to as:",
+                options: ["a. Forceps", "b. Spatulas", "c. Tongs", "d. Brushes"],
+                answer: 1,
+                explanation: "Spatulas (metal or rubber) are used to spread, lift, and mix semi-solids."
+            },
+            {
+                q: "An initial dose of medication is called a:",
+                options: ["a. Magma", "b. Miscible", "c. Lozenge", "d. Loading dose"],
+                answer: 3,
+                explanation: "A Loading Dose is an initial large dose of medication given to rapidly achieve therapeutic concentrations."
+            },
+            {
+                q: "The process of reducing the particle size of a substance by grinding it is known as:",
+                options: ["a. Trituration", "b. Fermentation", "c. Habituation", "d. Hyperhydration"],
+                answer: 0,
+                explanation: "Trituration is the mechanical process of grinding a substance to reduce its particle size."
+            },
+            {
+                q: "Devices used in the laboratory that resemble ice tongs are called:",
+                options: ["a. Blenders", "b. Crimpers", "c. Brushes", "d. Beaker tongs"],
+                answer: 3,
+                explanation: "Beaker Tongs have a spring-loaded handle and curved jaws to safely lift hot beakers."
+            },
+            {
+                q: "A physical property of fluids that determines the internal resistance of shear forces is referred to as:",
+                options: ["a. Infusion", "b. Germicidal", "c. Viscosity", "d. Solubility"],
+                answer: 2,
+                explanation: "Viscosity is the measure of a fluid's resistance to flow (thickness)."
+            },
+            {
+                q: "Which of the following is not a factor related to increased pharmaceutical compounding?",
+                options: ["a. A shortage of drug products and combinations", "b. Increasing special patient populations", "c. Increasing number of pregnant women", "d. A limited number of dosage forms"],
+                answer: 2,
+                explanation: "While pregnant women have specific needs, the broad increase in compounding is driven by shortages, dosage forms, and special populations generally."
+            },
+            {
+                q: "Which of the following devices is used to remove seals on capped containers such as vials?",
+                options: ["a. Crimpers", "b. Droppers", "c. Decappers", "d. Filters"],
+                answer: 2,
+                explanation: "Decappers (or cap removers) are tools designed to peel off or pop off aluminum seals and plastic caps."
+            },
+            {
+                q: "Heat sealers are primarily used to seal containers made of:",
+                options: ["a. Plastic", "b. Glass", "c. Steel", "d. Copper"],
+                answer: 0,
+                explanation: "Heat sealers melt thermoplastic materials (like foil liners or plastic bags) to create an airtight seal."
+            },
+            {
+                q: "Isopropyl alcohol is an effective disinfectant in concentration equal to or above:",
+                options: ["a. 10%", "b. 25%", "c. 60%", "d. 70%"],
+                answer: 3,
+                explanation: "70% Isopropyl Alcohol is the gold standard for disinfection. Higher concentrations evaporate too quickly."
+            },
+            // Medical Terminology & Pathology Matching Quiz
+            {
+                q: "What is the definition of 'Atypical'?",
+                options: ["A. Loss of voluntary movement in a part of the body", "B. An abnormal growth of new tissue that forms into a tumor", "C. Unusual or irregular", "D. Extreme emotional disturbance"],
+                answer: 2,
+                explanation: "In medical terms, 'atypical' describes something that deviates from the normal or usual pattern."
+            },
+            {
+                q: "Which term describes 'The smallest blood cell in the cardiovascular system' (Note: Refers to capillaries as vessels in this context)?",
+                options: ["A. Capillary", "B. B lymphocyte", "C. Metastasis", "D. Insulin"],
+                answer: 0,
+                explanation: "According to the provided list, 'Capillary' is matched with the description of the smallest vessel structure in the system."
+            },
+            {
+                q: "What is the function of 'Insulin'?",
+                options: ["A. A hormone produced by the pancreas that lowers blood sugar by allowing cells to absorb glucose", "B. The process of invading body cells by means of metastasis", "C. Deterioration of intellectual faculties including memory", "D. An uncontrollable rhythmic shaking"],
+                answer: 0,
+                explanation: "Insulin regulates blood glucose levels by facilitating the uptake of sugar into cells."
+            },
+            {
+                q: "What does it mean to 'Metastasize'?",
+                options: ["A. To accumulate ketone bodies in the blood", "B. The process of invading body cells by means of metastasis (spreading)", "C. An abnormal growth of new tissue forming a tumor", "D. Extreme emotional disturbance"],
+                answer: 1,
+                explanation: "Metastasis is the spread of cancer cells from the primary site to other parts of the body."
+            },
+            {
+                q: "How is a 'Neoplasm' defined?",
+                options: ["A. Loss of memory, usually of a specific period of time", "B. An abnormal growth of new tissue that forms into a tumor; may be benign or malignant", "C. Age-related difficulty in seeing at close range", "D. A subjective, non-observable manifestation of a condition"],
+                answer: 1,
+                explanation: "Neoplasms are new, uncontrolled growths of tissue (tumors), which can be harmless (benign) or dangerous (malignant)."
+            },
+            {
+                q: "What characterizes 'Agitation'?",
+                options: ["A. Extreme emotional disturbance", "B. Loss of voluntary movement in a part of the body", "C. The accumulation of ketone bodies in the blood", "D. An uncontrollable rhythmic shaking"],
+                answer: 0,
+                explanation: "Agitation refers to a state of severe anxiety, nervousness, or restlessness."
+            },
+            {
+                q: "What is a 'B lymphocyte'?",
+                options: ["A. A type of white blood cell that performs a vital role in the immune system", "B. A hormone produced by the pancreas", "C. An abnormal growth of new tissue", "D. Loss of memory"],
+                answer: 0,
+                explanation: "B-lymphocytes (B-cells) are responsible for producing antibodies to fight infections."
+            },
+            {
+                q: "What is the meaning of 'Amnesia'?",
+                options: ["A. Deterioration of intellectual faculties including memory", "B. Loss of memory, usually of a specific period of time", "C. Chronic inability to sleep", "D. An abnormal growth of new tissue"],
+                answer: 1,
+                explanation: "Amnesia is the partial or total loss of memory."
+            },
+            {
+                q: "How is 'Paralysis' defined?",
+                options: ["A. Loss of voluntary movement in a part of the body", "B. Extreme emotional disturbance", "C. Age-related difficulty in seeing", "D. An uncontrollable rhythmic shaking"],
+                answer: 0,
+                explanation: "Paralysis results from nerve damage or disease, leading to an inability to move muscles voluntarily."
+            },
+            {
+                q: "What is 'Ketosis'?",
+                options: ["A. The accumulation of ketone bodies in the blood", "B. The process of invading body cells", "C. An abnormal growth of new tissue", "D. Loss of memory"],
+                answer: 0,
+                explanation: "Ketosis occurs when the body burns fat for fuel instead of glucose, producing ketones."
+            },
+            // Part 2: Additional Definitions
+            {
+                q: "What is 'Dementia'?",
+                options: ["A. Loss of memory, usually of a specific period of time", "B. Deterioration of intellectual faculties including memory and concentration, caused by an organic disorder of the brain", "C. Age-related difficulty in seeing at close range", "D. An abnormal growth of new tissue"],
+                answer: 1,
+                explanation: "Dementia is a syndrome involving a decline in cognitive function severe enough to interfere with daily life."
+            },
+            {
+                q: "What is 'Presbyopia'?",
+                options: ["A. Chronic inability to sleep or remain asleep during the night", "B. Age-related difficulty in seeing or reading at close range", "C. Loss of voluntary movement in a part of the body", "D. The ability of a tumor to spread"],
+                answer: 1,
+                explanation: "Presbyopia is the natural aging of the eye lens, making near vision difficult (often requiring reading glasses)."
+            },
+            {
+                q: "What defines 'Insomnia'?",
+                options: ["A. Loss of memory", "B. Chronic inability to sleep or remain asleep during the night", "C. Extreme emotional disturbance", "D. An abnormal growth of new tissue"],
+                answer: 1,
+                explanation: "Insomnia is a sleep disorder characterized by difficulty falling asleep or staying asleep."
+            },
+            {
+                q: "What does 'Malignant' mean in a medical context?",
+                options: ["A. An abnormal growth of new tissue", "B. The ability of a tumor to spread and invade other areas", "C. Loss of voluntary movement", "D. Extreme emotional disturbance"],
+                answer: 1,
+                explanation: "Malignant tumors are cancerous and have the potential to invade nearby tissues and spread (metastasize)."
+            },
+            {
+                q: "What is 'Impotence'?",
+                options: ["A. Inability to achieve penile erection", "B. Loss of memory", "C. Uncontrollable rhythmic shaking", "D. A subjective, non-observable manifestation"],
+                answer: 0,
+                explanation: "Impotence (Erectile Dysfunction) is the inability to get or maintain an erection sufficient for sexual intercourse."
+            },
+            {
+                q: "What is a 'Symptom'?",
+                options: ["A. A subjective, non-observable manifestation of a medical condition", "B. An objective sign observed by a doctor", "C. An abnormal growth of new tissue", "D. The accumulation of ketone bodies"],
+                answer: 0,
+                explanation: "Symptoms are what the patient feels and reports (e.g., pain, nausea), whereas signs are what the doctor observes."
+            },
+            {
+                q: "What is a 'Neoplasm' (revisited)?",
+                options: ["A. An abnormal growth of new tissue", "B. Loss of memory", "C. Extreme emotional disturbance", "D. Age-related difficulty in seeing"],
+                answer: 0,
+                explanation: "A neoplasm is a new, abnormal mass of tissue."
+            },
+            {
+                q: "What is a 'Tremor'?",
+                options: ["A. Uncontrollable rhythmic shaking", "B. Loss of voluntary movement", "C. Chronic inability to sleep", "D. An abnormal growth of new tissue"],
+                answer: 0,
+                explanation: "A tremor is an involuntary, rhythmic muscle contraction leading to shaking movements."
+            }
+        ];
+
+        /* 
+         * STATE MANAGEMENT
+         */
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let score = 0;
+
+        /* 
+         * DOM ELEMENTS
+         */
+        const els = {
+            quizView: document.getElementById('quiz-view'),
+            resultView: document.getElementById('result-view'),
+            questionText: document.getElementById('question-text'),
+            optionsContainer: document.getElementById('options-container'),
+            explanationBox: document.getElementById('explanation-box'),
+            explanationText: document.getElementById('explanation-text'),
+            progressText: document.getElementById('progress-text'),
+            prevBtn: document.getElementById('prev-btn'),
+            nextBtn: document.getElementById('next-btn'),
+            viewListBtn: document.getElementById('view-list-btn'),
+            finalScore: document.getElementById('final-score'),
+            resultMessage: document.getElementById('result-message'),
+            gridOverlay: document.getElementById('grid-overlay'),
+            gridContainer: document.getElementById('grid-container'),
+            closeOverlay: document.getElementById('close-overlay')
+        };
+
+        /* 
+         * INITIALIZATION
+         */
+        function initQuiz() {
+            renderQuestion();
+            renderGrid();
+        }
+
+        /* 
+         * RENDER LOGIC 
+         */
+        function renderQuestion() {
+            const data = quizData[currentQuestionIndex];
+            
+            els.questionText.textContent = `${currentQuestionIndex + 1}. ${data.q}`;
+            els.progressText.textContent = `Q ${currentQuestionIndex + 1} / ${quizData.length}`;
+            
+            els.prevBtn.disabled = currentQuestionIndex === 0;
+            
+            els.optionsContainer.innerHTML = '';
+            els.explanationBox.style.display = 'none';
+
+            const hasAnswered = userAnswers[currentQuestionIndex] !== null;
+
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span>${opt}</span>`;
+                
+                const feedbackSpan = document.createElement('span');
+                feedbackSpan.className = 'feedback';
+                btn.appendChild(feedbackSpan);
+
+                if (hasAnswered) {
+                    btn.classList.add('disabled');
+                    if (index === data.answer) {
+                        btn.classList.add('selected-correct');
+                        feedbackSpan.textContent = 'CORRECT';
+                        feedbackSpan.classList.add('correct');
+                    } else if (index === userAnswers[currentQuestionIndex]) {
+                        btn.classList.add('selected-wrong');
+                        feedbackSpan.textContent = 'INCORRECT';
+                        feedbackSpan.classList.add('wrong');
+                    }
+                } else {
+                    btn.onclick = () => handleAnswerSelect(index, btn, feedbackSpan);
+                }
+
+                els.optionsContainer.appendChild(btn);
+            });
+
+            if (hasAnswered) {
+                els.explanationText.textContent = data.explanation;
+                els.explanationBox.style.display = 'block';
+            }
+        }
+
+        function handleAnswerSelect(selectedIndex, btnElement, feedbackElement) {
+            const data = quizData[currentQuestionIndex];
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            
+            const allBtns = els.optionsContainer.querySelectorAll('.option-btn');
+            allBtns.forEach(b => {
+                b.classList.add('disabled');
+                b.onclick = null;
+            });
+
+            if (selectedIndex === data.answer) {
+                score++;
+                btnElement.classList.add('selected-correct');
+                feedbackElement.textContent = 'CORRECT';
+                feedbackElement.classList.add('correct');
+            } else {
+                btnElement.classList.add('selected-wrong');
+                feedbackElement.textContent = 'INCORRECT';
+                feedbackElement.classList.add('wrong');
+                
+                const correctBtn = allBtns[data.answer];
+                const correctFeedback = correctBtn.querySelector('.feedback');
+                correctBtn.classList.add('selected-correct');
+                correctFeedback.textContent = 'CORRECT';
+                correctFeedback.classList.add('correct');
+            }
+
+            els.explanationText.textContent = data.explanation;
+            els.explanationBox.style.display = 'block';
+            renderGrid();
+        }
+
+        /* 
+         * NAVIGATION HANDLERS 
+         */
+        els.prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        });
+
+        els.nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        /* 
+         * GRID OVERLAY LOGIC
+         */
+        els.viewListBtn.addEventListener('click', () => {
+            renderGrid();
+            els.gridOverlay.style.display = 'flex';
+        });
+
+        els.closeOverlay.addEventListener('click', () => {
+            els.gridOverlay.style.display = 'none';
+        });
+
+        els.gridOverlay.addEventListener('click', (e) => {
+            if (e.target === els.gridOverlay) {
+                els.gridOverlay.style.display = 'none';
+            }
+        });
+
+        function renderGrid() {
+            els.gridContainer.innerHTML = '';
+            
+            quizData.forEach((_, index) => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.textContent = index + 1;
+
+                if (index === currentQuestionIndex) {
+                    item.classList.add('current');
+                }
+                if (userAnswers[index] !== null) {
+                    item.classList.add('answered');
+                }
+
+                item.onclick = () => {
+                    currentQuestionIndex = index;
+                    renderQuestion();
+                    els.gridOverlay.style.display = 'none';
+                };
+
+                els.gridContainer.appendChild(item);
+            });
+        }
+
+        /* 
+         * RESULTS LOGIC 
+         */
+        function showResults() {
+            els.quizView.style.display = 'none';
+            els.resultView.style.display = 'block';
+            els.finalScore.textContent = `${score} / ${quizData.length}`;
+            
+            let msg = "";
+            const percentage = (score / quizData.length) * 100;
+            if (percentage >= 90) msg = "Outstanding performance.";
+            else if (percentage >= 70) msg = "Good job.";
+            else if (percentage >= 50) msg = "Passing, but review is needed.";
+            else msg = "Further study required.";
+            
+            els.resultMessage.textContent = msg;
+        }
+
+        initQuiz();
+
+    </script>
+</body>
+</html>
