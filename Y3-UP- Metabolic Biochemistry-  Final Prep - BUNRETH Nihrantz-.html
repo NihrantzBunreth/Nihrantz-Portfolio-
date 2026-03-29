@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biochemistry Final Prep - Clinical Edition</title>
+    <style>
+        /* 
+         * PART 1: CLEAN CLINICAL DESIGN 
+         * Font: Arial
+         * Colors: White, Light Grey Lines, Medical Blue (#0056b3)
+         */
+        :root {
+            --med-blue: #0056b3;
+            --med-blue-hover: #004494;
+            --med-light-blue: #e6f0fa;
+            --med-red: #d32f2f;
+            --med-green: #2e7d32;
+            --bg-color: #ffffff;
+            --line-color: #e0e0e0;
+            --text-color: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            /* Sterile Background: Medical chart paper effect */
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 27px,
+                var(--line-color) 28px
+            );
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        /* Container: Clean clipboard/digital tablet look */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            border: 2px solid var(--med-blue);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            position: relative;
+            margin-top: 20px;
+            margin-bottom: 80px;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            border-bottom: 2px solid var(--med-blue);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-family: Arial, sans-serif;
+            color: var(--med-blue);
+            margin: 0;
+            font-size: 22px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-text {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            color: var(--med-blue);
+        }
+
+        /* Question Area */
+        .question-area {
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* Interactive Elements */
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-left: 4px solid #ccc;
+            padding: 15px;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            background-color: var(--med-light-blue);
+            border-left-color: var(--med-blue);
+        }
+
+        .option-btn.selected-correct {
+            background-color: var(--med-light-blue);
+            border-color: var(--med-green);
+            border-left-color: var(--med-green);
+        }
+
+        .option-btn.selected-wrong {
+            background-color: #ffebee;
+            border-color: var(--med-red);
+            border-left-color: var(--med-red);
+        }
+
+        .option-btn.disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        /* Instant Feedback Text */
+        .feedback {
+            font-weight: bold;
+            font-size: 14px;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
+        .feedback.correct { color: var(--med-green); }
+        .feedback.wrong { color: var(--med-red); }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--med-blue);
+            display: none;
+            font-size: 15px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .explanation-title {
+            font-weight: bold;
+            color: var(--med-blue);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* Navigation Area */
+        .nav-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-btn {
+            background-color: transparent;
+            border: 1px solid var(--med-blue);
+            color: var(--med-blue);
+            padding: 10px 20px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--med-blue);
+            color: white;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background-color: transparent;
+            cursor: not-allowed;
+        }
+
+        .view-list-btn {
+            background-color: var(--med-blue);
+            color: white;
+            border: none;
+        }
+
+        .view-list-btn:hover {
+            background-color: var(--med-blue-hover);
+        }
+
+        /* Result Screen */
+        .result-screen {
+            text-align: center;
+            display: none;
+            padding: 40px 20px;
+        }
+
+        .score-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--med-blue);
+            margin: 20px 0;
+        }
+
+        .result-details {
+            font-size: 18px;
+            color: #555;
+        }
+
+        /* 
+         * PART 2: BRANDING & SOCIAL MEDIA 
+         */
+        .branding-footer {
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-family: Arial, sans-serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            background-color: var(--med-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 0;
+            transition: background 0.3s;
+        }
+
+        .social-btn:hover {
+            background-color: var(--med-blue-hover);
+        }
+
+        /* 
+         * PART 3: QUESTION OVERLAY (GRID)
+         */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .overlay-content {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            border: 2px solid var(--med-blue);
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .overlay-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--med-blue);
+            cursor: pointer;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+
+        .patient-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            background: #fff;
+            transition: all 0.2s;
+        }
+
+        .grid-item.current {
+            border: 2px solid var(--med-blue);
+            box-shadow: 0 0 5px rgba(0,86,179, 0.4);
+        }
+
+        .grid-item.answered {
+            background-color: var(--med-light-blue);
+            color: var(--med-blue);
+            border-color: var(--med-blue);
+        }
+        
+        .grid-item:hover {
+            transform: scale(1.05);
+            border-color: var(--med-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="quiz-container">
+        <header>
+            <h1>Metabolic Biochemistry Year III Final Prep</h1>
+            <span class="progress-text" id="progress-text">Q 1 / 100</span>
+        </header>
+
+        <!-- Quiz Interface -->
+        <div id="quiz-view">
+            <div class="question-area">
+                <div class="question-text" id="question-text">Loading...</div>
+                <div class="options-grid" id="options-container">
+                    <!-- Options injected via JS -->
+                </div>
+                <div class="explanation-box" id="explanation-box">
+                    <span class="explanation-title">Explanation:</span>
+                    <span id="explanation-text"></span>
+                </div>
+            </div>
+
+            <div class="nav-area">
+                <button class="nav-btn" id="prev-btn" disabled>Previous</button>
+                <button class="nav-btn view-list-btn" id="view-list-btn">View List</button>
+                <button class="nav-btn" id="next-btn">Next</button>
+            </div>
+        </div>
+
+        <!-- Result Interface -->
+        <div id="result-view" class="result-screen">
+            <h2>Test Result</h2>
+            <div class="score-display" id="final-score">0 / 100</div>
+            <div class="result-details" id="result-message">Review your answers.</div>
+            <div class="nav-area" style="justify-content: center;">
+                <button class="nav-btn view-list-btn" onclick="location.reload()">Restart Quiz</button>
+            </div>
+        </div>
+
+        <!-- Branding & Social Media -->
+        <footer class="branding-footer">
+            <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Question Overview Overlay -->
+    <div class="overlay" id="grid-overlay">
+        <div class="overlay-content">
+            <div class="overlay-header">
+                <h3 style="margin:0; color:var(--med-blue);">Question Overview</h3>
+                <button class="close-btn" id="close-overlay">✕</button>
+            </div>
+            <p style="font-size:14px; color:#666; margin-bottom:20px;">
+                <span style="display:inline-block; width:15px; height:15px; border:2px solid var(--med-blue); vertical-align:middle;"></span> Current &nbsp;
+                <span style="display:inline-block; width:15px; height:15px; background:var(--med-light-blue); border:1px solid var(--med-blue); vertical-align:middle;"></span> Answered
+            </p>
+            <div class="patient-grid" id="grid-container">
+                <!-- Grid items injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* 
+         * DATA SET - Metabolic Biochemistry
+         * 100 Questions extracted from the provided text.
+         */
+        const quizData = [
+            // SESSION 4–5: ATP and Glycolysis
+            {
+                q: "The universal energy currency of the cell is",
+                options: ["A. GTP", "B. ATP", "C. NADH", "D. FADH₂"],
+                answer: 1,
+                explanation: "ATP (adenosine triphosphate) is the primary energy carrier in all living cells, powering cellular work by releasing energy when its high-energy phosphate bonds are hydrolyzed."
+            },
+            {
+                q: "ATP contains which nitrogenous base?",
+                options: ["A. Guanine", "B. Adenine", "C. Cytosine", "D. Uracil"],
+                answer: 1,
+                explanation: "ATP = Adenine + ribose + 3 phosphates. Adenine is a purine base also found in DNA/RNA and other nucleotides like ADP and AMP."
+            },
+            {
+                q: "The high-energy bonds in ATP are located between",
+                options: ["A. Ribose and adenine", "B. Ribose and phosphate", "C. Phosphate groups", "D. Adenine and phosphate"],
+                answer: 2,
+                explanation: "The phosphoanhydride bonds between the phosphate groups (especially between β–γ and α–β phosphates) are high-energy."
+            },
+            {
+                q: "The first stage of conversion of food into ATP is",
+                options: ["A. Oxidative phosphorylation", "B. Digestion and absorption", "C. Conversion of nutrients to acetyl-CoA", "D. Electron transport chain"],
+                answer: 1,
+                explanation: "Stage 1: Digestion breaks macromolecules (carbs, fats, proteins) into absorbable units (glucose, fatty acids, amino acids)."
+            },
+            {
+                q: "The second stage of energy production mainly produces",
+                options: ["A. Acetyl-CoA", "B. CO₂", "C. ATP only", "D. Lactate"],
+                answer: 0,
+                explanation: "Stage 2: Nutrients enter cells and are converted to acetyl-CoA, the central metabolite for the TCA cycle."
+            },
+            {
+                q: "The final stage of cellular energy production occurs in the",
+                options: ["A. Cytoplasm", "B. Nucleus", "C. Mitochondria", "D. Lysosome"],
+                answer: 2,
+                explanation: "Stage 3: Oxidative phosphorylation (ETC + chemiosmosis) happens in the inner mitochondrial membrane, producing ~90% of cellular ATP."
+            },
+            {
+                q: "Glycolysis occurs in the",
+                options: ["A. Mitochondria", "B. Cytoplasm", "C. Nucleus", "D. Golgi apparatus"],
+                answer: 1,
+                explanation: "Glycolysis is anaerobic and occurs entirely in the cytosol of all cells—even without mitochondria (e.g., RBCs)."
+            },
+            {
+                q: "The first step of glycolysis is catalyzed by",
+                options: ["A. Hexokinase", "B. Pyruvate kinase", "C. Phosphofructokinase-1", "D. Aldolase"],
+                answer: 0,
+                explanation: "Hexokinase phosphorylates glucose → glucose-6-phosphate using ATP, trapping glucose inside the cell."
+            },
+            {
+                q: "The committed and rate-limiting step of glycolysis is catalyzed by",
+                options: ["A. Hexokinase", "B. Phosphofructokinase-1", "C. Pyruvate kinase", "D. Enolase"],
+                answer: 1,
+                explanation: "PFK-1 converts fructose-6-phosphate → fructose-1,6-bisphosphate. It is the key regulatory enzyme (inhibited by ATP/citrate; activated by AMP/F2,6BP)."
+            },
+            {
+                q: "Which of the following reactions in glycolysis is irreversible?",
+                options: ["A. Glucose → Glucose-6-phosphate", "B. Fructose-6-phosphate → Fructose-1,6-bisphosphate", "C. Phosphoenolpyruvate → Pyruvate", "D. All of the above"],
+                answer: 3,
+                explanation: "Three irreversible steps in glycolysis: Hexokinase (step 1), PFK-1 (step 3), and Pyruvate kinase (step 10). These are bypassed in gluconeogenesis."
+            },
+            {
+                q: "The final product of glycolysis under general (aerobic) conditions is",
+                options: ["A. Lactate", "B. Pyruvate", "C. Acetyl-CoA", "D. Ethanol"],
+                answer: 1,
+                explanation: "Glycolysis ends with pyruvate. Under aerobic conditions, pyruvate enters mitochondria → acetyl-CoA → TCA cycle."
+            },
+            {
+                q: "The final product of glycolysis in anaerobic muscle is",
+                options: ["A. Pyruvate", "B. Lactate", "C. Ethanol", "D. Acetaldehyde"],
+                answer: 1,
+                explanation: "In oxygen-deprived muscle, LDH reduces pyruvate → lactate to regenerate NAD⁺ for glycolysis continuation."
+            },
+            {
+                q: "The final product of glycolysis in yeast under anaerobic conditions is",
+                options: ["A. Lactate", "B. Acetyl-CoA", "C. Ethanol and CO₂", "D. Pyruvate"],
+                answer: 2,
+                explanation: "Yeast performs alcoholic fermentation: Pyruvate → acetaldehyde + CO₂ → ethanol, regenerating NAD⁺."
+            },
+            {
+                q: "Which enzyme catalyzes the last step of glycolysis?",
+                options: ["A. Pyruvate kinase", "B. Aldolase", "C. Enolase", "D. Hexokinase"],
+                answer: 0,
+                explanation: "Pyruvate kinase converts PEP → pyruvate, producing 1 ATP per molecule (substrate-level phosphorylation)."
+            },
+            {
+                q: "Phosphofructokinase-1 is inhibited by",
+                options: ["A. AMP", "B. ADP", "C. ATP", "D. Fructose-2,6-bisphosphate"],
+                answer: 2,
+                explanation: "ATP signals high energy → inhibits PFK-1 to slow glycolysis. AMP/ADP/F2,6BP activate it."
+            },
+            {
+                q: "Glycolysis is stimulated by",
+                options: ["A. ATP", "B. Citrate", "C. AMP", "D. NADH"],
+                answer: 2,
+                explanation: "AMP indicates low energy → activates PFK-1. ATP, citrate, and NADH signal energy surplus → inhibit glycolysis."
+            },
+            {
+                q: "Which molecule strongly activates glycolysis?",
+                options: ["A. Citrate", "B. Fructose-2,6-bisphosphate", "C. Acetyl-CoA", "D. NADH"],
+                answer: 1,
+                explanation: "F2,6BP is the most potent allosteric activator of PFK-1, synthesized in response to insulin."
+            },
+            {
+                q: "Net ATP produced in glycolysis per glucose molecule is",
+                options: ["A. 1", "B. 2", "C. 4", "D. 6"],
+                answer: 1,
+                explanation: "Investment phase: –2 ATP. Payoff phase: +4 ATP. Net = 2 ATP + 2 NADH + 2 pyruvate."
+            },
+            {
+                q: "According to the old P/O ratio concept, aerobic glycolysis produces",
+                options: ["A. 6 ATP", "B. 7 ATP", "C. 8 ATP", "D. 10 ATP"],
+                answer: 2,
+                explanation: "Old model: 2 ATP (net) + 2 NADH × 3 = 8 ATP."
+            },
+            {
+                q: "According to the new P/O ratio concept, aerobic glycolysis produces approximately",
+                options: ["A. 5 ATP", "B. 6 ATP", "C. 7 ATP", "D. 8 ATP"],
+                answer: 1,
+                explanation: "New model: 2 ATP (net) + 2 × 2 (approx) = ~6 ATP per glucose, reflecting real bioenergetic efficiency."
+            },
+            // SESSION 6: Gluconeogenesis
+            {
+                q: "Gluconeogenesis is defined as",
+                options: ["A. Conversion of glucose to glycogen", "B. Formation of glucose from non-carbohydrate sources", "C. Breakdown of glycogen", "D. Conversion of glucose to pyruvate"],
+                answer: 1,
+                explanation: "Gluconeogenesis is the formation of glucose from non-carbohydrate sources like lactate, glycerol, and amino acids."
+            },
+            {
+                q: "Gluconeogenesis mainly occurs in",
+                options: ["A. Brain", "B. Liver", "C. Muscle", "D. Adipose tissue"],
+                answer: 1,
+                explanation: "Liver (~90%) and kidneys are primary sites. Muscle lacks glucose-6-phosphatase."
+            },
+            {
+                q: "Gluconeogenesis increases during",
+                options: ["A. Fed state", "B. Starvation", "C. Hyperglycemia", "D. Insulin secretion"],
+                answer: 1,
+                explanation: "During fasting/starvation, glycogen stores deplete → body relies on gluconeogenesis."
+            },
+            {
+                q: "Which hormone stimulates gluconeogenesis?",
+                options: ["A. Insulin", "B. Glucagon", "C. Thyroxine", "D. Estrogen"],
+                answer: 1,
+                explanation: "Glucagon stimulates gluconeogenesis; Insulin suppresses it."
+            },
+            {
+                q: "Which of the following is a gluconeogenic precursor?",
+                options: ["A. Lactate", "B. Alanine", "C. Glycerol", "D. All of the above"],
+                answer: 3,
+                explanation: "Lactate (Cori cycle), Alanine (glucose-alanine cycle), and Glycerol (fat breakdown) all feed into gluconeogenesis."
+            },
+            {
+                q: "Which organ cannot perform gluconeogenesis?",
+                options: ["A. Liver", "B. Kidney", "C. Muscle", "D. Intestine"],
+                answer: 2,
+                explanation: "Muscle lacks glucose-6-phosphatase, so it cannot release free glucose into blood."
+            },
+            {
+                q: "Cellular starvation refers to",
+                options: ["A. Lack of food intake", "B. Lack of glucose utilization by cells", "C. Low protein intake", "D. Vitamin deficiency"],
+                answer: 1,
+                explanation: "Seen in diabetes mellitus: high blood glucose, but cells can’t take it up (insulin deficiency/resistance)."
+            },
+            {
+                q: "Human starvation refers to",
+                options: ["A. Lack of glucose utilization", "B. Lack of nutrient intake", "C. Insulin resistance", "D. Hyperglycemia"],
+                answer: 1,
+                explanation: "True starvation = no caloric intake → body shifts to fat/protein catabolism."
+            },
+            {
+                q: "The Cori cycle involves the transport of",
+                options: ["A. Glucose from muscle to liver", "B. Lactate from muscle to liver", "C. Pyruvate from liver to muscle", "D. Alanine from muscle to liver"],
+                answer: 1,
+                explanation: "Muscle produces lactate → liver converts lactate back to glucose via gluconeogenesis → reused by muscle."
+            },
+            {
+                q: "The main function of the Cori cycle is to",
+                options: ["A. Produce ATP in liver", "B. Maintain blood glucose", "C. Store glycogen", "D. Produce ketone bodies"],
+                answer: 1,
+                explanation: "Recycles lactate into glucose, preventing lactic acidosis and sustaining glucose supply during intense exercise."
+            },
+            // Pyruvate to Acetyl-CoA
+            {
+                q: "The conversion of pyruvate to acetyl-CoA occurs in which cellular location?",
+                options: ["A. Cytosol", "B. Nucleus", "C. Mitochondrial matrix", "D. Endoplasmic reticulum"],
+                answer: 2,
+                explanation: "The Pyruvate Dehydrogenase Complex (PDC) resides in the mitochondrial matrix."
+            },
+            {
+                q: "The enzyme complex responsible for conversion of pyruvate to acetyl-CoA is:",
+                options: ["A. Pyruvate carboxylase", "B. Pyruvate kinase", "C. Pyruvate dehydrogenase complex", "D. Lactate dehydrogenase"],
+                answer: 2,
+                explanation: "PDC catalyzes the oxidative decarboxylation of pyruvate."
+            },
+            {
+                q: "Which of the following cofactors is NOT required for the pyruvate dehydrogenase complex?",
+                options: ["A. Thiamine pyrophosphate (TPP)", "B. Lipoic acid", "C. NAD⁺", "D. Biotin"],
+                answer: 3,
+                explanation: "PDC requires 5 coenzymes: TPP, Lipoic acid, CoA, FAD, and NAD⁺. Biotin is for carboxylases."
+            },
+            {
+                q: "The overall reaction of pyruvate oxidation produces:",
+                options: ["A. Acetyl-CoA + CO₂ + NADH", "B. Lactate + NAD⁺", "C. Oxaloacetate + NADH", "D. Citrate + ATP"],
+                answer: 0,
+                explanation: "Reaction: Pyruvate + CoA + NAD⁺ → Acetyl-CoA + CO₂ + NADH + H⁺."
+            },
+            {
+                q: "Which vitamin deficiency most directly impairs pyruvate dehydrogenase activity?",
+                options: ["A. Vitamin B1", "B. Vitamin C", "C. Vitamin A", "D. Vitamin K"],
+                answer: 0,
+                explanation: "Vitamin B1 (Thiamine) is converted to TPP, a critical cofactor for E1. Deficiency causes Beriberi and lactic acidosis."
+            },
+            // Acetyl-CoA as Central Molecule
+            {
+                q: "Acetyl-CoA is considered central in metabolism because it:",
+                options: ["A. Is produced only from carbohydrates", "B. Links carbohydrate, lipid, and protein metabolism", "C. Produces ATP directly", "D. Occurs only in cytosol"],
+                answer: 1,
+                explanation: "Derived from carbs, fats, and proteins; serves as the common entry point for energy production or biosynthesis."
+            },
+            {
+                q: "Acetyl-CoA does not participate in:",
+                options: ["A. Citric acid cycle", "B. Fatty acid synthesis", "C. Ketone body formation", "D. Glycolysis"],
+                answer: 3,
+                explanation: "Glycolysis breaks down glucose to pyruvate. Acetyl-CoA is a product of pyruvate oxidation, not a substrate for glycolysis."
+            },
+            {
+                q: "During starvation, excess acetyl-CoA is mainly used for:",
+                options: ["A. Glucose synthesis", "B. Ketone body synthesis", "C. Glycogen formation", "D. Lactate production"],
+                answer: 1,
+                explanation: "High acetyl-CoA exceeds TCA capacity and is diverted to form ketone bodies for brain/heart fuel."
+            },
+            {
+                q: "Which pathway requires acetyl-CoA as a substrate?",
+                options: ["A. Glycogenesis", "B. Fatty acid synthesis", "C. Glycolysis", "D. Gluconeogenesis"],
+                answer: 1,
+                explanation: "Acetyl-CoA is the building block for fatty acids."
+            },
+            // Pyruvate as a Junction Point
+            {
+                q: "Pyruvate is called a metabolic junction because it can:",
+                options: ["A. Enter multiple metabolic pathways", "B. Produce ATP directly", "C. Form glycogen directly", "D. Convert to fatty acids directly"],
+                answer: 0,
+                explanation: "Pyruvate branches into aerobic respiration, anaerobic fermentation, gluconeogenesis, and amino acid synthesis."
+            },
+            {
+                q: "Conversion of pyruvate to lactate occurs when:",
+                options: ["A. Oxygen is abundant", "B. NADH levels are low", "C. Oxygen is limited", "D. ATP is abundant"],
+                answer: 2,
+                explanation: "Under hypoxia, NADH accumulates. LDH converts pyruvate to lactate to regenerate NAD⁺."
+            },
+            {
+                q: "The enzyme converting pyruvate to oxaloacetate is:",
+                options: ["A. Pyruvate kinase", "B. Pyruvate carboxylase", "C. Citrate synthase", "D. Malate dehydrogenase"],
+                answer: 1,
+                explanation: "Pyruvate carboxylase (requires ATP and Biotin) converts pyruvate to oxaloacetate."
+            },
+            {
+                q: "Pyruvate can be converted into alanine by:",
+                options: ["A. Transamination", "B. Decarboxylation", "C. Oxidation", "D. Phosphorylation"],
+                answer: 0,
+                explanation: "Pyruvate accepts an amino group from glutamate (via ALT enzyme) to form Alanine."
+            },
+            // ATP Yield of Aerobic Glycolysis
+            {
+                q: "According to older textbooks, aerobic glycolysis yields:",
+                options: ["A. 2 ATP", "B. 4 ATP", "C. 6 ATP", "D. 8 ATP"],
+                answer: 3,
+                explanation: "Old model assumed 3 ATP per NADH. Calculation: 2 ATP (net) + 2 NADH × 3 = 8 ATP."
+            },
+            {
+                q: "According to newer estimates, aerobic glycolysis produces approximately:",
+                options: ["A. 5 ATP", "B. 7 ATP", "C. 9 ATP", "D. 12 ATP"],
+                answer: 1,
+                explanation: "New model: 2 ATP (net) + 2 NADH × 2.5 = 7 ATP (approx)."
+            },
+            {
+                q: "The difference between old and new ATP calculations is mainly due to:",
+                options: ["A. New enzymes discovered", "B. Revised P/O ratio in oxidative phosphorylation", "C. New glycolytic steps", "D. Increased NADH formation"],
+                answer: 1,
+                explanation: "Modern data shows proton leak and transport costs reduce efficiency. NADH ≈ 2.5 ATP; FADH₂ ≈ 1.5 ATP."
+            },
+            // Significance of Citric Acid Cycle
+            {
+                q: "The citric acid cycle is also known as:",
+                options: ["A. Glycolytic cycle", "B. Krebs cycle", "C. Cori cycle", "D. Urea cycle"],
+                answer: 1,
+                explanation: "Named after Hans Krebs. Also called the TCA (Tricarboxylic Acid) cycle."
+            },
+            {
+                q: "The major function of the citric acid cycle is:",
+                options: ["A. ATP storage", "B. Oxidation of acetyl-CoA to CO₂", "C. Protein synthesis", "D. Fatty acid formation"],
+                answer: 1,
+                explanation: "Fully oxidizes the acetyl group to CO₂ and harvests high-energy electrons (NADH/FADH₂)."
+            },
+            {
+                q: "The Citric Acid Cycle is considered amphibolic because it:",
+                options: ["A. Occurs only in animals", "B. Functions in both catabolism and anabolism", "C. Requires oxygen directly", "D. Produces glucose"],
+                answer: 1,
+                explanation: "Catabolic: Breaks down acetyl-CoA. Anabolic: Intermediates serve as precursors for amino acids, heme, etc."
+            },
+            // Reactions of Citric Acid Cycle
+            {
+                q: "The first step of Citric Acid Cycle is the condensation of acetyl-CoA with:",
+                options: ["A. Malate", "B. Oxaloacetate", "C. Pyruvate", "D. Citrate"],
+                answer: 1,
+                explanation: "Catalyzed by Citrate Synthase: Acetyl-CoA (2C) + Oxaloacetate (4C) → Citrate (6C)."
+            },
+            {
+                q: "Citrate is converted to isocitrate by:",
+                options: ["A. Aconitase", "B. Dehydrogenase", "C. Synthase", "D. Kinase"],
+                answer: 0,
+                explanation: "Aconitase catalyzes the isomerization via dehydration (to cis-aconitate) and rehydration."
+            },
+            {
+                q: "The first oxidative decarboxylation in Citric Acid Cycle produces:",
+                options: ["A. Succinate", "B. α-ketoglutarate", "C. Malate", "D. Oxaloacetate"],
+                answer: 1,
+                explanation: "Isocitrate Dehydrogenase converts isocitrate → α-ketoglutarate + CO₂ + NADH."
+            },
+            {
+                q: "The second oxidative decarboxylation produces:",
+                options: ["A. Fumarate", "B. Succinate", "C. Succinyl-CoA", "D. Malate"],
+                answer: 2,
+                explanation: "α-Ketoglutarate Dehydrogenase converts α-ketoglutarate → Succinyl-CoA + CO₂ + NADH."
+            },
+            {
+                q: "Substrate-level phosphorylation in Citric Acid Cycle occurs during conversion of:",
+                options: ["A. Citrate → Isocitrate", "B. Succinyl-CoA → Succinate", "C. Malate → Oxaloacetate", "D. Fumarate → Malate"],
+                answer: 1,
+                explanation: "Succinyl-CoA Synthetase produces GTP (or ATP) directly from Succinyl-CoA → Succinate."
+            },
+            // Final Products of CAC
+            {
+                q: "For one acetyl-CoA, Citric Acid Cycle produces:",
+                options: ["A. 2 NADH", "B. 3 NADH", "C. 4 NADH", "D. 5 NADH"],
+                answer: 1,
+                explanation: "Steps producing NADH: Isocitrate → α-KG, α-KG → Succinyl-CoA, Malate → OAA. Total = 3 NADH."
+            },
+            {
+                q: "For one acetyl-CoA, Citric Acid Cycle produces how many FADH₂?",
+                options: ["A. 0", "B. 1", "C. 2", "D. 3"],
+                answer: 1,
+                explanation: "Produced at the Succinate → Fumarate step by Succinate Dehydrogenase."
+            },
+            {
+                q: "Total products per acetyl-CoA include:",
+                options: ["A. 3 NADH, 1 FADH₂, 1 GTP, 2 CO₂", "B. 2 NADH, 2 FADH₂", "C. 1 NADH, 1 ATP", "D. 4 NADH"],
+                answer: 0,
+                explanation: "Summary per turn: 3 NADH, 1 FADH₂, 1 GTP, 2 CO₂."
+            },
+            {
+                q: "Complete oxidation of one glucose through Citric Acid Cycle produces:",
+                options: ["A. 4 NADH", "B. 6 NADH", "C. 8 NADH", "D. 10 NADH"],
+                answer: 1,
+                explanation: "One glucose → 2 Pyruvate → 2 Acetyl-CoA. Cycle turns twice. 3 NADH × 2 = 6 NADH from CAC."
+            },
+            // Regulation of CAC
+            {
+                q: "The main regulatory enzyme of Citric Acid Cycle is:",
+                options: ["A. Citrate synthase", "B. Hexokinase", "C. Pyruvate kinase", "D. Lactate dehydrogenase"],
+                answer: 0,
+                explanation: "Citrate Synthase is the primary control point, inhibited by ATP, NADH, and Citrate."
+            },
+            {
+                q: "Which molecule inhibits the citric acid cycle?",
+                options: ["A. ADP", "B. NAD⁺", "C. ATP", "D. AMP"],
+                answer: 2,
+                explanation: "High ATP signals energy surplus → slows down the cycle."
+            },
+            // ETC Location and Components
+            {
+                q: "The electron transport chain is located in the:",
+                options: ["A. Outer mitochondrial membrane", "B. Inner mitochondrial membrane", "C. Mitochondrial matrix", "D. Cytosol"],
+                answer: 1,
+                explanation: "All four protein complexes (I–IV) and ATP synthase are embedded in the inner mitochondrial membrane."
+            },
+            {
+                q: "Which complex accepts electrons from NADH?",
+                options: ["A. Complex I", "B. Complex II", "C. Complex III", "D. Complex IV"],
+                answer: 0,
+                explanation: "Complex I (NADH Dehydrogenase) receives electrons from NADH."
+            },
+            {
+                q: "Which complex is part of both the TCA cycle and the ETC?",
+                options: ["A. Complex I", "B. Complex II", "C. Complex III", "D. Complex IV"],
+                answer: 1,
+                explanation: "Complex II (Succinate Dehydrogenase) catalyzes succinate to fumarate in TCA and passes electrons to CoQ in ETC."
+            },
+            {
+                q: "Which electron carrier is lipid-soluble and moves within the inner membrane?",
+                options: ["A. NAD+", "B. Coenzyme Q", "C. Cytochrome c", "D. FAD"],
+                answer: 1,
+                explanation: "CoQ is lipid-soluble and diffuses within the membrane, shuttling electrons between Complex I/II and III."
+            },
+            {
+                q: "Cytochrome c is located in the:",
+                options: ["A. Mitochondrial matrix", "B. Cytoplasm", "C. Intermembrane space", "D. Outer membrane"],
+                answer: 2,
+                explanation: "Cytochrome c is a peripheral protein on the outer surface of the inner membrane facing the intermembrane space."
+            },
+            // Electron Flow and Final Acceptors
+            {
+                q: "The final electron acceptor in the ETC is:",
+                options: ["A. NAD+", "B. FAD", "C. Oxygen", "D. Water"],
+                answer: 2,
+                explanation: "Oxygen accepts electrons at Complex IV, combining with protons to form water."
+            },
+            {
+                q: "Which complex does NOT pump protons?",
+                options: ["A. Complex I", "B. Complex II", "C. Complex III", "D. Complex IV"],
+                answer: 1,
+                explanation: "Complex II transfers electrons but does not pump protons; hence FADH₂ yields less ATP."
+            },
+            // Inhibitors and Toxins
+            {
+                q: "Inhibitors of Complex I include:",
+                options: ["A. Cyanide", "B. Rotenone", "C. Antimycin A", "D. Oligomycin"],
+                answer: 1,
+                explanation: "Rotenone blocks electron transfer at Complex I."
+            },
+            {
+                q: "Which toxin blocks Complex IV?",
+                options: ["A. Rotenone", "B. Antimycin A", "C. Cyanide", "D. DNP"],
+                answer: 2,
+                explanation: "Cyanide binds to heme iron in Complex IV, preventing oxygen reduction."
+            },
+            {
+                q: "Antimycin A inhibits which complex?",
+                options: ["A. I", "B. II", "C. III", "D. IV"],
+                answer: 2,
+                explanation: "Antimycin A blocks electron flow from Cytochrome b to Cytochrome c1 in Complex III."
+            },
+            {
+                q: "FADH₂ yields less ATP than NADH because it donates electrons at:",
+                options: ["A. Complex I", "B. Complex II", "C. Coenzyme Q", "D. Complex IV"],
+                answer: 1,
+                explanation: "Electrons enter at Complex II, bypassing Complex I, pumping fewer protons."
+            },
+            // ATP Yield and Chemiosmosis
+            {
+                q: "Approximate ATP generated per NADH via oxidative phosphorylation is (New reference):",
+                options: ["A. 1 ATP", "B. 2.5 ATP", "C. 5 ATP", "D. 0.5 ATP"],
+                answer: 1,
+                explanation: "Modern estimates use a P/O ratio of 2.5 for NADH."
+            },
+            {
+                q: "Approximate ATP generated per FADH₂ is (New reference):",
+                options: ["A. 0.5", "B. 1.5", "C. 2.5", "D. 4.0"],
+                answer: 1,
+                explanation: "Fewer protons are pumped for FADH₂, yielding approximately 1.5 ATP."
+            },
+            {
+                q: "Total ATP formed from oxidation of one glucose in aerobic respiration is about (New reference):",
+                options: ["A. 2–4", "B. 10–12", "C. 20–22", "D. 30–32"],
+                answer: 3,
+                explanation: "Total: ~30–32 ATP (depending on shuttle system for cytosolic NADH)."
+            },
+            {
+                q: "ATP synthase F1 portion is responsible for:",
+                options: ["A. Proton transport", "B. Catalytic formation of ATP", "C. Pumping electrons", "D. Oxidizing NADH"],
+                answer: 1,
+                explanation: "The F₁ headpiece contains the catalytic sites where ADP + Pi → ATP occurs."
+            },
+            {
+                q: "The chemiosmotic theory was proposed by:",
+                options: ["A. Krebs", "B. Mitchell", "C. Oliv", "D. Sanger"],
+                answer: 1,
+                explanation: "Peter Mitchell proposed it in 1961, explaining how proton gradients drive ATP synthesis."
+            },
+            {
+                q: "Which drug causes uncoupling by increasing proton leak?",
+                options: ["A. Oligomycin", "B. Rotenone", "C. DNP", "D. Antimycin A"],
+                answer: 2,
+                explanation: "DNP (2,4-Dinitrophenol) carries protons back into the matrix without ATP synthase, releasing heat."
+            },
+            {
+                q: "A patient with cyanide poisoning will have blocked:",
+                options: ["A. Transfer of electrons from NADH", "B. Reduction of oxygen to water", "C. ATP synthesis by ATP synthase", "D. Complex II activity"],
+                answer: 1,
+                explanation: "Cyanide binds to Complex IV, preventing the final step where O₂ is reduced to H₂O."
+            },
+            {
+                q: "Which physiological uncoupler is present in brown adipose tissue?",
+                options: ["A. UCP1", "B. DNP", "C. Aspirin", "D. CoQ"],
+                answer: 0,
+                explanation: "UCP1 (Thermogenin) allows protons to leak back, generating heat for thermogenesis."
+            },
+            {
+                q: "Which mitochondrial diseases are associated with ETC defects?",
+                options: ["A. MELAS and LHON", "B. Tay-Sachs", "C. Sickle cell anemia", "D. Cystic fibrosis"],
+                answer: 0,
+                explanation: "MELAS and LHON are caused by mutations in mitochondrial DNA affecting ETC complexes."
+            },
+            // Fundamentals of Glycogen Metabolism
+            {
+                q: "The major storage form of carbohydrate in humans is:",
+                options: ["A. Cellulose", "B. Glycogen", "C. Amylose", "D. Amylopectin"],
+                answer: 1,
+                explanation: "Glycogen is the primary polysaccharide stored in animals."
+            },
+            {
+                q: "Liver glycogen maintains:",
+                options: ["A. Muscle ATP", "B. Blood glucose", "C. Urea cycle", "D. Ketone formation"],
+                answer: 1,
+                explanation: "The liver breaks down glycogen to release free glucose into the bloodstream."
+            },
+            {
+                q: "The activated donor of glucose in glycogen synthesis is:",
+                options: ["A. G-6-P", "B. UDP-glucose", "C. cAMP", "D. Glucose-1,6-BP"],
+                answer: 1,
+                explanation: "UDP-glucose is the high-energy 'activated' form of glucose used by glycogen synthase."
+            },
+            {
+                q: "The primer protein for glycogen is:",
+                options: ["A. Glycogenin", "B. Glycogen synthase", "C. Phosphorylase", "D. Debranching enzyme"],
+                answer: 0,
+                explanation: "Glycogenin acts as the primer, attaching the first few glucose molecules to itself."
+            },
+            {
+                q: "Which enzyme forms α-1,4 glycosidic bonds?",
+                options: ["A. Glycogen phosphorylase", "B. Phosphoglucomutase", "C. Glycogen synthase", "D. Branching enzyme"],
+                answer: 2,
+                explanation: "Glycogen synthase adds glucose units via α-1,4 linkages."
+            },
+            {
+                q: "Glycogenolysis is initiated by:",
+                options: ["A. Glycogen phosphorylase", "B. Glycogen synthase", "C. UDP-glucose pyrophosphorylase", "D. Glycogenin"],
+                answer: 0,
+                explanation: "Glycogen phosphorylase cleaves glucose residues using inorganic phosphate (phosphorolysis)."
+            },
+            {
+                q: "Which hormone activates glycogen breakdown in muscle?",
+                options: ["A. Insulin", "B. Glucagon", "C. Epinephrine", "D. Somatostatin"],
+                answer: 2,
+                explanation: "Epinephrine signals 'fight or flight', triggering glycogenolysis in muscle."
+            },
+            {
+                q: "Which enzyme is absent in muscle, preventing glucose release to the blood?",
+                options: ["A. Phosphoglucomutase", "B. Glucose-6-phosphatase", "C. Glycogen phosphorylase", "D. Debranching enzyme"],
+                answer: 1,
+                explanation: "Muscle lacks glucose-6-phosphatase, so it cannot convert G6P to free glucose."
+            },
+            {
+                q: "McArdle disease is due to deficiency of:",
+                options: ["A. Liver phosphorylase", "B. Muscle phosphorylase", "C. G-6-phosphatase", "D. Branching enzyme"],
+                answer: 1,
+                explanation: "McArdle Disease (GSD Type V) is caused by a lack of myophosphorylase."
+            },
+            {
+                q: "Glycogen branching increases:",
+                options: ["A. Insolubility and crystallization", "B. Rate of synthesis and breakdown", "C. Only degradation", "D. Glycolysis inhibition"],
+                answer: 1,
+                explanation: "Branching creates more non-reducing ends, which are the sites where enzymes work."
+            },
+            // Pentose Phosphate Pathway
+            {
+                q: "Rate-limiting enzyme of PPP?",
+                options: ["A. Transketolase", "B. G6PD", "C. Hexokinase", "D. Aldolase B"],
+                answer: 1,
+                explanation: "G6PD catalyzes the first committed step of the oxidative phase."
+            },
+            {
+                q: "NADPH is required for:",
+                options: ["A. Glycolysis", "B. TCA cycle", "C. Fatty acid synthesis", "D. ATP production"],
+                answer: 2,
+                explanation: "NADPH provides reducing power for biosynthetic reactions like fatty acid synthesis."
+            },
+            {
+                q: "In G6PD deficiency, RBC hemolysis occurs due to:",
+                options: ["A. ↓ ATP", "B. ↓ NADPH", "C. ↑ NADH", "D. ↑ Pyruvate"],
+                answer: 1,
+                explanation: "Low NADPH → reduced glutathione cannot be regenerated → oxidative damage to hemoglobin."
+            },
+            {
+                q: "Polyol pathway consumes:",
+                options: ["A. NADH", "B. FADH₂", "C. NADPH", "D. ATP"],
+                answer: 2,
+                explanation: "Aldose reductase converts glucose to sorbitol using NADPH."
+            },
+            {
+                q: "Classic galactosemia is due to deficiency of:",
+                options: ["A. Galactokinase", "B. GALT", "C. Fructokinase", "D. Aldolase B"],
+                answer: 1,
+                explanation: "Lack of GALT leads to toxic accumulation of Galactose-1-Phosphate."
+            },
+            {
+                q: "Essential fructosuria is due to:",
+                options: ["A. Aldolase B deficiency", "B. Fructokinase deficiency", "C. Hexokinase deficiency", "D. G6PD deficiency"],
+                answer: 1,
+                explanation: "Fructokinase is missing, so fructose cannot be phosphorylated and is excreted."
+            },
+            {
+                q: "Aldolase B deficiency leads to:",
+                options: ["A. Hyperglycemia", "B. Hypoglycemia", "C. Ketosis only", "D. Hyperuricemia"],
+                answer: 1,
+                explanation: "Hereditary Fructose Intolerance causes hypoglycemia after fruit intake due to accumulation of F-1-P."
+            },
+            {
+                q: "Non-oxidative PPP produces:",
+                options: ["A. NADPH", "B. Ribose-5-phosphate", "C. Pyruvate", "D. Lactate"],
+                answer: 1,
+                explanation: "Generates Ribose-5-phosphate (for nucleotides) and glycolytic intermediates."
+            },
+            {
+                q: "Sorbitol accumulation causes:",
+                options: ["A. Cataract", "B. Hyperthyroidism", "C. Anemia", "D. Alkalosis"],
+                answer: 0,
+                explanation: "Sorbitol is osmotically active and accumulates in the lens, causing swelling and opacity."
+            },
+            {
+                q: "PPP is most active in:",
+                options: ["A. Skeletal muscle", "B. Liver", "C. Heart", "D. Brain"],
+                answer: 1,
+                explanation: "The liver needs NADPH for fatty acid/cholesterol synthesis and detoxification."
+            },
+            // Amino Acid Metabolism
+            {
+                q: "Which process removes the amino group from an amino acid and transfers it to an α-keto acid?",
+                options: ["A. Deamination", "B. Transamination", "C. Decarboxylation", "D. Hydrolysis"],
+                answer: 1,
+                explanation: "Transamination involves the transfer of an amino group from an amino acid to an α-keto acid."
+            },
+            {
+                q: "Which vitamin is required as a coenzyme for transamination reactions?",
+                options: ["A. Vitamin B1", "B. Vitamin B6", "C. Vitamin B12", "D. Vitamin C"],
+                answer: 1,
+                explanation: "Pyridoxal Phosphate (PLP), the active form of Vitamin B6, is the coenzyme."
+            },
+            {
+                q: "The major amino group acceptor in transamination reactions is:",
+                options: ["A. Pyruvate", "B. Oxaloacetate", "C. α-Ketoglutarate", "D. Lactate"],
+                answer: 2,
+                explanation: "Most reactions funnel amino groups onto α-ketoglutarate, converting it into glutamate."
+            },
+            {
+                q: "Protein digestion begins in the:",
+                options: ["A. Mouth", "B. Stomach", "C. Small intestine", "D. Colon"],
+                answer: 1,
+                explanation: "Chemical digestion of proteins begins in the stomach where pepsin is activated by HCl."
+            },
+            {
+                q: "Which enzyme converts pepsinogen to pepsin?",
+                options: ["A. Trypsin", "B. HCl", "C. Enterokinase", "D. Chymotrypsin"],
+                answer: 1,
+                explanation: "HCl creates an acidic environment that cleaves pepsinogen into active pepsin."
+            },
+            {
+                q: "Which enzyme activates trypsinogen in the intestine?",
+                options: ["A. Pepsin", "B. Enterokinase", "C. Carboxypeptidase", "D. Elastase"],
+                answer: 1,
+                explanation: "Enterokinase cleaves trypsinogen to form active trypsin."
+            },
+            {
+                q: "Amino acids are mainly absorbed in the:",
+                options: ["A. Stomach", "B. Duodenum and jejunum", "C. Colon", "D. Ileum only"],
+                answer: 1,
+                explanation: "The majority of absorption occurs in the proximal small intestine."
+            },
+            {
+                q: "Absorption of dipeptides and tripeptides occurs through:",
+                options: ["A. Passive diffusion", "B. Na+ dependent transport", "C. H+ dependent transport", "D. Pinocytosis"],
+                answer: 2,
+                explanation: "PepT1 transporter uses an H+ gradient to absorb peptides."
+            },
+            {
+                q: "The Meister cycle is associated with metabolism of:",
+                options: ["A. Glutathione", "B. Urea", "C. Creatine", "D. Heme"],
+                answer: 0,
+                explanation: "Describes the synthesis, reduction, and recycling of glutathione (GSH)."
+            },
+            {
+                q: "The key compound involved in the Meister cycle is:",
+                options: ["A. Glutamate", "B. Glutathione", "C. Glycine", "D. Alanine"],
+                answer: 1,
+                explanation: "Glutathione cycles between reduced (GSH) and oxidized (GSSG) forms."
+            },
+            {
+                q: "The major pathway for selective intracellular protein degradation involves:",
+                options: ["A. Lysosomes only", "B. Proteasome system", "C. Ribosomes", "D. Golgi apparatus"],
+                answer: 1,
+                explanation: "The Ubiquitin-Proteasome System (UPS) selectively degrades damaged or regulatory proteins."
+            },
+            {
+                q: "Proteins targeted for proteasomal degradation are tagged with:",
+                options: ["A. ATP", "B. Ubiquitin", "C. Glutathione", "D. NADH"],
+                answer: 1,
+                explanation: "Polyubiquitination signals the protein to the proteasome."
+            },
+            {
+                q: "The main amino acid transporting nitrogen from muscle to liver is:",
+                options: ["A. Glutamate", "B. Alanine", "C. Glycine", "D. Serine"],
+                answer: 1,
+                explanation: "In the Glucose-Alanine Cycle, muscle converts pyruvate to alanine."
+            },
+            {
+                q: "Which amino acid transports ammonia from tissues to liver in non-toxic form?",
+                options: ["A. Glutamine", "B. Aspartate", "C. Tyrosine", "D. Proline"],
+                answer: 0,
+                explanation: "Glutamine safely carries two ammonia molecules through the blood."
+            },
+            {
+                q: "Amino acids that form glucose are called:",
+                options: ["A. Ketogenic", "B. Glucogenic", "C. Essential", "D. Aromatic"],
+                answer: 1,
+                explanation: "Glucogenic amino acids yield intermediates that can be converted to glucose."
+            },
+            {
+                q: "Which amino acid is purely ketogenic?",
+                options: ["A. Leucine", "B. Alanine", "C. Glycine", "D. Aspartate"],
+                answer: 0,
+                explanation: "Only Leucine and Lysine are purely ketogenic."
+            },
+            {
+                q: "Which enzyme catalyzes oxidative deamination of glutamate?",
+                options: ["A. Aminotransferase", "B. Glutamate dehydrogenase", "C. Dehydratase", "D. Decarboxylase"],
+                answer: 1,
+                explanation: "GDH oxidatively deaminates glutamate to α-ketoglutarate + NH4+."
+            },
+            {
+                q: "Oxidative deamination requires which coenzyme?",
+                options: ["A. NAD+ or NADP+", "B. FAD only", "C. Biotin", "D. Coenzyme A"],
+                answer: 0,
+                explanation: "GDH uses NAD+ (or NADP+) as an electron acceptor."
+            },
+            {
+                q: "Ammonia is toxic primarily to the:",
+                options: ["A. Kidney", "B. Brain", "C. Liver", "D. Heart"],
+                answer: 1,
+                explanation: "High ammonia disrupts cerebral energy metabolism and causes encephalopathy."
+            },
+            {
+                q: "Detoxification of ammonia mainly occurs in the:",
+                options: ["A. Kidney", "B. Brain", "C. Liver", "D. Muscle"],
+                answer: 2,
+                explanation: "The Liver houses the Urea Cycle, converting ammonia into urea."
+            },
+            {
+                q: "The urea cycle occurs mainly in the:",
+                options: ["A. Brain", "B. Muscle", "C. Liver", "D. Kidney"],
+                answer: 2,
+                explanation: "Enzymes are located in mitochondrial matrix and cytosol of hepatocytes."
+            },
+            {
+                q: "The first step of the urea cycle forms:",
+                options: ["A. Carbamoyl phosphate", "B. Citrulline", "C. Arginine", "D. Ornithine"],
+                answer: 0,
+                explanation: "CPS-I combines NH3, CO2, and ATP to form carbamoyl phosphate."
+            },
+            {
+                q: "Which molecule activates carbamoyl phosphate synthetase-I?",
+                options: ["A. ATP", "B. N-acetylglutamate", "C. Citrate", "D. NADH"],
+                answer: 1,
+                explanation: "N-Acetylglutamate (NAG) is an essential allosteric activator."
+            },
+            {
+                q: "Urea cycle defects commonly lead to:",
+                options: ["A. Hypoglycemia", "B. Hyperammonemia", "C. Hyperglycemia", "D. Acidosis"],
+                answer: 1,
+                explanation: "Blockage prevents ammonia detoxification, leading to high blood ammonia."
+            },
+            {
+                q: "One-carbon units are mainly carried by:",
+                options: ["A. Biotin", "B. Tetrahydrofolate", "C. Thiamine", "D. Riboflavin"],
+                answer: 1,
+                explanation: "Tetrahydrofolate (THF) carries one-carbon units at various oxidation states."
+            },
+            {
+                q: "Which vitamin is required for tetrahydrofolate formation?",
+                options: ["A. Vitamin B9", "B. Vitamin B6", "C. Vitamin B1", "D. Vitamin C"],
+                answer: 0,
+                explanation: "Vitamin B9 (Folate) is reduced to THF."
+            },
+            {
+                q: "One-carbon units are generated mainly from metabolism of:",
+                options: ["A. Serine and glycine", "B. Valine and leucine", "C. Alanine and proline", "D. Lysine and arginine"],
+                answer: 0,
+                explanation: "Serine is the primary donor (via serine hydroxymethyltransferase)."
+            },
+            {
+                q: "One-carbon units are required for synthesis of:",
+                options: ["A. Purines", "B. Pyrimidines", "C. Methionine", "D. All of the above"],
+                answer: 3,
+                explanation: "Essential for purines, thymidine, and methionine synthesis."
+            },
+            {
+                q: "The conversion of homocysteine to methionine requires:",
+                options: ["A. Vitamin B12", "B. Vitamin C", "C. Vitamin K", "D. Vitamin D"],
+                answer: 0,
+                explanation: "Methionine Synthase requires Vitamin B12 to transfer a methyl group from methyl-THF."
+            },
+            {
+                q: "Deficiency of folate mainly leads to:",
+                options: ["A. Hemolytic anemia", "B. Megaloblastic anemia", "C. Iron deficiency anemia", "D. Sickle cell anemia"],
+                answer: 1,
+                explanation: "Impairs DNA synthesis, causing large, immature RBCs."
+            },
+            // DNA & RNA
+            {
+                q: "A nucleotide consists of:",
+                options: ["A. Nitrogenous base + phosphate", "B. Nitrogenous base + sugar + phosphate", "C. Sugar + phosphate", "D. Base + lipid"],
+                answer: 1,
+                explanation: "Comprises a nitrogenous base, a pentose sugar, and one or more phosphate groups."
+            },
+            {
+                q: "The sugar present in DNA is:",
+                options: ["A. Ribose", "B. Deoxyribose", "C. Glucose", "D. Fructose"],
+                answer: 1,
+                explanation: "DNA uses 2-deoxyribose."
+            },
+            {
+                q: "Which nitrogenous base is found only in RNA?",
+                options: ["A. Thymine", "B. Adenine", "C. Uracil", "D. Guanine"],
+                answer: 2,
+                explanation: "Uracil (U) replaces Thymine in RNA."
+            },
+            {
+                q: "In DNA, adenine pairs with:",
+                options: ["A. Guanine", "B. Cytosine", "C. Thymine", "D. Uracil"],
+                answer: 2,
+                explanation: "Adenine pairs with Thymine via 2 hydrogen bonds."
+            },
+            {
+                q: "DNA strands are arranged in:",
+                options: ["A. Parallel orientation", "B. Antiparallel orientation", "C. Circular structure only", "D. Linear structure only"],
+                answer: 1,
+                explanation: "One strand runs 5' → 3', and the complementary strand runs 3' → 5'."
+            },
+            {
+                q: "DNA replication occurs during which phase of the cell cycle?",
+                options: ["A. G1 phase", "B. S phase", "C. G2 phase", "D. M phase"],
+                answer: 1,
+                explanation: "S phase (Synthesis phase) is when the genome is duplicated."
+            },
+            {
+                q: "The enzyme responsible for synthesizing new DNA strands is:",
+                options: ["A. RNA polymerase", "B. DNA polymerase", "C. Ligase", "D. Helicase"],
+                answer: 1,
+                explanation: "DNA Polymerase adds nucleotides to the growing DNA chain in the 5' → 3' direction."
+            },
+            {
+                q: "The enzyme that unwinds the DNA double helix during replication is:",
+                options: ["A. Helicase", "B. Ligase", "C. Primase", "D. Topoisomerase"],
+                answer: 0,
+                explanation: "Helicase breaks hydrogen bonds, 'unzipping' the helix."
+            },
+            {
+                q: "Short DNA fragments formed on the lagging strand are called:",
+                options: ["A. Operons", "B. Okazaki fragments", "C. Exons", "D. Codons"],
+                answer: 1,
+                explanation: "Lagging strand is synthesized discontinuously in Okazaki fragments."
+            },
+            {
+                q: "DNA ligase functions to:",
+                options: ["A. Unwind DNA", "B. Join DNA fragments", "C. Remove primers", "D. Add nucleotides"],
+                answer: 1,
+                explanation: "Seals the 'nicks' in the sugar-phosphate backbone."
+            },
+            {
+                q: "The flow of genetic information in biological systems is called the:",
+                options: ["A. Genetic cycle", "B. Central dogma", "C. Genetic drift", "D. Mutation theory"],
+                answer: 1,
+                explanation: "DNA → RNA → Protein."
+            },
+            {
+                q: "The process of synthesizing RNA from DNA is called:",
+                options: ["A. Translation", "B. Replication", "C. Transcription", "D. Mutation"],
+                answer: 2,
+                explanation: "Transcription synthesizes RNA from a DNA template."
+            },
+            {
+                q: "The process of synthesizing protein from mRNA is called:",
+                options: ["A. Replication", "B. Translation", "C. Transcription", "D. Mutation"],
+                answer: 1,
+                explanation: "Translation occurs at the ribosome to build a polypeptide chain."
+            },
+            {
+                q: "A codon consists of:",
+                options: ["A. One nucleotide", "B. Two nucleotides", "C. Three nucleotides", "D. Four nucleotides"],
+                answer: 2,
+                explanation: "A codon is a triplet of nucleotides specifying an amino acid."
+            },
+            {
+                q: "The start codon for protein synthesis is:",
+                options: ["A. UAA", "B. AUG", "C. UAG", "D. UGA"],
+                answer: 1,
+                explanation: "AUG codes for Methionine and serves as the start signal."
+            },
+            {
+                q: "Which molecules carry amino acids to ribosomes?",
+                options: ["A. mRNA", "B. tRNA", "C. rRNA", "D. DNA"],
+                answer: 1,
+                explanation: "Transfer RNA (tRNA) acts as the adapter molecule."
+            },
+            {
+                q: "Which RNA forms the structural and catalytic component of ribosomes?",
+                options: ["A. mRNA", "B. tRNA", "C. rRNA", "D. snRNA"],
+                answer: 2,
+                explanation: "Ribosomal RNA (rRNA) makes up the bulk of the ribosome and catalyzes peptide bond formation."
+            },
+            {
+                q: "The genetic code is described as 'degenerate' because:",
+                options: ["A. Codons are unstable", "B. Multiple codons code for the same amino acid", "C. Codons change frequently", "D. Codons contain modified bases"],
+                answer: 1,
+                explanation: "Most amino acids are encoded by more than one codon."
+            },
+            {
+                q: "A mutation is defined as:",
+                options: ["A. Change in protein structure", "B. Permanent change in DNA sequence", "C. Change in RNA sequence", "D. Change in enzyme activity"],
+                answer: 1,
+                explanation: "A heritable alteration in the nucleotide sequence of DNA."
+            },
+            {
+                q: "Ultraviolet radiation commonly causes formation of:",
+                options: ["A. Thymine dimers", "B. Cytosine dimers", "C. Guanine dimers", "D. Adenine dimers"],
+                answer: 0,
+                explanation: "UV light causes adjacent Thymine bases to covalently bond."
+            },
+            {
+                q: "The DNA repair mechanism that removes damaged DNA segments is:",
+                options: ["A. Base excision repair", "B. Nucleotide excision repair", "C. Mismatch repair", "D. Photoreactivation"],
+                answer: 1,
+                explanation: "NER recognizes bulky distortions (like thymine dimers) and cuts them out."
+            },
+            {
+                q: "Failure of DNA repair mechanisms may lead to:",
+                options: ["A. Cancer", "B. Genetic disorders", "C. Cell death", "D. All of the above"],
+                answer: 3,
+                explanation: "Accumulated mutations can cause cancer, genetic defects, or cell death."
+            },
+            {
+                q: "Recombinant DNA technology involves:",
+                options: ["A. Cutting and joining DNA molecules from different sources", "B. Destroying DNA molecules", "C. Replicating RNA molecules", "D. Translating proteins"],
+                answer: 0,
+                explanation: "Combines DNA from different organisms to create new genetic combinations."
+            },
+            {
+                q: "Enzymes used to cut DNA at specific sequences are:",
+                options: ["A. DNA ligases", "B. Restriction endonucleases", "C. Polymerases", "D. Helicases"],
+                answer: 1,
+                explanation: "Also known as restriction enzymes, they act as 'molecular scissors'."
+            },
+            {
+                q: "DNA ligase in recombinant DNA technology is used to:",
+                options: ["A. Break DNA", "B. Join DNA fragments", "C. Replicate DNA", "D. Translate DNA"],
+                answer: 1,
+                explanation: "Ligase seals the backbone to create a stable recombinant DNA molecule."
+            },
+            {
+                q: "PCR stands for:",
+                options: ["A. Protein chain reaction", "B. Polymerase chain reaction", "C. Peptide chain replication", "D. Phosphate cycle reaction"],
+                answer: 1,
+                explanation: "PCR is an in vitro technique used to amplify specific DNA sequences."
+            },
+            {
+                q: "The enzyme used in PCR is:",
+                options: ["A. RNA polymerase", "B. DNA polymerase", "C. Taq polymerase", "D. Ligase"],
+                answer: 2,
+                explanation: "Taq polymerase is a heat-stable DNA polymerase."
+            },
+            {
+                q: "PCR involves three main steps:",
+                options: ["A. Replication, transcription, translation", "B. Denaturation, annealing, extension", "C. Initiation, elongation, termination", "D. Activation, synthesis, repair"],
+                answer: 1,
+                explanation: "Denaturation (separate), Annealing (primers bind), Extension (synthesize)."
+            },
+            {
+                q: "PCR is widely used in:",
+                options: ["A. Disease diagnosis", "B. Genetic testing", "C. Forensic analysis", "D. All of the above"],
+                answer: 3,
+                explanation: "Used in diagnostics, genetics, and forensics."
+            },
+            {
+                q: "Recombinant DNA technology is essential for producing:",
+                options: ["A. Recombinant insulin", "B. Vaccines", "C. Therapeutic proteins", "D. All of the above"],
+                answer: 3,
+                explanation: "Examples include Insulin, Hepatitis B vaccine, and Growth hormone."
+            },
+            // Free Radicals
+            {
+                q: "A free radical is defined as:",
+                options: ["A. A molecule with paired electrons", "B. A molecule containing one or more unpaired electrons", "C. A molecule without oxygen", "D. A stable molecule with double bonds"],
+                answer: 1,
+                explanation: "A free radical has at least one unpaired electron, making it highly unstable."
+            },
+            {
+                q: "The high reactivity of free radicals is mainly due to:",
+                options: ["A. Their large molecular size", "B. Their unpaired electron", "C. Their high molecular weight", "D. Their positive charge"],
+                answer: 1,
+                explanation: "The unpaired electron creates a strong drive to pair up, leading to rapid reactions."
+            },
+            {
+                q: "Which of the following is a true free radical?",
+                options: ["A. Hydrogen peroxide", "B. Superoxide", "C. Water", "D. Glucose"],
+                answer: 1,
+                explanation: "Superoxide (O2•−) has an unpaired electron."
+            },
+            {
+                q: "Reactive oxygen species (ROS) are:",
+                options: ["A. Oxygen-containing molecules that are highly reactive", "B. Non-reactive oxygen molecules", "C. Only free radicals", "D. Only antioxidants"],
+                answer: 0,
+                explanation: "ROS includes both free radicals and non-radical oxidants."
+            },
+            {
+                q: "Which of the following is NOT a ROS?",
+                options: ["A. Hydroxyl radical", "B. Superoxide radical", "C. Hydrogen peroxide", "D. Nitrogen gas"],
+                answer: 3,
+                explanation: "Nitrogen gas (N2) is inert."
+            },
+            {
+                q: "The most reactive oxygen radical in biological systems is:",
+                options: ["A. Superoxide radical", "B. Hydroxyl radical", "C. Hydrogen peroxide", "D. Peroxide ion"],
+                answer: 1,
+                explanation: "The Hydroxyl radical (•OH) is the most aggressive and damaging ROS."
+            },
+            {
+                q: "The major intracellular source of ROS is:",
+                options: ["A. Lysosomes", "B. Mitochondria", "C. Ribosomes", "D. Nucleus"],
+                answer: 1,
+                explanation: "Electron leak from the ETC in mitochondria accounts for ~90% of cellular ROS."
+            },
+            {
+                q: "Which enzyme system generates ROS during phagocytosis?",
+                options: ["A. Catalase", "B. NADPH oxidase", "C. Lactate dehydrogenase", "D. Hexokinase"],
+                answer: 1,
+                explanation: "NADPH oxidase produces superoxide to kill engulfed bacteria."
+            },
+            {
+                q: "The Fenton reaction generates:",
+                options: ["A. Superoxide radical", "B. Hydroxyl radical", "C. Hydrogen peroxide", "D. Nitric oxide"],
+                answer: 1,
+                explanation: "Fenton reaction converts H2O2 into the highly destructive hydroxyl radical."
+            },
+            {
+                q: "Free radicals can damage cells by:",
+                options: ["A. Lipid peroxidation", "B. Protein oxidation", "C. DNA damage", "D. All of the above"],
+                answer: 3,
+                explanation: "Free radicals attack lipids, proteins, and DNA."
+            },
+            {
+                q: "The membrane damage caused by ROS mainly results from:",
+                options: ["A. Lipid hydrolysis", "B. Lipid peroxidation", "C. Protein synthesis", "D. DNA replication"],
+                answer: 1,
+                explanation: "ROS initiates a chain reaction called lipid peroxidation in membranes."
+            },
+            {
+                q: "Oxidative stress occurs when:",
+                options: ["A. Antioxidants exceed ROS", "B. ROS exceed antioxidant defense", "C. Oxygen levels are low", "D. Glucose levels are high"],
+                answer: 1,
+                explanation: "Imbalance where ROS production overwhelms antioxidant defenses."
+            },
+            {
+                q: "The enzyme that converts superoxide radical to hydrogen peroxide is:",
+                options: ["A. Catalase", "B. Superoxide dismutase", "C. Glutathione peroxidase", "D. Peroxidase"],
+                answer: 1,
+                explanation: "SOD converts superoxide to hydrogen peroxide."
+            },
+            {
+                q: "Catalase converts hydrogen peroxide into:",
+                options: ["A. Water and oxygen", "B. Carbon dioxide", "C. Superoxide", "D. Hydroxyl radical"],
+                answer: 0,
+                explanation: "Catalase breaks down H2O2 into water and oxygen."
+            },
+            {
+                q: "Glutathione peroxidase requires which trace element?",
+                options: ["A. Zinc", "B. Selenium", "C. Copper", "D. Iron"],
+                answer: 1,
+                explanation: "Selenium is a cofactor for Glutathione Peroxidase."
+            },
+            {
+                q: "Free radicals are implicated in the pathogenesis of:",
+                options: ["A. Cancer", "B. Atherosclerosis", "C. Diabetes complications", "D. All of the above"],
+                answer: 3,
+                explanation: "Oxidative stress contributes to many chronic diseases."
+            },
+            {
+                q: "Oxidized LDL contributes to:",
+                options: ["A. Diabetes", "B. Atherosclerosis", "C. Anemia", "D. Hypertension"],
+                answer: 1,
+                explanation: "Oxidized LDL is ingested by macrophages to form foam cells in arterial plaques."
+            },
+            {
+                q: "Free radical damage to neurons is associated with:",
+                options: ["A. Parkinson’s disease", "B. Alzheimer’s disease", "C. Stroke", "D. All of the above"],
+                answer: 3,
+                explanation: "Neurodegeneration and ischemic injury involve oxidative damage."
+            },
+            {
+                q: "Lipid peroxidation mainly affects:",
+                options: ["A. Saturated fatty acids", "B. Polyunsaturated fatty acids", "C. Monosaccharides", "D. Proteins"],
+                answer: 1,
+                explanation: "PUFAs have multiple double bonds, making them susceptible."
+            },
+            {
+                q: "Lipid peroxidation occurs in three stages:",
+                options: ["A. Initiation, propagation, termination", "B. Digestion, absorption, metabolism", "C. Oxidation, reduction, hydrolysis", "D. Activation, elongation, termination"],
+                answer: 0,
+                explanation: "Initiation (radical forms), Propagation (chain spreads), Termination (antioxidants stop it)."
+            },
+            {
+                q: "A commonly measured marker of lipid peroxidation is:",
+                options: ["A. Malondialdehyde (MDA)", "B. Urea", "C. Lactate", "D. Creatinine"],
+                answer: 0,
+                explanation: "MDA is a stable end-product of lipid peroxidation."
+            },
+            {
+                q: "Antioxidants protect cells by:",
+                options: ["A. Increasing ROS production", "B. Neutralizing free radicals", "C. Increasing oxidation", "D. Producing radicals"],
+                answer: 1,
+                explanation: "Antioxidants donate electrons to free radicals to stop the chain reaction."
+            },
+            {
+                q: "Which vitamin is a lipid-soluble antioxidant?",
+                options: ["A. Vitamin C", "B. Vitamin B12", "C. Vitamin E", "D. Vitamin B1"],
+                answer: 2,
+                explanation: "Vitamin E (Tocopherol) protects cell membranes from peroxidation."
+            },
+            {
+                q: "Which vitamin is a major water-soluble antioxidant?",
+                options: ["A. Vitamin A", "B. Vitamin C", "C. Vitamin D", "D. Vitamin K"],
+                answer: 1,
+                explanation: "Vitamin C scavenges radicals in the cytosol and blood plasma."
+            },
+            {
+                q: "β-Carotene acts mainly as:",
+                options: ["A. Enzyme inhibitor", "B. Antioxidant", "C. Hormone", "D. Cofactor"],
+                answer: 1,
+                explanation: "β-Carotene quenches singlet oxygen and scavenges free radicals."
+            },
+            {
+                q: "Antioxidants are useful in preventing:",
+                options: ["A. Oxidative stress", "B. Cellular damage", "C. Chronic diseases", "D. All of the above"],
+                answer: 3,
+                explanation: "They help prevent oxidative stress, cellular damage, and chronic diseases."
+            },
+            {
+                q: "Glutathione functions as:",
+                options: ["A. Hormone", "B. Antioxidant", "C. Structural protein", "D. Enzyme"],
+                answer: 1,
+                explanation: "Glutathione (GSH) is the 'master antioxidant' inside cells."
+            },
+            {
+                q: "Which antioxidant enzyme works with glutathione?",
+                options: ["A. Catalase", "B. Glutathione peroxidase", "C. Superoxide dismutase", "D. Transaminase"],
+                answer: 1,
+                explanation: "Glutathione peroxidase uses GSH to reduce H2O2 to water."
+            },
+            {
+                q: "Dietary antioxidants mainly include:",
+                options: ["A. Vitamins A, C, and E", "B. Vitamin B complex", "C. Vitamin D and K", "D. Vitamin B12 and folate"],
+                answer: 0,
+                explanation: "Vitamins A, C, and E are the primary dietary sources."
+            },
+            {
+                q: "Which condition increases free radical production in the body?",
+                options: ["A. Smoking", "B. Radiation", "C. Pollution", "D. All of the above"],
+                answer: 3,
+                explanation: "Smoking, radiation, and pollutants all induce massive ROS generation."
+            }
+        ];
+
+        /* 
+         * STATE MANAGEMENT
+         */
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let score = 0;
+
+        /* 
+         * DOM ELEMENTS
+         */
+        const els = {
+            quizView: document.getElementById('quiz-view'),
+            resultView: document.getElementById('result-view'),
+            questionText: document.getElementById('question-text'),
+            optionsContainer: document.getElementById('options-container'),
+            explanationBox: document.getElementById('explanation-box'),
+            explanationText: document.getElementById('explanation-text'),
+            progressText: document.getElementById('progress-text'),
+            prevBtn: document.getElementById('prev-btn'),
+            nextBtn: document.getElementById('next-btn'),
+            viewListBtn: document.getElementById('view-list-btn'),
+            finalScore: document.getElementById('final-score'),
+            resultMessage: document.getElementById('result-message'),
+            gridOverlay: document.getElementById('grid-overlay'),
+            gridContainer: document.getElementById('grid-container'),
+            closeOverlay: document.getElementById('close-overlay')
+        };
+
+        /* 
+         * INITIALIZATION
+         */
+        function initQuiz() {
+            renderQuestion();
+            renderGrid();
+        }
+
+        /* 
+         * RENDER LOGIC 
+         */
+        function renderQuestion() {
+            const data = quizData[currentQuestionIndex];
+            
+            els.questionText.textContent = `${currentQuestionIndex + 1}. ${data.q}`;
+            els.progressText.textContent = `Q ${currentQuestionIndex + 1} / ${quizData.length}`;
+            
+            els.prevBtn.disabled = currentQuestionIndex === 0;
+            
+            els.optionsContainer.innerHTML = '';
+            els.explanationBox.style.display = 'none';
+
+            const hasAnswered = userAnswers[currentQuestionIndex] !== null;
+
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span>${opt}</span>`;
+                
+                const feedbackSpan = document.createElement('span');
+                feedbackSpan.className = 'feedback';
+                btn.appendChild(feedbackSpan);
+
+                if (hasAnswered) {
+                    btn.classList.add('disabled');
+                    if (index === data.answer) {
+                        btn.classList.add('selected-correct');
+                        feedbackSpan.textContent = 'CORRECT';
+                        feedbackSpan.classList.add('correct');
+                    } else if (index === userAnswers[currentQuestionIndex]) {
+                        btn.classList.add('selected-wrong');
+                        feedbackSpan.textContent = 'INCORRECT';
+                        feedbackSpan.classList.add('wrong');
+                    }
+                } else {
+                    btn.onclick = () => handleAnswerSelect(index, btn, feedbackSpan);
+                }
+
+                els.optionsContainer.appendChild(btn);
+            });
+
+            if (hasAnswered) {
+                els.explanationText.textContent = data.explanation;
+                els.explanationBox.style.display = 'block';
+            }
+        }
+
+        function handleAnswerSelect(selectedIndex, btnElement, feedbackElement) {
+            const data = quizData[currentQuestionIndex];
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            
+            const allBtns = els.optionsContainer.querySelectorAll('.option-btn');
+            allBtns.forEach(b => {
+                b.classList.add('disabled');
+                b.onclick = null;
+            });
+
+            if (selectedIndex === data.answer) {
+                score++;
+                btnElement.classList.add('selected-correct');
+                feedbackElement.textContent = 'CORRECT';
+                feedbackElement.classList.add('correct');
+            } else {
+                btnElement.classList.add('selected-wrong');
+                feedbackElement.textContent = 'INCORRECT';
+                feedbackElement.classList.add('wrong');
+                
+                const correctBtn = allBtns[data.answer];
+                const correctFeedback = correctBtn.querySelector('.feedback');
+                correctBtn.classList.add('selected-correct');
+                correctFeedback.textContent = 'CORRECT';
+                correctFeedback.classList.add('correct');
+            }
+
+            els.explanationText.textContent = data.explanation;
+            els.explanationBox.style.display = 'block';
+            renderGrid();
+        }
+
+        /* 
+         * NAVIGATION HANDLERS 
+         */
+        els.prevBtn.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        });
+
+        els.nextBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        /* 
+         * GRID OVERLAY LOGIC
+         */
+        els.viewListBtn.addEventListener('click', () => {
+            renderGrid();
+            els.gridOverlay.style.display = 'flex';
+        });
+
+        els.closeOverlay.addEventListener('click', () => {
+            els.gridOverlay.style.display = 'none';
+        });
+
+        els.gridOverlay.addEventListener('click', (e) => {
+            if (e.target === els.gridOverlay) {
+                els.gridOverlay.style.display = 'none';
+            }
+        });
+
+        function renderGrid() {
+            els.gridContainer.innerHTML = '';
+            
+            quizData.forEach((_, index) => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.textContent = index + 1;
+
+                if (index === currentQuestionIndex) {
+                    item.classList.add('current');
+                }
+                if (userAnswers[index] !== null) {
+                    item.classList.add('answered');
+                }
+
+                item.onclick = () => {
+                    currentQuestionIndex = index;
+                    renderQuestion();
+                    els.gridOverlay.style.display = 'none';
+                };
+
+                els.gridContainer.appendChild(item);
+            });
+        }
+
+        /* 
+         * RESULTS LOGIC 
+         */
+        function showResults() {
+            els.quizView.style.display = 'none';
+            els.resultView.style.display = 'block';
+            els.finalScore.textContent = `${score} / ${quizData.length}`;
+            
+            let msg = "";
+            const percentage = (score / quizData.length) * 100;
+            if (percentage >= 90) msg = "Outstanding performance.";
+            else if (percentage >= 70) msg = "Good job.";
+            else if (percentage >= 50) msg = "Passing, but review is needed.";
+            else msg = "Further study required.";
+            
+            els.resultMessage.textContent = msg;
+        }
+
+        initQuiz();
+
+    </script>
+</body>
+</html>
