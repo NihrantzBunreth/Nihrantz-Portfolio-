@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinical Logistics Assessment</title>
+    <style>
+        /* 
+         * PART 1: CLEAN CLINICAL DESIGN
+         */
+        
+        :root {
+            --clinical-blue: #0056b3;
+            --clinical-blue-dark: #004494;
+            --clinical-bg: #ffffff;
+            --clinical-border: #dee2e6;
+            --clinical-light-blue: #e7f1ff;
+            --clinical-text: #333333;
+            --clinical-green: #28a745;
+            --clinical-red: #dc3545;
+            --font-main: 'Arial', sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: var(--font-main);
+            background-color: #f8f9fa;
+            color: var(--clinical-text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(#e9ecef 1px, transparent 1px);
+            background-size: 100% 25px;
+        }
+
+        .device-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--clinical-bg);
+            border: 2px solid var(--clinical-blue);
+            border-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0, 86, 179, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            position: relative;
+        }
+
+        header {
+            background-color: var(--clinical-bg);
+            border-bottom: 2px solid var(--clinical-blue);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        h1 {
+            font-family: var(--font-main);
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--clinical-blue);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        main {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background-image: linear-gradient(#f1f3f5 1px, transparent 1px);
+            background-size: 100% 30px;
+        }
+
+        .question-block {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--clinical-border);
+        }
+
+        .question-text {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .options-list { list-style: none; padding: 0; margin: 0; }
+
+        .option-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border: 1px solid var(--clinical-border);
+            background: #fff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 2px;
+            font-size: 15px;
+        }
+
+        .option-item:hover {
+            background-color: var(--clinical-light-blue);
+            border-color: var(--clinical-blue);
+        }
+
+        .option-item.selected {
+            border-color: var(--clinical-blue);
+            background-color: var(--clinical-light-blue);
+            font-weight: bold;
+        }
+
+        .feedback {
+            font-weight: bold;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        .feedback.correct { color: var(--clinical-green); }
+        .feedback.incorrect { color: var(--clinical-red); }
+
+        .explanation {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--clinical-blue);
+            font-size: 14px;
+            color: #555;
+            display: none;
+        }
+        .explanation.show { display: block; }
+
+        nav {
+            border-top: 1px solid var(--clinical-border);
+            padding: 10px 20px;
+            background-color: #fff;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background-color: #fff;
+            border: 1px solid var(--clinical-blue);
+            color: var(--clinical-blue);
+            padding: 8px 20px;
+            font-family: var(--font-main);
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+
+        .nav-btn:hover { background-color: var(--clinical-light-blue); }
+        .nav-btn:disabled { border-color: #ccc; color: #ccc; cursor: not-allowed; background-color: #fff; }
+        
+        .view-list-btn { background-color: var(--clinical-blue); color: #fff; border: 1px solid var(--clinical-blue); }
+        .view-list-btn:hover { background-color: var(--clinical-blue-dark); }
+
+        #result-screen { display: none; text-align: center; padding-top: 50px; }
+        .score-display { font-size: 48px; font-weight: bold; color: var(--clinical-blue); margin: 20px 0; }
+
+        /* PART 2: BRANDING */
+        .branding-footer {
+            border-top: 2px solid var(--clinical-blue);
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .credit-text {
+            font-family: var(--font-main);
+            font-style: italic;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .social-bar { display: flex; justify-content: center; gap: 10px; }
+
+        .social-btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--clinical-blue);
+            color: #fff;
+            text-decoration: none;
+            font-family: var(--font-main);
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 2px;
+            transition: background-color 0.2s;
+        }
+
+        .social-btn:hover { background-color: var(--clinical-blue-dark); }
+
+        /* PART 3: NAVIGATION GRID */
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--clinical-border);
+            padding-bottom: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-family: var(--font-main);
+            font-size: 24px;
+            color: var(--clinical-blue);
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 10px;
+            overflow-y: auto;
+            padding-bottom: 20px;
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid var(--clinical-border);
+            background-color: #fff;
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-weight: bold;
+            color: #333;
+            border-radius: 2px;
+        }
+
+        .grid-item.current { border: 2px solid var(--clinical-blue); box-shadow: 0 0 5px rgba(0, 86, 179, 0.3); }
+        .grid-item.answered { background-color: var(--clinical-light-blue); color: var(--clinical-blue); border-color: var(--clinical-blue); }
+        .grid-item.unanswered { background-color: #fff; border-color: #ccc; }
+        .hidden { display: none !important; }
+
+    </style>
+</head>
+<body>
+
+    <div class="device-container">
+        <header>
+            <h1>Introduction to Pharmanagement Final S1</h1>
+            <div id="progress-text">1 / 180</div>
+        </header>
+
+        <main id="quiz-content">
+            <!-- Questions Injected via JS -->
+        </main>
+
+        <div id="result-screen">
+            <h2>Test Result</h2>
+            <div class="score-display">Score: 0 / 0</div>
+            <p>Assessment Complete.</p>
+            <button class="nav-btn view-list-btn" onclick="location.reload()">Restart Assessment</button>
+        </div>
+
+        <nav id="nav-controls">
+            <button class="nav-btn" id="btn-prev" onclick="prevQuestion()">Previous</button>
+            <button class="nav-btn view-list-btn" id="btn-list" onclick="toggleGrid()">View List</button>
+            <button class="nav-btn" id="btn-next" onclick="nextQuestion()">Next</button>
+        </nav>
+
+        <div class="branding-footer">
+            <div class="credit-text">Prepared by BUNRETH Nihrantz</div>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </div>
+
+        <div class="modal-overlay" id="grid-modal">
+            <div class="modal-header">
+                <h2>Patient List (Questions)</h2>
+                <button class="close-modal" onclick="toggleGrid()">×</button>
+            </div>
+            <div class="grid-container" id="grid-container"></div>
+        </div>
+    </div>
+
+    <script>
+        /* FULL DATASET */
+        const questions = [
+            { id: 1, text: "What is logistics management?", options: ["Logistics management is the governance of supply chain functions.", "Logistics management is the governance of a product.", "Logistics management is the process of managing the flow and storage of goods and services from origin to consumption.", "Logistics management is the governance of product transportation."], correct: 2, explanation: "Option c: Correct — matches the standard definition: managing flow + storage from origin to consumption." },
+            { id: 2, text: "What does Supply Chain Management (SCM) mean?", options: ["SCM is the management and oversight of a product from its suppliers.", "SCM is the management and oversight of a product from its origin until it is consumed.", "SCM is the management and oversight of a product from its consumed.", "SCM is the oversight of a product from its origin until it is consumed."], correct: 1, explanation: "Option b: Correct — SCM covers end-to-end: origin → production → delivery → consumption, with both management + oversight." },
+            { id: 3, text: "How many key items must be properly supplied when delivering health services directly to patients?", options: ["There are 5 items.", "There are 3 items.", "There are 4 items.", "There are 7 items."], correct: 3, explanation: "Option d: Correct — aligns with the 7 Rights framework used in healthcare logistics for safe, effective delivery." },
+            { id: 4, text: "What are the correct principles for supplying health products to patients?", options: ["4 principles: Right quantity, Right time, Right place, Right cost.", "3 types: Pull system, Push system, Right patient.", "7 principles: Right product, Right quantity, Right condition, Right time, Right place, Right cost, Right patient.", "5 principles: Right quantity, Right time, Right place, Right cost, Right patient."], correct: 2, explanation: "Option c: Correct — the globally accepted 7 Rights of healthcare logistics ensure safe, efficient patient care." },
+            { id: 5, text: "If Pipeline ≥ MoS, what does this imply about your inventory?", options: ["Our stock will not expire.", "Our stock will be free of congestion.", "Our stock will be transferred out until the next supply date.", "We will experience a stockout (run out) before the new supply arrives."], correct: 3, explanation: "Option d: Correct — If lead time (Pipeline) is longer than current stock (MoS), you run out before replenishment." },
+            { id: 6, text: "If Pipeline ≥ MoS, how should you handle the situation?", options: ["Hold a meeting to report the shortage only.", "Ask doctors for therapeutic substitution, request extra funds/orders, and ask suppliers for early delivery.", "Request the destruction of substandard medicines.", "Request the supplier to extend the supply contract timeline."], correct: 1, explanation: "Option b: Correct — 3-Step Fix: Substitute (clinical), Order More (procurement), Expedite (supplier)." },
+            { id: 7, text: "What is the definition of Substitution in pharmacology?", options: ["Replacing a drug with another in the same therapeutic category that has a more appropriate price.", "Replacing a drug simply because it is the most expensive.", "Replacing expensive drugs only in the private market.", "Replacing medicines that are ordered from abroad."], correct: 0, explanation: "Option a: Correct — Substitution = same therapeutic effect + better cost/appropriateness (e.g., generic for brand)." },
+            { id: 8, text: "What is the Pipeline in healthcare logistics?", options: ["The time and transport period for products to move from the supplier's warehouse to the customer.", "The time products spend leaving the health center to go back to the warehouse.", "The transport of medicines from state hospitals to illegal private services.", "The transport of medicines from illegal factories to public health services."], correct: 0, explanation: "Option a: Correct — Pipeline = Lead time + Transit from supplier → customer." },
+            { id: 9, text: "What is the use of dispense data in logistics management?", options: ["Useful for estimating drug needs based on annual medical equipment transfers.", "Useful for estimating medicine needs using the consumption method, based on annual dispensed data.", "Annual data on equipment and medicines is not useful for estimating needs.", "Annual equipment and supply data has no procurement benefit for medicines."], correct: 1, explanation: "Option b: Correct — Dispense data drives consumption-based forecasting for accurate medicine planning." },
+            { id: 10, text: "What does issue data mean in healthcare supply chains?", options: ["Data on medicine and equipment transfers from health services to wholesalers.", "Data on the supply of medicines and health products from a health service within a specific time period.", "Data on medicine distribution from health services to retailers in the market.", "Data on pharmacies receiving supplies from health services for illegal private drug supply."], correct: 1, explanation: "Option b: Correct — Issue data = records of all medicines/products issued from a health service in a defined period." },
+            { id: 11, text: "What is the use of issued data in logistics management?", options: ["Annual medical equipment data has no benefit in estimating medicine needs.", "Based on patient numbers and annual equipment, it helps plan medicine procurement.", "It is useful for estimating demand because it is used in the Consumption Method calculation.", "Annual equipment deterioration data helps estimate medicine needs."], correct: 2, explanation: "Option c: Correct — Issued data feeds the Consumption Method, a key tool for demand forecasting." },
+            { id: 12, text: "How many fundamental supply chain activities/systems are used in practice?", options: ["1 activity: Push system only.", "3 activities: Pull system, Push system, Right place.", "4 activities: Push system, Right quantity, Right time, Right cost.", "2 systems: Pull system and Push system."], correct: 3, explanation: "Option d: Correct — Pull and Push are the two foundational inventory strategies in SCM practice." },
+            { id: 13, text: "What is the Push system in supply chain management?", options: ["A system where medicines are supplied only upon patient request.", "A system where the supplier determines the quantity to supply based on forecasts, which may be more or less than actual need.", "A system where the supplier gives whatever they decide, directly to patients.", "A system where the requester receives the exact quantity ordered by management."], correct: 1, explanation: "Option b: Correct — Push is forecast-driven; supplier decides quantity, risking over/under supply." },
+            { id: 14, text: "What is the Pull system in supply chain management?", options: ["A system where the quantity demanded is greater than the quantity supplied.", "A system where the applicant receives less medicine than requested.", "A system where supply quantity matches actual demand, based on real-time needs and principles like the 7 Rights.", "A system where the requester receives a fixed quantity from the supplier without justification."], correct: 2, explanation: "Option c: Correct — Pull is demand-driven; supply responds to actual consumption + safety principles." },
+            { id: 15, text: "What does dispense data mean in healthcare logistics?", options: ["Data on medicine supply from health services to the private market.", "Data on medicine supply from health services to private companies.", "Data on medicines distributed directly to patients by health services within a specified time period.", "Data on drug supply from health services to retailers."], correct: 2, explanation: "Option c: Correct — Dispense data = records of medicines given directly to patients by health services in a set timeframe." },
+            { id: 16, text: "If Pipeline ≥ MoS (risk of stockout), how should you handle the situation?", options: ["Request to destroy substandard medicines.", "Hold a meeting to report on transferring frozen medicine.", "Ask doctors for therapeutic substitutes, request extra funds/orders, and ask suppliers for early delivery.", "Request the supplier to delay the contract delivery."], correct: 2, explanation: "Option c: Correct — 3-Step Fix: Substitute (clinical), Order More (procurement), Expedite (supplier)." },
+            { id: 17, text: "If Lead Time ≥ MoS (risk of stockout until next supply), how should you handle the situation?", options: ["Request to destroy substandard medicines.", "Hold a meeting to report on transferring frozen medicine.", "Ask doctors for therapeutic substitutes, request extra funds/orders, and ask suppliers for early delivery.", "Request the supplier to delay the contract delivery."], correct: 2, explanation: "Option c: Correct — 3-Step Fix: Substitute (clinical), Order More (procurement), Expedite (supplier)." },
+            { id: 18, text: "If Lead Time < MoS (Months of Stock), what is the status of your inventory?", options: ["We will experience stock shortages.", "Our stock is suitable.", "Our stock will run out before restocking.", "We can use the stock until new supply arrives according to Lead Time."], correct: 3, explanation: "Option d: Correct — Current stock lasts longer than the wait time, ensuring continuity." },
+            { id: 19, text: "What does AMC stand for in healthcare logistics?", options: ["Average Monthly Comparison: the quantity of medicines compared monthly.", "Average Monthly Costing: the average cost of medicines per month.", "Average Monthly Commitment: the amount of medication committed per month.", "Average Monthly Consumption: the average amount of medicines and medical equipment supplied or distributed per month."], correct: 3, explanation: "Option d: Correct — AMC = Average Monthly Consumption, a key metric for forecasting and stock planning." },
+            { id: 20, text: "What is the correct formula for calculating AMC?", options: ["(Total quantity issued in 12 months ÷ 12) − (adjustment for stockout days ÷ 30).", "(Total supply/dispense data in 12 months ÷ 12) − (adjustment for expiry days ÷ 30).", "(Total expired items in 12 months ÷ 12) − (adjustment for stockout days).", "(Total days of near-expiry items in 12 months ÷ 12) − (adjustment for stockout days)."], correct: 0, explanation: "Option a: Correct — AMC = Total Issued ÷ 12 months, adjusted for stockout days (since no consumption occurred then)." },
+            { id: 21, text: "What are the benefits of using AMC in logistics management?", options: ["1 benefit only: tells average monthly supply/distribution.", "2 benefits only: calculates expired medications + supply cycle.", "3 benefits: (1) average monthly consumption, (2) supports supply cycle planning, (3) calculates Months of Stock (MoS) and procurement proposals.", "1 benefit only: tells average monthly distribution."], correct: 2, explanation: "Option c: Correct — AMC supports: forecasting, cycle planning, MoS calculation, procurement proposals." },
+            { id: 22, text: "What is the definition of Month of Stock (MoS)?", options: ["Study of the amount of stock used in the past.", "Study of the amount of stock transferred out in the past.", "Study of the amount of stock received in the past.", "Study of remaining stock: how many months it can last in the future + its quality status."], correct: 3, explanation: "Option d: Correct — MoS = Future coverage (months) + Quality check of current stock." },
+            { id: 23, text: "What are the benefits of studying Month of Stock (MoS)?", options: ["Shows number of months of stock received in the past.", "Shows number of months of stock transferred out in the past.", "Shows number of months of stock that were destroyed in the past.", "Shows months of stock available for future use + quality status + comparison with Lead Time/Pipeline/Expiry."], correct: 3, explanation: "Option d: Correct — MoS helps: Forecast coverage, Check quality, Compare vs Lead Time/Pipeline/Expiry." },
+            { id: 24, text: "What is the correct full term of LMIS?", options: ["Logistic Meaning Inter System", "Logistic Mineral Integrated System", "Logistic Management Information System", "Life Management Information Success"], correct: 2, explanation: "Option c: Correct — LMIS = Logistic Management Information System: tracks stock, orders, consumption." },
+            { id: 25, text: "What is the correct formula for calculating Month of Stock (MoS)?", options: ["MoS = Balance ÷ AMC", "MoS = Balance + AMC", "MoS = Balance × AMC", "MoS = Balance − AMC"], correct: 0, explanation: "Option a: Correct — MoS = Current Stock (Balance) ÷ Average Monthly Consumption (AMC)." },
+            { id: 26, text: "What is the correct formula for Maximum Stock?", options: ["Maximum Stock = Minimum Stock + Security Stock", "Maximum Stock = Stock per period (1 cycle usage) + Security Stock", "Maximum Stock = Over Stock + Security Stock", "Maximum Stock = Stock Expiry + Security Stock"], correct: 1, explanation: "Option b: Correct — Max Stock = One cycle's need + Buffer (Security Stock)." },
+            { id: 27, text: "What is the correct formula for Minimum Stock?", options: ["Minimum Stock = Over Stock × AMC", "Minimum Stock = Potential Stock Out × AMC", "Minimum Stock = Stock Out × AMC", "Minimum Stock = Lead Time × AMC"], correct: 3, explanation: "Option d: Correct — Min Stock = Lead Time × AMC (covers usage while waiting for new order)." },
+            { id: 28, text: "When comparing Month of Stock (MoS) to Maximum and Minimum stock levels, what are the 4 possible indicator results?", options: ["1. Available Stock, 2. Over Stock.", "1. Over Stock, 2. Potential Stock Out.", "4 Indicators: 1. Available Stock (Good), 2. Over Stock (Avoid), 3. Potential Stock Out (Avoid), 4. Stock Out (Eliminate).", "1. Potential Stock Out, 2. Stock Out."], correct: 2, explanation: "Option c: Correct — Covers all 4 status levels: Safe, Too High, Too Low, Empty." },
+            { id: 29, text: "If Minimum Stock < MoS < Maximum Stock, what is the stock situation?", options: ["There is stock suitable for supply (Available Stock).", "Overstock must be avoided.", "Potential stock out must be avoided.", "Stock out and must be disposed of."], correct: 0, explanation: "Option a: Correct — MoS is within the safe range (between Min & Max)." },
+            { id: 30, text: "If MoS > Maximum Stock, how do we conclude the stock status?", options: ["There is stock suitable for supply (Available Stock).", "Overstock must be avoided.", "Potential stock out must be avoided.", "Stock out and must be disposed of."], correct: 1, explanation: "Option b: Correct — Exceeding Max = Overstock (risk of expiry/waste)." },
+            { id: 31, text: "If stock is congested (MoS > Maximum Stock), how should you handle it?", options: ["Report only.", "Request legal permission to transfer only.", "Request more funds/order more (Incorrect action).", "Comprehensive Plan: 1. Substitute use for low-stock items, 2. Transfer to other facilities, 3. Promote appropriate use."], correct: 3, explanation: "Option d: Correct — 3-Step Fix: Use elsewhere (Substitute), Move stock (Transfer), Increase usage (Promote)." },
+            { id: 32, text: "If MoS < Minimum Stock, how do we conclude the stock situation?", options: ["There is stock suitable for supply (Available Stock).", "Overstock must be avoided.", "Potential stock out must be avoided.", "Stock out and must be disposed of."], correct: 2, explanation: "Option c: Correct — Below Minimum = Warning Zone (risk of running out soon)." },
+            { id: 33, text: "If stock is tight (MoS < Minimum Stock), how should you handle it?", options: ["Comprehensive Plan: Substitute drugs, request funds, and ask for early delivery.", "Request legal permission to transfer from management.", "Request additional order funds only.", "Sell illegally in the private sector."], correct: 0, explanation: "Option a: Correct — 3-Step Fix: Clinical substitution + Emergency funds + Expedited supply." },
+            { id: 34, text: "If MoS = 0, how do we conclude the stock situation?", options: ["There is stock suitable for supply (Available Stock).", "Overstock must be avoided.", "Potential stock out must be avoided.", "Stock out (must be eliminated/resolved)."], correct: 3, explanation: "Option d: Correct — MoS = 0 means Empty Shelves (Critical Failure)." },
+            { id: 35, text: "If stock status is MoS = 0 (Stock Out), how should you handle it?", options: ["Request permission to burn and destroy legally.", "Comprehensive Plan: Substitute drugs, request funds, and ask for early delivery.", "Request a legal transfer.", "Sell illegally in the private sector."], correct: 1, explanation: "Option b: Correct — Emergency response: Treat patients (substitute) + Replenish ASAP." },
+            { id: 36, text: "If MoS > Expiry Date (Stock lasts longer than shelf life), what is your conclusion?", options: ["We can use up the stock before the expiration date.", "Our inventory is running out of time.", "Our stock is adequate.", "Our stock cannot be used up before the expiration date."], correct: 3, explanation: "Option d: Correct — You have more stock than time → Risk of expiry waste." },
+            { id: 37, text: "If MoS > Expiry Date (risk of expiry before use), how should you handle it?", options: ["Request permission to burn and destroy legally immediately.", "Request additional budget or make more orders.", "Mitigation Plan: 1. Substitute with other low-stock items, 2. Transfer to other facilities, 3. Promote appropriate use.", "Negotiate with suppliers to deliver before the contract deadline."], correct: 2, explanation: "Option c: Correct — 3-Step Fix: Substitute (clinical), Transfer (logistics), Promote (usage) to reduce waste." },
+            { id: 38, text: "If MoS < Expiry Date, what do you conclude about the stock?", options: ["We can use up the stock before the expiration date.", "Our stock is overdue.", "Our stock is out of stock.", "The amount of stock we should transfer."], correct: 0, explanation: "Option a: Correct — Stock duration is shorter than shelf life → Safe to use fully." },
+            { id: 39, text: "What is the Shelf Life of medicines and medical equipment?", options: ["The period during which the medicine must be transferred.", "The period during which they are no longer of good quality.", "The period during which it can be used without legal approval.", "The period during which the medicine remains safe, effective, and of good quality."], correct: 3, explanation: "Option d: Correct — Shelf Life = Safety + Effectiveness + Time Limit." },
+            { id: 40, text: "When receiving medicines, according to international standards, what is the minimum acceptable remaining shelf life?", options: ["Less than 9 months.", "More than 18 months (or at least 75% of total shelf life).", "At least 11 months.", "Less than 6 months."], correct: 1, explanation: "Option b: Correct — International standard often requires ≥12–18 months or 75% remaining life for acceptance." },
+            { id: 41, text: "When receiving a medicine with a 24-month total shelf life, what is the formula for the minimum remaining shelf life required?", options: ["24 months × 1/3", "24 months × 2/5", "24 months × 6/7", "24 months × 3/4"], correct: 3, explanation: "Option d: Correct — 3/4 rule: 24 × 0.75 = 18 months minimum remaining on receipt." },
+            { id: 42, text: "When receiving a medicine with a 36-month total shelf life, what is the formula for the minimum remaining shelf life required?", options: ["36 months × 2/3", "36 months × 5/6", "36 months × 6/7", "36 months × 3/4"], correct: 3, explanation: "Option d: Correct — 3/4 rule: 36 × 0.75 = 27 months minimum remaining." },
+            { id: 43, text: "What is the correct formula for calculating Shelf Life?", options: ["Shelf Life = Expiry Date + AMC", "Shelf Life = Expiry Date + MoS", "Shelf Life = Expiry Date − AMC", "Shelf Life = Expiry Date − Manufacture Date"], correct: 3, explanation: "Option d: Correct — Shelf Life = Expiry − Manufacture Date (total usable time)." },
+            { id: 44, text: "What is the correct definition of Inventory (physical count) in warehouse management?", options: ["Counting medicines and comparing to the request form.", "Counting medicines and comparing to the inventory ledger.", "Counting drugs and comparing to the warehouse receipt column.", "Counting each item and comparing to the final balance in the warehouse ledger."], correct: 3, explanation: "Option d: Correct — Inventory = Physical Count vs Recorded Final Balance (to find discrepancies)." },
+            { id: 45, text: "What is the main result obtained after completing a physical inventory?", options: ["The requested amount.", "The actual remaining balance (stock on hand).", "The amount received.", "An additional amount."], correct: 1, explanation: "Option b: Correct — Inventory reveals the true physical balance for records and planning." },
+            { id: 46, text: "What is the correct time frame for conducting an inventory?", options: ["Only before changing warehouse managers.", "Before changing managers and when the unit head needs it.", "Before changing managers and when theft is suspected.", "Comprehensive: Change of managers, Scheduled (End June/Dec), Before ordering, and when irregularities (theft) are suspected."], correct: 3, explanation: "Option d: Correct — Covers all 4 key times: Manager change, Scheduled (June/Dec), Pre-order, and Suspicion." },
+            { id: 47, text: "What is the purpose of the balance sheet after inventory?", options: ["To know transfer amounts without permission.", "To know resupply amounts only.", "For formulary requests, estimating needs, and calculating Months of Stock (MoS).", "To know transfer amounts from the Ministry of Health only."], correct: 2, explanation: "Option c: Correct — Balance sheet drives Requests, Estimates, and MoS Calculation." },
+            { id: 48, text: "Before making a report, request, or order, what does the Ministry of Health advise you to do first?", options: ["Request to destroy items.", "Conduct an inventory first.", "Transfer or sell stock.", "Release all stocks at once."], correct: 1, explanation: "Option b: Correct — Inventory First ensures you know actual stock before ordering." },
+            { id: 49, text: "How many results can come from an inventory comparison?", options: ["6 results", "5 results", "4 results", "3 results"], correct: 1, explanation: "Option b: Correct — 5 Results: Correct, Loss, Gain, Expired, Damaged." },
+            { id: 50, text: "What does a proper inventory result mean?", options: ["Ledger Balance = Actual Amount", "Ledger Balance < Actual Amount", "Ledger Balance > Actual Amount", "Receipt Amount = Actual Amount"], correct: 0, explanation: "Option a: Correct — Perfect Match: Paper records match physical stock." },
+            { id: 51, text: "What does an incorrect inventory result mean?", options: ["Defective drugs = Actual number", "Actual Amount ≠ Ledger Balance (Smaller or Larger)", "Transferred Amount > Actual Amount", "Transferred In < Actual Amount"], correct: 1, explanation: "Option b: Correct — Mismatch: Physical count differs from records (Loss or Gain)." },
+            { id: 52, text: "After a theft occurs in your warehouse, what should you do first?", options: ["Report to the head of the family.", "Report to our assistant.", "Report to the Head of Unit to resolve the issue.", "Report to our workers."], correct: 2, explanation: "Option c: Correct — Head of Unit has authority to investigate and report officially." },
+            { id: 53, text: "What is the correct Quantification formula?", options: ["Quantification = Forecasting + Supply Planning", "Quantification = Forecasting + Over Stock", "Quantification = Forecasting + Stock Out", "Quantification = Forecasting + Expiry"], correct: 0, explanation: "Option a: Correct — Quantification combines Need (Forecast) + Logistics (Supply Plan)." },
+            { id: 54, text: "What is the definition of Forecasting?", options: ["Transferring medicines that do not meet needs.", "Incinerating medicines that do not meet market needs.", "Estimating medicine needs for a population within a specific time frame.", "Consuming medicines for high living standards."], correct: 2, explanation: "Option c: Correct — Forecasting = Estimating Future Needs based on population & time." },
+            { id: 55, text: "What is the definition of Supply Planning?", options: ["Transferring medicines that do not meet needs.", "Incinerating medicines that do not meet needs.", "Using drugs to meet necessary needs.", "Studying quantity and price for cost-effective distribution with a clear plan."], correct: 3, explanation: "Option d: Correct — Supply Planning = Cost + Quantity + Schedule for efficient delivery." },
+            { id: 56, text: "What is the definition of Quantification?", options: ["Studying estimated needs + supply plan to ensure no stockouts.", "Incinerating medicines that do not meet needs.", "Transferring excess medication to patients.", "Using medicines for minority health needs only."], correct: 0, explanation: "Option a: Correct — Quantification = Forecast + Supply Plan = No Stockouts." },
+            { id: 57, text: "What is the definition of Medicine?", options: ["Products from plants only for treatment.", "Products from plants/chemicals for treatment/prevention.", "Products from plants/chemicals/animals/humans for treatment/prevention/diagnosis/modification.", "Products from plants for medical research only."], correct: 2, explanation: "Option c: Correct — Comprehensive: All sources + All uses (Treat, Prevent, Diagnose, Modify)." },
+            { id: 58, text: "What is an Essential Medicine?", options: ["Medicine for patients with very high living standards.", "Expensive medicine available on the market.", "Unregistered drugs listed at the Ministry of Health.", "Medicine meeting most patients' needs, available anytime, at a reasonable price (WHO 1970)."], correct: 3, explanation: "Option d: Correct — WHO Definition: Priority needs + Available + Affordable." },
+            { id: 59, text: "What is a counterfeit medicine?", options: ["A medicine with: (a) No active substance, OR (b) Fake packaging mimicking a genuine product.", "A medicine with: (a) No active substance, OR wrong active ingredient, OR wrong amount, OR fake packaging, OR no Ministry of Health license.", "A medicine with: (a) Wrong active ingredient, OR fake packaging, OR no license.", "A medicine with wrong amount, no active substance, or unlicensed packaging."], correct: 1, explanation: "Option b: Correct — Comprehensive WHO-aligned definition: Covers content, labeling, packaging, and legal status." },
+            { id: 60, text: "What is the definition of addictive drugs affecting the nervous system?", options: ["Drugs that are non-addictive and do not affect the nervous system.", "Drugs that can be treated without causing addiction.", "Narcotics/psychotropic substances that cause addiction AND affect the nervous system.", "Drugs that can be used without harming health."], correct: 2, explanation: "Option c: Correct — Narcotic + Psychotropic = Addiction + Nervous System Impact." },
+            { id: 61, text: "How many tables/schedules classify addictive drugs affecting the nervous system?", options: ["7 tables", "6 tables", "5 tables", "4 tables"], correct: 3, explanation: "Option d: Correct — 4 Tables classify drugs by risk and medical use." },
+            { id: 62, text: "What defines Table 1 addictive drugs?", options: ["Plants/drugs with no serious health risk.", "Plants/drugs causing serious harm with NO medical benefits.", "Plants/drugs posing medical risk.", "Plants/drugs causing no harm and beneficial to health."], correct: 1, explanation: "Option b: Correct — Table 1 = High harm, zero medical use (e.g., heroin)." },
+            { id: 63, text: "What defines Table 2 addictive drugs?", options: ["Plants/drugs causing no harm.", "Plants/drugs causing no harm to society.", "Plants/drugs causing no harm to health.", "Plants/drugs causing serious harm BUT with medical benefits."], correct: 3, explanation: "Option d: Correct — Table 2 = High harm, BUT used medically under strict control (e.g., morphine)." },
+            { id: 64, text: "What defines Table 3 addictive drugs?", options: ["Plants/drugs causing harm but with medical benefits.", "Plants/drugs causing no harm.", "Plants/drugs causing no harm to society.", "Plants/drugs causing no harm to health."], correct: 0, explanation: "Option a: Correct — Table 3 = Moderate harm, accepted medical uses (e.g., codeine)." },
+            { id: 65, text: "What defines Table 4 addictive drugs?", options: ["Chemicals not classified under European anti-drug laws.", "Chemicals not classified under ASEAN anti-drug laws.", "Chemicals classified under the UN Convention against Illicit Drug Trafficking.", "Chemicals not classified under Arab Community guidelines."], correct: 2, explanation: "Option c: Correct — Table 4 = Precursors/chemicals controlled by UN treaty." },
+            { id: 66, text: "What is the correct full name of INN?", options: ["International Nearly expiry Name", "International Non-officially Name", "International Non-approval Name", "International Nonproprietary Name"], correct: 3, explanation: "Option d: Correct — INN = International Nonproprietary Name (generic, public domain)." },
+            { id: 67, text: "What names are used for medicines in the public sector?", options: ["Trade name", "INN, Generic name, Essential medicines name", "Commercial name", "Trademark name"], correct: 1, explanation: "Option b: Correct — Public sector uses generic/INN/Essential names for cost-effectiveness." },
+            { id: 68, text: "What names are used for medicines in the private sector?", options: ["Brand name, Trade name, Commercial name, Trademark", "INN", "Generic name", "Essential medicines name"], correct: 0, explanation: "Option a: Correct — Private sector markets Brand/Trade names for differentiation." },
+            { id: 69, text: "What are the similarities between medicine names in private and public sectors?", options: ["Ownership by a person", "Same definition of medicine, 5 special features, quality standards", "Same modern style and packaging", "Same value/price"], correct: 1, explanation: "Option b: Correct — Both sectors follow same drug definition, quality standards, and core features." },
+            { id: 70, text: "What are the differences between medicine names in private and public sectors?", options: ["Same ownership", "Different ownership, packaging, and prices", "Same modern style and packaging", "Same value"], correct: 1, explanation: "Option b: Correct — Ownership (public vs private), Packaging, and Pricing differ." },
+            { id: 71, text: "What is the correct full name of HIS?", options: ["Health Interprice System", "Head Intergrated System", "Health Information System", "Heavy Information Success"], correct: 2, explanation: "Option c: Correct — HIS = Health Information System (data management for health)." },
+            { id: 72, text: "Does Cambodia's Ministry of Health have a Health Management Information System (HMIS)?", options: ["No system exists yet.", "A system is being prepared.", "Yes, the system is operational.", "Only a preparatory study group exists."], correct: 2, explanation: "Option c: Correct — HMIS is operational for health data management." },
+            { id: 73, text: "What is the correct full name of HMIS?", options: ["Health Management Information System", "Head Manage Intergrated System", "Health Manage Interprice System", "Heavy Manage Information Success"], correct: 0, explanation: "Option a: Correct — HMIS = Health Management Information System." },
+            { id: 74, text: "What is a health system?", options: ["Expanding estimated medicine needs for population health.", "Expanding medicine procurement for people's health.", "Expanding transportation for health needs.", "Expanding health services to meet community needs through knowledge and resources."], correct: 3, explanation: "Option d: Correct — Health System = Services + Knowledge + Resources for community health." },
+            { id: 75, text: "What is the correct full form of MPA?", options: ["Minimum Package of Activity", "Maximum Package of Activity", "Medium Package of Activity", "Multy-Package of Activity"], correct: 0, explanation: "Option a: Correct — MPA = Minimum Package of Activity (basic health services)." },
+            { id: 76, text: "What is the correct full form of CPA?", options: ["Compare Package of Activities", "Complementary Package of Activities", "Component Package of Activity", "Company Package of Activity"], correct: 1, explanation: "Option b: Correct — CPA = Complementary Package of Activities (additional services beyond MPA)." },
+            { id: 77, text: "How many offices handle Food, Medical Equipment, and Cosmetics within Cambodia's Department of Medicine?", options: ["There are 3 offices.", "There are 4 offices.", "There are 5 offices.", "There are 2 offices."], correct: 1, explanation: "Option b: Correct — 4 offices manage food, drugs, cosmetics, and medical devices." },
+            { id: 78, text: "What is data in health information systems?", options: ["Raw phrases or numbers not yet analyzed or interpreted.", "Complete values already analyzed and interpreted.", "Valuable information ready for clear analysis.", "Complete values ready for analysis but not yet interpreted."], correct: 0, explanation: "Option a: Correct — Data = Raw, unprocessed facts/numbers before analysis." },
+            { id: 79, text: "What is information in health management?", options: ["Complete, valuable data for precise programs.", "Processed data (collected → entered → analyzed) for clear decision-making.", "Fully-fledged data needing no further processing.", "Complete information ready for next use without processing."], correct: 1, explanation: "Option b: Correct — Information = Data + Processing (Collection → Entry → Analysis)." },
+            { id: 80, text: "What is the correct process for turning data into information?", options: ["Collection → Storage → Translation", "Collection → Storage → Translation", "Collection → Storage → Analysis → Translation into Information", "Collection → Translation"], correct: 2, explanation: "Option c: Correct — Full cycle: Collect → Store → Analyze → Interpret." },
+            { id: 81, text: "What is Primary Data?", options: ["Original data collected from published documents.", "Original data collected and published in books/journals.", "Information from existing documents for reuse.", "Original data collected directly by researchers for specific studies."], correct: 3, explanation: "Option d: Correct — Primary Data = Collected firsthand for specific research." },
+            { id: 82, text: "What is Secondary Data?", options: ["Data previously collected, compiled, and published for reuse in research.", "Original data collected directly from the population.", "Original data collected directly for specific needs.", "Original data collected directly"], correct: 0, explanation: "Option a: Correct — Secondary Data = Pre-existing, published data reused for new studies." },
+            { id: 83, text: "Does Cambodia's Ministry of Health have an Essential Medicines List (EML)?", options: ["No list exists yet.", "Yes, the list already exists.", "Preparing the first list.", "Organizing a working group to prepare it."], correct: 1, explanation: "Option b: Correct — EML is established and regularly updated." },
+            { id: 84, text: "How many editions of Cambodia's Essential Medicines List have been published (as of 2018)?", options: ["6th edition (2018)", "7th edition (2018)", "9th edition (2018)", "6th edition (2018)"], correct: 1, explanation: "Option b: Correct — 7th Edition published in 2018." },
+            { id: 85, text: "How many WHO criteria guide the selection of essential medicines?", options: ["4 points", "5 points", "6 points", "7 points"], correct: 2, explanation: "Option c: Correct — 6 WHO Criteria: Relevance, Efficacy/Safety, Quality, Cost-effectiveness, Pharmacokinetics, Local feasibility." },
+            { id: 86, text: "What abbreviations represent health service levels in Cambodia's Essential Medicines List?", options: ["MPA, CPA1, CPA2, CPA3", "MPA, CPA1, CPA3", "MPA, CPA2, CPA3", "CPA1, CPA2, CPA3"], correct: 0, explanation: "Option a: Correct — 4 Levels: MPA (Minimum) + CPA1/2/3 (Complementary tiers)." },
+            { id: 87, text: "Does Cambodia's Ministry of Health have a National Drug Policy?", options: ["No policy exists yet.", "Yes, the policy already exists.", "Preparing a policy.", "Organizing a working group to develop it."], correct: 1, explanation: "Option b: Correct — National Drug Policy is active and implemented." },
+            { id: 88, text: "What is a Drug Policy?", options: ["A guide for managing the pharmaceutical sector (private/public).", "A guide with key goals and methods for sector management.", "A comprehensive guide: vision, mission, goals, methods for managing public/private pharmaceutical sectors.", "A picture of main management methods."], correct: 2, explanation: "Option c: Correct — Drug Policy = Vision + Mission + Goals + Methods for both sectors." },
+            { id: 89, text: "Why does Medicine Policy differ by country?", options: ["Different geography leads to different drug policies.", "Different country names lead to different drug policies.", "Different leadership leads to different drug policies.", "Different goals, strategies, structures, health systems, and contexts lead to different drug policies."], correct: 3, explanation: "Option d: Correct — Policy varies due to Goals, Structures, Health Systems, Resources, Context." },
+            { id: 90, text: "What are the elements of Medicine Policy?", options: ["Legislation/Regulation, Selection, Procurement, Distribution, Rational Use, Financing.", "Selection, Procurement, Distribution, Rational Use, Financing.", "Legislation, Selection, Procurement, Distribution, Financing.", "Distribution, Rational Use, Financing."], correct: 0, explanation: "Option a: Correct — 6 Core Elements: Legal framework + Selection + Procurement + Distribution + Rational Use + Financing." },
+            { id: 91, text: "What impact should we consider when selecting medicines in the health sector?", options: ["Quality of education and market spending cost.", "Quality of treatment and cost of treatment per patient.", "Quality of teaching and annual education cost.", "Product quality only."], correct: 1, explanation: "Option b: Correct — Selection balances Treatment Quality + Cost per Patient (value-based care)." },
+            { id: 92, text: "What is the process of selecting a medicine or product?", options: ["A medicine/product that needs transportation in healthcare.", "A medicine/product that needs transfer in healthcare.", "Medicines/products procured and used in health sector so patients can access them.", "A medicine/product that is destroyed in healthcare."], correct: 2, explanation: "Option c: Correct — Selection = Choose → Procure → Use → Patient Access." },
+            { id: 93, text: "What document sources are used to study medicine/product selection?", options: ["National policy + Traffic laws.", "National policy + Guide on substandard medicines.", "National policy + Guide on avoiding stale medicine transfer.", "National policy + EML + Visa registration + Treatment guides + Formulary + Partner requirements."], correct: 3, explanation: "Option d: Correct — Comprehensive sources: Policy + EML + Registration + Guidelines + Formulary + Donor rules." },
+            { id: 94, text: "How many important methods exist for estimating drug/product demand?", options: ["4 methods", "5 methods", "6 methods", "7 methods"], correct: 2, explanation: "Option c: Correct — 6 Methods: Consumption, Morbidity, Adjusted Consumption, Service Level, Proxy, Combination." },
+            { id: 95, text: "What is the Consumption Method for estimating drug demand?", options: ["A method relying on adjusting available inventory.", "A method based on quantity supplied/distributed, adjusting for inventory, backlog, and overdue amounts.", "A method depending on inventory adjustment only.", "A method depending on medicine used, ignoring backlog/overdue."], correct: 1, explanation: "Option b: Correct — Consumption Method = Past Supply + Inventory Adjustments + Backlog/Overdue." },
+            { id: 96, text: "What is the Morbidity Method for estimating drug demand?", options: ["Relies on patient numbers in hospital files per department.", "Relies on patient numbers in medicine management documents.", "Relies on patient numbers in health information system + treatment regimens by disease.", "Relies on patient numbers in the accounting department."], correct: 2, explanation: "Option c: Correct — Morbidity Method = Patient Data (HIS) + Disease-Specific Treatment Protocols." },
+            { id: 97, text: "What defines good quality medicines?", options: ["Effectiveness, market sale focus, safety, quality, dark medicine.", "Safety only = quality medicine.", "For illegal smuggling = quality medicine.", "Effectiveness + Safety = quality medicine."], correct: 3, explanation: "Option d: Correct — Quality Medicine = Effectiveness + Safety + Quality Standards." },
+            { id: 98, text: "What is a registered medicine?", options: ["Inspected by drug regulatory authority for efficacy, safety, quality, health requirements.", "Inspected by Ministry of Education for documents/samples.", "Inspected by Ministry of Mines and Energy for safety/quality.", "Inspected by Ministry of Water Resources for safety/documents."], correct: 0, explanation: "Option a: Correct — Registered = Ministry of Health Drug Authority verifies efficacy + safety + quality." },
+            { id: 99, text: "What is a book of medicine formulas (Formulary)?", options: ["A guide to medicine market prices.", "A guide to trade-name medicines for private market.", "A guide on generic medicines for health officials to treat patients appropriately.", "A guide on recording defective medicines."], correct: 2, explanation: "Option c: Correct — Formulary = Generic Medicine Guide + Treatment Guidance for Health Workers." },
+            { id: 100, text: "What is a sample book of treatment regimens (Standard Treatment Guidelines)?", options: ["A guide to evaluating medicines in patient treatment.", "A guide recommending expensive medicines by doctors.", "A guide recommending brand-name medicines.", "A guide recommending disease treatment regimens by doctors based on clinical needs."], correct: 3, explanation: "Option d: Correct — STGs = Disease-Specific + Doctor-Recommended + Clinical Need-Based." },
+            { id: 101, text: "What is Procurement?", options: ["Searching for medicines/products/goods/services through defined methods per budget owner guidelines.", "Supplier search for medicines/products through a defined method.", "Search for medicines/products based on buyer needs only.", "Search for medicines based on runner suggestions."], correct: 0, explanation: "Option a: Correct — Procurement = Sourcing + Methods + Budget Rules + Contracts." },
+            { id: 102, text: "How many objectives are there in procurement?", options: ["3 objectives", "9 objectives", "4 objectives", "5 objectives"], correct: 3, explanation: "Option d: Correct — 5 Objectives: Right Quality, Right Quantity, Right Time, Right Place, Right Price." },
+            { id: 103, text: "What is Bidding/Tendering?", options: ["Illegal competitive activity to transfer out drugs.", "Illegal competitive activity to destroy medicines.", "Legal competitive activity to supply medicines/construction/products/goods.", "Competitive activity to distribute medicines free of charge."], correct: 2, explanation: "Option c: Correct — Tendering = Open Competition + Rules + Best Offer for Supplies/Works." },
+            { id: 104, text: "What is a Bid/Tender?", options: ["Illegal competitive activity to transfer out drugs.", "Illegal competitive activity to destroy medicines.", "Legal competitive activity to supply medicines/construction/products/goods.", "Competitive activity to distribute medicines free of charge."], correct: 2, explanation: "Option c: Correct — Bid/Tender = Formal Offer + Competition + Supply/Works." },
+            { id: 105, text: "What is a Contract?", options: ["Verbal negotiation between buyer/supplier without official status.", "Agreement without legal written conditions.", "Agreement to destroy illegal/expired medicines.", "Mutual agreement between buyer/supplier for medicines/goods/products."], correct: 3, explanation: "Option d: Correct — Contract = Mutual Agreement + Legal Terms + Supply Commitment." },
+            { id: 106, text: "What are the key principles of procurement?", options: ["Quality assurance, correct past shortcomings, not price-only, quality+price competitiveness.", "Quality assurance, correct past shortcomings.", "Not price-only, quality+price competitiveness.", "Correct past shortcomings, not price-only."], correct: 0, explanation: "Option a: Correct — 4 Principles: Quality, Learn from Past, Value (Not Cheapest), Quality+Price Balance." },
+            { id: 107, text: "What is Distribution in healthcare logistics?", options: ["Delivering products without guaranteeing medicine necessity.", "Process ensuring medicines/products/devices meet patient needs continuously via supply channels.", "Process of delivering expired products to patients.", "Process of delivering congested products to patients."], correct: 1, explanation: "Option b: Correct — Distribution = Reliable Supply + Patient Needs + Continuity + Quality Assurance." },
+            { id: 108, text: "What is the Central Medical Store (CMS) international supply system?", options: ["Provincial level handles procurement, supply, and transportation.", "District level handles procurement, supply, and transportation.", "Commune/district administrative level handles supply and transportation.", "National level handles procurement, supply, and transportation."], correct: 3, explanation: "Option d: Correct — CMS = National Level manages procurement + supply + transport for entire country." },
+            { id: 109, text: "What was the CMS supply system under Cambodia's Ministry of Health before 2020?", options: ["National level handles selection, procurement, budget, supply, and transportation.", "Provincial level handles selection, supply, and transportation.", "District level handles selection and supply management.", "Development partners handle selection and supply management."], correct: 0, explanation: "Option a: Correct — Pre-2020 CMS = National Level controlled all key functions end-to-end." },
+            { id: 110, text: "Which facilities does the Central Drug Warehouse (MoH) supply?", options: ["7 national hospitals, 25 provincial hospitals, 75 directorate hospitals.", "7 national hospitals, provincial hospitals, pharmacies, health centers.", "7 national hospitals + Kantha Bopha, 25 provincial referral hospitals, 100+ district drug stores.", "7 national hospitals, private warehouses, health post pharmacies."], correct: 2, explanation: "Option c: Correct — Covers National + Provincial + District Drug Stores (100+)." },
+            { id: 111, text: "How long is one CMS supply cycle from MoH to public health services?", options: ["Every 3 months (quarterly)", "2.5 months", "5.5 months", "2.5 months"], correct: 0, explanation: "Option a: Correct — CMS operates on quarterly (3-month) cycles for regular supply." },
+            { id: 112, text: "What is the supply formula for a 3-month CMS cycle?", options: ["4 × AMC − Balance = Quantity supplied", "3 × AMC − Balance = Quantity supplied", "6 × AMC − Balance = Quantity supplied", "7 × AMC − Balance = Quantity supplied"], correct: 1, explanation: "Option b: Correct — Formula: 3 (months) × AMC − Current Balance = Order Quantity." },
+            { id: 113, text: "What facilities does the District Drug Warehouse supply?", options: ["Provincial capital health centers + district referral hospitals", "Organized hospitals in capital/provinces", "Private hospitals", "Military hospitals"], correct: 0, explanation: "Option a: Correct — District warehouses supply District Referral Hospitals + Health Centers." },
+            { id: 114, text: "What services does the Health Center Pharmacy supply?", options: ["Outpatients and program volunteers only", "Outpatients, health posts, village health volunteers, program volunteers", "Outpatients, health posts, program volunteers", "Outpatients, local clinics, private pharmacies"], correct: 1, explanation: "Option b: Correct — Health centers serve Outpatients + Health Posts + Village Volunteers." },
+            { id: 115, text: "What is the LMIS name for national level in Cambodia's MoH drug management system?", options: ["ProDID", "ProDID", "NatDiD", "ODDiD"], correct: 2, explanation: "Option c: Correct — NatDiD = National Drug Information Database." },
+            { id: 116, text: "What is the LMIS name for provincial level in Cambodia's MoH drug management system?", options: ["ProDID", "ProDID", "NatDiD", "ODDiD"], correct: 0, explanation: "Option a: Correct — ProDID = Provincial Drug Information Database." },
+            { id: 117, text: "What is the LMIS name for executive district level?", options: ["ProDID", "ODDiD", "NatDiD", "ProDID"], correct: 1, explanation: "Option b: Correct — ODDiD = Operational District Drug Information Database." },
+            { id: 118, text: "What is the LMIS name for hospital level?", options: ["ProDID", "ODDiD", "HosDID", "ProDID"], correct: 2, explanation: "Option c: Correct — HosDID = Hospital Drug Information Database." },
+            { id: 119, text: "How do hospitals distribute medicines to patients?", options: ["Outpatients, home delivery, market distribution", "Specialty departments, pharmacies, ambulances", "Outpatients, ward boxes, ambulances", "Outpatients, inpatients, specialty, pharmacy, ward boxes, ambulances"], correct: 3, explanation: "Option d: Correct — Hospitals distribute via Outpatients + Inpatients + Specialty + Pharmacy + Ward Boxes + Ambulances." },
+            { id: 120, text: "As warehouse head, how do you handle increased patient load to avoid medicine shortages?", options: ["Report meeting + request funds for food/supplies", "Report meeting + request funds for transportation", "Report meeting + request funds for office supplies", "Report meeting + request funds for medicines/equipment + negotiate early supplier delivery"], correct: 3, explanation: "Option d: Correct — 3-Step Fix: Report + Medicine Funds + Early Delivery." },
+            { id: 121, text: "What are the components of the Logistic Cycle?", options: ["Selection, Procurement, Distribution, Use, Management/Financial support (central)", "Selection, Distribution, Use, Management/Financial support", "Selection, Procurement, Distribution, Use", "Procurement, Distribution, Use, Management"], correct: 0, explanation: "Option a: Correct — 5 Components: Selection → Procurement → Distribution → Use → Management." },
+            { id: 122, text: "What are the five most important functions of medicine?", options: ["Cannot save lives, cannot inspire confidence, no price consideration", "Save lives, promote health, inspire confidence, appropriate pricing, improve service quality", "Save lives, can be used like any product, adequate supply doesn't improve quality", "Cannot save lives, cannot inspire confidence, cannot be used like other products"], correct: 1, explanation: "Option b: Correct — 5 Functions: Save Lives + Promote Health + Inspire Trust + Fair Price + Improve Quality." },
+            { id: 123, text: "What is Stock on Hand?", options: ["Balance of remaining stock + quality mixture", "Balance of medicines with sample quality + poor quality mixture", "Usable remaining stock in warehouse without negative impact", "Balance of transferred drugs only"], correct: 2, explanation: "Option c: Correct — Stock on Hand = Usable + Quality + Warehouse Inventory." },
+            { id: 124, text: "What is Stock on Hold?", options: ["Amount of stock remaining in warehouse", "Stock requested/ordered, to be supplied soon", "Amount of stock remaining in warehouse", "Defective stock amount"], correct: 1, explanation: "Option b: Correct — Stock on Hold = Ordered + In Transit + Pending Arrival." },
+            { id: 125, text: "What must you prepare before delivering/receiving medicines far from warehouse?", options: ["Human resources, budget, packaging materials", "Mission letter, resources, budget, documents", "Report, mission letter, HR, budget, documents, transport, packaging materials", "Human resources, budget, transport equipment"], correct: 2, explanation: "Option c: Correct — Full Prep: Report + Mission Letter + HR + Budget + Documents + Transport + Packaging." },
+            { id: 126, text: "What document should you verify a release form/invoice against as recipient?", options: ["Card + report of transferred medicine", "Card + report of defective medicines", "Bills + report of lost medicines + utility bills", "Purchase order + request report (+ contract if public service)"], correct: 3, explanation: "Option d: Correct — Verify against Purchase Order + Request Report + Contract." },
+            { id: 127, text: "What details must you check on medicine packaging when receiving?", options: ["Name, level, type, quantity, unit price, total price, expiry, source, country, lot/batch number", "Name, unit price, total price, expiry, source, country", "Name, level, type, total price, source, country", "Name, expiry, source, country"], correct: 0, explanation: "Option a: Correct — Full Check: Name, Level/Type, Quantity/Price, Expiry, Source/Country, Lot/Batch." },
+            { id: 128, text: "What results/documents are needed before signing a release form?", options: ["Partially correct numbers + goods analysis summary", "Actual amount = slip amount (confirmed correct) + delivery/receipt summary record", "50% correct result + transfer summary", "Spoiled medicine count + burning summary"], correct: 1, explanation: "Option b: Correct — Two Requirements: Actual = Documented Amount + Signed Delivery/Receipt Summary." },
+            { id: 129, text: "How should you handle incorrect results before signing a release form?", options: ["Continue handover if recipient agrees + call president for advice", "Continue discussion if agreed + call president", "Prepare repayment contract if agreed + call chairman + document good/bad results", "Store items if agreed + call president + then deliver to warehouse"], correct: 2, explanation: "Option c: Correct — Proper Process: Document Discrepancies + Agreement on Resolution + Escalate to Authority." },
+            { id: 130, text: "When transporting medicines far from warehouse, what action must the unit head take first?", options: ["Store outside warehouse first", "Request additional funding first", "Request additional medicines first", "Form working group for delivery/receipt/inspection first"], correct: 3, explanation: "Option d: Correct — First Step: Form Working Group for Delivery + Receipt + Inspection." },
+            { id: 131, text: "After handover/receipt, what must you do before entering warehouse for storage?", options: ["Make warehouse entry record first", "Make report on past medicine transfer first", "Make list of congestion-treating medications first", "Make report requesting additional medication first"], correct: 0, explanation: "Option a: Correct — Warehouse Entry Record = Official log of received items before storage." },
+            { id: 132, text: "What are the correct storage arrangement principles for medicines and medical equipment?", options: ["By initial capital letter OR therapeutic category OR Anatomic Therapeutic Category (ATC) only.", "By FIFO/FEFO rules + initial letter + type/level + therapeutic category OR ATC.", "By initial capital letter, level OR therapeutic category OR ATC only.", "By initial capital letter, level OR ATC only."], correct: 1, explanation: "Option b: Correct — Full System: FIFO/FEFO + Alphabetical + Category/ATC + Type/Level." },
+            { id: 133, text: "What important tasks should a new pharmacist/warehouse head perform on the first day?", options: ["Get permission to inventory, show presence, show courtesy, ensure equipment is maintained.", "Ask permission to go to workplace, show presence, show courtesy.", "Meet other senior officials with presence.", "Attend meetings with former warehouse managers and senior officials."], correct: 0, explanation: "Option a: Correct — 4 Key Tasks: Inventory Permission + Show Presence + Show Courtesy + Check Equipment." },
+            { id: 134, text: "What is the WHO definition of Rational Medicine Use (RMU)?", options: ["Patients receive medication appropriate to clinical need + correct individual dose.", "Patients receive medication for adequate time + at lowest cost to them/community.", "Patients receive: appropriate medication + correct dose + adequate time + lowest cost.", "Patients receive: appropriate medication + lowest cost only."], correct: 2, explanation: "Option c: Correct — 4 RMU Elements: Clinical Need + Correct Dose + Adequate Time + Lowest Cost." },
+            { id: 135, text: "What are the important prescription checking points for public/private pharmacies (first stage)?", options: ["Ministry-approved prescription model + prescribing at patient's request.", "Correct prescription form + correct treatment per guidelines + strict adherence to treatment guide.", "Correct prescription form + issuing orders per leadership.", "Correct prescription form + treatment per physician's routine."], correct: 1, explanation: "Option b: Correct — 3 Checks: Correct Form + Correct Treatment + Per Guidelines." },
+            { id: 136, text: "When verifying treatment appropriateness, what do we check and compare?", options: ["Health problem vs appropriate medication prescribed.", "Patient's condition vs appropriate medication on prescription.", "Patient's address vs appropriate medication on prescription.", "Patient's gender vs medication type on prescription."], correct: 0, explanation: "Option a: Correct — Match Health Problem ↔ Prescribed Medication." },
+            { id: 137, text: "When checking treatment guide accuracy, what do we verify?", options: ["Patient's name vs medication level.", "Patient's weight vs medication dose.", "Patient's condition vs medication level.", "Patient's height vs medication level."], correct: 1, explanation: "Option b: Correct — Weight-Based Dosing is critical for safe medication." },
+            { id: 138, text: "How do we verify patient understands medicine use instructions?", options: ["Check facial freshness, no need to ask further.", "Check facial freshness only.", "Give once, explain once, no verification.", "Check facial expression + tone, then have patient explain back correctly."], correct: 3, explanation: "Option d: Correct — Teach-Back Method: Observe + Listen + Patient Repeats." },
+            { id: 139, text: "What are the benefits of writing medicine instructions on bags for literate patients?", options: ["Write medicine name only.", "Quick explanation only.", "Patient's name only.", "Write letters + numbers with detailed usage instructions."], correct: 3, explanation: "Option d: Correct — Detailed Written Instructions: Letters + Numbers + Full Usage Details." },
+            { id: 140, text: "How should medicine instructions be written on bags for illiterate patients?", options: ["Written + illustrated hospital maps.", "Numbers + arrows on river landscape.", "Medicine symbols + time lines + letters/numbers for dosing times.", "Letters and numbers only."], correct: 2, explanation: "Option c: Correct — Visual Aids: Symbols + Time Lines + Simple Numbers." },
+            { id: 141, text: "What important information should pharmacists give patients before they leave the pharmacy?", options: ["Take medicine regularly + store in warm/humid place.", "Take as wished + wait another day if not working.", "Take regularly + return if problems + keep from children + store properly + bring prescription next time.", "Take regularly + wait for next business day + store anywhere."], correct: 2, explanation: "Option c: Correct — 5 Key Points: Regular Use + Return if Problems + Keep from Children + Proper Storage + Bring Prescription." },
+            { id: 142, text: "If a patient experiences adverse reactions/wrong medicine, what should they do?", options: ["Stop immediately + return to doctor with prescription/ID/remaining medicine.", "Bring motorcycle registration card.", "Bring vehicle registration card.", "Come any day with money for check-up."], correct: 0, explanation: "Option a: Correct — Emergency Response: Stop Medicine + Return to Doctor + Bring Docs + Remaining Meds." },
+            { id: 143, text: "What should patients bring for their next health check-up?", options: ["Travel receipt.", "Motorcycle registration card.", "Vehicle registration card.", "Prescription or patient ID card."], correct: 3, explanation: "Option d: Correct — Medical Records: Prescription + Patient ID = Continuity of Care." },
+            { id: 144, text: "What prescription verification points must retail pharmacists check?", options: ["Written clearly + treatment for out-of-stock medicines.", "Written per doctor's routine + limited to physician's routine.", "Written clearly per MoH/hospital guidelines + appropriate treatment + correct dosing per weight/guidelines.", "Written per doctor's routine + treatment not in line with clinical needs."], correct: 2, explanation: "Option c: Correct — 3 Verification Points: Clear Writing + Appropriate Treatment + Correct Dosing." },
+            { id: 145, text: "What are the benefits of keeping prescriptions at retail pharmacies?", options: ["Proper management documents + daily employee budget.", "Proper management documents + daily outpatient expenses + dispensed data for AMC calculation.", "Proper management documents + daily water/electricity expenses.", "Proper management documents + administrative department + daily fuel costs."], correct: 1, explanation: "Option b: Correct — 3 Benefits: Management Docs + Expense Tracking + Dispensed Data for AMC." },
+            { id: 146, text: "When should pharmacists process/summarize prescription costs and daily expenses?", options: ["Any given day (random timing).", "Over next 3-4 days (delayed).", "End of same day OR early next morning.", "For next 5 days (future planning)."], correct: 2, explanation: "Option c: Correct — Timely Processing: Same Day End OR Next Morning Early." },
+            { id: 147, text: "After inventory, what are the benefits for a NEW pharmacist/warehouse head on day 1?", options: ["Received actual quantity of defective drugs as final balance.", "Received amount of transferred medicines as final balance.", "Received amount of medicine in stock as final balance.", "Received real amount of GOOD medicine as legal, tangible final evidence."], correct: 3, explanation: "Option d: Correct — Legal Handover: Good Medicine + Actual Count + Legal Evidence." },
+            { id: 148, text: "After inventory, what are the benefits for the OLD pharmacist/warehouse head on last day?", options: ["Delivered actual amount of GOOD medicine as legal, tangible final evidence.", "Amount of transferred medicines as final balance.", "Amount of medicine in stock as final balance.", "Actual amount of defective drugs as final balance."], correct: 0, explanation: "Option a: Correct — Legal Handover Out: Good Medicine + Actual Count + Legal Evidence." },
+            { id: 149, text: "After inventory, what are the benefits for the UNIT HEAD?", options: ["Delivered, received, transferred amount as final balance.", "Receiving/delivering actual GOOD medicine amount as legal evidence to resolve disputes per civil service guidelines.", "Delivered/received stock amount as final balance.", "Delivering/receiving defective medicine quantity as final balance."], correct: 1, explanation: "Option b: Correct — Unit Head Benefits: Good Medicine + Legal Evidence + Dispute Resolution." },
+            { id: 150, text: "How many major activities must a hospital pharmacy pharmacist complete?", options: ["Record inventory results only.", "Record lost medicines only.", "Record inventory + incoming from all sources + issued + defective drugs.", "Record budget expenses for civil servant missions."], correct: 2, explanation: "Option c: Correct — 4 Major Activities: Inventory + Incoming + Issued + Defective." },
+            { id: 151, text: "How should expired/defective medicines be handled and stored?", options: ["Regularly check, store poor quality on shelf.", "Regularly check, store poor quality in medicine box.", "Study stock, report defective, request removal.", "Study stock + inspect + report + request removal from inventory + place in defective medicine box per guidelines."], correct: 3, explanation: "Option d: Correct — Full Process: Inspect + Report + Remove + Quarantine Box." },
+            { id: 152, text: "In the warehouse ledger, which column records receipts from outside the service?", options: ["Back of warehouse receipt.", "Number of items in warehouse receipt.", "Total amount in correct column.", "Correct amount in receipt column (IN column)."], correct: 3, explanation: "Option d: Correct — Receipts from Outside = IN Column (positive entry)." },
+            { id: 153, text: "In the warehouse ledger, which column records transfers from subordinate services?", options: ["Inventory ledger column.", "Correct amount in warehouse receipt column (IN column).", "Total amount in correct column.", "Number of withdrawals in warehouse receipt."], correct: 1, explanation: "Option b: Correct — From Subordinates = IN Column (returns/transfers back)." },
+            { id: 154, text: "In the warehouse ledger, which column records issues to subordinate services?", options: ["Inventory ledger column.", "Correct amount in warehouse receipt column.", "Number of outgoing items in warehouse receipt (OUT column).", "Total amount in correct column."], correct: 2, explanation: "Option c: Correct — To Subordinates = OUT Column (negative entry)." },
+            { id: 155, text: "In the warehouse ledger, which column records transfers out of service?", options: ["Inventory ledger column.", "Total amount in correct digits.", "Number of outgoing items in warehouse receipt (OUT column).", "Correct amount using minus sign."], correct: 2, explanation: "Option c: Correct — Out of Service = OUT Column (permanent removal)." },
+            { id: 156, text: "In the warehouse balance sheet, which column records spoiled medicine deductions?", options: ["Correct amount on back using minus sign.", "Total amount in correct digits.", "Number of outgoing items in warehouse receipt (OUT/Adjustment column).", "Amount in inventory ledger."], correct: 2, explanation: "Option c: Correct — Spoiled Medicines = OUT/Adjustment Column (with minus)." },
+            { id: 157, text: "In the warehouse balance sheet, where do we record when actual amount < balance amount (inventory discrepancy)?", options: ["Total amount using division number.", "Adjustment column using minus sign.", "Output digit using multiplication sign.", "Entry number using equal sign."], correct: 1, explanation: "Option b: Correct — Shortage Discrepancy = Adjustment Column + Minus Sign (to reduce balance)." },
+            { id: 158, text: "In the warehouse ledger, if Actual Amount > Balance Amount (Surplus), how do you record the adjustment?", options: ["Record total amount using a division number.", "Record in the output column using a minus sign.", "Record the correct amount using a plus sign (IN/Adjustment column).", "Record the entry number using an equal sign."], correct: 2, explanation: "Option c: Correct — Surplus = Add to balance using Plus Sign to match actual count." },
+            { id: 159, text: "How long should medical equipment records be stored safely before destruction?", options: ["For 3 years", "For 4 years", "For more than 5 years", "For 2 years"], correct: 2, explanation: "Option c: Correct — 5+ Years ensures accountability and audit compliance." },
+            { id: 160, text: "What is the correct definition of Right Medicine?", options: ["Supplier supplies based on their own decision.", "Supplier supplies whatever they have in stock.", "Supplier supplies based on sentiment.", "Supplier supplies medicines as needed/requested by the patient facility."], correct: 3, explanation: "Option d: Correct — Right Medicine = Matches the Request/Need." },
+            { id: 161, text: "What is the correct definition of Right Place?", options: ["Supplying medicines to the appropriate location (e.g., malaria meds to malaria areas).", "Supplier does not supply to the right place.", "Supplier supplies to any location randomly.", "Supplier supplies to areas that did not request them."], correct: 0, explanation: "Option a: Correct — Right Place = Matches Geographic/Disease Need." },
+            { id: 162, text: "What is the correct definition of Right Cost?", options: ["Buyers/suppliers choose the most expensive price.", "Buyers/suppliers choose the appropriate/affordable price.", "Buyers/suppliers choose the lowest price only.", "Buyers/suppliers choose the most expensive price."], correct: 1, explanation: "Option b: Correct — Right Cost = Affordable + Sustainable (Value for Money)." },
+            { id: 163, text: "When theft occurs at a pharmacy, what should you absolutely NOT do before police finish?", options: ["Affect remaining samples from the theft.", "Clean up any evidence left from the theft.", "Clean up evidence", "It is strictly forbidden to touch any evidence left from the theft."], correct: 3, explanation: "Option d: Correct — Preserve Evidence = Do Not Touch until police investigate." },
+            { id: 164, text: "What condition indicates Good Stock (Available/Suitable)?", options: ["Minimum Stock < MoS < Maximum Stock", "MoS < Minimum Stock", "MoS > Maximum Stock", "MoS = 0"], correct: 0, explanation: "Option a: Correct — Safe Zone = Between Min and Max limits." },
+            { id: 165, text: "What condition indicates Congestion (Overstock)?", options: ["Minimum Stock < MoS < Maximum Stock", "MoS < Minimum Stock", "MoS > Maximum Stock", "MoS = 0"], correct: 2, explanation: "Option c: Correct — Overstock = Exceeds Maximum limit." },
+            { id: 166, text: "What condition indicates Out of Stock?", options: ["Minimum Stock < MoS < Maximum Stock", "MoS < Minimum Stock", "MoS > Maximum Stock", "MoS = 0"], correct: 3, explanation: "Option d: Correct — Stock Out = Zero Months of Stock." },
+            { id: 167, text: "What is the name of the activity: Counting actual medicines vs. ledger balance?", options: ["Finding medicine for congestion.", "Inventory.", "Finding substandard medicines.", "Finding lost medicine."], correct: 1, explanation: "Option b: Correct — Inventory = Physical Count vs. Records." },
+            { id: 168, text: "If medicine loss is suspected, what should you do first?", options: ["Find medicine for congestion.", "Find lost medicine.", "Find substandard medicines.", "Do an internal inventory first."], correct: 3, explanation: "Option d: Correct — Verify via Inventory before accusing/reporting." },
+            { id: 169, text: "After confirmed loss via inventory, what should you do?", options: ["Investigate, record results, report to head, follow legal procedures.", "Search for out-of-stock medicines.", "Find substandard medicines.", "Transfer the medicine out."], correct: 0, explanation: "Option a: Correct — Formal Process: Investigate → Document → Report → Legal Action." },
+            { id: 170, text: "Is receiving medicine without a mission letter/certificate allowed?", options: ["Occurs due to illegal collusion.", "Absolutely impossible unless there is a letter of mission/nomination.", "Occurs due to illegal fraternization.", "Occurs due to illegal friendship."], correct: 1, explanation: "Option b: Correct — Official Business Requires Official Documents." },
+            { id: 171, text: "Which forecasting method is the most important?", options: ["Morbidity method.", "Adjusted consumption method.", "Service level exploration method.", "No single method is best; depends on actual needs/data."], correct: 3, explanation: "Option d: Correct — Context Matters = Choose method based on Data Availability & Needs." },
+            { id: 172, text: "What data is needed for the Consumption Method of forecasting?", options: ["Dispensed Data & Issued Data.", "Adjusted data.", "Service level exploration data.", "Primary data."], correct: 0, explanation: "Option a: Correct — Consumption Method uses past Usage Records (Dispensed/Issued)." },
+            { id: 173, text: "Does the Kingdom of Cambodia have a Pharmacists' Association?", options: ["Not yet available.", "Existed and in operation.", "Not yet, working group is being formed.", "Not available yet, still researching."], correct: 1, explanation: "Option b: Correct — Pharmaceutical Association of Cambodia is active." },
+            { id: 174, text: "When verifying a prescription, what key points confirm appropriateness?", options: ["Filling prescriptions according to doctor's routine.", "Filling prescriptions as requested by the patient.", "All prescriptions filled appropriately + correct treatment level.", "Filling prescriptions as requested by management."], correct: 2, explanation: "Option c: Correct — Check Appropriateness + Treatment Level per guidelines." },
+            { id: 175, text: "If a prescription matches health problems + treatment guidelines, how do you conclude?", options: ["The doctor prescribes appropriate treatment.", "The doctor prescribed inappropriate treatment.", "The doctor prescribes routine treatment.", "The doctor prescribes treatment at management request."], correct: 0, explanation: "Option a: Correct — Match with guidelines = Appropriate Treatment." },
+            { id: 176, text: "If a prescription matches weight + restrictions + treatment guide, how do you conclude?", options: ["There is an incorrect medical prescription.", "There are strict treatment guidelines followed.", "There are restrictions on the patient's request.", "The doctor prescribed treatment not in accordance with guidelines."], correct: 1, explanation: "Option b: Correct — Matching weight/restrictions = Guidelines Followed." },
+            { id: 177, text: "How many key items must be properly supplied when delivering health services directly to patients?", options: ["There are 5 items.", "There are 3 items.", "There are 4 items.", "There are 6 items."], correct: 3, explanation: "Option d: Correct — closest to the standard framework (ideally 7 Rights), covering essential supply elements." },
+            { id: 178, text: "What are the correct principles for supplying health products to patients?", options: ["4 principles: Right quantity, Right time, Right place, Right cost.", "3 types: Pull system, Push system, Right patient.", "6 principles: Right product, Right quantity, Right condition, Right time, Right place, Right cost.", "5 principles: Right quantity, Right time, Right place, Right cost, Right patient."], correct: 2, explanation: "Option c: Correct — 6 core Rights covering product integrity, timing, location, and cost." },
+            { id: 179, text: "If Pipeline ≥ MoS, how do we conclude the stock situation?", options: ["Our stock will not expire.", "Our stock will be free of congestion.", "Our stock will be transferred out until the next supply date.", "We will experience a stockout (run out) before the new supply arrives."], correct: 3, explanation: "Option d: Correct — If lead time (Pipeline) is longer than current stock (MoS), you run out before replenishment." },
+            { id: 180, text: "If Pipeline ≥ MoS (risk of stockout), how should you handle the situation?", options: ["Hold a meeting to report the shortage only.", "Ask doctors for therapeutic substitution, request extra funds/orders, and ask suppliers for early delivery.", "Request the destruction of substandard medicines.", "Request the supplier to extend the supply contract timeline."], correct: 1, explanation: "Option b: Correct — 3-Step Fix: Substitute (clinical), Order More (procurement), Expedite (supplier)." }
+        ];
+
+        /* STATE MANAGEMENT */
+        let currentState = {
+            currentIndex: 0,
+            answers: new Array(questions.length).fill(null),
+            status: new Array(questions.length).fill('unanswered')
+        };
+
+        /* DOM ELEMENTS */
+        const container = document.getElementById('quiz-content');
+        const prevBtn = document.getElementById('btn-prev');
+        const nextBtn = document.getElementById('btn-next');
+        const progressText = document.getElementById('progress-text');
+        const gridModal = document.getElementById('grid-modal');
+        const gridContainer = document.getElementById('grid-container');
+
+        /* INITIALIZATION */
+        function init() {
+            renderQuestion(0);
+            renderGrid();
+            updateButtons();
+        }
+
+        /* RENDER LOGIC */
+        function renderQuestion(index) {
+            const q = questions[index];
+            
+            let html = `
+                <div class="question-block">
+                    <div class="question-text">
+                        <span style="color:var(--clinical-blue); margin-right:8px;">Q${q.id}.</span>
+                        ${q.text}
+                    </div>
+                    <ul class="options-list">
+            `;
+
+            q.options.forEach((opt, idx) => {
+                const isSelected = currentState.answers[index] === idx;
+                const isCorrect = q.correct === idx;
+                let feedbackHtml = '';
+                
+                if (currentState.answers[index] !== null) {
+                    if (isSelected && isCorrect) {
+                        feedbackHtml = `<span class="feedback correct">CORRECT</span>`;
+                    } else if (isSelected && !isCorrect) {
+                        feedbackHtml = `<span class="feedback incorrect">INCORRECT</span>`;
+                    } else if (!isSelected && isCorrect) {
+                         feedbackHtml = `<span class="feedback correct">CORRECT</span>`;
+                    }
+                }
+
+                html += `
+                    <li class="option-item ${isSelected ? 'selected' : ''}" onclick="handleAnswer(${index}, ${idx})">
+                        <span>${String.fromCharCode(97 + idx)}) ${opt}</span>
+                        ${feedbackHtml}
+                    </li>
+                `;
+            });
+
+            const explanationClass = currentState.answers[index] !== null ? 'show' : '';
+            html += `
+                    </ul>
+                    <div class="explanation ${explanationClass}">
+                        <strong>Explanation:</strong> ${q.explanation}
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            progressText.textContent = `${index + 1} / ${questions.length}`;
+            document.querySelector('main').scrollTop = 0;
+            updateGridHighlight();
+        }
+
+        /* INTERACTION HANDLERS */
+        function handleAnswer(qIndex, optIndex) {
+            if (currentState.answers[qIndex] === null) {
+                currentState.status[qIndex] = 'answered';
+            }
+            currentState.answers[qIndex] = optIndex;
+            renderQuestion(qIndex);
+            renderGrid();
+        }
+
+        function nextQuestion() {
+            if (currentState.currentIndex < questions.length - 1) {
+                currentState.currentIndex++;
+                renderQuestion(currentState.currentIndex);
+                updateButtons();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentState.currentIndex > 0) {
+                currentState.currentIndex--;
+                renderQuestion(currentState.currentIndex);
+                updateButtons();
+            }
+        }
+
+        function jumpToQuestion(index) {
+            currentState.currentIndex = index;
+            renderQuestion(index);
+            updateButtons();
+            toggleGrid();
+        }
+
+        /* NAVIGATION UPDATES */
+        function updateButtons() {
+            prevBtn.disabled = currentState.currentIndex === 0;
+            if (currentState.currentIndex === questions.length - 1) {
+                nextBtn.textContent = "Finish";
+                nextBtn.onclick = finishQuiz;
+            } else {
+                nextBtn.textContent = "Next";
+                nextBtn.onclick = nextQuestion;
+            }
+        }
+
+        /* GRID / MODAL LOGIC */
+        function toggleGrid() {
+            if (gridModal.style.display === 'flex') {
+                gridModal.style.display = 'none';
+            } else {
+                renderGrid();
+                gridModal.style.display = 'flex';
+            }
+        }
+
+        function renderGrid() {
+            let html = '';
+            currentState.status.forEach((status, idx) => {
+                let classes = 'grid-item';
+                if (idx === currentState.currentIndex) classes += ' current';
+                if (status === 'answered') classes += ' answered';
+                else classes += ' unanswered';
+
+                html += `<div class="${classes}" onclick="jumpToQuestion(${idx})">${idx + 1}</div>`;
+            });
+            gridContainer.innerHTML = html;
+        }
+
+        function updateGridHighlight() {
+            renderGrid(); 
+        }
+
+        /* FINISH LOGIC */
+        function finishQuiz() {
+            let score = 0;
+            currentState.answers.forEach((ans, idx) => {
+                if (ans === questions[idx].correct) {
+                    score++;
+                }
+            });
+
+            document.getElementById('quiz-content').style.display = 'none';
+            document.getElementById('nav-controls').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            
+            document.querySelector('.score-display').textContent = `Score: ${score} / ${questions.length}`;
+        }
+
+        init();
+
+    </script>
+</body>
+</html>
