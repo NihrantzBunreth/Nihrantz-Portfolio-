@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instrumental Analytical Chemistry - Final Prep</title>
+    <style>
+        /* --- RESET & BASIC SETUP --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- CLINICAL CONTAINER --- */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #ffffff;
+            border: 2px solid #0056b3; /* Medical Blue */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 85vh;
+            overflow: hidden;
+        }
+
+        /* Medical Chart Paper Background Effect */
+        .chart-bg {
+            flex-grow: 1;
+            padding: 40px;
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 30px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* --- TYPOGRAPHY & HEADER --- */
+        h1 {
+            color: #0056b3;
+            font-size: 22px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        h2 {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: #0056b3;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            color: #222;
+        }
+
+        /* --- QUESTION & OPTIONS --- */
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 12px 15px;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            position: relative;
+            outline: none;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #e6f0ff;
+            border-color: #0056b3;
+        }
+
+        .option-btn.correct {
+            border: 2px solid #28a745;
+            background-color: #f0fff4;
+        }
+
+        .option-btn.incorrect {
+            border: 2px solid #dc3545;
+            background-color: #fff5f5;
+        }
+
+        .feedback-badge {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .feedback-correct { color: #28a745; }
+        .feedback-incorrect { color: #dc3545; }
+
+        .explanation-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0056b3;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #444;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- NAVIGATION BAR --- */
+        .nav-bar {
+            border-top: 1px solid #0056b3;
+            padding: 15px 40px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background-color: #fff;
+            border: 1px solid #0056b3;
+            color: #0056b3;
+            padding: 8px 20px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .view-list-btn {
+            border: 1px solid #ccc;
+            color: #555;
+        }
+        .view-list-btn:hover {
+            background-color: #eee;
+            color: #000;
+            border-color: #555;
+        }
+
+        /* --- BRANDING & SOCIAL --- */
+        .branding-footer {
+            border-top: 1px solid #ddd;
+            padding: 15px 40px;
+            background-color: #fff;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-style: italic;
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .social-btn:hover {
+            background-color: #004494;
+        }
+
+        /* --- OVERVIEW MODAL --- */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            display: none;
+            flex-direction: column;
+            z-index: 20;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+
+        .modal-title {
+            color: #0056b3;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            font-size: 30px;
+            color: #0056b3;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 15px;
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ddd;
+            background-color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .grid-item.current {
+            border-color: #0056b3;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+        }
+
+        .grid-item.answered {
+            background-color: #cce5ff;
+            border-color: #cce5ff;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.1);
+            z-index: 2;
+        }
+
+        /* --- RESULT SCREEN --- */
+        .result-screen {
+            text-align: center;
+            padding: 40px;
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 30px;
+        }
+
+        .result-title {
+            font-size: 28px;
+            color: #0056b3;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .score-display {
+            font-size: 60px;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .score-label {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- Main Quiz Area -->
+        <div class="chart-bg" id="quiz-content">
+            <h1>Instrumental Analytical Chemistry</h1>
+            <h2>Final Prep</h2>
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+            
+            <div id="question-container">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div class="result-screen" id="result-screen">
+            <h1 class="result-title">Test Result</h1>
+            <div class="score-display" id="final-score">0 / 70</div>
+            <div class="score-label">Score</div>
+            <button class="nav-btn" onclick="restartQuiz()" style="margin-top: 30px; font-size: 16px; padding: 10px 30px;">Retake Test</button>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="nav-bar" id="nav-bar">
+            <button class="nav-btn" id="prev-btn" onclick="changeQuestion(-1)">Previous</button>
+            <button class="nav-btn view-list-btn" onclick="toggleModal()">View List</button>
+            <button class="nav-btn" id="next-btn" onclick="changeQuestion(1)">Next</button>
+        </div>
+
+        <!-- Branding & Social -->
+        <div class="branding-footer">
+            <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </div>
+
+        <!-- Overview Modal -->
+        <div class="modal-overlay" id="overview-modal">
+            <div class="modal-header">
+                <span class="modal-title">Question Overview</span>
+                <button class="close-modal-btn" onclick="toggleModal()">×</button>
+            </div>
+            <div style="margin-bottom: 15px; font-size: 14px; color: #666;">
+                <span style="display:inline-block; width: 15px; height: 15px; border: 2px solid #0056b3; vertical-align: middle; margin-right: 5px;"></span> Current
+                <span style="display:inline-block; width: 15px; height: 15px; background: #cce5ff; border: 2px solid #cce5ff; vertical-align: middle; margin-left: 15px; margin-right: 5px;"></span> Answered
+                <span style="display:inline-block; width: 15px; height: 15px; border: 2px solid #ddd; vertical-align: middle; margin-left: 15px; margin-right: 5px;"></span> Unanswered
+            </div>
+            <div class="question-grid" id="question-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                section: "Dissolution & Disintegration",
+                question: "1. In dissolution test, flask is maintained at:",
+                options: ["a) 37° C ± 0.5 °C", "b) 41° C ± 0.1 °C", "c) 39° C ± 0.6 °C", "d) 40° C ± 0.1 °C"],
+                correct: 0,
+                explanation: "The dissolution test simulates physiological conditions. Normal human core body temperature is 37°C, so dissolution media are maintained at 37°C ± 0.5°C per USP <711> and Ph. Eur. guidelines. This tight tolerance ensures reproducibility."
+            },
+            {
+                section: "Dissolution & Disintegration",
+                question: "2. Enteric coated tablet disintegrate in ____ hrs in simulated intestinal fluid (per full protocol).",
+                options: ["a) 0.5", "b) 2", "c) 3", "d) 4"],
+                correct: 1,
+                explanation: "Enteric-coated tablets must not disintegrate in simulated gastric fluid (for 2 hours), but must disintegrate within 1 hour after transfer to simulated intestinal fluid. The total time from start in gastric fluid to complete disintegration in intestinal fluid is typically ≤2 hours."
+            },
+            {
+                section: "Dissolution & Disintegration",
+                question: "3. Enteric coated tablet disintegrate in",
+                options: ["a) Stomach", "b) Liver", "c) Intestine", "d) Mouth"],
+                correct: 2,
+                explanation: "Enteric coatings are pH-sensitive polymers that remain intact at gastric pH (1–3) but dissolve at intestinal pH (≥5.5–6.8). Thus, disintegration occurs in the small intestine."
+            },
+            {
+                section: "Content Uniformity",
+                question: "4. How many tablets are required for content uniformity test?",
+                options: ["a) 10", "b) 20", "c) 30", "d) 40"],
+                correct: 0,
+                explanation: "Per USP <905> Uniformity of Dosage Units, the initial test uses 10 dosage units. If results meet acceptance criteria, testing stops."
+            },
+            {
+                section: "Equipment Calibration",
+                question: "5. According to USP, the speed regulating device of the dissolution apparatus should be capable of maintaining the speed within limits of what % of the selected speed?",
+                options: ["a) 1%", "b) 2%", "c) 4%", "d) 5%"],
+                correct: 0,
+                explanation: "USP <711> states that the rotational speed must be controlled to within ±1% of the selected speed. For example, at 50 rpm, the actual speed must be 49.5–50.5 rpm."
+            },
+            {
+                section: "Equipment Calibration",
+                question: "6. The shaft is positioned so that the lower edge of the blade is",
+                options: ["a) 23–25 mm", "b) 23–27 mm", "c) 21–27 mm", "d) 20–25 mm"],
+                correct: 0,
+                explanation: "In USP Apparatus 2 (Paddle), the lower edge of the paddle blade must be 23–25 mm above the inside bottom of the dissolution vessel to ensure consistent fluid dynamics."
+            },
+            {
+                section: "Dissolution Apparatus",
+                question: "7. For immediate and delayed-release solid oral dosage forms, including tablets and capsules, which dissolution apparatus is/are used?",
+                options: ["a) USP Apparatus 1", "b) USP Apparatus 2", "c) USP Apparatus 3", "d) a and b"],
+                correct: 3,
+                explanation: "USP Apparatus 1 (Basket) and Apparatus 2 (Paddle) are the most commonly used for solid oral dosage forms. Apparatus 3 is used for modified-release or chewable products."
+            },
+            {
+                section: "Disintegration Test",
+                question: "8. Disintegration test:",
+                options: ["a) Determine the disintegration time of the solid dosage form tablet, capsules within prescribed time when placed in liquid medium for internal use", "b) Determine the dissolution rate...", "c) Measure absorbance...", "d) Identify components..."],
+                correct: 0,
+                explanation: "Disintegration test checks whether a tablet/capsule breaks apart into granules/particles within a specified time in fluid. It does not measure drug release (dissolution) or chemical identity."
+            },
+            {
+                section: "Disintegration Test",
+                question: "9. Disintegration test requirement for uncoated tablet of immediate release dosage forms",
+                options: ["a) 10 minutes", "b) 15 minutes", "c) 20 minutes", "d) 60 minutes"],
+                correct: 1,
+                explanation: "USP <701>: Uncoated immediate-release tablets must disintegrate within 15 minutes in water at 37°C."
+            },
+            {
+                section: "Disintegration Test",
+                question: "10. Disintegration test requirement for coated tablet of immediate release dosage forms",
+                options: ["a) 10 minutes", "b) 15 minutes", "c) 30 minutes", "d) 60 minutes"],
+                correct: 2,
+                explanation: "Film-coated immediate-release tablets are allowed up to 30 minutes to disintegrate (USP <701>). The coating adds a slight barrier."
+            },
+            {
+                section: "Disintegration Test",
+                question: "11. Disintegration test requirement for capsules of immediate release dosage forms",
+                options: ["a) 10 minutes", "b) 15 minutes", "c) 30 minutes", "d) 60 minutes"],
+                correct: 2,
+                explanation: "Hard and soft gelatin capsules must disintegrate within 30 minutes per USP. Capsule shells take slightly longer to hydrate and rupture."
+            },
+            {
+                section: "Disintegration Test",
+                question: "12. Disintegration acceptance criteria:",
+                options: ["a) The test is met if all of the dosage units have disintegrated completely", "b) …dissolved…", "c) …disintegrated incompletely…", "d) …dissolved incompletely…"],
+                correct: 0,
+                explanation: "Acceptance = complete disintegration (no residue except insoluble coating fragments or capsule shell). 'Dissolved' refers to dissolution, not disintegration."
+            },
+            {
+                section: "Disintegration Test",
+                question: "13. If 1 or 2 dosage units fail to disintegrate:",
+                options: ["a) Repeat on 6 additional; ≥16/18 pass", "b) Repeat on 12 additional; ≥16/18 pass", "c) Repeat on 18 additional…", "d) Repeat on 24; ≥22/24 pass"],
+                correct: 1,
+                explanation: "USP <701> allows a two-stage test. Initial: 6 units → all must disintegrate. If 1 or 2 fail, test 12 more (total 18). At least 16 of 18 must pass."
+            },
+            {
+                section: "Disintegration Test",
+                question: "14. In disintegration test, flask is maintained at:",
+                options: ["a) 37° C ± 0.5 °C", "b) 37° C ± 1 °C", "c) 37° C ± 2 °C", "d) 37° C ± 3 °C"],
+                correct: 1,
+                explanation: "Unlike dissolution (±0.5°C), disintegration test allows ±1°C (i.e., 36–38°C) per USP <701>. Less stringent because it’s a pass/fail physical test."
+            },
+            {
+                section: "Equipment Management",
+                question: "15. Which is true regarding defective/out-of-calibration equipment?",
+                options: ["a) Maintenance not followed", "b) Take out of service & label", "c) Recalibrate immediately", "d) Keep using if results okay"],
+                correct: 1,
+                explanation: "GMP principle: Any equipment suspected of being out of calibration must be quarantined (taken out of service) and clearly labeled to prevent accidental use."
+            },
+            {
+                section: "QC Sample Handling",
+                question: "16. Which is required for incoming QC lab samples?",
+                options: ["a) Assign ID, label, log, record date", "b) Check documents", "c) Inspect sample/packaging", "d) All of the above"],
+                correct: 3,
+                explanation: "Proper sample handling requires: Unique ID assignment and logging, Verification of test request form, and Visual inspection for damage, labeling, storage conditions."
+            },
+            {
+                section: "OOS Investigation",
+                question: "17. HPLC assay: acceptance NLT 90.0%; results 96.0% and 86.0%. What to do?",
+                options: ["a) Investigate variability, then repeat", "b) Keep testing until two >90%", "c) Average to 91.0% → pass", "d) Disregard 86.0% as outlier"],
+                correct: 0,
+                explanation: "Averaging is NOT allowed if one result fails specification (86% < 90%). GMP requires OOS (Out-of-Specification) investigation before any retesting."
+            },
+            {
+                section: "Documentation",
+                question: "18. Required info on Certificate of Analysis (CoA)?",
+                options: ["a) Date, lab name/address, signature", "b) Methods & results", "c) Compliance statement", "d) All of the above"],
+                correct: 3,
+                explanation: "A valid CoA must include: Lab identification, Test methods used, Actual results, and Conclusion (meets/does not meet spec)."
+            },
+            {
+                section: "Validation",
+                question: "19. FALSE regarding analytical procedures in QC lab?",
+                options: ["a) Non-pharmacopeial procedures need validation evidence", "b) Manufacturer-submitted procedures require no validation data", "c) Pharmacopeial procedures may need verification", "d) Major changes require revalidation"],
+                correct: 1,
+                explanation: "Even manufacturer-provided methods must be verified or validated in the receiving lab. ICH Q2(R1) and GMP require proof that the method works in your lab."
+            },
+            {
+                section: "Standards",
+                question: "20. Main ISO standard for testing/calibration labs?",
+                options: ["a) ISO 17025", "b) ISO 9000", "c) ISO Testing and calibration", "d) None"],
+                correct: 0,
+                explanation: "ISO/IEC 17025 is the global standard for competence of testing and calibration laboratories. ISO 9000 is general quality management, not lab-specific."
+            },
+            {
+                section: "Compendial Standards",
+                question: "21. If a pharmacopoeia requirement is referenced, testing should be performed...",
+                options: ["a) with interpretation", "b) as in latest revision", "c) as in pharmacopoeia in force when spec was authorized", "d) best parts of sources"],
+                correct: 2,
+                explanation: "Regulatory specifications are fixed at time of approval. Even if the pharmacopoeia updates, the product must be tested per the version cited in its approved dossier unless a change is filed."
+            },
+            {
+                section: "Procurement",
+                question: "22. Supplier of critical consumables, supplies, and services which affect quality must be ______",
+                options: ["a) ISO 9001 registered and approved", "b) Evaluated and approved by the laboratory", "c) The lowest cost compared to the others supplier", "d) Able to provide gift or bonus to procurement"],
+                correct: 1,
+                explanation: "Per GMP and ISO/IEC 17025, suppliers of critical materials must undergo a formal evaluation and be approved by the lab/QA unit."
+            },
+            {
+                section: "CAPA",
+                question: "23. The procedure for corrective action must start with ____________",
+                options: ["a) Finger-pointing", "b) Risk Management", "c) An investigation to determine the root cause(s) of the problem", "d) Documenting the problem"],
+                correct: 2,
+                explanation: "Corrective action begins with a thorough investigation to identify the root cause (e.g., equipment failure, training gap). Only after root cause identification can effective corrective and preventive actions be implemented."
+            },
+            {
+                section: "Training",
+                question: "24. Training records are essential to ______",
+                options: ["a) Writing job description", "b) Accrediting the analyst", "c) Ensure the competence and authorize personnel", "d) Increase the salary"],
+                correct: 2,
+                explanation: "Training records prove that staff have received required instruction and demonstrated competence to perform specific tasks. Authorization to perform testing is contingent on documented training."
+            },
+            {
+                section: "QMS",
+                question: "25. Overall quality system policies and objectives shall be documented in a _________",
+                options: ["a) Quality manual", "b) Quality policy statements", "c) Standard operating procedure", "d) Quality work instruction"],
+                correct: 0,
+                explanation: "The Quality Manual is the top-tier document in a QMS (per ISO/IEC 17025 §8.2). It includes scope of accreditation, quality policy & objectives, and references to SOPs."
+            },
+            {
+                section: "Document Control",
+                question: "26. What is the meaning of control of document?",
+                options: ["a) More work for Quality Manager and QMU", "b) All documents must contain accurate information of test result", "c) Documents are identified with unique ID, authorized, reviewed by authorized personnel", "d) Any staff can prepare, review, and approve all QMS documentation"],
+                correct: 2,
+                explanation: "Document control ensures: Each document has a unique identifier, Approved by authorized personnel, Periodic review, and Current version only is available at point of use."
+            },
+            {
+                section: "Equipment Records",
+                question: "27. Records to be retained for every piece of equipment significant to the testing activity shall include _________",
+                options: ["a) Current location (where appropriate)", "b) Serial number or other unique identification", "c) Calibration status", "d) All of the above"],
+                correct: 3,
+                explanation: "ISO/IEC 17025 §6.4.10 requires an equipment register containing: Unique ID, Location, Calibration due date/status, and Maintenance history."
+            },
+            {
+                section: "Calibration",
+                question: "28. When is it not necessary to calibrate laboratory equipment against traceable reference standard or reference materials?",
+                options: ["a) When too expensive", "b) When used by trained analyst", "c) When traceable reference materials are not available", "d) When the equipment has no effect on the quality of test results"],
+                correct: 3,
+                explanation: "Calibration is required only for equipment that influences test results. Items like furniture, non-measuring glassware, or sample trays don’t require calibration."
+            },
+            {
+                section: "Audits",
+                question: "29. Internal audits are used to identify ____",
+                options: ["a) Compliance with the management system", "b) Compliance with ISO/IEC 17025", "c) Opportunities for improvement", "d) All of the above"],
+                correct: 3,
+                explanation: "Internal audits verify: Adherence to QMS procedures, Conformance to standard requirements, and Gaps that can lead to process improvements."
+            },
+            {
+                section: "Records",
+                question: "30. Records that contain all the information of testing activity must be _________",
+                options: ["a) Legible, readily retrievable, and stored in a suitable environment", "b) Designed for auditors to find observation/nonconformity easily", "c) Controlled by IT personnel", "d) Disposed anytime"],
+                correct: 0,
+                explanation: "ALCOA+ principles apply. Records must be protected from damage, organized, and accessible during retention period."
+            },
+            {
+                section: "QMS",
+                question: "31. The Quality Manual (QM) lays down... Which are expected to be included?",
+                options: ["a) I and II only", "b) I and III only", "c) II and III only", "d) I, II, and III"],
+                correct: 3,
+                explanation: "A comprehensive Quality Manual includes: Quality policy & objectives, Organizational structure showing roles/responsibilities, and QA processes (internal/external audits, management reviews, CAPA)."
+            },
+            {
+                section: "SOPs",
+                question: "32. Which operations in a QC lab require SOPs?",
+                options: ["a) I and II only", "b) II and IV only", "c) I, II and III only", "d) II, III, and IV"],
+                correct: 3,
+                explanation: "SOPs are required for all quality-affecting activities: Equipment calibration, Analytical testing, and OOS investigation. Stationery purchase is administrative, not quality-critical."
+            },
+            {
+                section: "Management",
+                question: "33. The QA manager:",
+                options: ["a) I and II only", "b) I and III only", "c) II and III only", "d) I, II, and III"],
+                correct: 0,
+                explanation: "The QA manager must oversee QMS compliance and report independently to senior management. However, should NOT be the QC lab head to ensure objective oversight."
+            },
+            {
+                section: "Environment",
+                question: "34. Serious analytical errors may arise undetected unless the QC lab ensures:",
+                options: ["a) I and II only", "b) I and III only", "c) I, II and III only", "d) I, II, III, and IV"],
+                correct: 3,
+                explanation: "All factors impact data integrity: Uncalibrated instruments, Dirty glassware, Temp/humidity swings, and Power surges affecting sensitive electronics."
+            },
+            {
+                section: "Reagents",
+                question: "35. All prepared reagents should be labeled properly with:",
+                options: ["a) I and II only", "b) I, II, and III only", "c) I, II, and IV only", "d) I, II, III, and IV"],
+                correct: 2,
+                explanation: "Required label info: Identity & strength, Prep date & preparer, and Expiry or discard date. Lab director’s name is not required."
+            },
+            {
+                section: "Equipment Management",
+                question: "36. Which is true regarding defective/out-of-calibration equipment?",
+                options: ["a) Maintenance procedures not followed", "b) Take out of service and clearly label", "c) Recalibration date boldly written", "d) Keep using if results seem okay"],
+                correct: 1,
+                explanation: "Immediate quarantine is mandatory upon detection of defect/calibration failure. Labeling prevents accidental use."
+            },
+            {
+                section: "QC Sample Handling",
+                question: "37. Required for incoming QC lab samples?",
+                options: ["a) Assign ID, label, log, record date", "b) Check documents", "c) Inspect sample/packaging", "d) All of the above"],
+                correct: 3,
+                explanation: "Sample integrity starts at receipt: Unique ID & logging, Document check, and Physical inspection."
+            },
+            {
+                section: "OOS Investigation",
+                question: "38. HPLC assay: NLT 90.0%; results 96.0% and 86.0%. What to do?",
+                options: ["a) Investigate variability, then repeat", "b) Keep testing until two >90%", "c) Average to 91.0% → pass", "d) Disregard 86.0% as outlier"],
+                correct: 0,
+                explanation: "One failing result = Out-of-Specification (OOS). Must conduct Phase I (lab error) investigation before any retesting. No averaging or selective reporting allowed."
+            },
+            {
+                section: "Documentation",
+                question: "39. Required info on Certificate of Analysis (CoA)?",
+                options: ["a) Date, lab name/address, signature", "b) Methods & results", "c) Compliance statement", "d) All of the above"],
+                correct: 3,
+                explanation: "A valid CoA is a legal document requiring: Lab identification, Test methods & numerical results, and Clear conclusion."
+            },
+            {
+                section: "Validation",
+                question: "40. FALSE regarding analytical procedures in QC lab?",
+                options: ["a) Non-pharmacopeial procedures need validation evidence", "b) Manufacturer-submitted procedures require no validation data", "c) Pharmacopeial procedures may need verification", "d) Major changes require revalidation"],
+                correct: 1,
+                explanation: "All methods used in QC must be proven suitable in the user’s lab. Assuming validity without proof is a major audit finding."
+            },
+            {
+                section: "Standards",
+                question: "41. The main ISO standards used by testing and calibration labs",
+                options: ["a) ISO 17025", "b) ISO 9000", "c) ISO Testing and calibration", "d) None of the above"],
+                correct: 0,
+                explanation: "ISO/IEC 17025 is the internationally recognized standard specifically for the competence of testing and calibration laboratories."
+            },
+            {
+                section: "Compendial Standards",
+                question: "42. If a pharmacopoeial requirement is referenced, testing should be performed...",
+                options: ["a) using interpretation and common sense", "b) as in the latest revision", "c) as in the pharmacopoeia in force when the specification was authorized", "d) by taking best parts of sources"],
+                correct: 2,
+                explanation: "Regulatory specifications are locked to the version of the pharmacopoeia valid at the time of product registration."
+            },
+            {
+                section: "Change Control",
+                question: "43. When a pharmacopoeia is revised, what should happen to lab documents that reference it?",
+                options: ["a) Existing documents should not be changed", "b) An automatic procedure must ensure documents are reviewed", "c) Erase the pharmacopoeial reference", "d) None of the above"],
+                correct: 1,
+                explanation: "Per GMP and QMS best practices, any change in external standards must trigger a document review process to assess whether method updates are needed."
+            },
+            {
+                section: "Training",
+                question: "44. Training records are essential to ______",
+                options: ["a) Writing job description", "b) Accrediting the analyst", "c) Ensure the competence and authorize personnel", "d) Increase the salary"],
+                correct: 2,
+                explanation: "Training records demonstrate that staff are qualified to perform specific tasks. Authorization to test is contingent on documented competence."
+            },
+            {
+                section: "Equipment Records",
+                question: "45. Records for equipment significant to testing shall include ______",
+                options: ["a) Current location", "b) Serial number or unique ID", "c) Calibration status", "d) All of the above"],
+                correct: 3,
+                explanation: "ISO/IEC 17025 §6.4.10 mandates an equipment register with: Unique identifier, Location (if movable), and Calibration due date/status."
+            },
+            {
+                section: "Equipment Management",
+                question: "46. Before equipment is placed/returned to service, lab personnel must",
+                options: ["a) Ensure function and calibration status are satisfactory", "b) Remove Out-of-service label", "c) Ensure replacement equipment is available", "d) Verify equipment conforms to specified requirements"],
+                correct: 0,
+                explanation: "Equipment returning from maintenance/calibration must undergo performance verification. Only after confirming fitness for use can it be returned to service."
+            },
+            {
+                section: "CAPA",
+                question: "47. The procedure for corrective action must start with ____________",
+                options: ["a) Finger-pointing", "b) Risk Management", "c) An investigation to determine root cause(s)", "d) Documenting the problem"],
+                correct: 2,
+                explanation: "Corrective action begins with a structured investigation (e.g., 5 Whys, Fishbone) to find the true root cause—not symptoms."
+            },
+            {
+                section: "Calibration",
+                question: "48. When is calibration NOT necessary?",
+                options: ["a) Too expensive", "b) Used by trained analyst", "c) Traceable standards unavailable", "d) Equipment has no effect on test results"],
+                correct: 3,
+                explanation: "Calibration is required only for equipment influencing data quality. Items like sample racks, non-measuring tools don’t require calibration."
+            },
+            {
+                section: "Audits",
+                question: "49. Internal audits identify",
+                options: ["a) Compliance with management system", "b) Compliance with ISO/IEC 17025", "c) Opportunities for improvement", "d) All of the above"],
+                correct: 3,
+                explanation: "Internal audits verify conformance to QMS and standards while also identifying process gaps and improvement areas."
+            },
+            {
+                section: "Document Control",
+                question: "50. Meaning of 'control of document'?",
+                options: ["a) More work for QA", "b) Must contain accurate test results", "c) Identified with unique ID, authorized, reviewed", "d) Any staff can approve all documents"],
+                correct: 2,
+                explanation: "Document control ensures only approved, current versions are used. Includes: numbering, approval signatures, review cycles, and obsolescence handling."
+            },
+            {
+                section: "Records",
+                question: "51. Records containing all testing information must be",
+                options: ["a) Current location", "b) Serial number", "c) Calibration status", "d) Legible, readily retrievable, and stored in a suitable environment"],
+                correct: 3,
+                explanation: "Records must be legible, readily retrievable, and stored in a suitable environment to ensure data integrity (ALCOA+ principles). Note: Options a-c were corrected to match the question's intent regarding testing records."
+            },
+            {
+                section: "Procurement",
+                question: "52. Supplier of critical consumables must be",
+                options: ["a) ISO 9001 registered", "b) Evaluated and approved by the lab", "c) Lowest cost", "d) Provide gifts"],
+                correct: 1,
+                explanation: "Critical suppliers must undergo quality-based evaluation (audits, certificates, performance history) to ensure reliability and traceability."
+            },
+            {
+                section: "Contract Review",
+                question: "53. Purpose of reviewing requests, tenders, and contracts?",
+                options: ["a) Evaluate if client requirements can be met with current lab capability", "b) Increase revenue", "c) Check spelling", "d) Give admin more work"],
+                correct: 0,
+                explanation: "Labs must review customer requests to ensure: They understand requirements, Have competence/resources to deliver, and Can meet turnaround times and specs."
+            },
+            {
+                section: "QMS",
+                question: "54. Quality system policies and objectives documented in a ______",
+                options: ["a) Quality manual", "b) Quality policy statements", "c) SOP", "d) Work instruction"],
+                correct: 0,
+                explanation: "The Quality Manual is the top-level QMS document. It includes scope, policy, objectives, org structure, and references to procedures."
+            },
+            {
+                section: "Preventive Action",
+                question: "55. Preventive action plans are for ______",
+                options: ["a) Nonconformance and/or opportunities", "b) Potential nonconformance and/or opportunities", "c) Nonconformance only", "d) Opportunities only"],
+                correct: 1,
+                explanation: "Preventive action addresses risks before they occur (e.g., trend analysis, near misses). Unlike corrective action (reactive), preventive action is proactive."
+            },
+            {
+                section: "Data Integrity Context",
+                question: "56. Reason for increased awareness of data?",
+                options: ["a) More instruments used", "b) Everyone uses ALCOA+", "c) Increase in observations related to data reliability", "d) Sufficient records maintained"],
+                correct: 2,
+                explanation: "Regulatory agencies (FDA, MHRA, WHO) have issued numerous warning letters due to data integrity failures. These observations and enforcement actions drove global focus on data reliability."
+            },
+            {
+                section: "Data Integrity Guidelines",
+                question: "57. Organization providing guidance on data integrity",
+                options: ["a) WHO", "b) US FDA", "c) MHRA", "d) PIC/S"],
+                correct: 3,
+                explanation: "PIC/S is the harmonizing body publishing Annexes and Guidance adopted globally, though FDA, MHRA, and WHO also publish key documents."
+            },
+            {
+                section: "Data Integrity Training",
+                question: "58. Should personnel be trained in detecting data integrity issues?",
+                options: ["a) No, well educated", "b) Yes, need training", "c) This is cGMP requirement", "d) B and C"],
+                correct: 3,
+                explanation: "FDA and MHRA explicitly state that staff must be trained to recognize and prevent data integrity breaches. It is a cGMP expectation."
+            },
+            {
+                section: "Data Integrity Acronym",
+                question: "59. What does ALCOA stand for?",
+                options: ["a) Acceptable, Legible, Constancy…", "b) Accurate, Legal…", "c) Attributable, Legible, Contemporaneous, Original, Accurate", "d) All of the above"],
+                correct: 2,
+                explanation: "ALCOA is the foundational principle for data integrity: Attributable, Legible, Contemporaneous, Original, Accurate."
+            },
+            {
+                section: "Data Integrity Breach",
+                question: "60. Use of _______________________ is a data integrity issue",
+                options: ["a) Common/same password for all staff", "b) Turning on audit trail", "c) Defining user rights", "d) Re-integration without procedure"],
+                correct: 0,
+                explanation: "Shared passwords violate attributability (you can’t tell who performed an action). This is a classic data integrity breach cited in FDA warning letters."
+            },
+            {
+                section: "Data Integrity Definition",
+                question: "61. What is Data Integrity?",
+                options: ["a) A group of data", "b) Data generated in lab", "c) Maintaining accuracy and consistency over data’s life-cycle", "d) None"],
+                correct: 2,
+                explanation: "Data integrity means data is complete, consistent, and accurate from creation to disposal. It ensures data is trustworthy for decision-making."
+            },
+            {
+                section: "Data Integrity Acronym",
+                question: "62. Acronym for data integrity elements",
+                options: ["a) ECAC", "b) GDocP", "c) ALCOA+", "d) GxP"],
+                correct: 2,
+                explanation: "ALCOA+ is the standard acronym used globally by FDA, WHO, MHRA, and EMA to describe data integrity attributes."
+            },
+            {
+                section: "Data Reliability",
+                question: "63. State when data is complete and error-free enough to be convincing",
+                options: ["a) data integrity", "b) accurate data", "c) valid data", "d) data reliability"],
+                correct: 3,
+                explanation: "Data reliability = data is fit for purpose, trustworthy, and supports decisions. It encompasses integrity, but adds contextual fitness."
+            },
+            {
+                section: "Data Lifecycle",
+                question: "64. Data life cycle consists of 6 steps:",
+                options: ["a) Collection – Processing – Review – Retention – Reporting – Disposal", "b) Collection – Review – Processing – Reporting – Retention – Disposal", "c) Processing – Review – Reporting – Collection – Retention – Disposal", "d) Collection – Processing – Review – Reporting – Retention – Disposal"],
+                correct: 3,
+                explanation: "Per MHRA & FDA guidance, the data life cycle is: Collection, Processing, Review, Reporting, Retention & retrieval, and Disposal. Order matters—review comes after processing, before reporting."
+            },
+            {
+                section: "Data Types",
+                question: "65. Hybrid data is …",
+                options: ["a) only static", "b) combination of static and dynamic", "c) only dynamic", "d) static, dynamic, intergenic"],
+                correct: 1,
+                explanation: "Hybrid system: Uses both paper and electronic records for same workflow (e.g., print chromatogram + sign manually)."
+            },
+            {
+                section: "Data Integrity Principles",
+                question: "66. Basic principles of data integrity are",
+                options: ["a) accurate", "b) consistent", "c) complete", "d) all the above"],
+                correct: 3,
+                explanation: "Core principles include: Accuracy, Completeness, Consistency, Attributability, Legibility, etc. (ALCOA+). All are essential for trustworthy data."
+            },
+            {
+                section: "OOS & Integrity",
+                question: "67. It is okay to …",
+                options: ["a and d", "b and c", "a and d", "a and c"],
+                correct: 3,
+                explanation: "Mistakes (a) and OOS results (c) are normal in science—they must be investigated, not hidden. A robust QMS encourages transparency, not perfection."
+            },
+            {
+                section: "Electronic Records",
+                question: "68. Secure, time-stamped electronic record for reconstructing events is",
+                options: ["a) instrument software", "b) CDS", "c) metadata", "d) audit trail"],
+                correct: 3,
+                explanation: "Audit trail = secure, computer-generated log showing who, what, when for electronic records. Required by 21 CFR Part 11 and EU GMP Annex 11."
+            },
+            {
+                section: "Paper Records",
+                question: "69. Expectations for contemporaneous paper records include:",
+                options: ["a) Enhanced security permissions", "b) Written procedures, training, audits", "c) Control to determine timing of activities relative to others", "d) Controlled annotation tools"],
+                correct: 2,
+                explanation: "Contemporaneous = recorded at the time of activity. For paper, this means timely entry with clear timestamps, allowing sequence reconstruction. Time zone control supports this in global operations."
+            },
+            {
+                section: "Raw Data",
+                question: "70. Original records retained in original format are",
+                options: ["a) static data", "b) metadata", "c) hybrid data", "d) raw data"],
+                correct: 3,
+                explanation: "Raw data = original observations and recordings (e.g., lab notebook entry, CDS file, balance printout). Defined by FDA as 'all records including metadata necessary to reconstruct and evaluate the study.'"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let score = 0;
+
+        const questionContainer = document.getElementById('question-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const overviewModal = document.getElementById('overview-modal');
+        const questionGrid = document.getElementById('question-grid');
+        const quizContent = document.getElementById('quiz-content');
+        const navBar = document.getElementById('nav-bar');
+        const resultScreen = document.getElementById('result-screen');
+        const finalScore = document.getElementById('final-score');
+
+        function initQuiz() {
+            renderQuestion();
+            renderGrid();
+            updateNavButtons();
+        }
+
+        function renderQuestion() {
+            const data = quizData[currentQuestionIndex];
+            const savedAnswer = userAnswers[currentQuestionIndex];
+            
+            let optionsHtml = '';
+            data.options.forEach((opt, index) => {
+                let className = 'option-btn';
+                let feedbackHtml = '';
+                
+                if (savedAnswer !== null) {
+                    className += ' disabled';
+                    
+                    if (index === data.correct) {
+                        className += ' correct';
+                        feedbackHtml = '<span class="feedback-badge feedback-correct">CORRECT</span>';
+                    } else if (index === savedAnswer) {
+                        className += ' incorrect';
+                        feedbackHtml = '<span class="feedback-badge feedback-incorrect">INCORRECT</span>';
+                    }
+                }
+
+                optionsHtml += `
+                    <button class="${className}" onclick="selectAnswer(${index})" ${savedAnswer !== null ? 'disabled' : ''}>
+                        ${opt}
+                        ${feedbackHtml}
+                    </button>
+                `;
+            });
+
+            const explanationHtml = savedAnswer !== null 
+                ? `<div class="explanation-box" style="display:block;"><strong>🔍 Explanation:</strong><br>${data.explanation}</div>` 
+                : `<div class="explanation-box" id="explanation-${currentQuestionIndex}"></div>`;
+
+            questionContainer.innerHTML = `
+                <div class="section-title">${data.section}</div>
+                <div class="question-text">${data.question}</div>
+                <div class="options-grid">${optionsHtml}</div>
+                ${explanationHtml}
+            `;
+
+            renderGrid();
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (userAnswers[currentQuestionIndex] !== null) return; 
+
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            
+            if (selectedIndex === quizData[currentQuestionIndex].correct) {
+                score++;
+            }
+
+            renderQuestion();
+            updateNavButtons();
+            renderGrid();
+        }
+
+        function changeQuestion(direction) {
+            const newIndex = currentQuestionIndex + direction;
+            if (newIndex >= 0 && newIndex < quizData.length) {
+                currentQuestionIndex = newIndex;
+                renderQuestion();
+                updateNavButtons();
+            }
+        }
+
+        function jumpToQuestion(index) {
+            currentQuestionIndex = index;
+            renderQuestion();
+            updateNavButtons();
+            toggleModal();
+        }
+
+        function updateNavButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.innerText = "Finish";
+                nextBtn.onclick = showResults;
+            } else {
+                nextBtn.innerText = "Next";
+                nextBtn.onclick = () => changeQuestion(1);
+            }
+        }
+
+        function toggleModal() {
+            const isVisible = overviewModal.style.display === 'flex';
+            overviewModal.style.display = isVisible ? 'none' : 'flex';
+            renderGrid();
+        }
+
+        function renderGrid() {
+            questionGrid.innerHTML = '';
+            quizData.forEach((q, index) => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.innerText = index + 1;
+
+                if (index === currentQuestionIndex) {
+                    item.classList.add('current');
+                } else if (userAnswers[index] !== null) {
+                    item.classList.add('answered');
+                }
+
+                item.onclick = () => jumpToQuestion(index);
+                questionGrid.appendChild(item);
+            });
+        }
+
+        function showResults() {
+            let finalScoreCalc = 0;
+            userAnswers.forEach((ans, idx) => {
+                if (ans === quizData[idx].correct) finalScoreCalc++;
+            });
+
+            finalScore.innerText = `${finalScoreCalc} / ${quizData.length}`;
+
+            quizContent.classList.add('hidden');
+            navBar.classList.add('hidden');
+            resultScreen.style.display = 'flex';
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            score = 0;
+            
+            quizContent.classList.remove('hidden');
+            navBar.classList.remove('hidden');
+            resultScreen.style.display = 'none';
+            
+            initQuiz();
+        }
+
+        initQuiz();
+    </script>
+</body>
+</html>
