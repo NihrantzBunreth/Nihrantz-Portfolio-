@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erythropoiesis - Clinical Quiz</title>
+    <style>
+        /* 
+         * PART 1: CLEAN CLINICAL DESIGN 
+         * Font Restriction: Arial exclusively.
+         * Sterile Background: White with subtle grey lines.
+         * Color Palette: Clinical Blue (#0056b3), White (#ffffff).
+         */
+        
+        :root {
+            --clinical-blue: #0056b3;
+            --clinical-light-blue: #e6f0fa;
+            --clinical-hover: #cce5ff;
+            --clinical-red: #d9534f;
+            --clinical-green: #28a745;
+            --bg-grey-lines: #f0f0f0;
+            --text-dark: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            /* Sterile Background: Medical chart paper effect */
+            background-image: linear-gradient(var(--bg-grey-lines) 1px, transparent 1px);
+            background-size: 100% 30px; /* Horizontal lines */
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Container: Clipboard / Digital Tablet look */
+        #quiz-container {
+            width: 100%;
+            max-width: 700px;
+            background-color: #ffffff;
+            border: 2px solid var(--clinical-blue);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Header */
+        header {
+            border-bottom: 2px solid var(--clinical-blue);
+            padding: 15px 20px;
+            background-color: #fff;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 20px;
+            color: var(--clinical-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #555;
+            font-weight: normal;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            padding: 10px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--clinical-blue);
+        }
+
+        #progress-text {
+            margin-right: 10px;
+        }
+
+        #view-list-btn {
+            background: transparent;
+            border: 1px solid var(--clinical-blue);
+            color: var(--clinical-blue);
+            padding: 4px 10px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        #view-list-btn:hover {
+            background: var(--clinical-light-blue);
+        }
+
+        /* Main Question Area */
+        #quiz-body {
+            flex: 1;
+            padding: 30px;
+            min-height: 300px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 2px; /* Slightly rounded/Sharp corners */
+            transition: background 0.2s, border-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--clinical-light-blue);
+            border-color: var(--clinical-blue);
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        /* Instant Feedback Styling */
+        .option-btn.correct {
+            border-color: var(--clinical-green);
+            background-color: #f0fff0;
+        }
+
+        .option-btn.incorrect {
+            border-color: var(--clinical-red);
+            background-color: #fff0f0;
+        }
+
+        .feedback-label {
+            font-weight: bold;
+            font-size: 12px;
+            display: none;
+        }
+
+        .correct .feedback-label {
+            display: inline-block;
+            color: var(--clinical-green);
+        }
+
+        .incorrect .feedback-label {
+            display: inline-block;
+            color: var(--clinical-red);
+        }
+
+        /* Explanation Box */
+        #explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--clinical-light-blue);
+            border-left: 4px solid var(--clinical-blue);
+            font-size: 13px;
+            line-height: 1.5;
+            display: none; /* Hidden by default */
+        }
+
+        /* Navigation Buttons */
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px;
+            border-top: 1px solid #eee;
+            background: #fff;
+        }
+
+        .nav-btn {
+            background: #fff;
+            border: 1px solid var(--clinical-blue);
+            color: var(--clinical-blue);
+            padding: 8px 20px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--clinical-light-blue);
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background: #fff;
+            cursor: not-allowed;
+        }
+
+        /* 
+         * PART 2: BRANDING & SOCIAL MEDIA 
+         */
+        .footer-branding {
+            border-top: 2px solid var(--clinical-blue);
+            padding: 15px;
+            text-align: center;
+            background: #fff;
+        }
+
+        .credit-text {
+            font-family: Arial, sans-serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 35px;
+            height: 35px;
+            background: var(--clinical-blue);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .social-btn:hover {
+            background: #004494;
+        }
+
+        /* 
+         * PART 3: MODAL (Patient List / Question Overview)
+         */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #fff;
+            border: 2px solid var(--clinical-blue);
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .modal-title {
+            color: var(--clinical-blue);
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--clinical-red);
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: #555;
+            font-size: 13px;
+        }
+
+        /* Grid Status Indicators */
+        .grid-item.current {
+            border: 2px solid var(--clinical-blue);
+            color: var(--clinical-blue);
+        }
+
+        .grid-item.answered {
+            background-color: var(--clinical-light-blue);
+            border-color: #b8daff;
+        }
+        
+        .grid-item.unanswered {
+            background-color: #fff;
+        }
+
+        /* Result Screen */
+        #result-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 24px;
+            color: var(--clinical-blue);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .result-detail {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .restart-btn {
+            background: var(--clinical-blue);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        
+        .restart-btn:hover {
+            background: #004494;
+        }
+
+        /* Utility for mobile */
+        @media (max-width: 500px) {
+            h1 { font-size: 16px; }
+            .question-text { font-size: 16px; }
+            .option-btn { padding: 12px; font-size: 13px; }
+            #quiz-container { border-width: 1px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz-container">
+        <header>
+            <h1>Hematology Theory</h1>
+            <h2>Lesson 2: Erythropoiesis (MCQ+ QnA)</h2>
+        </header>
+
+        <!-- Result Screen (Hidden Initially) -->
+        <div id="result-screen">
+            <div class="result-title">Test Result</div>
+            <div class="result-score" id="final-score">0%</div>
+            <div class="result-detail" id="final-detail">0 / 0 Correct</div>
+            <button class="restart-btn" onclick="restartQuiz()">Retake Test</button>
+            
+            <div class="footer-branding" style="width: 100%; margin-top: 20px; border:none; padding-top: 0;">
+                <div class="credit-text">Prepared by BUNRETH Nihrantz</div>
+                <div class="social-bar">
+                    <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                    <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                    <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Interface -->
+        <div id="quiz-interface">
+            <div class="progress-container">
+                <span id="progress-text">Question 1 of 40</span>
+                <button id="view-list-btn" onclick="openModal()">View List</button>
+            </div>
+
+            <div id="quiz-body">
+                <div class="question-text" id="question-text">
+                    Loading question...
+                </div>
+                <div class="options-grid" id="options-container">
+                    <!-- Options injected via JS -->
+                </div>
+                <div id="explanation-box">
+                    <strong>Explanation:</strong> <span id="explanation-text"></span>
+                </div>
+            </div>
+
+            <div class="nav-controls">
+                <button id="prev-btn" class="nav-btn" onclick="prevQuestion()">Previous</button>
+                <button id="next-btn" class="nav-btn" onclick="nextQuestion()">Next</button>
+            </div>
+
+            <div class="footer-branding">
+                <div class="credit-text">Prepared by BUNRETH Nihrantz</div>
+                <div class="social-bar">
+                    <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                    <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                    <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient List Modal -->
+    <div class="modal-overlay" id="list-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Question Overview (Patient List)</span>
+                <button class="close-modal" onclick="closeModal()">✕</button>
+            </div>
+            <div class="grid-container" id="grid-container">
+                <!-- Grid items injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* 
+         * QUIZ DATA 
+         * Parsed from the user's provided content.
+         */
+        const quizData = [
+            // Section 1
+            {
+                q: "What is the primary physiological role of red blood cells (RBCs)?",
+                options: ["Immune defense against pathogens", "Clot formation at injury sites", "Transport of oxygen from lungs to tissues", "Synthesis of plasma proteins"],
+                answer: 2,
+                explanation: "RBCs carry O₂ from the lungs to peripheral tissues and also assist in CO₂ transport back to the lungs. This is their core gas-exchange function."
+            },
+            {
+                q: "Approximately how many RBCs are produced per second in a healthy adult?",
+                options: ["200,000", "500,000", "1 million", "2 million"],
+                answer: 3,
+                explanation: "The body produces about 2 million RBCs every second to maintain homeostasis and replace aged cells."
+            },
+            {
+                q: "In which organ does erythropoiesis primarily occur in the early fetus (before 2 months gestation)?",
+                options: ["Liver", "Spleen", "Bone marrow", "Yolk sac"],
+                answer: 3,
+                explanation: "The yolk sac is the initial site of hematopoiesis in the embryo. By 2–5 months, the liver and spleen take over, and bone marrow becomes dominant after ~5 months."
+            },
+            {
+                q: "After mid-gestation, what becomes the permanent site of erythropoiesis?",
+                options: ["Liver", "Spleen", "Bone marrow", "Thymus"],
+                answer: 2,
+                explanation: "From approximately 5 months of gestation onward, the bone marrow serves as the lifelong site of RBC production."
+            },
+            // Section 2
+            {
+                q: "Which cell is considered the starting point of all blood cell lineages, including RBCs?",
+                options: ["Myeloblast", "Megakaryocyte", "Hematopoietic stem cell (HSC)", "Reticulocyte"],
+                answer: 2,
+                explanation: "The HSC (or hemocytoblast) is pluripotent and gives rise to all blood cells via differentiation into lineage-specific progenitors."
+            },
+            {
+                q: "Which progenitor cell gives rise to erythrocytes, megakaryocytes, and myeloblasts?",
+                options: ["BFU-E", "CFU-E", "Common Lymphoid Progenitor", "Common Myeloid Progenitor (CMP)"],
+                answer: 3,
+                explanation: "The CMP is the branch point for myeloid lineages, including RBCs, platelets, and granulocytes."
+            },
+            {
+                q: "Which of the following is the earliest committed erythroid precursor?",
+                options: ["Pronormoblast", "CFU-E", "BFU-E", "Orthochromatic normoblast"],
+                answer: 2,
+                explanation: "BFU-E (Burst-Forming Unit–Erythroid) is the first cell exclusively destined to become an RBC, though it is less mature than CFU-E."
+            },
+            {
+                q: "Which cytokine primarily drives the maturation of BFU-E?",
+                options: ["Erythropoietin (EPO)", "Interleukin-3 (IL-3)", "Thrombopoietin", "Interferon-gamma"],
+                answer: 1,
+                explanation: "IL-3 or GM-CSF supports BFU-E development, while EPO acts later on CFU-E."
+            },
+            {
+                q: "CFU-E is highly responsive to EPO because it:",
+                options: ["Produces heme independently", "Expresses high levels of EPO receptors", "Resides in the spleen", "Has a large nucleus"],
+                answer: 1,
+                explanation: "CFU-E expresses many EPO receptors, making it exquisitely sensitive to even low levels of EPO, unlike BFU-E."
+            },
+            {
+                q: "The first morphologically identifiable erythroid cell is the:",
+                options: ["BFU-E", "CFU-E", "Pronormoblast (proerythroblast)", "Reticulocyte"],
+                answer: 2,
+                explanation: "While BFU-E and CFU-E are functional progenitors, they are not visible under standard microscopy. The pronormoblast is the first recognizable stage by morphology."
+            },
+            // Section 3
+            {
+                q: "Which of the following correctly lists the erythroid maturation sequence?",
+                options: ["CFU-E → BFU-E → Basophilic → Polychromatic → Orthochromatic → Reticulocyte", "BFU-E → CFU-E → Pronormoblast → Basophilic → Polychromatic → Orthochromatic → Reticulocyte", "HSC → Myeloblast → Metamyelocyte → Band cell → RBC", "Pronormoblast → CFU-E → BFU-E → Reticulocyte"],
+                answer: 1,
+                explanation: "The correct order is: HSC → CMP → BFU-E → CFU-E → Pronormoblast → Basophilic → Polychromatic → Orthochromatic → Reticulocyte → Mature RBC."
+            },
+            {
+                q: "During which stage does the cell begin significant hemoglobin synthesis?",
+                options: ["Pronormoblast", "Basophilic normoblast", "Orthochromatic normoblast", "Reticulocyte"],
+                answer: 1,
+                explanation: "Iron uptake increases in the basophilic stage, marking the start of robust hemoglobin production."
+            },
+            {
+                q: "The cytoplasm appears 'polychromatic' in which erythroblast stage?",
+                options: ["Pronormoblast", "Basophilic normoblast", "Polychromatic normoblast", "Orthochromatic normoblast"],
+                answer: 2,
+                explanation: "The mixed blue-pink color results from increasing hemoglobin (pink) alongside residual RNA (blue)—hence “polychromatic.”"
+            },
+            {
+                q: "Nuclear extrusion occurs at which stage?",
+                options: ["Basophilic normoblast", "Polychromatic normoblast", "Orthochromatic normoblast", "Reticulocyte"],
+                answer: 2,
+                explanation: "The orthochromatic normoblast extrudes its nucleus, becoming a reticulocyte—a key step unique to mammals."
+            },
+            {
+                q: "What causes the slightly bluish tint in reticulocytes when stained supravitally?",
+                options: ["DNA remnants", "Residual ribosomal RNA", "Iron deposits", "Mitochondrial fragments"],
+                answer: 1,
+                explanation: "The blue-purple color comes from residual RNA, which disappears as the reticulocyte matures into an RBC."
+            },
+            {
+                q: "How long do normoblasts typically spend maturing in the bone marrow?",
+                options: ["1–2 days", "3–4 days", "5–7 days", "10–14 days"],
+                answer: 2,
+                explanation: "The 5–7 day transit time in marrow allows full maturation before reticulocytes enter circulation."
+            },
+            {
+                q: "Mature erythrocytes lack:",
+                options: ["Hemoglobin", "Cell membrane", "Nucleus", "Cytoplasm"],
+                answer: 2,
+                explanation: "Mature RBCs are anucleate, enabling more space for hemoglobin and flexibility for capillary passage."
+            },
+            {
+                q: "Presence of nucleated RBCs in adult peripheral blood may indicate:",
+                options: ["Normal aging", "Dehydration", "Severe anemia or bone marrow stress", "High cholesterol"],
+                answer: 2,
+                explanation: "Nucleated RBCs in blood suggest premature release due to marrow stress, as in severe anemia, thalassemia, or leukemia."
+            },
+            // Section 4
+            {
+                q: "In adults, where is the majority of EPO produced?",
+                options: ["Liver", "Spleen", "Kidneys", "Bone marrow"],
+                answer: 2,
+                explanation: "85–90% of EPO is made by peritubular interstitial cells in the kidneys; the liver contributes only 10–15%."
+            },
+            {
+                q: "What triggers increased EPO production?",
+                options: ["Hyperoxia", "Hypoxia", "Hyperglycemia", "Acidosis"],
+                answer: 1,
+                explanation: "Low tissue oxygen (hypoxia) activates HIFs, which upregulate the EPO gene in kidney cells."
+            },
+            {
+                q: "EPO exerts its effects by binding to receptors on which cells?",
+                options: ["Mature RBCs", "Hepatocytes", "Erythroid progenitor cells", "Neutrophils"],
+                answer: 2,
+                explanation: "EPO binds EPOR on CFU-E and proerythroblasts, promoting survival, proliferation, and differentiation."
+            },
+            {
+                q: "Without EPO, erythroid precursors undergo:",
+                options: ["Accelerated maturation", "Apoptosis", "Mitosis without differentiation", "Transformation into lymphocytes"],
+                answer: 1,
+                explanation: "EPO is anti-apoptotic; its absence leads to massive cell death of early erythroid cells."
+            },
+            {
+                q: "Which erythroid stage has the highest sensitivity to EPO?",
+                options: ["BFU-E", "CFU-E", "Orthochromatic normoblast", "Reticulocyte"],
+                answer: 1,
+                explanation: "CFU-E expresses the most EPOR, making it most responsive to EPO."
+            },
+            {
+                q: "What is the approximate half-life of circulating EPO?",
+                options: ["1–2 hours", "3–5 hours", "6–10 hours", "24 hours"],
+                answer: 2,
+                explanation: "EPO has a short half-life of 6–10 hours, ensuring tight regulation of RBC production."
+            },
+            {
+                q: "EPO receptor (EPOR) expression declines significantly after which stage?",
+                options: ["BFU-E", "CFU-E", "Proerythroblast", "Reticulocyte"],
+                answer: 2,
+                explanation: "After the proerythroblast stage, cells become less dependent on EPO, and EPOR is downregulated."
+            },
+            {
+                q: "Fetal EPO is primarily produced by the:",
+                options: ["Kidneys", "Bone marrow", "Liver", "Placenta"],
+                answer: 2,
+                explanation: "In the fetus, the liver is the main source of EPO since the kidneys are not fully functional."
+            },
+            // Section 5
+            {
+                q: "How many oxygen molecules can one hemoglobin molecule carry?",
+                options: ["1", "2", "3", "4"],
+                answer: 3,
+                explanation: "Each heme group binds one O₂, and hemoglobin has four heme groups → total of 4 O₂ molecules."
+            },
+            {
+                q: "The primary hemoglobin in healthy adults is:",
+                options: ["Hb F", "Hb A", "Hb A₂", "Hb Gower"],
+                answer: 1,
+                explanation: "Hb A (α₂β₂) constitutes 95–98% of adult hemoglobin."
+            },
+            {
+                q: "Fetal hemoglobin (Hb F) has higher oxygen affinity because it:",
+                options: ["Contains iron in ferric state", "Has γ-chains instead of β-chains", "Lacks heme groups", "Is smaller in size"],
+                answer: 1,
+                explanation: "Hb F = α₂γ₂; the γ-chains reduce binding to 2,3-BPG, increasing O₂ affinity to extract oxygen from maternal blood."
+            },
+            {
+                q: "By what age is Hb F typically reduced to <1% in infants?",
+                options: ["At birth", "1 month", "3 months", "6 months"],
+                answer: 3,
+                explanation: "Hb F declines rapidly after birth, and by 6 months, Hb A dominates (>99%)."
+            },
+            {
+                q: "What is the molecular weight of hemoglobin?",
+                options: ["34,000 Da", "68,000 Da", "100,000 Da", "150,000 Da"],
+                answer: 1,
+                explanation: "Hemoglobin is a 68 kDa tetrameric protein."
+            },
+            {
+                q: "When is the majority of hemoglobin synthesized during erythropoiesis?",
+                options: ["Pronormoblast stage", "Basophilic normoblast", "Polychromatic normoblast", "Reticulocyte"],
+                answer: 2,
+                explanation: "75–80% of Hb is made by the polychromatophilic stage, before nuclear extrusion."
+            },
+            // Section 6
+            {
+                q: "Where does heme biosynthesis begin and end?",
+                options: ["Entirely in cytoplasm", "Entirely in mitochondria", "Starts and ends in mitochondria", "Starts in nucleus, ends in lysosome"],
+                answer: 2,
+                explanation: "Heme synthesis starts in mitochondria (ALA formation), moves to cytoplasm, then returns to mitochondria for final steps."
+            },
+            {
+                q: "The rate-limiting enzyme in heme synthesis is:",
+                options: ["ALA dehydratase", "Ferrochelatase", "ALA synthase", "PBG deaminase"],
+                answer: 2,
+                explanation: "ALA synthase catalyzes the first step (glycine + succinyl-CoA → ALA) and is rate-limiting."
+            },
+            {
+                q: "Which enzyme inserts Fe²⁺ into protoporphyrin IX to form heme?",
+                options: ["Coproporphyrinogen oxidase", "Protoporphyrinogen oxidase", "Ferrochelatase", "Uroporphyrinogen decarboxylase"],
+                answer: 2,
+                explanation: "Ferrochelatase (FECH) performs the final mitochondrial step of heme synthesis."
+            },
+            {
+                q: "Deficiency of PBG deaminase causes:",
+                options: ["Iron-deficiency anemia", "Sickle cell disease", "Acute intermittent porphyria", "Thalassemia"],
+                answer: 2,
+                explanation: "PBG deaminase deficiency leads to accumulation of PBG and ALA, causing acute intermittent porphyria."
+            },
+            {
+                q: "Iron is stored primarily as:",
+                options: ["Transferrin", "Hemoglobin", "Ferritin", "Hemosiderin (only)"],
+                answer: 2,
+                explanation: "Ferritin is the main bioavailable storage form of iron in liver, spleen, and marrow."
+            },
+            {
+                q: "Iron is absorbed mainly in the:",
+                options: ["Stomach", "Duodenum and upper jejunum", "Ileum", "Colon"],
+                answer: 1,
+                explanation: "Dietary iron absorption occurs primarily in the duodenum and proximal jejunum."
+            },
+            {
+                q: "Daily iron absorption in adults is approximately:",
+                options: ["0.1–0.5 mg", "1–2 mg", "5–10 mg", "15–20 mg"],
+                answer: 1,
+                explanation: "Despite dietary intake of 10–15 mg/day, only 1–2 mg is absorbed, tightly regulated by body needs."
+            },
+            {
+                q: "Which receptor allows erythroid precursors to take up iron-bound transferrin?",
+                options: ["EPOR", "CD34", "Transferrin Receptor 1 (TfR1)", "Ferritin receptor"],
+                answer: 2,
+                explanation: "TfR1 is highly expressed on erythroblasts to prioritize iron delivery for heme synthesis."
+            }
+        ];
+
+        /* 
+         * STATE MANAGEMENT 
+         */
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null); // Stores index of selected option or null
+        let score = 0;
+
+        /*
+         * DOM ELEMENTS
+         */
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progressText = document.getElementById('progress-text');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const modal = document.getElementById('list-modal');
+        const gridContainer = document.getElementById('grid-container');
+        const quizInterface = document.getElementById('quiz-interface');
+        const resultScreen = document.getElementById('result-screen');
+
+        /*
+         * INITIALIZATION
+         */
+        function initQuiz() {
+            renderQuestion();
+            updateNavButtons();
+        }
+
+        /*
+         * RENDER LOGIC
+         */
+        function renderQuestion() {
+            const data = quizData[currentQuestionIndex];
+            
+            // Update Text
+            questionTextEl.textContent = data.q;
+            progressText.textContent = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
+            
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+            explanationBox.style.display = 'none';
+
+            // Create Options
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span>${opt}</span><span class="feedback-label"></span>`;
+                
+                // Interaction Logic
+                const hasAnswered = userAnswers[currentQuestionIndex] !== null;
+                
+                if (hasAnswered) {
+                    btn.disabled = true;
+                    const selectedIdx = userAnswers[currentQuestionIndex];
+                    const isCorrect = selectedIdx === data.answer;
+                    
+                    if (index === data.answer) {
+                        btn.classList.add('correct');
+                        btn.querySelector('.feedback-label').textContent = 'CORRECT';
+                    } else if (index === selectedIdx && !isCorrect) {
+                        btn.classList.add('incorrect');
+                        btn.querySelector('.feedback-label').textContent = 'INCORRECT';
+                    }
+                } else {
+                    btn.onclick = () => handleOptionClick(index);
+                }
+
+                optionsContainer.appendChild(btn);
+            });
+
+            // Show explanation if already answered
+            if (userAnswers[currentQuestionIndex] !== null) {
+                showExplanation(data.explanation);
+            }
+
+            updateNavButtons();
+        }
+
+        function handleOptionClick(selectedIndex) {
+            const data = quizData[currentQuestionIndex];
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            
+            // Calculate Score immediately (for final tally)
+            calculateScore();
+
+            // Re-render to show feedback
+            renderQuestion();
+        }
+
+        function showExplanation(text) {
+            explanationText.textContent = text;
+            explanationBox.style.display = 'block';
+        }
+
+        function calculateScore() {
+            score = 0;
+            quizData.forEach((q, idx) => {
+                if (userAnswers[idx] === q.answer) {
+                    score++;
+                }
+            });
+        }
+
+        /*
+         * NAVIGATION LOGIC
+         */
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function updateNavButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.textContent = "Finish Test";
+            } else {
+                nextBtn.textContent = "Next";
+            }
+        }
+
+        /*
+         * MODAL & GRID LOGIC
+         */
+        function openModal() {
+            renderGrid();
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        // Close modal if clicking outside content
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        function renderGrid() {
+            gridContainer.innerHTML = '';
+            quizData.forEach((_, idx) => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.textContent = idx + 1;
+
+                // Status classes
+                if (idx === currentQuestionIndex) {
+                    item.classList.add('current');
+                }
+                
+                if (userAnswers[idx] !== null) {
+                    item.classList.add('answered');
+                } else {
+                    item.classList.add('unanswered');
+                }
+
+                // Jump Logic
+                item.onclick = () => {
+                    currentQuestionIndex = idx;
+                    closeModal();
+                    renderQuestion();
+                };
+
+                gridContainer.appendChild(item);
+            });
+        }
+
+        /*
+         * RESULT SCREEN
+         */
+        function showResults() {
+            quizInterface.style.display = 'none';
+            resultScreen.style.display = 'flex';
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            document.getElementById('final-score').textContent = `${percentage}%`;
+            document.getElementById('final-detail').textContent = `${score} / ${quizData.length} Correct`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            score = 0;
+            
+            resultScreen.style.display = 'none';
+            quizInterface.style.display = 'block';
+            renderQuestion();
+        }
+
+        // Start
+        initQuiz();
+
+    </script>
+</body>
+</html>
