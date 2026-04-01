@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hematology Theory: Lesson 1</title>
+    <style>
+        /* --- RESET & BASE STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Sterile Background: White with subtle grey lines */
+            background-color: #ffffff;
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 30px;
+            font-family: Arial, sans-serif; /* Font Restriction: Arial */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- CONTAINER (Clipboard/Tablet Style) --- */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            /* Medical Blue Border */
+            border: 2px solid #0056b3; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- HEADER --- */
+        header {
+            border-bottom: 2px solid #0056b3;
+            padding: 15px 20px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 18px;
+            color: #0056b3;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-counter {
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        main {
+            padding: 30px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        /* Question Text */
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        /* Options List */
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Option Buttons: Rectangular, sharp/slightly rounded */
+        .option-btn {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Hover Effect: Light Blue */
+        .option-btn:hover:not(:disabled) {
+            background-color: #e6f0fa;
+            border-color: #0056b3;
+        }
+
+        /* Disabled State */
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.9;
+        }
+
+        /* Feedback Styles */
+        .feedback-text {
+            font-weight: 900;
+            font-size: 16px;
+            margin-left: 15px;
+            min-width: 80px;
+            text-align: right;
+            display: none;
+        }
+
+        .feedback-correct { color: #008000; }
+        .feedback-incorrect { color: #d32f2f; }
+
+        /* Styling based on correctness */
+        .option-item.correct .option-btn {
+            border-color: #008000;
+            background-color: #f0fff0;
+        }
+        .option-item.incorrect .option-btn {
+            border-color: #d32f2f;
+            background-color: #fff0f0;
+        }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #0056b3;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-box h4 {
+            color: #0056b3;
+            margin-bottom: 5px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .explanation-box p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        /* --- NAVIGATION FOOTER --- */
+        .nav-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background-color: #fff;
+            border: 1px solid #0056b3;
+            color: #0056b3;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background-color: #fff;
+            cursor: not-allowed;
+        }
+
+        .view-list-btn {
+            background: none;
+            border: none;
+            color: #0056b3;
+            text-decoration: underline;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        /* --- BRANDING & SOCIAL --- */
+        .branding-section {
+            padding: 10px 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-style: italic;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: block;
+            color: #333;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 35px;
+            height: 35px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.2s;
+        }
+
+        .social-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* --- MODAL (PATIENT LIST) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #fff;
+            border: 2px solid #0056b3;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .grid-item {
+            width: 100%;
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 2px;
+        }
+
+        .grid-item.current {
+            border: 2px solid #0056b3;
+        }
+        .grid-item.answered {
+            background-color: #dbeafe;
+            border-color: #0056b3;
+        }
+        .grid-item.unanswered {
+            background-color: #fff;
+        }
+
+        /* --- RESULT SCREEN --- */
+        .result-screen {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .result-title {
+            font-size: 24px;
+            color: #0056b3;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #0056b3;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .restart-btn {
+            padding: 12px 30px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        
+        .restart-btn:hover {
+            background-color: #004494;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Tweaks */
+        @media (max-width: 600px) {
+            header { flex-direction: column; gap: 5px; text-align: center; }
+            .nav-footer { flex-direction: column-reverse; gap: 15px; }
+            .nav-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- HEADER -->
+        <header>
+            <h1>Hematology Theory: Lesson 1</h1>
+            <div class="progress-counter">Question <span id="current-q-num">1</span> of <span id="total-q-num">40</span></div>
+        </header>
+
+        <!-- MAIN QUIZ AREA -->
+        <main id="quiz-main">
+            <div class="question-text" id="question-text">
+                Loading question...
+            </div>
+
+            <ul class="options-list" id="options-list">
+                <!-- Options injected via JS -->
+            </ul>
+
+            <div class="explanation-box" id="explanation-box">
+                <h4>Explanation:</h4>
+                <div id="explanation-content"></div>
+            </div>
+        </main>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="result-screen">
+            <h2 class="result-title">Test Result</h2>
+            <p>Your Score:</p>
+            <div class="result-score"><span id="score-val">0</span> / <span id="total-val">0</span></div>
+            <button class="restart-btn" onclick="quizApp.restartQuiz()">Retake Assessment</button>
+        </div>
+
+        <!-- NAVIGATION FOOTER -->
+        <footer class="nav-footer" id="nav-footer">
+            <button class="nav-btn" id="prev-btn" onclick="quizApp.prevQuestion()">Previous</button>
+            <button class="view-list-btn" onclick="quizApp.toggleModal(true)">View List</button>
+            <button class="nav-btn" id="next-btn" onclick="quizApp.nextQuestion()">Next</button>
+        </footer>
+
+        <!-- BRANDING & SOCIAL -->
+        <div class="branding-section">
+            <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL OVERLAY -->
+    <div class="modal-overlay" id="list-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Question Overview</h3>
+                <button class="close-modal" onclick="quizApp.toggleModal(false)">&times;</button>
+            </div>
+            <div class="question-grid" id="question-grid">
+                <!-- Grid items injected via JS -->
+            </div>
+            <button class="nav-btn" onclick="quizApp.toggleModal(false)">Close Overview</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA: QUESTIONS ---
+        const quizData = [
+            // MCQs 1–10
+            {
+                id: 1,
+                text: "What percentage of total blood volume is composed of plasma?",
+                options: [{id:"A",text:"35%"},{id:"B",text:"45%"},{id:"C",text:"55%"},{id:"D",text:"65%"}],
+                correct: "C",
+                explanation: "Plasma constitutes approximately 55% of total blood volume and serves as the liquid matrix containing water, proteins, electrolytes, hormones, and waste products."
+            },
+            {
+                id: 2,
+                text: "Which of the following is NOT a function of blood?",
+                options: [{id:"A",text:"Oxygen transport"},{id:"B",text:"Hormone synthesis"},{id:"C",text:"Thermoregulation"},{id:"D",text:"pH buffering"}],
+                correct: "B",
+                explanation: "Blood transports hormones but does not synthesize them—hormones are produced by endocrine glands (e.g., thyroid, adrenal)."
+            },
+            {
+                id: 3,
+                text: "The hematocrit represents the volume percentage of:",
+                options: [{id:"A",text:"Plasma"},{id:"B",text:"White blood cells"},{id:"C",text:"Red blood cells"},{id:"D",text:"Platelets"}],
+                correct: "C",
+                explanation: "Hematocrit is the proportion of blood volume occupied by RBCs, typically ~45% in healthy adults."
+            },
+            {
+                id: 4,
+                text: "Which component makes up the majority of cellular elements in blood?",
+                options: [{id:"A",text:"Lymphocytes"},{id:"B",text:"Platelets"},{id:"C",text:"Red blood cells"},{id:"D",text:"Neutrophils"}],
+                correct: "C",
+                explanation: "RBCs number 4.5–5.5 million/μL, vastly outnumbering WBCs (~4,000–11,000/μL) and platelets (~150,000–400,000/μL)."
+            },
+            {
+                id: 5,
+                text: "All blood cells originate from:",
+                options: [{id:"A",text:"Mesenchymal stem cells"},{id:"B",text:"Embryonic yolk sac cells only"},{id:"C",text:"Hematopoietic stem cells (HSCs)"},{id:"D",text:"Liver progenitor cells"}],
+                correct: "C",
+                explanation: "HSCs are multipotent, self-renewing stem cells that give rise to all blood lineages throughout life."
+            },
+            {
+                id: 6,
+                text: "During fetal development, the primary site of hematopoiesis between weeks 6–24 is the:",
+                options: [{id:"A",text:"Yolk sac"},{id:"B",text:"Spleen"},{id:"C",text:"Bone marrow"},{id:"D",text:"Liver"}],
+                correct: "D",
+                explanation: "The liver becomes the dominant hematopoietic organ from ~6 weeks until mid-gestation; bone marrow takes over later."
+            },
+            {
+                id: 7,
+                text: "In healthy adults, active hematopoiesis occurs exclusively in:",
+                options: [{id:"A",text:"Yellow bone marrow"},{id:"B",text:"Red bone marrow"},{id:"C",text:"Spleen"},{id:"D",text:"Lymph nodes"}],
+                correct: "B",
+                explanation: "Only red bone marrow (in axial skeleton and proximal long bones) supports active blood cell production in adults."
+            },
+            {
+                id: 8,
+                text: "Yellow bone marrow primarily consists of:",
+                options: [{id:"A",text:"Developing erythroblasts"},{id:"B",text:"Adipose tissue"},{id:"C",text:"Sinusoidal endothelial cells"},{id:"D",text:"Lymphoid follicles"}],
+                correct: "B",
+                explanation: "Yellow marrow is mostly fat (adipose) and can convert back to red marrow under stress like severe anemia."
+            },
+            {
+                id: 9,
+                text: "Which structure contains red bone marrow in adults?",
+                options: [{id:"A",text:"Diaphysis of femur"},{id:"B",text:"Compact bone of tibia"},{id:"C",text:"Epiphysis of humerus"},{id:"D",text:"Periosteum"}],
+                correct: "C",
+                explanation: "Red marrow persists in epiphyses/metaphyses of long bones and flat bones (e.g., pelvis, sternum), not in the diaphysis (which holds yellow marrow)."
+            },
+            {
+                id: 10,
+                text: "The amniotic cavity is:",
+                options: [{id:"A",text:"A major fetal hematopoietic site"},{id:"B",text:"The origin of HSCs"},{id:"C",text:"A structural embryonic feature, not involved in hematopoiesis"},{id:"D",text:"Where platelets mature"}],
+                correct: "C",
+                explanation: "The amniotic cavity supports embryo development but does not produce blood cells—hematopoiesis begins in the yolk sac."
+            },
+            // MCQs 11–20
+            {
+                id: 11,
+                text: "Mature human RBCs lack:",
+                options: [{id:"A",text:"Hemoglobin"},{id:"B",text:"Cell membrane"},{id:"C",text:"Nucleus and mitochondria"},{id:"D",text:"Cytoplasm"}],
+                correct: "C",
+                explanation: "Loss of nucleus and mitochondria maximizes space for hemoglobin and prevents oxidative damage, but limits repair capacity."
+            },
+            {
+                id: 12,
+                text: "The average lifespan of a red blood cell is:",
+                options: [{id:"A",text:"30 days"},{id:"B",text:"60 days"},{id:"C",text:"90 days"},{id:"D",text:"120 days"}],
+                correct: "D",
+                explanation: "RBCs circulate for ~120 days before being phagocytosed by macrophages in the spleen and liver."
+            },
+            {
+                id: 13,
+                text: "Which WBC is most abundant in peripheral blood?",
+                options: [{id:"A",text:"Lymphocyte"},{id:"B",text:"Monocyte"},{id:"C",text:"Neutrophil"},{id:"D",text:"Eosinophil"}],
+                correct: "C",
+                explanation: "Neutrophils constitute 50–70% of circulating WBCs and are first responders to bacterial infection."
+            },
+            {
+                id: 14,
+                text: "Platelets are derived from:",
+                options: [{id:"A",text:"Myeloblasts"},{id:"B",text:"Lymphoblasts"},{id:"C",text:"Megakaryocytes"},{id:"D",text:"Erythroblasts"}],
+                correct: "C",
+                explanation: "Platelets are cytoplasmic fragments shed from megakaryocytes in bone marrow."
+            },
+            {
+                id: 15,
+                text: "Which WBC type is primarily involved in parasitic infections and allergic reactions?",
+                options: [{id:"A",text:"Basophil"},{id:"B",text:"Neutrophil"},{id:"C",text:"Eosinophil"},{id:"D",text:"Monocyte"}],
+                correct: "C",
+                explanation: "Eosinophils release toxic granules against parasites and modulate allergic inflammation."
+            },
+            {
+                id: 16,
+                text: "Natural Killer (NK) cells originate from the:",
+                options: [{id:"A",text:"Common myeloid progenitor"},{id:"B",text:"Common lymphoid progenitor"},{id:"C",text:"Megakaryocyte lineage"},{id:"D",text:"Erythroid lineage"}],
+                correct: "B",
+                explanation: "NK cells are part of the innate lymphoid system and arise from the lymphoid progenitor, along with B and T cells."
+            },
+            {
+                id: 17,
+                text: "Diapedesis refers to the ability of WBCs to:",
+                options: [{id:"A",text:"Phagocytose bacteria"},{id:"B",text:"Produce antibodies"},{id:"C",text:"Exit blood vessels into tissues"},{id:"D",text:"Divide rapidly in circulation"}],
+                correct: "C",
+                explanation: "Diapedesis is the migration of leukocytes through vessel walls to reach infection sites."
+            },
+            {
+                id: 18,
+                text: "Which cell becomes a macrophage in tissues?",
+                options: [{id:"A",text:"Neutrophil"},{id:"B",text:"Basophil"},{id:"C",text:"Monocyte"},{id:"D",text:"Lymphocyte"}],
+                correct: "C",
+                explanation: "Circulating monocytes differentiate into macrophages or dendritic cells upon entering tissues."
+            },
+            {
+                id: 19,
+                text: "Basophils release which substance to promote inflammation?",
+                options: [{id:"A",text:"Insulin"},{id:"B",text:"Histamine"},{id:"C",text:"Hemoglobin"},{id:"D",text:"Albumin"}],
+                correct: "B",
+                explanation: "Histamine from basophils increases vascular permeability and contributes to allergic responses."
+            },
+            {
+                id: 20,
+                text: "Which statement about platelets is TRUE?",
+                options: [{id:"A",text:"They have a nucleus"},{id:"B",text:"They live for 120 days"},{id:"C",text:"They are essential for hemostasis"},{id:"D",text:"They produce hemoglobin"}],
+                correct: "C",
+                explanation: "Platelets are anucleate fragments critical for forming the primary hemostatic plug."
+            },
+            // MCQs 21–30
+            {
+                id: 21,
+                text: "Erythropoietin (EPO) is primarily produced by the:",
+                options: [{id:"A",text:"Liver"},{id:"B",text:"Spleen"},{id:"C",text:"Kidneys"},{id:"D",text:"Bone marrow"}],
+                correct: "C",
+                explanation: "Kidney peritubular cells sense hypoxia and secrete EPO to stimulate RBC production."
+            },
+            {
+                id: 22,
+                text: "Thrombopoietin (TPO) is mainly synthesized in the:",
+                options: [{id:"A",text:"Kidneys"},{id:"B",text:"Liver"},{id:"C",text:"Spleen"},{id:"D",text:"Pancreas"}],
+                correct: "B",
+                explanation: "The liver is the primary source of TPO, which drives megakaryocyte maturation and platelet production."
+            },
+            {
+                id: 23,
+                text: "Withdrawal of hematopoietic growth factors leads to:",
+                options: [{id:"A",text:"Increased cell division"},{id:"B",text:"Apoptosis of progenitor cells"},{id:"C",text:"Enhanced self-renewal of HSCs"},{id:"D",text:"Spontaneous differentiation"}],
+                correct: "B",
+                explanation: "Without survival signals from growth factors, developing blood cells undergo programmed cell death (apoptosis) within hours."
+            },
+            {
+                id: 24,
+                text: "GM-CSF stimulates the production of all EXCEPT:",
+                options: [{id:"A",text:"Neutrophils"},{id:"B",text:"Eosinophils"},{id:"C",text:"Monocytes"},{id:"D",text:"Lymphocytes"}],
+                correct: "D",
+                explanation: "GM-CSF acts on myeloid lineages (neutrophils, eosinophils, monocytes/macrophages), not lymphocytes (which depend on interleukins)."
+            },
+            {
+                id: 25,
+                text: "Which growth factor specifically supports early HSC survival?",
+                options: [{id:"A",text:"EPO"},{id:"B",text:"TPO"},{id:"C",text:"Stem Cell Factor (SCF)"},{id:"D",text:"IL-2"}],
+                correct: "C",
+                explanation: "SCF (also called c-kit ligand) is crucial for maintenance and survival of primitive HSCs."
+            },
+            {
+                id: 26,
+                text: "Recombinant G-CSF is clinically used to:",
+                options: [{id:"A",text:"Treat iron-deficiency anemia"},{id:"B",text:"Boost platelet count"},{id:"C",text:"Stimulate neutrophil recovery after chemotherapy"},{id:"D",text:"Replace clotting factors"}],
+                correct: "C",
+                explanation: "G-CSF (granulocyte colony-stimulating factor) accelerates neutrophil production post-chemotherapy or in neutropenia."
+            },
+            {
+                id: 27,
+                text: "Interleukins primarily regulate:",
+                options: [{id:"A",text:"RBC maturation"},{id:"B",text:"Platelet aggregation"},{id:"C",text:"Immune cell communication and lymphocyte function"},{id:"D",text:"Plasma protein synthesis"}],
+                correct: "C",
+                explanation: "Interleukins (IL-1 to IL-17) are cytokines that mediate immune signaling, especially among lymphocytes."
+            },
+            {
+                id: 28,
+                text: "In chronic hypoxia, yellow bone marrow may convert to red marrow to:",
+                options: [{id:"A",text:"Store more fat"},{id:"B",text:"Increase oxygen delivery capacity"},{id:"C",text:"Reduce blood viscosity"},{id:"D",text:"Decrease immune activity"}],
+                correct: "B",
+                explanation: "This adaptive response boosts RBC production to improve oxygen-carrying capacity."
+            },
+            {
+                id: 29,
+                text: "Which factor is NOT a hematopoietic growth factor?",
+                options: [{id:"A",text:"EPO"},{id:"B",text:"TPO"},{id:"C",text:"Insulin"},{id:"D",text:"GM-CSF"}],
+                correct: "C",
+                explanation: "Insulin regulates glucose metabolism, not blood cell production."
+            },
+            {
+                id: 30,
+                text: "The common myeloid progenitor gives rise to all EXCEPT:",
+                options: [{id:"A",text:"Erythrocytes"},{id:"B",text:"Megakaryocytes"},{id:"C",text:"Neutrophils"},{id:"D",text:"T lymphocytes"}],
+                correct: "D",
+                explanation: "T cells arise from the common lymphoid progenitor, not the myeloid lineage."
+            },
+            // MCQs 31–40
+            {
+                id: 31,
+                text: "In acute bacterial otitis media, which WBC is expected to increase most prominently?",
+                options: [{id:"A",text:"Eosinophil"},{id:"B",text:"Lymphocyte"},{id:"C",text:"Neutrophil"},{id:"D",text:"Basophil"}],
+                correct: "C",
+                explanation: "Neutrophilia is hallmark of acute bacterial infections like otitis media."
+            },
+            {
+                id: 32,
+                text: "A “left shift” in a CBC indicates:",
+                options: [{id:"A",text:"Low platelet count"},{id:"B",text:"Increased immature neutrophils (bands)"},{id:"C",text:"High lymphocyte percentage"},{id:"D",text:"Elevated hematocrit"}],
+                correct: "B",
+                explanation: "“Left shift” means increased band forms, signaling active bone marrow response to infection."
+            },
+            {
+                id: 33,
+                text: "Which condition is associated with thrombocytopenia?",
+                options: [{id:"A",text:"Excessive clotting"},{id:"B",text:"Easy bruising and bleeding"},{id:"C",text:"Polycythemia"},{id:"D",text:"Leukocytosis"}],
+                correct: "B",
+                explanation: "Low platelet count (thrombocytopenia) impairs hemostasis, leading to bleeding tendencies."
+            },
+            {
+                id: 34,
+                text: "Pregnancy typically increases maternal blood volume by approximately:",
+                options: [{id:"A",text:"10%"},{id:"B",text:"25%"},{id:"C",text:"50%"},{id:"D",text:"75%"}],
+                correct: "C",
+                explanation: "Blood volume expands by ~50% during pregnancy to support placental circulation and fetal needs."
+            },
+            {
+                id: 35,
+                text: "Using the Nadler equation, which variable is NOT required?",
+                options: [{id:"A",text:"Height"},{id:"B",text:"Weight"},{id:"C",text:"Age"},{id:"D",text:"Sex"}],
+                correct: "C",
+                explanation: "The Nadler equation uses height, weight, and sex—not age—to estimate blood volume."
+            },
+            {
+                id: 36,
+                text: "The Lemmens-Bernstein-Brodsky equation improves accuracy by incorporating:",
+                options: [{id:"A",text:"Hematocrit"},{id:"B",text:"BMI"},{id:"C",text:"Platelet count"},{id:"D",text:"Serum albumin"}],
+                correct: "B",
+                explanation: "This formula adjusts for body composition using BMI, making it better for obese/underweight individuals."
+            },
+            {
+                id: 37,
+                text: "Which blood component is most responsible for CO₂ transport?",
+                options: [{id:"A",text:"Plasma proteins"},{id:"B",text:"Platelets"},{id:"C",text:"Red blood cells"},{id:"D",text:"Neutrophils"}],
+                correct: "C",
+                explanation: "RBCs carry CO₂ as carbaminohemoglobin and facilitate bicarbonate formation via carbonic anhydrase."
+            },
+            {
+                id: 38,
+                text: "Biconcave shape of RBCs enhances:",
+                options: [{id:"A",text:"Phagocytic ability"},{id:"B",text:"Surface area for gas exchange"},{id:"C",text:"Antibody production"},{id:"D",text:"Clot retraction"}],
+                correct: "B",
+                explanation: "The biconcave disc maximizes surface-to-volume ratio, optimizing O₂/CO₂ diffusion."
+            },
+            {
+                id: 39,
+                text: "In a patient with severe anemia due to chronic kidney disease, which hormone is likely deficient?",
+                options: [{id:"A",text:"TPO"},{id:"B",text:"SCF"},{id:"C",text:"Erythropoietin (EPO)"},{id:"D",text:"GM-CSF"}],
+                correct: "C",
+                explanation: "Damaged kidneys produce less EPO, leading to anemia of chronic disease."
+            },
+            {
+                id: 40,
+                text: "Which statement best describes hematopoietic hierarchy?",
+                options: [{id:"A",text:"All blood cells arise directly from plasma"},{id:"B",text:"HSCs differentiate into myeloid and lymphoid progenitors"},{id:"C",text:"Platelets originate from lymphoid lineage"},{id:"D",text:"RBCs can self-renew indefinitely"}],
+                correct: "B",
+                explanation: "The hematopoietic tree starts with HSCs, which branch into common myeloid and common lymphoid progenitors—the foundation of all blood cells."
+            }
+        ];
+
+        // --- APPLICATION LOGIC ---
+        const quizApp = {
+            currentIndex: 0,
+            userAnswers: new Array(quizData.length).fill(null), 
+            scores: 0,
+            
+            // DOM Elements
+            dom: {
+                questionText: document.getElementById('question-text'),
+                optionsList: document.getElementById('options-list'),
+                currentQNum: document.getElementById('current-q-num'),
+                totalQNum: document.getElementById('total-q-num'),
+                prevBtn: document.getElementById('prev-btn'),
+                nextBtn: document.getElementById('next-btn'),
+                explanationBox: document.getElementById('explanation-box'),
+                explanationContent: document.getElementById('explanation-content'),
+                quizMain: document.getElementById('quiz-main'),
+                navFooter: document.getElementById('nav-footer'),
+                resultScreen: document.getElementById('result-screen'),
+                scoreVal: document.getElementById('score-val'),
+                totalVal: document.getElementById('total-val'),
+                modal: document.getElementById('list-modal'),
+                grid: document.getElementById('question-grid')
+            },
+
+            init() {
+                this.dom.totalQNum.textContent = quizData.length;
+                this.renderQuestion();
+                this.updateNavButtons();
+            },
+
+            renderQuestion() {
+                const q = quizData[this.currentIndex];
+                
+                // Update Header
+                this.dom.currentQNum.textContent = this.currentIndex + 1;
+                
+                // Update Text
+                this.dom.questionText.textContent = q.text;
+                
+                // Clear Previous Options
+                this.dom.optionsList.innerHTML = '';
+                
+                // Hide Explanation
+                this.dom.explanationBox.style.display = 'none';
+
+                // Determine if already answered
+                const isAnswered = this.userAnswers[this.currentIndex] !== null;
+
+                // Generate Options
+                q.options.forEach(opt => {
+                    const li = document.createElement('li');
+                    li.className = 'option-item';
+                    
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerHTML = `<span>${opt.id}) ${opt.text}</span>`;
+                    
+                    // Feedback Span
+                    const feedback = document.createElement('span');
+                    feedback.className = 'feedback-text';
+
+                    if (isAnswered) {
+                        btn.disabled = true;
+                        feedback.style.display = 'block';
+
+                        const isCorrect = opt.id === q.correct;
+                        const isSelected = this.userAnswers[this.currentIndex].selectedId === opt.id;
+                        
+                        if (isCorrect) {
+                            li.classList.add('correct');
+                            feedback.textContent = 'CORRECT';
+                            feedback.classList.add('feedback-correct');
+                        } else if (isSelected && !isCorrect) {
+                            li.classList.add('incorrect');
+                            feedback.textContent = 'INCORRECT';
+                            feedback.classList.add('feedback-incorrect');
+                        }
+                    } else {
+                        btn.onclick = () => this.handleAnswer(opt.id, li);
+                    }
+
+                    li.appendChild(btn);
+                    li.appendChild(feedback);
+                    this.dom.optionsList.appendChild(li);
+                });
+
+                // Show explanation if answered
+                if (isAnswered) {
+                    this.dom.explanationContent.innerHTML = q.explanation;
+                    this.dom.explanationBox.style.display = 'block';
+                }
+
+                this.updateNavButtons();
+            },
+
+            handleAnswer(selectedId, liElement) {
+                const q = quizData[this.currentIndex];
+                const isCorrect = (selectedId === q.correct);
+                
+                // Record Answer
+                this.userAnswers[this.currentIndex] = {
+                    selectedId: selectedId,
+                    isCorrect: isCorrect
+                };
+
+                if (isCorrect) {
+                    this.scores++;
+                }
+
+                // Update UI immediately
+                // Find the button inside the clicked li
+                const btn = liElement.querySelector('.option-btn');
+                btn.disabled = true;
+
+                // Add classes
+                if (isCorrect) {
+                    liElement.classList.add('correct');
+                } else {
+                    liElement.classList.add('incorrect');
+                }
+
+                // Show Feedback Text
+                const feedback = liElement.querySelector('.feedback-text');
+                feedback.style.display = 'block';
+                feedback.textContent = isCorrect ? 'CORRECT' : 'INCORRECT';
+                feedback.className = 'feedback-text ' + (isCorrect ? 'feedback-correct' : 'feedback-incorrect');
+
+                // Highlight the actual correct answer if user was wrong
+                if (!isCorrect) {
+                    const allItems = this.dom.optionsList.querySelectorAll('.option-item');
+                    allItems.forEach(item => {
+                        const itemBtnText = item.querySelector('span').textContent;
+                        if (itemBtnText.startsWith(q.correct + ')')) {
+                            item.classList.add('correct');
+                            item.querySelector('.option-btn').disabled = true;
+                            const fb = item.querySelector('.feedback-text');
+                            fb.style.display = 'block';
+                            fb.textContent = 'CORRECT';
+                            fb.classList.add('feedback-correct');
+                        }
+                    });
+                }
+
+                // Show Explanation
+                this.dom.explanationContent.innerHTML = q.explanation;
+                this.dom.explanationBox.style.display = 'block';
+
+                this.updateNavButtons();
+            },
+
+            nextQuestion() {
+                if (this.currentIndex < quizData.length - 1) {
+                    this.currentIndex++;
+                    this.renderQuestion();
+                } else {
+                    this.showResults();
+                }
+            },
+
+            prevQuestion() {
+                if (this.currentIndex > 0) {
+                    this.currentIndex--;
+                    this.renderQuestion();
+                }
+            },
+
+            jumpToQuestion(index) {
+                this.currentIndex = index;
+                this.renderQuestion();
+                this.toggleModal(false);
+            },
+
+            updateNavButtons() {
+                this.dom.prevBtn.disabled = this.currentIndex === 0;
+                
+                const isLast = this.currentIndex === quizData.length - 1;
+                const isAnswered = this.userAnswers[this.currentIndex] !== null;
+
+                if (isLast) {
+                    this.dom.nextBtn.textContent = 'Finish';
+                    this.dom.nextBtn.disabled = !isAnswered;
+                } else {
+                    this.dom.nextBtn.textContent = 'Next';
+                    this.dom.nextBtn.disabled = false;
+                }
+            },
+
+            showResults() {
+                this.dom.quizMain.style.display = 'none';
+                this.dom.navFooter.style.display = 'none';
+                this.dom.resultScreen.style.display = 'block';
+                this.dom.scoreVal.textContent = this.scores;
+                this.dom.totalVal.textContent = quizData.length;
+            },
+
+            restartQuiz() {
+                this.currentIndex = 0;
+                this.userAnswers.fill(null);
+                this.scores = 0;
+                this.dom.quizMain.style.display = 'block';
+                this.dom.navFooter.style.display = 'flex';
+                this.dom.resultScreen.style.display = 'none';
+                this.renderQuestion();
+            },
+
+            toggleModal(show) {
+                if (show) {
+                    this.renderGrid();
+                    this.dom.modal.classList.add('active');
+                } else {
+                    this.dom.modal.classList.remove('active');
+                }
+            },
+
+            renderGrid() {
+                this.dom.grid.innerHTML = '';
+                quizData.forEach((q, index) => {
+                    const btn = document.createElement('div');
+                    btn.textContent = index + 1;
+                    
+                    // Base Class
+                    btn.className = 'grid-item';
+                    
+                    // Logic for Status Colors
+                    if (index === this.currentIndex) {
+                        btn.classList.add('current');
+                    }
+                    
+                    if (this.userAnswers[index] !== null) {
+                        btn.classList.add('answered');
+                    } else {
+                        btn.classList.add('unanswered');
+                    }
+
+                    btn.onclick = () => this.jumpToQuestion(index);
+                    this.dom.grid.appendChild(btn);
+                });
+            }
+        };
+
+        // Initialize Quiz
+        quizApp.init();
+
+    </script>
+</body>
+</html>
