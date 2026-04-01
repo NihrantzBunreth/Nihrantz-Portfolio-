@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instrumental Analytical Chemistry - Final Prep</title>
+    <title>Instrumental Analytical Chemistry</title>
     <style>
         /* --- RESET & BASIC SETUP --- */
         * {
@@ -369,7 +369,7 @@
         <!-- Result Screen -->
         <div class="result-screen" id="result-screen">
             <h1 class="result-title">Test Result</h1>
-            <div class="score-display" id="final-score">0 / 70</div>
+            <div class="score-display" id="final-score">0 / 71</div>
             <div class="score-label">Score</div>
             <button class="nav-btn" onclick="restartQuiz()" style="margin-top: 30px; font-size: 16px; padding: 10px 30px;">Retake Test</button>
         </div>
@@ -412,491 +412,427 @@
                 section: "Dissolution & Disintegration",
                 question: "1. In dissolution test, flask is maintained at:",
                 options: ["a) 37° C ± 0.5 °C", "b) 41° C ± 0.1 °C", "c) 39° C ± 0.6 °C", "d) 40° C ± 0.1 °C"],
-                correct: 0,
-                explanation: "The dissolution test simulates physiological conditions. Normal human core body temperature is 37°C, so dissolution media are maintained at 37°C ± 0.5°C per USP <711> and Ph. Eur. guidelines. This tight tolerance ensures reproducibility."
+                correct: 0
             },
             {
                 section: "Dissolution & Disintegration",
-                question: "2. Enteric coated tablet disintegrate in ____ hrs in simulated intestinal fluid (per full protocol).",
+                question: "2. Enteric coated tablet disintegrate in ____ hrs in simulated intestinal fluid.",
                 options: ["a) 0.5", "b) 2", "c) 3", "d) 4"],
-                correct: 1,
-                explanation: "Enteric-coated tablets must not disintegrate in simulated gastric fluid (for 2 hours), but must disintegrate within 1 hour after transfer to simulated intestinal fluid. The total time from start in gastric fluid to complete disintegration in intestinal fluid is typically ≤2 hours."
+                correct: 1
             },
             {
                 section: "Dissolution & Disintegration",
-                question: "3. Enteric coated tablet disintegrate in",
+                question: "3. Enteric coated tablet disintegrate in:",
                 options: ["a) Stomach", "b) Liver", "c) Intestine", "d) Mouth"],
-                correct: 2,
-                explanation: "Enteric coatings are pH-sensitive polymers that remain intact at gastric pH (1–3) but dissolve at intestinal pH (≥5.5–6.8). Thus, disintegration occurs in the small intestine."
+                correct: 2
             },
             {
                 section: "Content Uniformity",
-                question: "4. How many tablets are required for content uniformity test?",
+                question: "4. How many tablets require for content uniformity test?",
                 options: ["a) 10", "b) 20", "c) 30", "d) 40"],
-                correct: 0,
-                explanation: "Per USP <905> Uniformity of Dosage Units, the initial test uses 10 dosage units. If results meet acceptance criteria, testing stops."
+                correct: 2
             },
             {
                 section: "Equipment Calibration",
                 question: "5. According to USP, the speed regulating device of the dissolution apparatus should be capable of maintaining the speed within limits of what % of the selected speed?",
                 options: ["a) 1%", "b) 2%", "c) 4%", "d) 5%"],
-                correct: 0,
-                explanation: "USP <711> states that the rotational speed must be controlled to within ±1% of the selected speed. For example, at 50 rpm, the actual speed must be 49.5–50.5 rpm."
+                correct: 2
             },
             {
                 section: "Equipment Calibration",
-                question: "6. The shaft is positioned so that the lower edge of the blade is",
+                question: "6. The shaft is positioned so that the lower edge of the blade is:",
                 options: ["a) 23–25 mm", "b) 23–27 mm", "c) 21–27 mm", "d) 20–25 mm"],
-                correct: 0,
-                explanation: "In USP Apparatus 2 (Paddle), the lower edge of the paddle blade must be 23–25 mm above the inside bottom of the dissolution vessel to ensure consistent fluid dynamics."
+                correct: 1
             },
             {
                 section: "Dissolution Apparatus",
-                question: "7. For immediate and delayed-release solid oral dosage forms, including tablets and capsules, which dissolution apparatus is/are used?",
+                question: "7. For immediate and delayed-release solid oral dosage forms, including tablets and capsules which dissolution apparatus is/are used?",
                 options: ["a) USP Apparatus 1", "b) USP Apparatus 2", "c) USP Apparatus 3", "d) a and b"],
-                correct: 3,
-                explanation: "USP Apparatus 1 (Basket) and Apparatus 2 (Paddle) are the most commonly used for solid oral dosage forms. Apparatus 3 is used for modified-release or chewable products."
+                correct: 3
             },
             {
                 section: "Disintegration Test",
                 question: "8. Disintegration test:",
-                options: ["a) Determine the disintegration time of the solid dosage form tablet, capsules within prescribed time when placed in liquid medium for internal use", "b) Determine the dissolution rate...", "c) Measure absorbance...", "d) Identify components..."],
-                correct: 0,
-                explanation: "Disintegration test checks whether a tablet/capsule breaks apart into granules/particles within a specified time in fluid. It does not measure drug release (dissolution) or chemical identity."
+                options: ["a) Determine the disintegration time of the solid dosage form tablet, capsules within prescribed time when places in liquid medium for internal use", "b) Determine the dissolution rate of the solid dosage form tablet, capsules within prescribed time when places in liquid medium for internal use", "c) Measure the absorbance of the solution", "d) identify the components of pharmaceuticals products"],
+                correct: 0
             },
             {
                 section: "Disintegration Test",
-                question: "9. Disintegration test requirement for uncoated tablet of immediate release dosage forms",
+                question: "9. Disintegration test requirement for uncoated tablet of immediate release dosage forms:",
                 options: ["a) 10 minutes", "b) 15 minutes", "c) 20 minutes", "d) 60 minutes"],
-                correct: 1,
-                explanation: "USP <701>: Uncoated immediate-release tablets must disintegrate within 15 minutes in water at 37°C."
+                correct: 1
             },
             {
                 section: "Disintegration Test",
-                question: "10. Disintegration test requirement for coated tablet of immediate release dosage forms",
+                question: "10. Disintegration test requirement for coated tablet of immediate release dosage forms:",
                 options: ["a) 10 minutes", "b) 15 minutes", "c) 30 minutes", "d) 60 minutes"],
-                correct: 2,
-                explanation: "Film-coated immediate-release tablets are allowed up to 30 minutes to disintegrate (USP <701>). The coating adds a slight barrier."
+                correct: 2
             },
             {
                 section: "Disintegration Test",
-                question: "11. Disintegration test requirement for capsules of immediate release dosage forms",
+                question: "11. Disintegration test requirement for capsules of immediate release dosage forms:",
                 options: ["a) 10 minutes", "b) 15 minutes", "c) 30 minutes", "d) 60 minutes"],
-                correct: 2,
-                explanation: "Hard and soft gelatin capsules must disintegrate within 30 minutes per USP. Capsule shells take slightly longer to hydrate and rupture."
+                correct: 2
             },
             {
                 section: "Disintegration Test",
                 question: "12. Disintegration acceptance criteria:",
-                options: ["a) The test is met if all of the dosage units have disintegrated completely", "b) …dissolved…", "c) …disintegrated incompletely…", "d) …dissolved incompletely…"],
-                correct: 0,
-                explanation: "Acceptance = complete disintegration (no residue except insoluble coating fragments or capsule shell). 'Dissolved' refers to dissolution, not disintegration."
+                options: ["a) The test is met if all of the dosage units have disintegrated completely", "b) The test is met if all of the dosage units have dissolve completely", "c) The test is met if all of the dosage units have disintegrated incompletely", "d) The test is met if all of the dosage units have dissolve incompletely"],
+                correct: 0
             },
             {
                 section: "Disintegration Test",
                 question: "13. If 1 or 2 dosage units fail to disintegrate:",
-                options: ["a) Repeat on 6 additional; ≥16/18 pass", "b) Repeat on 12 additional; ≥16/18 pass", "c) Repeat on 18 additional…", "d) Repeat on 24; ≥22/24 pass"],
-                correct: 1,
-                explanation: "USP <701> allows a two-stage test. Initial: 6 units → all must disintegrate. If 1 or 2 fail, test 12 more (total 18). At least 16 of 18 must pass."
+                options: ["a) Repeat the test on 6 additional dosage units. The test is met if not less than 16 of the total of 18 dosage units tested are disintegrated.", "b) repeat the test on 12 additional dosage units. The test is met if not less than 16 of the total of 18 dosage units tested are disintegrated.", "c) Repeat the test on 18 additional dosage units. The test is met if not less than 16 of the total of 18 dosage units tested are disintegrated.", "d) Repeat the test on 24 additional dosage units. The test is met if not less than 22 of the total of 24 dosage units tested are disintegrated."],
+                correct: 1
             },
             {
                 section: "Disintegration Test",
                 question: "14. In disintegration test, flask is maintained at:",
                 options: ["a) 37° C ± 0.5 °C", "b) 37° C ± 1 °C", "c) 37° C ± 2 °C", "d) 37° C ± 3 °C"],
-                correct: 1,
-                explanation: "Unlike dissolution (±0.5°C), disintegration test allows ±1°C (i.e., 36–38°C) per USP <701>. Less stringent because it’s a pass/fail physical test."
+                correct: 2
             },
             {
                 section: "Equipment Management",
-                question: "15. Which is true regarding defective/out-of-calibration equipment?",
-                options: ["a) Maintenance not followed", "b) Take out of service & label", "c) Recalibrate immediately", "d) Keep using if results okay"],
-                correct: 1,
-                explanation: "GMP principle: Any equipment suspected of being out of calibration must be quarantined (taken out of service) and clearly labeled to prevent accidental use."
+                question: "15. Which of the following is true regarding defective or out of calibration equipment?",
+                options: ["a) Maintenance procedures and records were not followed.", "b) Take out of service and clearly label or mark to indicate it should not be used.", "c) Recalibration immediately", "d) If results obtained are okay continue using until a failed sample result is obtained."],
+                correct: 1
             },
             {
                 section: "QC Sample Handling",
-                question: "16. Which is required for incoming QC lab samples?",
-                options: ["a) Assign ID, label, log, record date", "b) Check documents", "c) Inspect sample/packaging", "d) All of the above"],
-                correct: 3,
-                explanation: "Proper sample handling requires: Unique ID assignment and logging, Verification of test request form, and Visual inspection for damage, labeling, storage conditions."
+                question: "16. Which of the following is required for incoming QC lab samples?",
+                options: ["a) Assigned an identification (ID) number, label sample with the assigned ID number, log sample into a register, and record receipt date.", "b) Check accompanying documents (e.g., test request form) for accuracy.", "c) Inspect sample and packaging for quantity, damage, labeling, storage conditions.", "d) All of the above"],
+                correct: 3
             },
             {
                 section: "OOS Investigation",
-                question: "17. HPLC assay: acceptance NLT 90.0%; results 96.0% and 86.0%. What to do?",
-                options: ["a) Investigate variability, then repeat", "b) Keep testing until two >90%", "c) Average to 91.0% → pass", "d) Disregard 86.0% as outlier"],
-                correct: 0,
-                explanation: "Averaging is NOT allowed if one result fails specification (86% < 90%). GMP requires OOS (Out-of-Specification) investigation before any retesting."
+                question: "17. If an HPLC assay for a medicine sample has an acceptance criterion of NLT 90.0%, and one obtains individual values of 96.0%, and 86.0%, what needs to be done?",
+                options: ["a) Investigate the source of variability and after investigation repeat test.", "b) Continue testing until two individual values > 90.0% are obtained, then report the two values.", "c) Average the individual values to obtain 91.0% with conclusion sample met required criterion.", "d) Disregard the lower value as an outlier and report 96.0%"],
+                correct: 0
             },
             {
                 section: "Documentation",
-                question: "18. Required info on Certificate of Analysis (CoA)?",
-                options: ["a) Date, lab name/address, signature", "b) Methods & results", "c) Compliance statement", "d) All of the above"],
-                correct: 3,
-                explanation: "A valid CoA must include: Lab identification, Test methods used, Actual results, and Conclusion (meets/does not meet spec)."
+                question: "18. Which of the following is required information in on a Certificate of analysis (CoA)?",
+                options: ["a) Date issued, name and contact address of the lab, and signature of the head of the lab.", "b) Specifications (testing methods) used, and results of all tests performed", "c) Statement of whether the sample complied with required specifications", "d) All of the above"],
+                correct: 3
             },
             {
                 section: "Validation",
-                question: "19. FALSE regarding analytical procedures in QC lab?",
-                options: ["a) Non-pharmacopeial procedures need validation evidence", "b) Manufacturer-submitted procedures require no validation data", "c) Pharmacopeial procedures may need verification", "d) Major changes require revalidation"],
-                correct: 1,
-                explanation: "Even manufacturer-provided methods must be verified or validated in the receiving lab. ICH Q2(R1) and GMP require proof that the method works in your lab."
+                question: "19. Which of the following is FALSE regarding analytical procedures used in the pharmaceutical QC lab?",
+                options: ["a) For non-pharmacopeias procedures, documented evidence that the procedure is validated", "b) Manufacturer-submitted procedures require no supporting validation data", "c) A pharmacopeias procedure may require verification, the first time it is performed", "d) A major change in the analytical procedure or the product being tested require revalidation"],
+                correct: 1
             },
             {
                 section: "Standards",
-                question: "20. Main ISO standard for testing/calibration labs?",
-                options: ["a) ISO 17025", "b) ISO 9000", "c) ISO Testing and calibration", "d) None"],
-                correct: 0,
-                explanation: "ISO/IEC 17025 is the global standard for competence of testing and calibration laboratories. ISO 9000 is general quality management, not lab-specific."
-            },
-            {
-                section: "Compendial Standards",
-                question: "21. If a pharmacopoeia requirement is referenced, testing should be performed...",
-                options: ["a) with interpretation", "b) as in latest revision", "c) as in pharmacopoeia in force when spec was authorized", "d) best parts of sources"],
-                correct: 2,
-                explanation: "Regulatory specifications are fixed at time of approval. Even if the pharmacopoeia updates, the product must be tested per the version cited in its approved dossier unless a change is filed."
-            },
-            {
-                section: "Procurement",
-                question: "22. Supplier of critical consumables, supplies, and services which affect quality must be ______",
-                options: ["a) ISO 9001 registered and approved", "b) Evaluated and approved by the laboratory", "c) The lowest cost compared to the others supplier", "d) Able to provide gift or bonus to procurement"],
-                correct: 1,
-                explanation: "Per GMP and ISO/IEC 17025, suppliers of critical materials must undergo a formal evaluation and be approved by the lab/QA unit."
-            },
-            {
-                section: "CAPA",
-                question: "23. The procedure for corrective action must start with ____________",
-                options: ["a) Finger-pointing", "b) Risk Management", "c) An investigation to determine the root cause(s) of the problem", "d) Documenting the problem"],
-                correct: 2,
-                explanation: "Corrective action begins with a thorough investigation to identify the root cause (e.g., equipment failure, training gap). Only after root cause identification can effective corrective and preventive actions be implemented."
-            },
-            {
-                section: "Training",
-                question: "24. Training records are essential to ______",
-                options: ["a) Writing job description", "b) Accrediting the analyst", "c) Ensure the competence and authorize personnel", "d) Increase the salary"],
-                correct: 2,
-                explanation: "Training records prove that staff have received required instruction and demonstrated competence to perform specific tasks. Authorization to perform testing is contingent on documented training."
-            },
-            {
-                section: "QMS",
-                question: "25. Overall quality system policies and objectives shall be documented in a _________",
-                options: ["a) Quality manual", "b) Quality policy statements", "c) Standard operating procedure", "d) Quality work instruction"],
-                correct: 0,
-                explanation: "The Quality Manual is the top-tier document in a QMS (per ISO/IEC 17025 §8.2). It includes scope of accreditation, quality policy & objectives, and references to SOPs."
-            },
-            {
-                section: "Document Control",
-                question: "26. What is the meaning of control of document?",
-                options: ["a) More work for Quality Manager and QMU", "b) All documents must contain accurate information of test result", "c) Documents are identified with unique ID, authorized, reviewed by authorized personnel", "d) Any staff can prepare, review, and approve all QMS documentation"],
-                correct: 2,
-                explanation: "Document control ensures: Each document has a unique identifier, Approved by authorized personnel, Periodic review, and Current version only is available at point of use."
-            },
-            {
-                section: "Equipment Records",
-                question: "27. Records to be retained for every piece of equipment significant to the testing activity shall include _________",
-                options: ["a) Current location (where appropriate)", "b) Serial number or other unique identification", "c) Calibration status", "d) All of the above"],
-                correct: 3,
-                explanation: "ISO/IEC 17025 §6.4.10 requires an equipment register containing: Unique ID, Location, Calibration due date/status, and Maintenance history."
-            },
-            {
-                section: "Calibration",
-                question: "28. When is it not necessary to calibrate laboratory equipment against traceable reference standard or reference materials?",
-                options: ["a) When too expensive", "b) When used by trained analyst", "c) When traceable reference materials are not available", "d) When the equipment has no effect on the quality of test results"],
-                correct: 3,
-                explanation: "Calibration is required only for equipment that influences test results. Items like furniture, non-measuring glassware, or sample trays don’t require calibration."
-            },
-            {
-                section: "Audits",
-                question: "29. Internal audits are used to identify ____",
-                options: ["a) Compliance with the management system", "b) Compliance with ISO/IEC 17025", "c) Opportunities for improvement", "d) All of the above"],
-                correct: 3,
-                explanation: "Internal audits verify: Adherence to QMS procedures, Conformance to standard requirements, and Gaps that can lead to process improvements."
-            },
-            {
-                section: "Records",
-                question: "30. Records that contain all the information of testing activity must be _________",
-                options: ["a) Legible, readily retrievable, and stored in a suitable environment", "b) Designed for auditors to find observation/nonconformity easily", "c) Controlled by IT personnel", "d) Disposed anytime"],
-                correct: 0,
-                explanation: "ALCOA+ principles apply. Records must be protected from damage, organized, and accessible during retention period."
-            },
-            {
-                section: "QMS",
-                question: "31. The Quality Manual (QM) lays down... Which are expected to be included?",
-                options: ["a) I and II only", "b) I and III only", "c) II and III only", "d) I, II, and III"],
-                correct: 3,
-                explanation: "A comprehensive Quality Manual includes: Quality policy & objectives, Organizational structure showing roles/responsibilities, and QA processes (internal/external audits, management reviews, CAPA)."
-            },
-            {
-                section: "SOPs",
-                question: "32. Which operations in a QC lab require SOPs?",
-                options: ["a) I and II only", "b) II and IV only", "c) I, II and III only", "d) II, III, and IV"],
-                correct: 3,
-                explanation: "SOPs are required for all quality-affecting activities: Equipment calibration, Analytical testing, and OOS investigation. Stationery purchase is administrative, not quality-critical."
-            },
-            {
-                section: "Management",
-                question: "33. The QA manager:",
-                options: ["a) I and II only", "b) I and III only", "c) II and III only", "d) I, II, and III"],
-                correct: 0,
-                explanation: "The QA manager must oversee QMS compliance and report independently to senior management. However, should NOT be the QC lab head to ensure objective oversight."
-            },
-            {
-                section: "Environment",
-                question: "34. Serious analytical errors may arise undetected unless the QC lab ensures:",
-                options: ["a) I and II only", "b) I and III only", "c) I, II and III only", "d) I, II, III, and IV"],
-                correct: 3,
-                explanation: "All factors impact data integrity: Uncalibrated instruments, Dirty glassware, Temp/humidity swings, and Power surges affecting sensitive electronics."
-            },
-            {
-                section: "Reagents",
-                question: "35. All prepared reagents should be labeled properly with:",
-                options: ["a) I and II only", "b) I, II, and III only", "c) I, II, and IV only", "d) I, II, III, and IV"],
-                correct: 2,
-                explanation: "Required label info: Identity & strength, Prep date & preparer, and Expiry or discard date. Lab director’s name is not required."
-            },
-            {
-                section: "Equipment Management",
-                question: "36. Which is true regarding defective/out-of-calibration equipment?",
-                options: ["a) Maintenance procedures not followed", "b) Take out of service and clearly label", "c) Recalibration date boldly written", "d) Keep using if results seem okay"],
-                correct: 1,
-                explanation: "Immediate quarantine is mandatory upon detection of defect/calibration failure. Labeling prevents accidental use."
-            },
-            {
-                section: "QC Sample Handling",
-                question: "37. Required for incoming QC lab samples?",
-                options: ["a) Assign ID, label, log, record date", "b) Check documents", "c) Inspect sample/packaging", "d) All of the above"],
-                correct: 3,
-                explanation: "Sample integrity starts at receipt: Unique ID & logging, Document check, and Physical inspection."
-            },
-            {
-                section: "OOS Investigation",
-                question: "38. HPLC assay: NLT 90.0%; results 96.0% and 86.0%. What to do?",
-                options: ["a) Investigate variability, then repeat", "b) Keep testing until two >90%", "c) Average to 91.0% → pass", "d) Disregard 86.0% as outlier"],
-                correct: 0,
-                explanation: "One failing result = Out-of-Specification (OOS). Must conduct Phase I (lab error) investigation before any retesting. No averaging or selective reporting allowed."
-            },
-            {
-                section: "Documentation",
-                question: "39. Required info on Certificate of Analysis (CoA)?",
-                options: ["a) Date, lab name/address, signature", "b) Methods & results", "c) Compliance statement", "d) All of the above"],
-                correct: 3,
-                explanation: "A valid CoA is a legal document requiring: Lab identification, Test methods & numerical results, and Clear conclusion."
-            },
-            {
-                section: "Validation",
-                question: "40. FALSE regarding analytical procedures in QC lab?",
-                options: ["a) Non-pharmacopeial procedures need validation evidence", "b) Manufacturer-submitted procedures require no validation data", "c) Pharmacopeial procedures may need verification", "d) Major changes require revalidation"],
-                correct: 1,
-                explanation: "All methods used in QC must be proven suitable in the user’s lab. Assuming validity without proof is a major audit finding."
-            },
-            {
-                section: "Standards",
-                question: "41. The main ISO standards used by testing and calibration labs",
+                question: "20. The main ISO standards used by testing and calibration labs:",
                 options: ["a) ISO 17025", "b) ISO 9000", "c) ISO Testing and calibration", "d) None of the above"],
-                correct: 0,
-                explanation: "ISO/IEC 17025 is the internationally recognized standard specifically for the competence of testing and calibration laboratories."
+                correct: 0
             },
             {
                 section: "Compendial Standards",
-                question: "42. If a pharmacopoeial requirement is referenced, testing should be performed...",
-                options: ["a) using interpretation and common sense", "b) as in the latest revision", "c) as in the pharmacopoeia in force when the specification was authorized", "d) by taking best parts of sources"],
-                correct: 2,
-                explanation: "Regulatory specifications are locked to the version of the pharmacopoeia valid at the time of product registration."
+                question: "21. If a pharmacopoeia requirement is referenced, then the testing should be performed...",
+                options: ["a) using a certain amount of interpretation and common sense", "b) as stated in the latest revision of the pharmacopoeia", "c) as in the pharmacopoeia that was in force when the specification was authorized", "d) by taking the best parts of available sources"],
+                correct: 1
             },
             {
                 section: "Change Control",
-                question: "43. When a pharmacopoeia is revised, what should happen to lab documents that reference it?",
-                options: ["a) Existing documents should not be changed", "b) An automatic procedure must ensure documents are reviewed", "c) Erase the pharmacopoeial reference", "d) None of the above"],
-                correct: 1,
-                explanation: "Per GMP and QMS best practices, any change in external standards must trigger a document review process to assess whether method updates are needed."
-            },
-            {
-                section: "Training",
-                question: "44. Training records are essential to ______",
-                options: ["a) Writing job description", "b) Accrediting the analyst", "c) Ensure the competence and authorize personnel", "d) Increase the salary"],
-                correct: 2,
-                explanation: "Training records demonstrate that staff are qualified to perform specific tasks. Authorization to test is contingent on documented competence."
-            },
-            {
-                section: "Equipment Records",
-                question: "45. Records for equipment significant to testing shall include ______",
-                options: ["a) Current location", "b) Serial number or unique ID", "c) Calibration status", "d) All of the above"],
-                correct: 3,
-                explanation: "ISO/IEC 17025 §6.4.10 mandates an equipment register with: Unique identifier, Location (if movable), and Calibration due date/status."
-            },
-            {
-                section: "Equipment Management",
-                question: "46. Before equipment is placed/returned to service, lab personnel must",
-                options: ["a) Ensure function and calibration status are satisfactory", "b) Remove Out-of-service label", "c) Ensure replacement equipment is available", "d) Verify equipment conforms to specified requirements"],
-                correct: 0,
-                explanation: "Equipment returning from maintenance/calibration must undergo performance verification. Only after confirming fitness for use can it be returned to service."
-            },
-            {
-                section: "CAPA",
-                question: "47. The procedure for corrective action must start with ____________",
-                options: ["a) Finger-pointing", "b) Risk Management", "c) An investigation to determine root cause(s)", "d) Documenting the problem"],
-                correct: 2,
-                explanation: "Corrective action begins with a structured investigation (e.g., 5 Whys, Fishbone) to find the true root cause—not symptoms."
-            },
-            {
-                section: "Calibration",
-                question: "48. When is calibration NOT necessary?",
-                options: ["a) Too expensive", "b) Used by trained analyst", "c) Traceable standards unavailable", "d) Equipment has no effect on test results"],
-                correct: 3,
-                explanation: "Calibration is required only for equipment influencing data quality. Items like sample racks, non-measuring tools don’t require calibration."
-            },
-            {
-                section: "Audits",
-                question: "49. Internal audits identify",
-                options: ["a) Compliance with management system", "b) Compliance with ISO/IEC 17025", "c) Opportunities for improvement", "d) All of the above"],
-                correct: 3,
-                explanation: "Internal audits verify conformance to QMS and standards while also identifying process gaps and improvement areas."
-            },
-            {
-                section: "Document Control",
-                question: "50. Meaning of 'control of document'?",
-                options: ["a) More work for QA", "b) Must contain accurate test results", "c) Identified with unique ID, authorized, reviewed", "d) Any staff can approve all documents"],
-                correct: 2,
-                explanation: "Document control ensures only approved, current versions are used. Includes: numbering, approval signatures, review cycles, and obsolescence handling."
-            },
-            {
-                section: "Records",
-                question: "51. Records containing all testing information must be",
-                options: ["a) Current location", "b) Serial number", "c) Calibration status", "d) Legible, readily retrievable, and stored in a suitable environment"],
-                correct: 3,
-                explanation: "Records must be legible, readily retrievable, and stored in a suitable environment to ensure data integrity (ALCOA+ principles). Note: Options a-c were corrected to match the question's intent regarding testing records."
+                question: "22. When a pharmacopoeia is revised what should happen to laboratory documents that reference it?",
+                options: ["a) Existing documents should not be changed", "b) An automatic procedure must ensure that documents are reviewed", "c) The pharmacopoeia reference should be erased from the document", "d) None of the above"],
+                correct: 1
             },
             {
                 section: "Procurement",
-                question: "52. Supplier of critical consumables must be",
-                options: ["a) ISO 9001 registered", "b) Evaluated and approved by the lab", "c) Lowest cost", "d) Provide gifts"],
-                correct: 1,
-                explanation: "Critical suppliers must undergo quality-based evaluation (audits, certificates, performance history) to ensure reliability and traceability."
+                question: "23. Supplier of critical consumables, supplies, and services which affect quality must be ______:",
+                options: ["a) ISO 9001 registered and approved", "b) Evaluated and approved by the laboratory", "c) The lowest cost compared to the others supplier", "d) Able to provide gift or bonus to procurement committee"],
+                correct: 1
             },
             {
-                section: "Contract Review",
-                question: "53. Purpose of reviewing requests, tenders, and contracts?",
-                options: ["a) Evaluate if client requirements can be met with current lab capability", "b) Increase revenue", "c) Check spelling", "d) Give admin more work"],
-                correct: 0,
-                explanation: "Labs must review customer requests to ensure: They understand requirements, Have competence/resources to deliver, and Can meet turnaround times and specs."
+                section: "CAPA",
+                question: "24. The procedure for corrective action must start with____________:",
+                options: ["a) Finger-pointing", "b) Risk Management", "c) An investigation to determine the root cause(s) of the problem", "d) Documenting the problem"],
+                correct: 2
+            },
+            {
+                section: "Training",
+                question: "25. Training records are essential to______:",
+                options: ["a. Writing job description", "b. Accrediting the analyst", "c. Ensure the competence and authorize personnel", "d. Increase the salary"],
+                correct: 2
             },
             {
                 section: "QMS",
-                question: "54. Quality system policies and objectives documented in a ______",
-                options: ["a) Quality manual", "b) Quality policy statements", "c) SOP", "d) Work instruction"],
-                correct: 0,
-                explanation: "The Quality Manual is the top-level QMS document. It includes scope, policy, objectives, org structure, and references to procedures."
+                question: "26. Overall quality system policies and objectives shall be documented in a _________:",
+                options: ["a. Quality manual", "b. Quality policy statements", "c. Standard operating procedure", "d. Quality work instruction"],
+                correct: 0
+            },
+            {
+                section: "Document Control",
+                question: "27. What is the meaning of control of document?",
+                options: ["a. More work for Quality Manager and QMU", "b. All documents must contain accurate information of test result", "c. Documents are identified with unique ID, authorized, reviewed by authorized personnel.", "d. Any staff of the laboratory has authorization to prepare, review and approved all QMS documentation."],
+                correct: 2
+            },
+            {
+                section: "Equipment Records",
+                question: "28. Records to be retained for every piece of equipment significant to the testing activity shall include_________:",
+                options: ["a. Current location (where appropriate)", "b. Serial number or other unique identification", "c. Calibration status", "d. All of the above"],
+                correct: 3
+            },
+            {
+                section: "Calibration",
+                question: "29. When is it not necessary to calibrate laboratory equipment against traceable reference standard or reference materials?",
+                options: ["a. When it is too expensive to do so", "b. When the equipment is used by trained analyst", "c. When traceable reference materials are not available", "d. When the equipment has no effect on the quality of test results"],
+                correct: 3
+            },
+            {
+                section: "Audits",
+                question: "30. Internal audits are used to identify____:",
+                options: ["a. Compliance with the management system", "b. Compliance with ISO/IEC 17025", "c. Opportunities for improvement", "d. All of the above."],
+                correct: 3
+            },
+            {
+                section: "Records",
+                question: "31. Records that contain all the information of testing activity must be _________:",
+                options: ["a. Legible, readily retrievable, and stored in a suitable environment", "b. Designed for auditors to find observation/nonconformity easily", "c. Controlled by IT personnel", "d. Disposed anytime."],
+                correct: 0
+            },
+            {
+                section: "QMS",
+                question: "32. The Quality Manual (QM) lays down formally, concisely, and systematically the general principles which should guide the administration the QC lab. Which of the following is/are expected to be included in the QM?",
+                options: ["a. I and II only", "b. I and III only", "c. II and III only", "d. I, II, and III"],
+                correct: 3
+            },
+            {
+                section: "SOPs",
+                question: "33. Which of the following operations in a QC lab require SOPs?",
+                options: ["a. I and II only", "b. II and IV only", "c. I, II and III only", "d. II, III, and IV"],
+                correct: 3
+            },
+            {
+                section: "Management",
+                question: "34. The QC lab should designate a staff member as QA manager. The QA manager:",
+                options: ["a. I and II only", "b. I and III only", "c. II and III only", "d. I, II, and III"],
+                correct: 0
+            },
+            {
+                section: "Environment",
+                question: "35. Serious analytical errors may arise undetected unless the QC lab ensures:",
+                options: ["a. I and II only", "b. I and III only", "c. I, II and III only", "d. I, II, III, and IV"],
+                correct: 3
+            },
+            {
+                section: "Reagents",
+                question: "36. All prepared reagents should be labeled properly with:",
+                options: ["a. I and II only", "b. I, II, and III only", "c. I, II, and IV only", "d. I, II, III, and IV"],
+                correct: 2
+            },
+            {
+                section: "Equipment Management",
+                question: "37. Which of the following is true regarding defective or out of calibration equipment?",
+                options: ["a. Maintenance procedures and records were not followed.", "b. Take out of service and clearly label or mark to indicate it should not be used.", "c. Recalibration date should be boldly written on it.", "d. If results obtained are okay continue using until a failed sample result is obtained."],
+                correct: 1
+            },
+            {
+                section: "QC Sample Handling",
+                question: "38. Which of the following is required for incoming QC lab samples?",
+                options: ["a. Assigned an identification (ID) number, label sample with the assigned ID number, log sample into a register, and record receipt date.", "b. Check accompanying documents (e.g., test request form) for accuracy.", "c. Inspect sample and packaging for quantity, damage, labeling, storage conditions.", "d. All of the above."],
+                correct: 3
+            },
+            {
+                section: "OOS Investigation",
+                question: "39. If an HPLC assay for a medicine sample has an acceptance criterion of NLT 90.0%, and one obtains individual values of 96.0%, and 86.0%, what needs to be done?",
+                options: ["a. Investigate the source of variability and after investigation repeat test.", "b. Continue testing until two individual values > 90.0% are obtained, then report the two values.", "c. Average the individual values to obtain 91.0% with conclusion sample met required criterion.", "d. Disregard the lower value as an outlier and report 96.0%"],
+                correct: 0
+            },
+            {
+                section: "Documentation",
+                question: "40. Which of the following is required information in on a Certificate of analysis (CoA)?",
+                options: ["a. Date issued, name and contact address of the lab, and signature of the head of the lab.", "b. Specifications (testing methods) used, and results of all tests performed", "c. Statement of whether the sample complied with required specifications", "d. All of the above"],
+                correct: 3
+            },
+            {
+                section: "Validation",
+                question: "41. Which of the following is FALSE regarding analytical procedures used in the pharmaceutical QC lab?",
+                options: ["a. For non-pharmacopeial procedures, documented evidence that the procedure is validated", "b. Manufacturer-submitted procedures require no supporting validation data", "c. A pharmacopeial procedure may require verification, the first time it is performed", "d. A major change in the analytical procedure or the product being tested require revalidation"],
+                correct: 1
+            },
+            {
+                section: "Standards",
+                question: "42. The main ISO standards used by testing and calibration labs:",
+                options: ["a. ISO 17025", "b. ISO 9000", "c. ISO Testing and calibration", "d. None of the above"],
+                correct: 0
+            },
+            {
+                section: "Compendial Standards",
+                question: "43. If a pharmacopoeial requirement is referenced, then the testing should be performed...",
+                options: ["a. using a certain amount of interpretation and common sense", "b. as stated in the latest revision of the pharmacopoeia", "c. as in the pharmacopoeia that was in force when the specification was authorized", "d. by taking the best parts of available sources"],
+                correct: 1
+            },
+            {
+                section: "Change Control",
+                question: "44. When a pharmacopoeia is revised what should happen to laboratory documents that reference it?",
+                options: ["a. Existing documents should not be changed", "b. An automatic procedure must ensure that documents are reviewed", "c. The pharmacopoeial reference should be erased from the document", "d. None of the above"],
+                correct: 1
+            },
+            {
+                section: "Training",
+                question: "45. Training records are essential to______:",
+                options: ["a. Writing job description", "b. Accrediting the analyst", "c. Ensure the competence and authorize personnel", "d. Increase the salary"],
+                correct: 2
+            },
+            {
+                section: "Equipment Records",
+                question: "46. Records to be retained for every piece of equipment significant to the testing activity shall include_________:",
+                options: ["a. Current location (where appropriate)", "b. Serial number or other unique identification", "c. Calibration status", "d. All of the above"],
+                correct: 3
+            },
+            {
+                section: "Equipment Management",
+                question: "47. Choose the most correct answer for the following statement. Before equipment is place or returned back in service, laboratory personnel must:",
+                options: ["a. Ensure the function and calibration status are shown to be satisfactory", "b. Ensure the Out-of-service label is removed", "c. Ensure new equipment to replace the old equipment is available", "d. Verify that equipment conforms to the specified requirements."],
+                correct: 0
+            },
+            {
+                section: "CAPA",
+                question: "48. The procedure for corrective action must start with____________:",
+                options: ["a. Finger-pointing", "b. Risk Management", "c. An investigation to determine the root cause(s) of the problem", "d. Documenting the problem"],
+                correct: 2
+            },
+            {
+                section: "Calibration",
+                question: "49. When is it not necessary to calibrate laboratory equipment against traceable reference standard or reference materials?",
+                options: ["a. When it is too expensive to do so", "b. When the equipment is used by trained analyst", "c. When traceable reference materials are not available", "d. When the equipment has no effect on the quality of test results"],
+                correct: 3
+            },
+            {
+                section: "Audits",
+                question: "50. Internal audits are used to identify:",
+                options: ["a. Compliance with the management system", "b. Compliance with ISO/IEC 17025", "c. Opportunities for improvement", "d. All of the above."],
+                correct: 3
+            },
+            {
+                section: "Document Control",
+                question: "51. What is the meaning of control of document?",
+                options: ["a. More work for Quality Manager and QMU", "b. All documents must contain accurate information of test result", "c. Documents are identified with unique ID, authorized, reviewed by authorized personnel.", "d. Any staff of the laboratory has authorization to prepare, review and approved all QMS documentation."],
+                correct: 2
+            },
+            {
+                section: "Equipment Records",
+                question: "52. Records that contain all the information of testing activity must be: (Note: Based on the options provided, this question refers to Equipment Records)",
+                options: ["a. Current location (where appropriate)", "b. Serial number or other unique identification", "c. Calibration status", "d. All of the above"],
+                correct: 3
+            },
+            {
+                section: "Procurement",
+                question: "53. Supplier of critical consumables, supplies, and services which affect quality must be:",
+                options: ["a. ISO 9001 registered and approved", "b. Evaluated and approved by the lab", "c. The lowest cost compared to the others supplier", "d. Able to provide gift or bonus to procurement committee"],
+                correct: 1
+            },
+            {
+                section: "Contract Review",
+                question: "54. What is the purpose of reviewing the requests, tenders, and contracts are reviewed?",
+                options: ["a. Evaluate the client requirements that can be achieved with the current lab capability", "b. Increase potential revenue", "c. Check the spelling and grammar", "d. Give more work for the administrative unit"],
+                correct: 0
+            },
+            {
+                section: "QMS",
+                question: "55. Overall quality system policies and objectives shall be documented in a _________:",
+                options: ["a. Quality manual", "b. Quality policy statements", "c. Standard operating procedure", "d. Quality work instruction"],
+                correct: 0
             },
             {
                 section: "Preventive Action",
-                question: "55. Preventive action plans are for ______",
-                options: ["a) Nonconformance and/or opportunities", "b) Potential nonconformance and/or opportunities", "c) Nonconformance only", "d) Opportunities only"],
-                correct: 1,
-                explanation: "Preventive action addresses risks before they occur (e.g., trend analysis, near misses). Unlike corrective action (reactive), preventive action is proactive."
+                question: "56. Preventive action plans are to be define and taken for_________:",
+                options: ["a. Nonconformance and/or opportunities for improvement", "b. Potential nonconformance and/or opportunities for improvement", "c. Nonconformance only", "d. Opportunities for improvement only"],
+                correct: 1
             },
             {
                 section: "Data Integrity Context",
-                question: "56. Reason for increased awareness of data?",
-                options: ["a) More instruments used", "b) Everyone uses ALCOA+", "c) Increase in observations related to data reliability", "d) Sufficient records maintained"],
-                correct: 2,
-                explanation: "Regulatory agencies (FDA, MHRA, WHO) have issued numerous warning letters due to data integrity failures. These observations and enforcement actions drove global focus on data reliability."
+                question: "57. Which of the following is the reason for the increase of awareness of data?",
+                options: ["a. increase number of instrument used by the laboratory and manufacturer", "b. everyone uses and apply ALCOA+", "c. increase number of observation related to data reliability", "d. sufficient records are maintained to show traceability of activity"],
+                correct: 2
             },
             {
                 section: "Data Integrity Guidelines",
-                question: "57. Organization providing guidance on data integrity",
-                options: ["a) WHO", "b) US FDA", "c) MHRA", "d) PIC/S"],
-                correct: 3,
-                explanation: "PIC/S is the harmonizing body publishing Annexes and Guidance adopted globally, though FDA, MHRA, and WHO also publish key documents."
+                question: "58. Organization that provides guidance on ensuring data integrity is………….:",
+                options: ["a. WHO", "b. US FDA", "c. MHRA", "d. PIC/s"],
+                correct: 3
             },
             {
                 section: "Data Integrity Training",
-                question: "58. Should personnel be trained in detecting data integrity issues?",
-                options: ["a) No, well educated", "b) Yes, need training", "c) This is cGMP requirement", "d) B and C"],
-                correct: 3,
-                explanation: "FDA and MHRA explicitly state that staff must be trained to recognize and prevent data integrity breaches. It is a cGMP expectation."
+                question: "59. Should personnel be trained in detecting data integrity issues as part of a routine CGMP training program?",
+                options: ["a. No, Personnel is well educated", "b. Yes, Personnel need training", "c. This is cGMP requirement", "d. B and C"],
+                correct: 3
             },
             {
                 section: "Data Integrity Acronym",
-                question: "59. What does ALCOA stand for?",
-                options: ["a) Acceptable, Legible, Constancy…", "b) Accurate, Legal…", "c) Attributable, Legible, Contemporaneous, Original, Accurate", "d) All of the above"],
-                correct: 2,
-                explanation: "ALCOA is the foundational principle for data integrity: Attributable, Legible, Contemporaneous, Original, Accurate."
+                question: "60. What does ALCOA stand for?",
+                options: ["a. Acceptable, Legible Constancy, Original, Adequate", "b. Accurate, Legal, Complete, Operation, Approximate", "c. Attributable, Legible, Contemporaneous, Original, Accurate", "d. All of the above"],
+                correct: 2
             },
             {
                 section: "Data Integrity Breach",
-                question: "60. Use of _______________________ is a data integrity issue",
-                options: ["a) Common/same password for all staff", "b) Turning on audit trail", "c) Defining user rights", "d) Re-integration without procedure"],
-                correct: 0,
-                explanation: "Shared passwords violate attributability (you can’t tell who performed an action). This is a classic data integrity breach cited in FDA warning letters."
+                question: "61. Use of _______________________ is a data integrity issues:",
+                options: ["a. common or same password for all staff", "b. turning on/enable the audit trail", "c. defining user rights", "d. re-integration without procedure"],
+                correct: 0
             },
             {
                 section: "Data Integrity Definition",
-                question: "61. What is Data Integrity?",
-                options: ["a) A group of data", "b) Data generated in lab", "c) Maintaining accuracy and consistency over data’s life-cycle", "d) None"],
-                correct: 2,
-                explanation: "Data integrity means data is complete, consistent, and accurate from creation to disposal. It ensures data is trustworthy for decision-making."
+                question: "62. What is Data Integrity?",
+                options: ["a. A group of data", "b. The data we generate in the laboratory", "c. Refers to maintaining and assuring the accuracy and consistency of data over its entire life-cycle", "d. None of the above"],
+                correct: 2
             },
             {
                 section: "Data Integrity Acronym",
-                question: "62. Acronym for data integrity elements",
-                options: ["a) ECAC", "b) GDocP", "c) ALCOA+", "d) GxP"],
-                correct: 2,
-                explanation: "ALCOA+ is the standard acronym used globally by FDA, WHO, MHRA, and EMA to describe data integrity attributes."
+                question: "63. Acronyms used to describe element of data integrity is…………….:",
+                options: ["a. ECAC", "b. GDocP", "c. ALCOA+", "d. GxP"],
+                correct: 2
             },
             {
                 section: "Data Reliability",
-                question: "63. State when data is complete and error-free enough to be convincing",
-                options: ["a) data integrity", "b) accurate data", "c) valid data", "d) data reliability"],
-                correct: 3,
-                explanation: "Data reliability = data is fit for purpose, trustworthy, and supports decisions. It encompasses integrity, but adds contextual fitness."
+                question: "64. The state that exists when data is sufficiently complete and error free to be convincing for its purposes and context is:",
+                options: ["a. data integrity", "b. accurate data", "c. valid data", "d. data reliability"],
+                correct: 0
             },
             {
                 section: "Data Lifecycle",
-                question: "64. Data life cycle consists of 6 steps:",
-                options: ["a) Collection – Processing – Review – Retention – Reporting – Disposal", "b) Collection – Review – Processing – Reporting – Retention – Disposal", "c) Processing – Review – Reporting – Collection – Retention – Disposal", "d) Collection – Processing – Review – Reporting – Retention – Disposal"],
-                correct: 3,
-                explanation: "Per MHRA & FDA guidance, the data life cycle is: Collection, Processing, Review, Reporting, Retention & retrieval, and Disposal. Order matters—review comes after processing, before reporting."
+                question: "65. Data life cycle consist of 6 steps which are………………………:",
+                options: ["a. Data collection – Data processing – Data review – Data retention and retrieval – Data reporting –Data disposal", "b. Data collection –Data review – Data processing – Data reporting – Data retention and retrieval – Data disposal", "c. Data processing – Data review – Data reporting – Data collection – Data retention and retrieval – Data disposal", "d. Data collection – Data processing – Data review – Data reporting – Data retention and retrieval – Data disposal"],
+                correct: 3
             },
             {
                 section: "Data Types",
-                question: "65. Hybrid data is …",
-                options: ["a) only static", "b) combination of static and dynamic", "c) only dynamic", "d) static, dynamic, intergenic"],
-                correct: 1,
-                explanation: "Hybrid system: Uses both paper and electronic records for same workflow (e.g., print chromatogram + sign manually)."
+                question: "66. Hybrid data is ………………………:",
+                options: ["a. only static data", "b. the combination of static and dynamic data", "c. only dynamic data", "d. the combination of static, dynamic, intergenic data"],
+                correct: 1
             },
             {
                 section: "Data Integrity Principles",
-                question: "66. Basic principles of data integrity are",
-                options: ["a) accurate", "b) consistent", "c) complete", "d) all the above"],
-                correct: 3,
-                explanation: "Core principles include: Accuracy, Completeness, Consistency, Attributability, Legibility, etc. (ALCOA+). All are essential for trustworthy data."
+                question: "67. Basic principles of data integrity are…………….:",
+                options: ["a. accurate", "b. consistent", "c. complete", "d. all the above"],
+                correct: 3
             },
             {
                 section: "OOS & Integrity",
-                question: "67. It is okay to …",
+                question: "68. It is okay to ………………………………………… …………:",
                 options: ["a and d", "b and c", "a and d", "a and c"],
-                correct: 3,
-                explanation: "Mistakes (a) and OOS results (c) are normal in science—they must be investigated, not hidden. A robust QMS encourages transparency, not perfection."
+                correct: 3
             },
             {
                 section: "Electronic Records",
-                question: "68. Secure, time-stamped electronic record for reconstructing events is",
-                options: ["a) instrument software", "b) CDS", "c) metadata", "d) audit trail"],
-                correct: 3,
-                explanation: "Audit trail = secure, computer-generated log showing who, what, when for electronic records. Required by 21 CFR Part 11 and EU GMP Annex 11."
+                question: "69. Secure, computer-generated, time-stamped electronic record that allows for reconstruction of events relating to the creation, modification, or deviation of an electronic record is……….:",
+                options: ["a. instrument software system", "b. Chromatography Data system", "c. meta data", "d. audit trail"],
+                correct: 3
             },
             {
                 section: "Paper Records",
-                question: "69. Expectations for contemporaneous paper records include:",
-                options: ["a) Enhanced security permissions", "b) Written procedures, training, audits", "c) Control to determine timing of activities relative to others", "d) Controlled annotation tools"],
-                correct: 2,
-                explanation: "Contemporaneous = recorded at the time of activity. For paper, this means timely entry with clear timestamps, allowing sequence reconstruction. Time zone control supports this in global operations."
+                question: "70. Contemporaneous data are recorded at the time they are generated or observed. The expectations of contemporaneous for paper records, include:",
+                options: ["a. Configuration settings that restrict access to enhanced security permissions", "b. Written procedure and training and review and audit and self-inspection control", "c. Control that allows for determination of timing of one activity relative to another (e.g., Time zone control)", "d. Strictly controlled configuration and use of data annotation tools in a manner that prevents data in displays and printouts from being obscured"],
+                correct: 2
             },
             {
                 section: "Raw Data",
-                question: "70. Original records retained in original format are",
-                options: ["a) static data", "b) metadata", "c) hybrid data", "d) raw data"],
-                correct: 3,
-                explanation: "Raw data = original observations and recordings (e.g., lab notebook entry, CDS file, balance printout). Defined by FDA as 'all records including metadata necessary to reconstruct and evaluate the study.'"
+                question: "71. Original records and documentation retained in the format originally generated are………….:",
+                options: ["a. static data", "b. meta data", "c. hybrid data", "d. raw data"],
+                correct: 3
             }
         ];
 
@@ -949,15 +885,10 @@
                 `;
             });
 
-            const explanationHtml = savedAnswer !== null 
-                ? `<div class="explanation-box" style="display:block;"><strong>🔍 Explanation:</strong><br>${data.explanation}</div>` 
-                : `<div class="explanation-box" id="explanation-${currentQuestionIndex}"></div>`;
-
             questionContainer.innerHTML = `
                 <div class="section-title">${data.section}</div>
                 <div class="question-text">${data.question}</div>
                 <div class="options-grid">${optionsHtml}</div>
-                ${explanationHtml}
             `;
 
             renderGrid();
