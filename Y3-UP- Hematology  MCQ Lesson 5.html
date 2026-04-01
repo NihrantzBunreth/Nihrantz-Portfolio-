@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hematology Theory: Lesson 5</title>
+    <style>
+        /* --- RESET & BASE STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Sterile Background: White with subtle grey lines */
+            background-color: #ffffff;
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 30px;
+            font-family: Arial, sans-serif; /* Font Restriction: Arial */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- CONTAINER (Clipboard/Tablet Style) --- */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            /* Medical Blue Border */
+            border: 2px solid #0056b3; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- HEADER --- */
+        header {
+            border-bottom: 2px solid #0056b3;
+            padding: 15px 20px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 18px;
+            color: #0056b3;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-counter {
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        main {
+            padding: 30px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        /* Question Text */
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        /* Options List */
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Option Buttons: Rectangular, sharp/slightly rounded */
+        .option-btn {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Hover Effect: Light Blue */
+        .option-btn:hover:not(:disabled) {
+            background-color: #e6f0fa;
+            border-color: #0056b3;
+        }
+
+        /* Disabled State */
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.9;
+        }
+
+        /* Feedback Styles */
+        .feedback-text {
+            font-weight: 900;
+            font-size: 16px;
+            margin-left: 15px;
+            min-width: 80px;
+            text-align: right;
+            display: none;
+        }
+
+        .feedback-correct { color: #008000; }
+        .feedback-incorrect { color: #d32f2f; }
+
+        /* Styling based on correctness */
+        .option-item.correct .option-btn {
+            border-color: #008000;
+            background-color: #f0fff0;
+        }
+        .option-item.incorrect .option-btn {
+            border-color: #d32f2f;
+            background-color: #fff0f0;
+        }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #0056b3;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-box h4 {
+            color: #0056b3;
+            margin-bottom: 5px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .explanation-box p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        /* --- NAVIGATION FOOTER --- */
+        .nav-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background-color: #fff;
+            border: 1px solid #0056b3;
+            color: #0056b3;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background-color: #fff;
+            cursor: not-allowed;
+        }
+
+        .view-list-btn {
+            background: none;
+            border: none;
+            color: #0056b3;
+            text-decoration: underline;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        /* --- BRANDING & SOCIAL --- */
+        .branding-section {
+            padding: 10px 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-style: italic;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: block;
+            color: #333;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 35px;
+            height: 35px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.2s;
+        }
+
+        .social-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* --- MODAL (PATIENT LIST) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #fff;
+            border: 2px solid #0056b3;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .grid-item {
+            width: 100%;
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 2px;
+        }
+
+        .grid-item.current {
+            border: 2px solid #0056b3;
+        }
+        .grid-item.answered {
+            background-color: #dbeafe;
+            border-color: #0056b3;
+        }
+        .grid-item.unanswered {
+            background-color: #fff;
+        }
+
+        /* --- RESULT SCREEN --- */
+        .result-screen {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .result-title {
+            font-size: 24px;
+            color: #0056b3;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #0056b3;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .restart-btn {
+            padding: 12px 30px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        
+        .restart-btn:hover {
+            background-color: #004494;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Tweaks */
+        @media (max-width: 600px) {
+            header { flex-direction: column; gap: 5px; text-align: center; }
+            .nav-footer { flex-direction: column-reverse; gap: 15px; }
+            .nav-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- HEADER -->
+        <header>
+            <h1>Hematology Theory: Lesson 5</h1>
+            <div class="progress-counter">Question <span id="current-q-num">1</span> of <span id="total-q-num">40</span></div>
+        </header>
+
+        <!-- MAIN QUIZ AREA -->
+        <main id="quiz-main">
+            <div class="question-text" id="question-text">
+                Loading question...
+            </div>
+
+            <ul class="options-list" id="options-list">
+                <!-- Options injected via JS -->
+            </ul>
+
+            <div class="explanation-box" id="explanation-box">
+                <h4>Explanation:</h4>
+                <div id="explanation-content"></div>
+            </div>
+        </main>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="result-screen">
+            <h2 class="result-title">Test Result</h2>
+            <p>Your Score:</p>
+            <div class="result-score"><span id="score-val">0</span> / <span id="total-val">0</span></div>
+            <button class="restart-btn" onclick="quizApp.restartQuiz()">Retake Assessment</button>
+        </div>
+
+        <!-- NAVIGATION FOOTER -->
+        <footer class="nav-footer" id="nav-footer">
+            <button class="nav-btn" id="prev-btn" onclick="quizApp.prevQuestion()">Previous</button>
+            <button class="view-list-btn" onclick="quizApp.toggleModal(true)">View List</button>
+            <button class="nav-btn" id="next-btn" onclick="quizApp.nextQuestion()">Next</button>
+        </footer>
+
+        <!-- BRANDING & SOCIAL -->
+        <div class="branding-section">
+            <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL OVERLAY -->
+    <div class="modal-overlay" id="list-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Question Overview</h3>
+                <button class="close-modal" onclick="quizApp.toggleModal(false)">&times;</button>
+            </div>
+            <div class="question-grid" id="question-grid">
+                <!-- Grid items injected via JS -->
+            </div>
+            <button class="nav-btn" onclick="quizApp.toggleModal(false)">Close Overview</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA: QUESTIONS ---
+        const quizData = [
+            {
+                id: 1,
+                text: "What is the primary site of platelet production in adults?",
+                options: [{id:"A",text:"Spleen"},{id:"B",text:"Liver"},{id:"C",text:"Bone marrow"},{id:"D",text:"Lymph nodes"}],
+                correct: "C",
+                explanation: "Platelets are produced in the bone marrow by fragmentation of megakaryocyte cytoplasmic extensions (proplatelets) into sinusoids. While the spleen stores ~30% of platelets and the liver produces thrombopoietin, production occurs exclusively in bone marrow under normal conditions."
+            },
+            {
+                id: 2,
+                text: "Platelets are derived from which type of bone marrow cell?",
+                options: [{id:"A",text:"Erythroblast"},{id:"B",text:"Myeloblast"},{id:"C",text:"Megakaryocyte"},{id:"D",text:"Lymphoblast"}],
+                correct: "C",
+                explanation: "Platelets are cytoplasmic fragments of megakaryocytes, large polyploid cells in the bone marrow. Each megakaryocyte can produce 1,000–3,000 platelets via proplatelet formation."
+            },
+            {
+                id: 3,
+                text: "Which of the following best describes the nuclear status of mature platelets?",
+                options: [{id:"A",text:"Diploid (2N)"},{id:"B",text:"Polyploid (16N)"},{id:"C",text:"Anucleate"},{id:"D",text:"Binucleate"}],
+                correct: "C",
+                explanation: "Mature platelets lack a nucleus (anucleate). They inherit mRNA and organelles from megakaryocytes but cannot synthesize new DNA or undergo mitosis."
+            },
+            {
+                id: 4,
+                text: "The normal platelet count in peripheral blood is:",
+                options: [{id:"A",text:"50–100 × 10⁹/L"},{id:"B",text:"100–150 × 10⁹/L"},{id:"C",text:"150–400 × 10⁹/L"},{id:"D",text:"400–600 × 10⁹/L"}],
+                correct: "C",
+                explanation: "This is the standard reference range. Counts <150 × 10⁹/L = thrombocytopenia; >400 × 10⁹/L = thrombocytosis."
+            },
+            {
+                id: 5,
+                text: "Platelet counts tend to be higher in:",
+                options: [{id:"A",text:"Men"},{id:"B",text:"Women"},{id:"C",text:"Children under 5"},{id:"D",text:"Elderly men over 70"}],
+                correct: "B",
+                explanation: "Due to hormonal influences (e.g., estrogen), women generally have slightly higher baseline platelet counts than men."
+            },
+            {
+                id: 6,
+                text: "The average lifespan of a circulating platelet is:",
+                options: [{id:"A",text:"1–2 days"},{id:"B",text:"3–5 days"},{id:"C",text:"7–10 days"},{id:"D",text:"14–21 days"}],
+                correct: "C",
+                explanation: "Platelets circulate for 7–10 days before being cleared by macrophages in the spleen and liver."
+            },
+            {
+                id: 7,
+                text: "What process do megakaryocytes undergo instead of mitosis after becoming megakaryoblasts?",
+                options: [{id:"A",text:"Meiosis"},{id:"B",text:"Apoptosis"},{id:"C",text:"Endomitosis"},{id:"D",text:"Cytokinesis"}],
+                correct: "C",
+                explanation: "Endomitosis = repeated DNA replication without nuclear or cytoplasmic division, leading to polyploidy (8N to 64N). This supports massive protein synthesis for platelet production."
+            },
+            {
+                id: 8,
+                text: "Which progenitor cell is the earliest committed to the megakaryocyte lineage?",
+                options: [{id:"A",text:"CFU-Mk"},{id:"B",text:"BFU-Mk"},{id:"C",text:"HSC"},{id:"D",text:"Promegakaryocyte"}],
+                correct: "B",
+                explanation: "BFU-Mk (Burst-Forming Unit–Megakaryocyte) is the earliest megakaryocyte-committed progenitor, less differentiated than CFU-Mk. Both arise from pluripotent HSCs."
+            },
+            {
+                id: 9,
+                text: "Which of the following growth factors primarily supports early megakaryocyte progenitor proliferation?",
+                options: [{id:"A",text:"Thrombopoietin (TPO)"},{id:"B",text:"IL-6"},{id:"C",text:"GM-CSF"},{id:"D",text:"PDGF"}],
+                correct: "C",
+                explanation: "GM-CSF, IL-3, SCF, and Flt ligand support early proliferation of HSCs and progenitors. TPO acts later but also on early stages; however, GM-CSF is a classic myeloid growth factor that includes megakaryocytic support."
+            },
+            {
+                id: 10,
+                text: "The Demarcation Membrane System (DMS) in megakaryocytes functions to:",
+                options: [{id:"A",text:"Store calcium ions"},{id:"B",text:"Synthesize thromboxane A₂"},{id:"C",text:"Compartmentalize cytoplasm into future platelet territories"},{id:"D",text:"Degrade old platelets"}],
+                correct: "C",
+                explanation: "The DMS is an internal membrane network derived from plasma membrane invaginations. It pre-forms platelet-sized compartments, enabling rapid platelet release without new membrane synthesis."
+            },
+            {
+                id: 11,
+                text: "Proplatelets are released into which vascular structures in the bone marrow?",
+                options: [{id:"A",text:"Capillaries"},{id:"B",text:"Arterioles"},{id:"C",text:"Sinusoids"},{id:"D",text:"Venules"}],
+                correct: "C",
+                explanation: "Bone marrow sinusoids are thin-walled, fenestrated vessels. Megakaryocytes extend proplatelet processes through endothelial gaps into these sinusoids, where shear forces fragment them into platelets."
+            },
+            {
+                id: 12,
+                text: "Which organ is the primary source of thrombopoietin (TPO) in healthy adults?",
+                options: [{id:"A",text:"Spleen"},{id:"B",text:"Kidneys"},{id:"C",text:"Bone marrow"},{id:"D",text:"Liver"}],
+                correct: "D",
+                explanation: "The liver constitutively produces TPO. Kidneys contribute secondarily. Production is not regulated by platelet count—instead, TPO availability is controlled by receptor-mediated clearance."
+            },
+            {
+                id: 13,
+                text: "Thrombopoietin (TPO) levels are inversely related to:",
+                options: [{id:"A",text:"White blood cell count"},{id:"B",text:"Hemoglobin concentration"},{id:"C",text:"Platelet mass"},{id:"D",text:"Bone marrow cellularity"}],
+                correct: "C",
+                explanation: "TPO binds to c-Mpl receptors on platelets and megakaryocytes. When platelets are abundant, TPO is bound and degraded → low free TPO. When platelets are low, more TPO remains free and active → stimulates production."
+            },
+            {
+                id: 14,
+                text: "Which of the following is NOT a function of platelets?",
+                options: [{id:"A",text:"Hemostasis"},{id:"B",text:"Vascular repair"},{id:"C",text:"Oxygen transport"},{id:"D",text:"Innate immunity"}],
+                correct: "C",
+                explanation: "Red blood cells carry oxygen via hemoglobin. Platelets do not transport oxygen—they lack hemoglobin and mitochondria for oxidative metabolism."
+            },
+            {
+                id: 15,
+                text: "Dense granules in platelets contain all of the following EXCEPT:",
+                options: [{id:"A",text:"ADP"},{id:"B",text:"Serotonin"},{id:"C",text:"Fibrinogen"},{id:"D",text:"Calcium"}],
+                correct: "C",
+                explanation: "Fibrinogen is stored in α-granules, not dense granules. Dense granules contain ADP, ATP, serotonin, and Ca²⁺—key for activation and aggregation."
+            },
+            {
+                id: 16,
+                text: "α-Granules contain all of the following EXCEPT:",
+                options: [{id:"A",text:"von Willebrand factor"},{id:"B",text:"Platelet factor 4"},{id:"C",text:"Thromboxane A₂"},{id:"D",text:"Fibrinogen"}],
+                correct: "C",
+                explanation: "Thromboxane A₂ (TXA₂) is synthesized de novo during activation in the dense tubular system (platelet ER equivalent). It is not pre-stored in granules."
+            },
+            {
+                id: 17,
+                text: "The Open Canalicular System (OCS) in platelets primarily serves to:",
+                options: [{id:"A",text:"Store calcium"},{id:"B",text:"Increase surface area and release granule contents"},{id:"C",text:"Maintain discoid shape"},{id:"D",text:"Synthesize proteins"}],
+                correct: "B",
+                explanation: "The OCS is a surface-connected membrane network that allows rapid secretion of granule contents to the exterior during activation and increases interaction with plasma."
+            },
+            {
+                id: 18,
+                text: "The marginal band in resting platelets is composed of:",
+                options: [{id:"A",text:"Actin filaments"},{id:"B",text:"Microtubules"},{id:"C",text:"Intermediate filaments"},{id:"D",text:"Myosin fibers"}],
+                correct: "B",
+                explanation: "A microtubule ring (marginal band) maintains the biconcave disc shape. Upon activation, it contracts, causing shape change to spiny spheres."
+            },
+            {
+                id: 19,
+                text: "Which receptor mediates platelet adhesion to von Willebrand factor at injury sites?",
+                options: [{id:"A",text:"GPIIb/IIIa"},{id:"B",text:"GPVI"},{id:"C",text:"GPIb-IX-V"},{id:"D",text:"P-selectin"}],
+                correct: "C",
+                explanation: "GPIb-IX-V complex binds vWF exposed on damaged endothelium—this is the first step (adhesion) in hemostasis. GPIIb/IIIa mediates aggregation later."
+            },
+            {
+                id: 20,
+                text: "Platelet aggregation is primarily mediated by:",
+                options: [{id:"A",text:"Collagen binding"},{id:"B",text:"Fibrinogen bridging via GPIIb/IIIa"},{id:"C",text:"Thrombin generation"},{id:"D",text:"Serotonin release"}],
+                correct: "B",
+                explanation: "Activated platelets express GPIIb/IIIa receptors, which bind fibrinogen, forming bridges between platelets → aggregation and plug formation."
+            },
+            {
+                id: 21,
+                text: "What percentage of nucleated bone marrow cells are megakaryocytes?",
+                options: [{id:"A",text:"~0.01%"},{id:"B",text:"~0.1%"},{id:"C",text:"~1%"},{id:"D",text:"~5%"}],
+                correct: "B",
+                explanation: "Megakaryocytes are very rare (~0.1%) but highly productive—each generates thousands of platelets."
+            },
+            {
+                id: 22,
+                text: "Which cytokine enhances late-stage megakaryocyte maturation but not proliferation?",
+                options: [{id:"A",text:"IL-3"},{id:"B",text:"GM-CSF"},{id:"C",text:"IL-6"},{id:"D",text:"SCF"}],
+                correct: "C",
+                explanation: "IL-6 and IL-11 support cytoplasmic maturation and proplatelet formation, acting synergistically with TPO, but do not drive progenitor proliferation like IL-3 or GM-CSF."
+            },
+            {
+                id: 23,
+                text: "The total time from hematopoietic stem cell to circulating platelet is approximately:",
+                options: [{id:"A",text:"1–2 days"},{id:"B",text:"2–3 days"},{id:"C",text:"4–7 days"},{id:"D",text:"10–14 days"}],
+                correct: "C",
+                explanation: "This includes progenitor expansion, endomitosis, maturation, and proplatelet release."
+            },
+            {
+                id: 24,
+                text: "After platelet release, the megakaryocyte nucleus is:",
+                options: [{id:"A",text:"Recycled into new platelets"},{id:"B",text:"Released into circulation"},{id:"C",text:"Phagocytosed by bone marrow macrophages"},{id:"D",text:"Stored in the spleen"}],
+                correct: "C",
+                explanation: "The leftover nucleus is efficiently cleared by local macrophages—a clean, waste-minimizing process."
+            },
+            {
+                id: 25,
+                text: "Higher ploidy in megakaryocytes (e.g., 64N vs. 8N) correlates with:",
+                options: [{id:"A",text:"Faster apoptosis"},{id:"B",text:"Reduced granule content"},{id:"C",text:"Greater platelet output"},{id:"D",text:"Smaller cell size"}],
+                correct: "C",
+                explanation: "Higher DNA content → more RNA/protein synthesis → larger cytoplasmic volume → more platelets produced."
+            },
+            {
+                id: 26,
+                text: "Which organelle in platelets is equivalent to the smooth endoplasmic reticulum?",
+                options: [{id:"A",text:"Open Canalicular System"},{id:"B",text:"Dense Tubular System"},{id:"C",text:"Lysosome"},{id:"D",text:"Mitochondrion"}],
+                correct: "B",
+                explanation: "The DTS stores Ca²⁺ and is the site of TXA₂ synthesis—functions analogous to smooth ER in nucleated cells."
+            },
+            {
+                id: 27,
+                text: "Platelets contribute to innate immunity by all of the following EXCEPT:",
+                options: [{id:"A",text:"Releasing antimicrobial peptides"},{id:"B",text:"Expressing Toll-like receptors (TLRs)"},{id:"C",text:"Producing antibodies"},{id:"D",text:"Forming aggregates with leukocytes"}],
+                correct: "C",
+                explanation: "Antibodies are produced by B cells, not platelets. Platelets do modulate immunity via TLRs, cytokines, pathogen binding, and leukocyte interactions—but no adaptive immunity."
+            },
+            {
+                id: 28,
+                text: "Which factor is critical for stabilizing the initial platelet plug?",
+                options: [{id:"A",text:"vWF"},{id:"B",text:"Fibrin mesh"},{id:"C",text:"Collagen"},{id:"D",text:"Serotonin"}],
+                correct: "B",
+                explanation: "The primary hemostatic plug (platelet aggregate) is temporary. The coagulation cascade generates fibrin, which stabilizes the clot into a durable thrombus."
+            },
+            {
+                id: 29,
+                text: "Thrombopoietin (TPO) is essential for:",
+                options: [{id:"A",text:"Only megakaryocyte maturation"},{id:"B",text:"Only platelet release"},{id:"C",text:"HSC self-renewal and all stages of megakaryopoiesis"},{id:"D",text:"Granule synthesis only"}],
+                correct: "C",
+                explanation: "TPO acts on HSCs, progenitors, megakaryoblasts, mature megakaryocytes, and platelet release—making it the master regulator of the entire lineage."
+            },
+            {
+                id: 30,
+                text: "In aging individuals (>60 years), platelet counts tend to:",
+                options: [{id:"A",text:"Increase significantly"},{id:"B",text:"Remain stable"},{id:"C",text:"Decline slightly"},{id:"D",text:"Fluctuate wildly"}],
+                correct: "C",
+                explanation: "Due to reduced bone marrow activity and hormonal changes, platelet production gradually decreases with age."
+            },
+            {
+                id: 31,
+                text: "Which granule releases PF4 (Platelet Factor 4)?",
+                options: [{id:"A",text:"Dense granule"},{id:"B",text:"Lysosome"},{id:"C",text:"α-Granule"},{id:"D",text:"Peroxisome"}],
+                correct: "C",
+                explanation: "PF4 is a chemokine stored in α-granules and released during activation to neutralize heparin and recruit immune cells."
+            },
+            {
+                id: 32,
+                text: "The shape change during platelet activation is driven by reorganization of:",
+                options: [{id:"A",text:"Mitochondria"},{id:"B",text:"Glycogen granules"},{id:"C",text:"Cytoskeleton (actin & microtubules)"},{id:"D",text:"Nucleus"}],
+                correct: "C",
+                explanation: "Actin polymerization and microtubule contraction transform platelets from discs to spiny spheres, increasing surface contact and aggregation potential."
+            },
+            {
+                id: 33,
+                text: "Which molecule is a potent platelet activator synthesized during activation?",
+                options: [{id:"A",text:"Fibrinogen"},{id:"B",text:"vWF"},{id:"C",text:"Thromboxane A₂"},{id:"D",text:"Albumin"}],
+                correct: "C",
+                explanation: "TXA₂ is synthesized from arachidonic acid in the DTS, promoting vasoconstriction and further platelet activation."
+            },
+            {
+                id: 34,
+                text: "Platelets help maintain vascular integrity by:",
+                options: [{id:"A",text:"Phagocytosing endothelial debris"},{id:"B",text:"Releasing growth factors to repair micro-tears"},{id:"C",text:"Producing nitric oxide"},{id:"D",text:"Generating erythropoietin"}],
+                correct: "B",
+                explanation: "Platelets release VEGF, PDGF, TGF-β, etc., to support endothelial maintenance and repair, even without overt injury."
+            },
+            {
+                id: 35,
+                text: "The c-Mpl receptor binds:",
+                options: [{id:"A",text:"IL-3"},{id:"B",text:"GM-CSF"},{id:"C",text:"Thrombopoietin (TPO)"},{id:"D",text:"SCF"}],
+                correct: "C",
+                explanation: "c-Mpl is the specific receptor for TPO, expressed on HSCs, megakaryocytes, and platelets."
+            },
+            {
+                id: 36,
+                text: "Which stage of megakaryocyte development is characterized by a highly lobulated nucleus and packed granules?",
+                options: [{id:"A",text:"Megakaryoblast"},{id:"B",text:"Promegakaryocyte"},{id:"C",text:"Granular megakaryocyte"},{id:"D",text:"Mature megakaryocyte"}],
+                correct: "C",
+                explanation: "Stage III (Granular) shows abundant α- and dense granules and lobulated nucleus, preceding full DMS development in Stage IV."
+            },
+            {
+                id: 37,
+                text: "Daily platelet production in a healthy adult is approximately:",
+                options: [{id:"A",text:"1 × 10⁹"},{id:"B",text:"1 × 10¹⁰"},{id:"C",text:"1 × 10¹¹"},{id:"D",text:"1 × 10¹²"}],
+                correct: "C",
+                explanation: "The bone marrow produces ~100 billion (1 × 10¹¹) platelets per day to maintain steady-state levels."
+            },
+            {
+                id: 38,
+                text: "Which of the following is stored in dense granules and acts as a vasoconstrictor?",
+                options: [{id:"A",text:"Fibrinogen"},{id:"B",text:"Serotonin"},{id:"C",text:"vWF"},{id:"D",text:"PDGF"}],
+                correct: "B",
+                explanation: "Serotonin (5-HT) is stored in dense granules and causes vasoconstriction at injury sites to reduce blood flow."
+            },
+            {
+                id: 39,
+                text: "During hemostasis, secretion refers to:",
+                options: [{id:"A",text:"Platelet adhesion to collagen"},{id:"B",text:"Release of granule contents to recruit more platelets"},{id:"C",text:"Formation of fibrin mesh"},{id:"D",text:"Apoptosis of damaged endothelium"}],
+                correct: "B",
+                explanation: "Secretion = exocytosis of ADP, ATP, serotonin, fibrinogen, etc., which amplify activation and recruit additional platelets."
+            },
+            {
+                id: 40,
+                text: "The feedback regulation of thrombopoiesis ensures:",
+                options: [{id:"A",text:"Constant red blood cell production"},{id:"B",text:"Stable platelet counts within normal range"},{id:"C",text:"Rapid neutrophil response to infection"},{id:"D",text:"Continuous lymphocyte maturation"}],
+                correct: "B",
+                explanation: "The TPO-platelet mass feedback loop maintains homeostasis, preventing excessive bleeding or thrombosis under normal conditions."
+            }
+        ];
+
+        // --- APPLICATION LOGIC ---
+        const quizApp = {
+            currentIndex: 0,
+            userAnswers: new Array(quizData.length).fill(null), 
+            scores: 0,
+            
+            // DOM Elements
+            dom: {
+                questionText: document.getElementById('question-text'),
+                optionsList: document.getElementById('options-list'),
+                currentQNum: document.getElementById('current-q-num'),
+                totalQNum: document.getElementById('total-q-num'),
+                prevBtn: document.getElementById('prev-btn'),
+                nextBtn: document.getElementById('next-btn'),
+                explanationBox: document.getElementById('explanation-box'),
+                explanationContent: document.getElementById('explanation-content'),
+                quizMain: document.getElementById('quiz-main'),
+                navFooter: document.getElementById('nav-footer'),
+                resultScreen: document.getElementById('result-screen'),
+                scoreVal: document.getElementById('score-val'),
+                totalVal: document.getElementById('total-val'),
+                modal: document.getElementById('list-modal'),
+                grid: document.getElementById('question-grid')
+            },
+
+            init() {
+                this.dom.totalQNum.textContent = quizData.length;
+                this.renderQuestion();
+                this.updateNavButtons();
+            },
+
+            renderQuestion() {
+                const q = quizData[this.currentIndex];
+                
+                // Update Header
+                this.dom.currentQNum.textContent = this.currentIndex + 1;
+                
+                // Update Text
+                this.dom.questionText.textContent = q.text;
+                
+                // Clear Previous Options
+                this.dom.optionsList.innerHTML = '';
+                
+                // Hide Explanation
+                this.dom.explanationBox.style.display = 'none';
+
+                // Determine if already answered
+                const isAnswered = this.userAnswers[this.currentIndex] !== null;
+
+                // Generate Options
+                q.options.forEach(opt => {
+                    const li = document.createElement('li');
+                    li.className = 'option-item';
+                    
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerHTML = `<span>${opt.id}) ${opt.text}</span>`;
+                    
+                    // Feedback Span
+                    const feedback = document.createElement('span');
+                    feedback.className = 'feedback-text';
+
+                    if (isAnswered) {
+                        btn.disabled = true;
+                        feedback.style.display = 'block';
+
+                        const isCorrect = opt.id === q.correct;
+                        const isSelected = this.userAnswers[this.currentIndex].selectedId === opt.id;
+                        
+                        if (isCorrect) {
+                            li.classList.add('correct');
+                            feedback.textContent = 'CORRECT';
+                            feedback.classList.add('feedback-correct');
+                        } else if (isSelected && !isCorrect) {
+                            li.classList.add('incorrect');
+                            feedback.textContent = 'INCORRECT';
+                            feedback.classList.add('feedback-incorrect');
+                        }
+                    } else {
+                        btn.onclick = () => this.handleAnswer(opt.id, li);
+                    }
+
+                    li.appendChild(btn);
+                    li.appendChild(feedback);
+                    this.dom.optionsList.appendChild(li);
+                });
+
+                // Show explanation if answered
+                if (isAnswered) {
+                    this.dom.explanationContent.innerHTML = q.explanation;
+                    this.dom.explanationBox.style.display = 'block';
+                }
+
+                this.updateNavButtons();
+            },
+
+            handleAnswer(selectedId, liElement) {
+                const q = quizData[this.currentIndex];
+                const isCorrect = (selectedId === q.correct);
+                
+                // Record Answer
+                this.userAnswers[this.currentIndex] = {
+                    selectedId: selectedId,
+                    isCorrect: isCorrect
+                };
+
+                if (isCorrect) {
+                    this.scores++;
+                }
+
+                // Update UI immediately
+                // Find the button inside the clicked li
+                const btn = liElement.querySelector('.option-btn');
+                btn.disabled = true;
+
+                // Add classes
+                if (isCorrect) {
+                    liElement.classList.add('correct');
+                } else {
+                    liElement.classList.add('incorrect');
+                }
+
+                // Show Feedback Text
+                const feedback = liElement.querySelector('.feedback-text');
+                feedback.style.display = 'block';
+                feedback.textContent = isCorrect ? 'CORRECT' : 'INCORRECT';
+                feedback.className = 'feedback-text ' + (isCorrect ? 'feedback-correct' : 'feedback-incorrect');
+
+                // Highlight the actual correct answer if user was wrong
+                if (!isCorrect) {
+                    const allItems = this.dom.optionsList.querySelectorAll('.option-item');
+                    allItems.forEach(item => {
+                        const itemBtnText = item.querySelector('span').textContent;
+                        if (itemBtnText.startsWith(q.correct + ')')) {
+                            item.classList.add('correct');
+                            item.querySelector('.option-btn').disabled = true;
+                            const fb = item.querySelector('.feedback-text');
+                            fb.style.display = 'block';
+                            fb.textContent = 'CORRECT';
+                            fb.classList.add('feedback-correct');
+                        }
+                    });
+                }
+
+                // Show Explanation
+                this.dom.explanationContent.innerHTML = q.explanation;
+                this.dom.explanationBox.style.display = 'block';
+
+                this.updateNavButtons();
+            },
+
+            nextQuestion() {
+                if (this.currentIndex < quizData.length - 1) {
+                    this.currentIndex++;
+                    this.renderQuestion();
+                } else {
+                    this.showResults();
+                }
+            },
+
+            prevQuestion() {
+                if (this.currentIndex > 0) {
+                    this.currentIndex--;
+                    this.renderQuestion();
+                }
+            },
+
+            jumpToQuestion(index) {
+                this.currentIndex = index;
+                this.renderQuestion();
+                this.toggleModal(false);
+            },
+
+            updateNavButtons() {
+                this.dom.prevBtn.disabled = this.currentIndex === 0;
+                
+                const isLast = this.currentIndex === quizData.length - 1;
+                const isAnswered = this.userAnswers[this.currentIndex] !== null;
+
+                if (isLast) {
+                    this.dom.nextBtn.textContent = 'Finish';
+                    this.dom.nextBtn.disabled = !isAnswered;
+                } else {
+                    this.dom.nextBtn.textContent = 'Next';
+                    this.dom.nextBtn.disabled = false;
+                }
+            },
+
+            showResults() {
+                this.dom.quizMain.style.display = 'none';
+                this.dom.navFooter.style.display = 'none';
+                this.dom.resultScreen.style.display = 'block';
+                this.dom.scoreVal.textContent = this.scores;
+                this.dom.totalVal.textContent = quizData.length;
+            },
+
+            restartQuiz() {
+                this.currentIndex = 0;
+                this.userAnswers.fill(null);
+                this.scores = 0;
+                this.dom.quizMain.style.display = 'block';
+                this.dom.navFooter.style.display = 'flex';
+                this.dom.resultScreen.style.display = 'none';
+                this.renderQuestion();
+            },
+
+            toggleModal(show) {
+                if (show) {
+                    this.renderGrid();
+                    this.dom.modal.classList.add('active');
+                } else {
+                    this.dom.modal.classList.remove('active');
+                }
+            },
+
+            renderGrid() {
+                this.dom.grid.innerHTML = '';
+                quizData.forEach((q, index) => {
+                    const btn = document.createElement('div');
+                    btn.textContent = index + 1;
+                    
+                    // Base Class
+                    btn.className = 'grid-item';
+                    
+                    // Logic for Status Colors
+                    if (index === this.currentIndex) {
+                        btn.classList.add('current');
+                    }
+                    
+                    if (this.userAnswers[index] !== null) {
+                        btn.classList.add('answered');
+                    } else {
+                        btn.classList.add('unanswered');
+                    }
+
+                    btn.onclick = () => this.jumpToQuestion(index);
+                    this.dom.grid.appendChild(btn);
+                });
+            }
+        };
+
+        // Initialize Quiz
+        quizApp.init();
+
+    </script>
+</body>
+</html>

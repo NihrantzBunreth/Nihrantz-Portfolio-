@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abnormal Erythrocyte Morphology - Clinical Quiz</title>
+    <style>
+        /* 
+         * PART 1: CLEAN CLINICAL DESIGN 
+         * Font Restriction: Arial exclusively.
+         * Sterile Background: White with subtle grey lines.
+         * Color Palette: Clinical Blue (#0056b3), White (#ffffff).
+         */
+        
+        :root {
+            --clinical-blue: #0056b3;
+            --clinical-light-blue: #e6f0fa;
+            --clinical-hover: #cce5ff;
+            --clinical-red: #d9534f;
+            --clinical-green: #28a745;
+            --bg-grey-lines: #f0f0f0;
+            --text-dark: #333333;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            /* Sterile Background: Medical chart paper effect */
+            background-image: linear-gradient(var(--bg-grey-lines) 1px, transparent 1px);
+            background-size: 100% 30px; /* Horizontal lines */
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Container: Clipboard / Digital Tablet look */
+        #quiz-container {
+            width: 100%;
+            max-width: 700px;
+            background-color: #ffffff;
+            border: 2px solid var(--clinical-blue);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Header */
+        header {
+            border-bottom: 2px solid var(--clinical-blue);
+            padding: 15px 20px;
+            background-color: #fff;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 20px;
+            color: var(--clinical-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #555;
+            font-weight: normal;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            padding: 10px 20px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--clinical-blue);
+        }
+
+        #progress-text {
+            margin-right: 10px;
+        }
+
+        #view-list-btn {
+            background: transparent;
+            border: 1px solid var(--clinical-blue);
+            color: var(--clinical-blue);
+            padding: 4px 10px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        #view-list-btn:hover {
+            background: var(--clinical-light-blue);
+        }
+
+        /* Main Question Area */
+        #quiz-body {
+            flex: 1;
+            padding: 30px;
+            min-height: 300px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 2px; /* Slightly rounded/Sharp corners */
+            transition: background 0.2s, border-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: var(--clinical-light-blue);
+            border-color: var(--clinical-blue);
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        /* Instant Feedback Styling */
+        .option-btn.correct {
+            border-color: var(--clinical-green);
+            background-color: #f0fff0;
+        }
+
+        .option-btn.incorrect {
+            border-color: var(--clinical-red);
+            background-color: #fff0f0;
+        }
+
+        .feedback-label {
+            font-weight: bold;
+            font-size: 12px;
+            display: none;
+        }
+
+        .correct .feedback-label {
+            display: inline-block;
+            color: var(--clinical-green);
+        }
+
+        .incorrect .feedback-label {
+            display: inline-block;
+            color: var(--clinical-red);
+        }
+
+        /* Explanation Box */
+        #explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: var(--clinical-light-blue);
+            border-left: 4px solid var(--clinical-blue);
+            font-size: 13px;
+            line-height: 1.5;
+            display: none; /* Hidden by default */
+        }
+
+        /* Navigation Buttons */
+        .nav-controls {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 30px;
+            border-top: 1px solid #eee;
+            background: #fff;
+        }
+
+        .nav-btn {
+            background: #fff;
+            border: 1px solid var(--clinical-blue);
+            color: var(--clinical-blue);
+            padding: 8px 20px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--clinical-light-blue);
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background: #fff;
+            cursor: not-allowed;
+        }
+
+        /* 
+         * PART 2: BRANDING & SOCIAL MEDIA 
+         */
+        .footer-branding {
+            border-top: 2px solid var(--clinical-blue);
+            padding: 15px;
+            text-align: center;
+            background: #fff;
+        }
+
+        .credit-text {
+            font-family: Arial, sans-serif;
+            font-style: italic;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 35px;
+            height: 35px;
+            background: var(--clinical-blue);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .social-btn:hover {
+            background: #004494;
+        }
+
+        /* 
+         * PART 3: MODAL (Patient List / Question Overview)
+         */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #fff;
+            border: 2px solid var(--clinical-blue);
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .modal-title {
+            color: var(--clinical-blue);
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--clinical-red);
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: #555;
+            font-size: 13px;
+        }
+
+        /* Grid Status Indicators */
+        .grid-item.current {
+            border: 2px solid var(--clinical-blue);
+            color: var(--clinical-blue);
+        }
+
+        .grid-item.answered {
+            background-color: var(--clinical-light-blue);
+            border-color: #b8daff;
+        }
+        
+        .grid-item.unanswered {
+            background-color: #fff;
+        }
+
+        /* Result Screen */
+        #result-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 24px;
+            color: var(--clinical-blue);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .result-detail {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .restart-btn {
+            background: var(--clinical-blue);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        
+        .restart-btn:hover {
+            background: #004494;
+        }
+
+        /* Utility for mobile */
+        @media (max-width: 500px) {
+            h1 { font-size: 16px; }
+            .question-text { font-size: 16px; }
+            .option-btn { padding: 12px; font-size: 13px; }
+            #quiz-container { border-width: 1px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz-container">
+        <header>
+            <h1>Hematology Theory</h1>
+            <h2>Lesson 6: Abnormal Erythrocyte Morphology (MCQ+ QnA)</h2>
+        </header>
+
+        <!-- Result Screen (Hidden Initially) -->
+        <div id="result-screen">
+            <div class="result-title">Test Result</div>
+            <div class="result-score" id="final-score">0%</div>
+            <div class="result-detail" id="final-detail">0 / 0 Correct</div>
+            <button class="restart-btn" onclick="restartQuiz()">Retake Test</button>
+            
+            <div class="footer-branding" style="width: 100%; margin-top: 20px; border:none; padding-top: 0;">
+                <div class="credit-text">Prepared by BUNRETH Nihrantz</div>
+                <div class="social-bar">
+                    <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                    <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                    <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Interface -->
+        <div id="quiz-interface">
+            <div class="progress-container">
+                <span id="progress-text">Question 1 of 40</span>
+                <button id="view-list-btn" onclick="openModal()">View List</button>
+            </div>
+
+            <div id="quiz-body">
+                <div class="question-text" id="question-text">
+                    Loading question...
+                </div>
+                <div class="options-grid" id="options-container">
+                    <!-- Options injected via JS -->
+                </div>
+                <div id="explanation-box">
+                    <strong>Explanation:</strong> <span id="explanation-text"></span>
+                </div>
+            </div>
+
+            <div class="nav-controls">
+                <button id="prev-btn" class="nav-btn" onclick="prevQuestion()">Previous</button>
+                <button id="next-btn" class="nav-btn" onclick="nextQuestion()">Next</button>
+            </div>
+
+            <div class="footer-branding">
+                <div class="credit-text">Prepared by BUNRETH Nihrantz</div>
+                <div class="social-bar">
+                    <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                    <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                    <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Patient List Modal -->
+    <div class="modal-overlay" id="list-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title">Question Overview (Patient List)</span>
+                <button class="close-modal" onclick="closeModal()">✕</button>
+            </div>
+            <div class="grid-container" id="grid-container">
+                <!-- Grid items injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* 
+         * QUIZ DATA - Lesson 6
+         */
+        const quizData = [
+            {
+                q: "Which of the following best defines anisocytosis?",
+                options: ["Variation in RBC shape", "Variation in RBC size", "Presence of nucleated RBCs", "Increased central pallor"],
+                answer: 1,
+                explanation: "Anisocytosis = abnormal variation in RBC size (from Greek aniso- = unequal, -cytosis = cells). It’s reflected by an elevated RDW (Red Cell Distribution Width) on CBC."
+            },
+            {
+                q: "A patient has MCV = 72 fL. This indicates:",
+                options: ["Macrocytosis", "Normocytosis", "Microcytosis", "Polychromasia"],
+                answer: 2,
+                explanation: "MCV < 80 fL = microcytosis. Common causes: iron deficiency, thalassemia, sideroblastic anemia, or chronic disease."
+            },
+            {
+                q: "Hypochromic RBCs are characterized by:",
+                options: ["Central pallor > 1/3 of cell diameter", "No central pallor", "Blue-gray cytoplasm", "Irregular spicules"],
+                answer: 0,
+                explanation: "Hypochromia = reduced hemoglobin → excessive central pallor (>1/3 vs. normal ~1/3). Almost always paired with microcytosis in iron deficiency or thalassemia."
+            },
+            {
+                q: "Polychromasia on a blood smear indicates:",
+                options: ["Iron overload", "Presence of reticulocytes", "Hemoglobin S polymerization", "Nuclear remnants"],
+                answer: 1,
+                explanation: "Polychromasia = bluish-gray tint due to residual RNA in young RBCs (reticulocytes). Sign of bone marrow regeneration (e.g., hemolysis, blood loss recovery)."
+            },
+            {
+                q: "Which condition is most commonly associated with microcytic hypochromic anemia?",
+                options: ["Vitamin B12 deficiency", "Folate deficiency", "Iron deficiency anemia", "Liver cirrhosis"],
+                answer: 2,
+                explanation: "Iron deficiency is the most common cause worldwide of microcytic hypochromic anemia due to impaired heme synthesis."
+            },
+            {
+                q: "Schistocytes are typically seen in:",
+                options: ["Hereditary spherocytosis", "Thalassemia", "Microangiopathic hemolytic anemia (MAHA)", "Iron deficiency"],
+                answer: 2,
+                explanation: "Schistocytes = fragmented RBCs from mechanical shearing in small vessels. Seen in TTP, HUS, DIC, severe burns, or prosthetic heart valves."
+            },
+            {
+                q: "Target cells (codocytes) are commonly found in all EXCEPT:",
+                options: ["Thalassemia", "HbC disease", "Iron deficiency anemia", "Autoimmune hemolytic anemia"],
+                answer: 3,
+                explanation: "Target cells occur when RBCs have excess membrane relative to volume—seen in thalassemia, HbC, liver disease, post-splenectomy, or iron deficiency (early). Not typical in AIHA, which causes spherocytes."
+            },
+            {
+                q: "Howell-Jolly bodies are most likely to appear in:",
+                options: ["Lead poisoning", "Post-splenectomy patients", "Vitamin B12 deficiency", "G6PD deficiency"],
+                answer: 1,
+                explanation: "Howell-Jolly bodies = nuclear remnants normally removed by the spleen. Their presence indicates hyposplenism (e.g., post-splenectomy, sickle cell disease)."
+            },
+            {
+                q: "Acanthocytes differ from echinocytes in that acanthocytes have:",
+                options: ["Uniform, short projections", "Reversible morphology", "Irregular, thorny projections", "Central pallor"],
+                answer: 2,
+                explanation: "Acanthocytes: few, irregular, long spicules → pathological (liver disease, abetalipoproteinemia). Echinocytes: many, uniform, short spikes → often reversible artifact (uremia, pH changes)."
+            },
+            {
+                q: "Spherocytes lack central pallor because they:",
+                options: ["Are hypochromic", "Have increased surface-to-volume ratio", "Have decreased surface-to-volume ratio", "Contain Heinz bodies"],
+                answer: 2,
+                explanation: "Spherocytes lose membrane (e.g., due to spectrin defect or IgG coating) → smaller, rounder, denser cells with no central pallor and high MCHC."
+            },
+            {
+                q: "Teardrop cells (dacryocytes) are classically associated with:",
+                options: ["Iron deficiency", "Primary myelofibrosis", "G6PD deficiency", "Vitamin B12 deficiency"],
+                answer: 1,
+                explanation: "Teardrop cells form when RBCs are distorted passing through fibrotic bone marrow. Classic in myelofibrosis, also seen in thalassemia or extramedullary hematopoiesis."
+            },
+            {
+                q: "Basophilic stippling is most characteristic of:",
+                options: ["Autoimmune hemolytic anemia", "Lead poisoning", "Hereditary spherocytosis", "Sickle cell disease"],
+                answer: 1,
+                explanation: "Basophilic stippling = aggregated ribosomes/RNA. Coarse stippling is classic for lead toxicity (inhibits RNAse). Also seen in thalassemia and sideroblastic anemia."
+            },
+            {
+                q: "Heinz bodies require which stain for visualization?",
+                options: ["Wright-Giemsa", "Prussian blue", "Supravital stain (e.g., methyl violet)", "Gram stain"],
+                answer: 2,
+                explanation: "Heinz bodies = denatured hemoglobin precipitates. Not visible on routine stains—require supravital staining. Associated with G6PD deficiency and oxidant stress."
+            },
+            {
+                q: "Which RBC inclusion consists of iron-containing granules?",
+                options: ["Howell-Jolly bodies", "Cabot rings", "Pappenheimer bodies", "Heinz bodies"],
+                answer: 2,
+                explanation: "Pappenheimer bodies = mitochondria + ferritin aggregates containing iron. Best confirmed with Prussian blue stain. Seen in sideroblastic anemia, hemolysis, or post-splenectomy."
+            },
+            {
+                q: "Drepanocytes are pathognomonic for:",
+                options: ["Thalassemia", "Hereditary elliptocytosis", "Sickle cell disease", "Iron deficiency"],
+                answer: 2,
+                explanation: "Drepanocytes = sickle-shaped RBCs due to HbS polymerization under low O₂. Diagnostic of sickle cell disorders (HbSS, HbSC, etc.)."
+            },
+            {
+                q: "Stomatocytes have a slit-like area of pallor due to:",
+                options: ["Loss of membrane", "Excess membrane", "Uniconcave shape", "Hemoglobin precipitation"],
+                answer: 2,
+                explanation: "Stomatocytes are cup-shaped (uniconcave) instead of biconcave, creating a mouth-like pallor. Seen in alcoholism, hereditary stomatocytosis, or hemolytic anemias."
+            },
+            {
+                q: "Elliptocytes are hallmark of:",
+                options: ["Iron deficiency", "Hereditary elliptocytosis", "Lead poisoning", "Autoimmune hemolytic anemia"],
+                answer: 1,
+                explanation: "Hereditary elliptocytosis = spectrin defect → RBCs become oval/cigar-shaped. Mild forms may be asymptomatic; severe cases cause hemolysis."
+            },
+            {
+                q: "A dichromic blood smear shows:",
+                options: ["Only hypochromic cells", "Only polychromatic cells", "Two populations: normochromic + hypochromic", "Fragmented and spherical cells"],
+                answer: 2,
+                explanation: "Dichromasia = mixed RBC populations. Classic after blood transfusion (donor = normochromic; recipient = hypochromic in iron deficiency)."
+            },
+            {
+                q: "Which finding is expected in vitamin B12 deficiency?",
+                options: ["Microcytic hypochromic RBCs", "Macro-ovalocytes and hypersegmented neutrophils", "Spherocytes", "Schistocytes"],
+                answer: 1,
+                explanation: "B12/folate deficiency → megaloblastic anemia → large oval RBCs (macro-ovalocytes), hypersegmented neutrophils, and Howell-Jolly bodies."
+            },
+            {
+                q: "Cabot rings represent remnants of:",
+                options: ["Nuclear DNA", "Mitochondria", "Mitotic spindle microtubules", "Golgi apparatus"],
+                answer: 2,
+                explanation: "Cabot rings = red-violet rings/figure-8 structures from abnormal erythropoiesis (e.g., megaloblastic anemia, severe dyserythropoiesis)."
+            },
+            {
+                q: "In which condition would you expect to see both target cells and microcytosis?",
+                options: ["Vitamin B12 deficiency", "Thalassemia trait", "Autoimmune hemolytic anemia", "TTP"],
+                answer: 1,
+                explanation: "Thalassemia = defective globin chain synthesis → microcytosis, hypochromia, and target cells due to imbalanced hemoglobin and excess membrane."
+            },
+            {
+                q: "Bite cells are formed when the spleen removes:",
+                options: ["Howell-Jolly bodies", "Heinz bodies", "Pappenheimer bodies", "Basophilic stippling"],
+                answer: 1,
+                explanation: "In G6PD deficiency, Heinz bodies form → spleen “bites” them out → bite cells (degmacytes) appear on smear."
+            },
+            {
+                q: "Which RBC abnormality is reversible and often artifactual?",
+                options: ["Acanthocytes", "Schistocytes", "Echinocytes", "Spherocytes"],
+                answer: 2,
+                explanation: "Echinocytes can result from pH changes, drying artifacts, or uremia and may disappear if smear is repeated properly."
+            },
+            {
+                q: "The presence of nucleated RBCs and teardrop cells strongly suggests:",
+                options: ["Iron deficiency", "Myelofibrosis", "Lead poisoning", "Hereditary spherocytosis"],
+                answer: 1,
+                explanation: "Myelofibrosis → bone marrow fibrosis → extramedullary hematopoiesis → teardrop cells + nucleated RBCs + leukoerythroblastic picture."
+            },
+            {
+                q: "Which of the following is NOT a cause of macrocytosis?",
+                options: ["Folate deficiency", "Liver disease", "Iron deficiency", "Reticulocytosis"],
+                answer: 2,
+                explanation: "Iron deficiency causes microcytosis, not macrocytosis. Macrocytosis = B12/folate deficiency, liver disease, alcohol, reticulocytosis, or hypothyroidism."
+            },
+            {
+                q: "Hyperchromic RBCs are seen in:",
+                options: ["Iron deficiency", "Thalassemia", "Spherocytosis", "Lead poisoning"],
+                answer: 2,
+                explanation: "Spherocytes appear hyperchromic due to high MCHC (not more hemoglobin, but less volume → concentrated Hb). They lack central pallor."
+            },
+            {
+                q: "Which inclusion is composed of DNA?",
+                options: ["Basophilic stippling", "Pappenheimer bodies", "Howell-Jolly bodies", "Heinz bodies"],
+                answer: 2,
+                explanation: "Howell-Jolly bodies = nuclear chromatin (DNA) remnants. Others: Basophilic stippling = RNA, Pappenheimer = iron, Heinz = denatured Hb."
+            },
+            {
+                q: "A patient with chronic kidney disease is most likely to have:",
+                options: ["Acanthocytes", "Echinocytes", "Spherocytes", "Target cells"],
+                answer: 1,
+                explanation: "Uremia in CKD commonly causes echinocytes (burr cells) due to toxin accumulation altering membrane lipids."
+            },
+            {
+                q: "Which poikilocyte is associated with vaso-occlusive crises?",
+                options: ["Schistocyte", "Drepanocyte", "Stomatocyte", "Elliptocyte"],
+                answer: 1,
+                explanation: "Drepanocytes (sickled cells) cause vaso-occlusion, ischemia, and pain crises in sickle cell disease."
+            },
+            {
+                q: "Reticulocytes appear larger and bluish due to:",
+                options: ["High hemoglobin content", "Residual RNA", "Iron granules", "Membrane defects"],
+                answer: 1,
+                explanation: "Reticulocytes retain ribosomal RNA, which binds basic dyes → polychromasia (blue-gray color) and larger size."
+            },
+            {
+                q: "Which condition causes both microcytosis and basophilic stippling?",
+                options: ["Vitamin B12 deficiency", "Thalassemia", "Autoimmune hemolytic anemia", "TTP"],
+                answer: 1,
+                explanation: "Thalassemia → ineffective erythropoiesis → microcytic hypochromic RBCs + fine basophilic stippling."
+            },
+            {
+                q: "The MCV in hereditary spherocytosis is typically:",
+                options: ["Low (<80 fL)", "Normal (80–100 fL)", "High (>100 fL)", "Variable"],
+                answer: 1,
+                explanation: "Hereditary spherocytosis = normocytic (MCV normal), but MCHC elevated. Anemia is due to hemolysis, not defective synthesis."
+            },
+            {
+                q: "Which of the following is a feature of lead poisoning?",
+                options: ["Target cells", "Coarse basophilic stippling", "Spherocytes", "Macro-ovalocytes"],
+                answer: 1,
+                explanation: "Lead inhibits δ-aminolevulinic acid dehydratase and ferrochelatase → accumulation of RNA and protoporphyrin → coarse basophilic stippling + sideroblastic anemia."
+            },
+            {
+                q: "In autoimmune hemolytic anemia (warm type), the predominant RBC morphology is:",
+                options: ["Schistocytes", "Spherocytes", "Target cells", "Elliptocytes"],
+                answer: 1,
+                explanation: "IgG-coated RBCs are partially phagocytosed by splenic macrophages → membrane loss → spherocytes."
+            },
+            {
+                q: "Which RBC shape is associated with abetalipoproteinemia?",
+                options: ["Echinocyte", "Acanthocyte", "Stomatocyte", "Elliptocyte"],
+                answer: 1,
+                explanation: "Abetalipoproteinemia = defective lipid transport → abnormal RBC membrane composition → true acanthocytes (not spur cells of liver disease)."
+            },
+            {
+                q: "Polychromasia is absent in:",
+                options: ["Hemolytic anemia", "Recovery from iron deficiency", "Aplastic anemia (active phase)", "Acute blood loss"],
+                answer: 2,
+                explanation: "Aplastic anemia = bone marrow failure → no reticulocyte production → no polychromasia. Appears only during recovery."
+            },
+            {
+                q: "Which inclusion is best visualized with Prussian blue stain?",
+                options: ["Howell-Jolly bodies", "Heinz bodies", "Pappenheimer bodies", "Cabot rings"],
+                answer: 2,
+                explanation: "Prussian blue detects ferric iron → confirms Pappenheimer bodies as iron-positive, unlike basophilic stippling."
+            },
+            {
+                q: "A blood smear showing schistocytes, thrombocytopenia, and fever suggests:",
+                options: ["Iron deficiency", "Thalassemia", "TTP", "Hereditary spherocytosis"],
+                answer: 2,
+                explanation: "TTP triad: MAHA (schistocytes), thrombocytopenia, fever, renal dysfunction, neurologic symptoms. Medical emergency!"
+            },
+            {
+                q: "Target cells in liver disease result from:",
+                options: ["Hemoglobin instability", "Altered membrane lipid composition", "Iron overload", "Spectrin deficiency"],
+                answer: 1,
+                explanation: "Cholestasis → increased cholesterol in RBC membrane → increased surface area → target cells."
+            },
+            {
+                q: "The primary diagnostic value of RBC morphology is to:",
+                options: ["Replace CBC", "Provide clues to underlying hematologic disorders", "Measure hemoglobin concentration", "Count white blood cells"],
+                answer: 1,
+                explanation: "RBC morphology complements CBC and helps differentiate causes of anemia, identify genetic disorders, and detect life-threatening conditions like MAHA."
+            }
+        ];
+
+        /* 
+         * STATE MANAGEMENT 
+         */
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null); // Stores index of selected option or null
+        let score = 0;
+
+        /*
+         * DOM ELEMENTS
+         */
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progressText = document.getElementById('progress-text');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const modal = document.getElementById('list-modal');
+        const gridContainer = document.getElementById('grid-container');
+        const quizInterface = document.getElementById('quiz-interface');
+        const resultScreen = document.getElementById('result-screen');
+
+        /*
+         * INITIALIZATION
+         */
+        function initQuiz() {
+            renderQuestion();
+            updateNavButtons();
+        }
+
+        /*
+         * RENDER LOGIC
+         */
+        function renderQuestion() {
+            const data = quizData[currentQuestionIndex];
+            
+            // Update Text
+            questionTextEl.textContent = data.q;
+            progressText.textContent = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
+            
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+            explanationBox.style.display = 'none';
+
+            // Create Options
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = `<span>${opt}</span><span class="feedback-label"></span>`;
+                
+                // Interaction Logic
+                const hasAnswered = userAnswers[currentQuestionIndex] !== null;
+                
+                if (hasAnswered) {
+                    btn.disabled = true;
+                    const selectedIdx = userAnswers[currentQuestionIndex];
+                    const isCorrect = selectedIdx === data.answer;
+                    
+                    if (index === data.answer) {
+                        btn.classList.add('correct');
+                        btn.querySelector('.feedback-label').textContent = 'CORRECT';
+                    } else if (index === selectedIdx && !isCorrect) {
+                        btn.classList.add('incorrect');
+                        btn.querySelector('.feedback-label').textContent = 'INCORRECT';
+                    }
+                } else {
+                    btn.onclick = () => handleOptionClick(index);
+                }
+
+                optionsContainer.appendChild(btn);
+            });
+
+            // Show explanation if already answered
+            if (userAnswers[currentQuestionIndex] !== null) {
+                showExplanation(data.explanation);
+            }
+
+            updateNavButtons();
+        }
+
+        function handleOptionClick(selectedIndex) {
+            const data = quizData[currentQuestionIndex];
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            
+            // Calculate Score immediately (for final tally)
+            calculateScore();
+
+            // Re-render to show feedback
+            renderQuestion();
+        }
+
+        function showExplanation(text) {
+            explanationText.textContent = text;
+            explanationBox.style.display = 'block';
+        }
+
+        function calculateScore() {
+            score = 0;
+            quizData.forEach((q, idx) => {
+                if (userAnswers[idx] === q.answer) {
+                    score++;
+                }
+            });
+        }
+
+        /*
+         * NAVIGATION LOGIC
+         */
+        function nextQuestion() {
+            if (currentQuestionIndex < quizData.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function updateNavButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.textContent = "Finish Test";
+            } else {
+                nextBtn.textContent = "Next";
+            }
+        }
+
+        /*
+         * MODAL & GRID LOGIC
+         */
+        function openModal() {
+            renderGrid();
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        // Close modal if clicking outside content
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        function renderGrid() {
+            gridContainer.innerHTML = '';
+            quizData.forEach((_, idx) => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.textContent = idx + 1;
+
+                // Status classes
+                if (idx === currentQuestionIndex) {
+                    item.classList.add('current');
+                }
+                
+                if (userAnswers[idx] !== null) {
+                    item.classList.add('answered');
+                } else {
+                    item.classList.add('unanswered');
+                }
+
+                // Jump Logic
+                item.onclick = () => {
+                    currentQuestionIndex = idx;
+                    closeModal();
+                    renderQuestion();
+                };
+
+                gridContainer.appendChild(item);
+            });
+        }
+
+        /*
+         * RESULT SCREEN
+         */
+        function showResults() {
+            quizInterface.style.display = 'none';
+            resultScreen.style.display = 'flex';
+            
+            const percentage = Math.round((score / quizData.length) * 100);
+            document.getElementById('final-score').textContent = `${percentage}%`;
+            document.getElementById('final-detail').textContent = `${score} / ${quizData.length} Correct`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            score = 0;
+            
+            resultScreen.style.display = 'none';
+            quizInterface.style.display = 'block';
+            renderQuestion();
+        }
+
+        // Start
+        initQuiz();
+
+    </script>
+</body>
+</html>

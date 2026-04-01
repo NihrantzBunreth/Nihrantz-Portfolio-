@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hematology Theory: Non-Malignant Leukocyte Disorder</title>
+    <style>
+        /* --- RESET & BASIC SETUP --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- CLINICAL CONTAINER --- */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #ffffff;
+            border: 2px solid #0056b3; /* Medical Blue */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 85vh;
+            overflow: hidden;
+        }
+
+        /* Medical Chart Paper Background Effect */
+        .chart-bg {
+            flex-grow: 1;
+            padding: 40px;
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 30px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* --- TYPOGRAPHY & HEADER --- */
+        h1 {
+            color: #0056b3;
+            font-size: 22px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        h2 {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: #0056b3;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            color: #222;
+        }
+
+        /* --- QUESTION & OPTIONS --- */
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 12px 15px;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            position: relative;
+            outline: none;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #e6f0ff;
+            border-color: #0056b3;
+        }
+
+        .option-btn.correct {
+            border: 2px solid #28a745;
+            background-color: #f0fff4;
+        }
+
+        .option-btn.incorrect {
+            border: 2px solid #dc3545;
+            background-color: #fff5f5;
+        }
+
+        .feedback-badge {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .feedback-correct { color: #28a745; }
+        .feedback-incorrect { color: #dc3545; }
+
+        .explanation-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0056b3;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #444;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- NAVIGATION BAR --- */
+        .nav-bar {
+            border-top: 1px solid #0056b3;
+            padding: 15px 40px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background-color: #fff;
+            border: 1px solid #0056b3;
+            color: #0056b3;
+            padding: 8px 20px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .view-list-btn {
+            border: 1px solid #ccc;
+            color: #555;
+        }
+        .view-list-btn:hover {
+            background-color: #eee;
+            color: #000;
+            border-color: #555;
+        }
+
+        /* --- BRANDING & SOCIAL --- */
+        .branding-footer {
+            border-top: 1px solid #ddd;
+            padding: 15px 40px;
+            background-color: #fff;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-style: italic;
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .social-btn:hover {
+            background-color: #004494;
+        }
+
+        /* --- OVERVIEW MODAL --- */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            display: none;
+            flex-direction: column;
+            z-index: 20;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+
+        .modal-title {
+            color: #0056b3;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            font-size: 30px;
+            color: #0056b3;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 15px;
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ddd;
+            background-color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .grid-item.current {
+            border-color: #0056b3;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+        }
+
+        .grid-item.answered {
+            background-color: #cce5ff;
+            border-color: #cce5ff;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.1);
+            z-index: 2;
+        }
+
+        /* --- RESULT SCREEN --- */
+        .result-screen {
+            text-align: center;
+            padding: 40px;
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 30px;
+        }
+
+        .result-title {
+            font-size: 28px;
+            color: #0056b3;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .score-display {
+            font-size: 60px;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .score-label {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- Main Quiz Area -->
+        <div class="chart-bg" id="quiz-content">
+            <h1>Hematology Theory</h1>
+            <h2>Lesson 7: Non-Malignant Leukocyte Disorder</h2>
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+            
+            <div id="question-container">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div class="result-screen" id="result-screen">
+            <h1 class="result-title">Test Result</h1>
+            <div class="score-display" id="final-score">0 / 40</div>
+            <div class="score-label">Score</div>
+            <button class="nav-btn" onclick="restartQuiz()" style="margin-top: 30px; font-size: 16px; padding: 10px 30px;">Retake Test</button>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="nav-bar" id="nav-bar">
+            <button class="nav-btn" id="prev-btn" onclick="changeQuestion(-1)">Previous</button>
+            <button class="nav-btn view-list-btn" onclick="toggleModal()">View List</button>
+            <button class="nav-btn" id="next-btn" onclick="changeQuestion(1)">Next</button>
+        </div>
+
+        <!-- Branding & Social -->
+        <div class="branding-footer">
+            <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </div>
+
+        <!-- Overview Modal -->
+        <div class="modal-overlay" id="overview-modal">
+            <div class="modal-header">
+                <span class="modal-title">Question Overview</span>
+                <button class="close-modal-btn" onclick="toggleModal()">×</button>
+            </div>
+            <div style="margin-bottom: 15px; font-size: 14px; color: #666;">
+                <span style="display:inline-block; width: 15px; height: 15px; border: 2px solid #0056b3; vertical-align: middle; margin-right: 5px;"></span> Current
+                <span style="display:inline-block; width: 15px; height: 15px; background: #cce5ff; border: 2px solid #cce5ff; vertical-align: middle; margin-left: 15px; margin-right: 5px;"></span> Answered
+                <span style="display:inline-block; width: 15px; height: 15px; border: 2px solid #ddd; vertical-align: middle; margin-left: 15px; margin-right: 5px;"></span> Unanswered
+            </div>
+            <div class="question-grid" id="question-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                section: "MCQs 1–10: General Concepts & Quantitative Disorders",
+                question: "1. Which of the following defines leukocytosis in adults?",
+                options: ["A. WBC count < 4.5 × 10⁹/L", "B. WBC count > 11.0 × 10⁹/L", "C. WBC count > 7.0 × 10⁹/L", "D. WBC count < 1.5 × 10⁹/L"],
+                correct: 1,
+                explanation: "Leukocytosis is defined as a total white blood cell (WBC) count greater than 11.0 × 10⁹/L. This is a reactive increase often due to infection, inflammation, or stress."
+            },
+            {
+                section: "MCQs 1–10: General Concepts & Quantitative Disorders",
+                question: "2. Pancytopenia involves a reduction in all of the following EXCEPT:",
+                options: ["A. Red blood cells", "B. White blood cells", "C. Platelets", "D. Plasma proteins"],
+                correct: 3,
+                explanation: "Pancytopenia = ↓ RBCs (anemia), ↓ WBCs (leukopenia), and ↓ platelets (thrombocytopenia). Plasma proteins are not cellular elements, so they are not part of pancytopenia."
+            },
+            {
+                section: "MCQs 1–10: General Concepts & Quantitative Disorders",
+                question: "3. The most common cause of leukocytosis is:",
+                options: ["A. Lymphocytosis", "B. Monocytosis", "C. Neutrophilia", "D. Eosinophilia"],
+                correct: 2,
+                explanation: "Neutrophils constitute 50–70% of circulating WBCs, so increases in neutrophils (neutrophilia) are the most frequent cause of overall leukocytosis."
+            },
+            {
+                section: "MCQs 1–10: General Concepts & Quantitative Disorders",
+                question: "4. Leukopenia is defined as a total WBC count:",
+                options: ["A. < 11.0 × 10⁹/L", "B. < 7.0 × 10⁹/L", "C. < 4.5 × 10⁹/L", "D. < 1.5 × 10⁹/L"],
+                correct: 2,
+                explanation: "Leukopenia = total WBC count < 4.5 × 10⁹/L. It’s most commonly due to neutropenia (low neutrophils)."
+            },
+            {
+                section: "MCQs 1–10: General Concepts & Quantitative Disorders",
+                question: "5. A patient with aplastic anemia is MOST likely to present with:",
+                options: ["A. Leukocytosis", "B. Neutrophilia", "C. Pancytopenia", "D. Eosinophilia"],
+                correct: 2,
+                explanation: "Aplastic anemia causes bone marrow failure, leading to pancytopenia—low RBCs, WBCs, and platelets."
+            },
+            {
+                section: "MCQs 1–10: General Concepts & Quantitative Disorders",
+                question: "6. Which mechanism explains transient neutropenia during acute infection?",
+                options: ["A. Bone marrow suppression", "B. Increased margination", "C. Rapid migration of neutrophils into tissues", "D. Drug-induced apoptosis"],
+                correct: 2,
+                explanation: "During acute infection, neutrophils migrate rapidly to tissues, causing a temporary drop in circulating counts—this is not true bone marrow failure."
+            },
+            {
+                section: "MCQs 1–10: General Concepts & Quantitative Disorders",
+                question: "7. Stress-induced leukocytosis is primarily due to:",
+                options: ["A. Increased bone marrow production", "B. Release of immature myeloid cells", "C. Shift from marginated to circulating pool", "D. Autoimmune stimulation"],
+                correct: 2,
+                explanation: "Epinephrine and cortisol during stress cause demargination—neutrophils detach from vessel walls and enter circulation, raising WBC count without new production."
+            },
+            {
+                section: "MCQs 1–10: General Concepts & Quantitative Disorders",
+                question: "8. Which condition is characterized by the presence of nucleated RBCs and immature WBCs in peripheral blood?",
+                options: ["A. Leukemoid reaction", "B. Leukoerythroblastic reaction", "C. Neutrophilia", "D. Lymphocytosis"],
+                correct: 1,
+                explanation: "Leukoerythroblastic reaction shows nucleated RBCs + left-shifted neutrophils, indicating marrow stress or infiltration (e.g., fibrosis, metastasis)."
+            },
+            {
+                section: "MCQs 1–10: General Concepts & Quantitative Disorders",
+                question: "9. A leukemoid reaction is distinguished from leukemia by:",
+                options: ["A. WBC count > 100 × 10⁹/L", "B. Presence of blast cells only", "C. WBC count usually < 50 × 10⁹/L and reversibility", "D. Absence of immature cells"],
+                correct: 2,
+                explanation: "Leukemoid reaction mimics leukemia but has WBC < 50 × 10⁹/L, immature forms (myelocytes), and resolves when the trigger (e.g., infection) is treated."
+            },
+            {
+                section: "MCQs 1–10: General Concepts & Quantitative Disorders",
+                question: "10. True neutropenia differs from pseudo-neutropenia in that:",
+                options: ["A. Pseudo-neutropenia involves actual marrow failure", "B. True neutropenia is due to margination", "C. True neutropenia reflects reduced production or increased destruction", "D. Pseudo-neutropenia is irreversible"],
+                correct: 2,
+                explanation: "True neutropenia = low neutrophils due to ↓ production or ↑ destruction. Pseudo-neutropenia = normal total neutrophils but increased margination, often reversible."
+            },
+            {
+                section: "MCQs 11–20: Neutrophil & Eosinophil Disorders",
+                question: "11. Severe neutropenia (agranulocytosis) is defined as ANC:",
+                options: ["A. < 1.5 × 10⁹/L", "B. < 1.0 × 10⁹/L", "C. < 0.5 × 10⁹/L", "D. < 0.1 × 10⁹/L"],
+                correct: 2,
+                explanation: "Agranulocytosis = ANC < 0.5 × 10⁹/L, carrying high risk of life-threatening infections."
+            },
+            {
+                section: "MCQs 11–20: Neutrophil & Eosinophil Disorders",
+                question: "12. Which drug class is LEAST associated with drug-induced neutropenia?",
+                options: ["A. Chemotherapy agents", "B. Antithyroid drugs", "C. NSAIDs", "D. Antihistamines"],
+                correct: 3,
+                explanation: "Antihistamines are not commonly linked to neutropenia. Chemo, NSAIDs, antithyroid drugs (e.g., methimazole), and antibiotics are known causes."
+            },
+            {
+                section: "MCQs 11–20: Neutrophil & Eosinophil Disorders",
+                question: "13. Eosinophilia is defined as an absolute eosinophil count >:",
+                options: ["A. 0.1 × 10⁹/L", "B. 0.4 × 10⁹/L", "C. 0.9 × 10⁹/L", "D. 1.5 × 10⁹/L"],
+                correct: 1,
+                explanation: "Normal eosinophils = 0.0–0.4 × 10⁹/L. Eosinophilia = > 0.4 × 10⁹/L."
+            },
+            {
+                section: "MCQs 11–20: Neutrophil & Eosinophil Disorders",
+                question: "14. Which condition is a classic cause of eosinophilia?",
+                options: ["A. Bacterial sepsis", "B. Hookworm infection", "C. Acute myocardial infarction", "D. Hyperthyroidism"],
+                correct: 1,
+                explanation: "Helminth infections (e.g., hookworm, schistosomiasis) are classic parasitic causes of eosinophilia."
+            },
+            {
+                section: "MCQs 11–20: Neutrophil & Eosinophil Disorders",
+                question: "15. Hypereosinophilic syndrome (HES) can lead to damage in all EXCEPT:",
+                options: ["A. Heart", "B. Lungs", "C. Peripheral nerves", "D. Bones"],
+                correct: 3,
+                explanation: "HES causes eosinophil-mediated tissue damage in heart (endomyocardial fibrosis), lungs, skin, and nerves—not typically bones."
+            },
+            {
+                section: "MCQs 11–20: Neutrophil & Eosinophil Disorders",
+                question: "16. Eosinopenia is MOST commonly caused by:",
+                options: ["A. Allergic rhinitis", "B. Glucocorticoid therapy", "C. Parasitic infection", "D. Asthma exacerbation"],
+                correct: 1,
+                explanation: "Glucocorticoids suppress eosinophil release and promote margination → eosinopenia, especially in acute illness or steroid use."
+            },
+            {
+                section: "MCQs 11–20: Neutrophil & Eosinophil Disorders",
+                question: "17. Which finding supports pseudo-neutropenia over true neutropenia?",
+                options: ["A. History of chemotherapy", "B. Ethnic background with benign neutropenia", "C. Splenomegaly", "D. Positive antineutrophil antibodies"],
+                correct: 1,
+                explanation: "Some ethnic groups (e.g., African descent) have benign ethnic neutropenia due to increased margination, not marrow failure."
+            },
+            {
+                section: "MCQs 11–20: Neutrophil & Eosinophil Disorders",
+                question: "18. A patient with rheumatoid arthritis develops neutrophilia. This is likely due to:",
+                options: ["A. Viral infection", "B. Chronic inflammation", "C. Bone marrow suppression", "D. Hypersplenism"],
+                correct: 1,
+                explanation: "Chronic inflammatory diseases like RA stimulate cytokine release (e.g., G-CSF) → reactive neutrophilia."
+            },
+            {
+                section: "MCQs 11–20: Neutrophil & Eosinophil Disorders",
+                question: "19. Which is NOT a feature of leukoerythroblastic reaction?",
+                options: ["A. Teardrop RBCs", "B. Nucleated RBCs", "C. Thrombocytosis", "D. Left-shifted neutrophils"],
+                correct: 2,
+                explanation: "Leukoerythroblastic reaction includes teardrop cells, nucleated RBCs, and immature WBCs, but thrombocytopenia (not thrombocytosis) is typical due to marrow dysfunction."
+            },
+            {
+                section: "MCQs 11–20: Neutrophil & Eosinophil Disorders",
+                question: "20. Neutrophilia due to tissue necrosis is commonly seen in:",
+                options: ["A. Viral hepatitis", "B. Myocardial infarction", "C. Allergic bronchitis", "D. Hyperthyroidism"],
+                correct: 1,
+                explanation: "Tissue necrosis (e.g., MI, burns) releases inflammatory mediators → neutrophilia."
+            },
+            {
+                section: "MCQs 21–30: Basophils, Monocytes & Lymphocytes",
+                question: "21. Basophilia is MOST characteristically associated with:",
+                options: ["A. Acute bacterial infection", "B. Chronic myeloid leukemia (CML)", "C. Systemic lupus erythematosus", "D. Iron deficiency anemia"],
+                correct: 1,
+                explanation: "Basophilia (>0.2 × 10⁹/L) is a classic clue for CML, though CML is malignant—it’s included for diagnostic context."
+            },
+            {
+                section: "MCQs 21–30: Basophils, Monocytes & Lymphocytes",
+                question: "22. Basopenia may occur due to all EXCEPT:",
+                options: ["A. Glucocorticoid use", "B. Acute inflammation", "C. Allergic rhinitis", "D. Hyperthyroidism"],
+                correct: 2,
+                explanation: "Allergic rhinitis causes basophilia, not basopenia. Basopenia occurs in stress, steroids, hyperthyroidism, and acute inflammation."
+            },
+            {
+                section: "MCQs 21–30: Basophils, Monocytes & Lymphocytes",
+                question: "23. Monocytosis is commonly seen in:",
+                options: ["A. Acute viral pharyngitis", "B. Tuberculosis", "C. Anaphylaxis", "D. Iron deficiency"],
+                correct: 1,
+                explanation: "TB is a classic cause of chronic monocytosis due to persistent intracellular infection."
+            },
+            {
+                section: "MCQs 21–30: Basophils, Monocytes & Lymphocytes",
+                question: "24. Absolute monocytosis is defined as monocyte count >:",
+                options: ["A. 0.2 × 10⁹/L", "B. 0.5 × 10⁹/L", "C. 0.8 × 10⁹/L", "D. 1.0 × 10⁹/L"],
+                correct: 2,
+                explanation: "Monocytosis = > 0.8 × 10⁹/L in adults."
+            },
+            {
+                section: "MCQs 21–30: Basophils, Monocytes & Lymphocytes",
+                question: "25. Monocytopenia is commonly caused by:",
+                options: ["A. Tuberculosis", "B. Glucocorticoid therapy", "C. Parasitic infection", "D. Recovery from infection"],
+                correct: 1,
+                explanation: "Steroids suppress monocyte production and circulation, leading to monocytopenia."
+            },
+            {
+                section: "MCQs 21–30: Basophils, Monocytes & Lymphocytes",
+                question: "26. Lymphocytosis in adults is defined as lymphocyte count >:",
+                options: ["A. 1.0 × 10⁹/L", "B. 2.5 × 10⁹/L", "C. 4.5 × 10⁹/L", "D. 7.0 × 10⁹/L"],
+                correct: 2,
+                explanation: "Lymphocytosis = > 4.5 × 10⁹/L in adults (note: children have higher normal ranges)."
+            },
+            {
+                section: "MCQs 21–30: Basophils, Monocytes & Lymphocytes",
+                question: "27. Which infection causes atypical lymphocytosis?",
+                options: ["A. Streptococcal pharyngitis", "B. Pertussis", "C. Urinary tract infection", "D. Malaria"],
+                correct: 1,
+                explanation: "Pertussis (whooping cough) causes atypical lymphocytosis due to lymphocytosis-promoting factor."
+            },
+            {
+                section: "MCQs 21–30: Basophils, Monocytes & Lymphocytes",
+                question: "28. Lymphocytopenia is a hallmark of:",
+                options: ["A. Infectious mononucleosis", "B. HIV/AIDS", "C. Allergic asthma", "D. Rheumatoid arthritis"],
+                correct: 1,
+                explanation: "HIV targets CD4+ T cells, leading to progressive lymphocytopenia and immunodeficiency."
+            },
+            {
+                section: "MCQs 21–30: Basophils, Monocytes & Lymphocytes",
+                question: "29. Which condition causes reactive (non-malignant) lymphocytosis?",
+                options: ["A. Chronic lymphocytic leukemia", "B. EBV infection", "C. Multiple myeloma", "D. Hodgkin lymphoma"],
+                correct: 1,
+                explanation: "EBV (mono) causes reactive lymphocytosis with atypical lymphocytes—non-malignant."
+            },
+            {
+                section: "MCQs 21–30: Basophils, Monocytes & Lymphocytes",
+                question: "30. Persistent lymphocytopenia may require:",
+                options: ["A. Antibiotic prophylaxis", "B. IVIG or immune evaluation", "C. Iron supplementation", "D. Steroid taper"],
+                correct: 1,
+                explanation: "Persistent lymphocytopenia suggests immunodeficiency, warranting immune workup and possibly IVIG."
+            },
+            {
+                section: "MCQs 31–40: Integration & Clinical Scenarios",
+                question: "31. A patient on methimazole develops fever and sore throat. CBC shows WBC 1.8 × 10⁹/L, ANC 0.3 × 10⁹/L. Most likely diagnosis?",
+                options: ["A. Viral pharyngitis", "B. Drug-induced agranulocytosis", "C. SLE flare", "D. Iron deficiency"],
+                correct: 1,
+                explanation: "Methimazole is a known cause of agranulocytosis (ANC < 0.5). Fever + sore throat = medical emergency."
+            },
+            {
+                section: "MCQs 31–40: Integration & Clinical Scenarios",
+                question: "32. Which finding suggests leukemoid reaction rather than CML?",
+                options: ["A. Basophilia", "B. Leukocyte alkaline phosphatase (LAP) score: high", "C. Philadelphia chromosome", "D. Blasts > 20%"],
+                correct: 1,
+                explanation: "High LAP score = leukemoid reaction; low LAP = CML. Philly chromosome confirms CML."
+            },
+            {
+                section: "MCQs 31–40: Integration & Clinical Scenarios",
+                question: "33. Eosinopenia in a septic patient is due to:",
+                options: ["A. Parasite clearance", "B. Glucocorticoid release from stress response", "C. Bone marrow exhaustion", "D. Splenic sequestration"],
+                correct: 1,
+                explanation: "Endogenous cortisol in sepsis suppresses eosinophil circulation → eosinopenia, which may correlate with severity."
+            },
+            {
+                section: "MCQs 31–40: Integration & Clinical Scenarios",
+                question: "34. A patient with IBD has WBC 18 × 10⁹/L, neutrophils 15 × 10⁹/L, and occasional metamyelocytes. Most likely:",
+                options: ["A. Acute leukemia", "B. Leukemoid reaction", "C. CML", "D. Viral infection"],
+                correct: 1,
+                explanation: "IBD (inflammatory disease) can cause leukemoid reaction—reactive neutrophilia with immature forms, WBC < 50."
+            },
+            {
+                section: "MCQs 31–40: Integration & Clinical Scenarios",
+                question: "35. Which is a cause of pancytopenia?",
+                options: ["A. Iron deficiency", "B. Vitamin B12 deficiency", "C. Aplastic anemia", "D. Hemolytic anemia"],
+                correct: 2,
+                explanation: "Only aplastic anemia causes pancytopenia due to marrow failure. B12 deficiency causes macrocytic anemia ± mild leukopenia, not full pancytopenia."
+            },
+            {
+                section: "MCQs 31–40: Integration & Clinical Scenarios",
+                question: "36. “Left shift” in neutrophils refers to:",
+                options: ["A. Decreased band forms", "B. Increased immature neutrophils (bands, metamyelocytes)", "C. Nuclear hypersegmentation", "D. Toxic granulation only"],
+                correct: 1,
+                explanation: "Left shift = increased immature neutrophils in blood, indicating accelerated marrow release (e.g., infection)."
+            },
+            {
+                section: "MCQs 31–40: Integration & Clinical Scenarios",
+                question: "37. Which disorder is associated with teardrop cells and nucleated RBCs?",
+                options: ["A. Iron deficiency", "B. Leukoerythroblastic reaction", "C. Hereditary spherocytosis", "D. Thalassemia"],
+                correct: 1,
+                explanation: "Teardrop cells + nucleated RBCs = leukoerythroblastic reaction, signaling marrow infiltration or fibrosis."
+            },
+            {
+                section: "MCQs 31–40: Integration & Clinical Scenarios",
+                question: "38. Cyclic neutropenia typically recurs every:",
+                options: ["A. 1–2 days", "B. 2–4 weeks", "C. 6–8 weeks", "D. 3 months"],
+                correct: 1,
+                explanation: "Cyclic neutropenia causes episodic drops in neutrophils every 2–4 weeks, due to genetic defects in granulopoiesis."
+            },
+            {
+                section: "MCQs 31–40: Integration & Clinical Scenarios",
+                question: "39. Which is NOT a cause of neutrophilia?",
+                options: ["A. Corticosteroid therapy", "B. Bacterial infection", "C. Aplastic anemia", "D. Myocardial infarction"],
+                correct: 2,
+                explanation: "Aplastic anemia causes neutropenia, not neutrophilia. Steroids, infection, and tissue necrosis increase neutrophils."
+            },
+            {
+                section: "MCQs 31–40: Integration & Clinical Scenarios",
+                question: "40. In non-malignant leukocyte disorders, the key principle is:",
+                options: ["A. Always treat with chemotherapy", "B. They are irreversible", "C. Often reactive and resolve when trigger is removed", "D. Require bone marrow transplant"],
+                correct: 2,
+                explanation: "Non-malignant disorders are usually reactive (to infection, drugs, stress) and resolve once the underlying cause is addressed."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let score = 0;
+
+        const questionContainer = document.getElementById('question-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const overviewModal = document.getElementById('overview-modal');
+        const questionGrid = document.getElementById('question-grid');
+        const quizContent = document.getElementById('quiz-content');
+        const navBar = document.getElementById('nav-bar');
+        const resultScreen = document.getElementById('result-screen');
+        const finalScore = document.getElementById('final-score');
+
+        function initQuiz() {
+            renderQuestion();
+            renderGrid();
+            updateNavButtons();
+        }
+
+        function renderQuestion() {
+            const data = quizData[currentQuestionIndex];
+            const savedAnswer = userAnswers[currentQuestionIndex];
+            
+            let optionsHtml = '';
+            data.options.forEach((opt, index) => {
+                let className = 'option-btn';
+                let feedbackHtml = '';
+                
+                if (savedAnswer !== null) {
+                    className += ' disabled';
+                    
+                    if (index === data.correct) {
+                        className += ' correct';
+                        feedbackHtml = '<span class="feedback-badge feedback-correct">CORRECT</span>';
+                    } else if (index === savedAnswer) {
+                        className += ' incorrect';
+                        feedbackHtml = '<span class="feedback-badge feedback-incorrect">INCORRECT</span>';
+                    }
+                }
+
+                optionsHtml += `
+                    <button class="${className}" onclick="selectAnswer(${index})" ${savedAnswer !== null ? 'disabled' : ''}>
+                        ${opt}
+                        ${feedbackHtml}
+                    </button>
+                `;
+            });
+
+            const explanationHtml = savedAnswer !== null 
+                ? `<div class="explanation-box" style="display:block;"><strong>📘 Explanation:</strong><br>${data.explanation}</div>` 
+                : `<div class="explanation-box" id="explanation-${currentQuestionIndex}"></div>`;
+
+            questionContainer.innerHTML = `
+                <div class="section-title">${data.section}</div>
+                <div class="question-text">${data.question}</div>
+                <div class="options-grid">${optionsHtml}</div>
+                ${explanationHtml}
+            `;
+
+            renderGrid();
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (userAnswers[currentQuestionIndex] !== null) return; 
+
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            
+            if (selectedIndex === quizData[currentQuestionIndex].correct) {
+                score++;
+            }
+
+            renderQuestion();
+            updateNavButtons();
+            renderGrid();
+        }
+
+        function changeQuestion(direction) {
+            const newIndex = currentQuestionIndex + direction;
+            if (newIndex >= 0 && newIndex < quizData.length) {
+                currentQuestionIndex = newIndex;
+                renderQuestion();
+                updateNavButtons();
+            }
+        }
+
+        function jumpToQuestion(index) {
+            currentQuestionIndex = index;
+            renderQuestion();
+            updateNavButtons();
+            toggleModal();
+        }
+
+        function updateNavButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.innerText = "Finish";
+                nextBtn.onclick = showResults;
+            } else {
+                nextBtn.innerText = "Next";
+                nextBtn.onclick = () => changeQuestion(1);
+            }
+        }
+
+        function toggleModal() {
+            const isVisible = overviewModal.style.display === 'flex';
+            overviewModal.style.display = isVisible ? 'none' : 'flex';
+            renderGrid();
+        }
+
+        function renderGrid() {
+            questionGrid.innerHTML = '';
+            quizData.forEach((q, index) => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.innerText = index + 1;
+
+                if (index === currentQuestionIndex) {
+                    item.classList.add('current');
+                } else if (userAnswers[index] !== null) {
+                    item.classList.add('answered');
+                }
+
+                item.onclick = () => jumpToQuestion(index);
+                questionGrid.appendChild(item);
+            });
+        }
+
+        function showResults() {
+            let finalScoreCalc = 0;
+            userAnswers.forEach((ans, idx) => {
+                if (ans === quizData[idx].correct) finalScoreCalc++;
+            });
+
+            finalScore.innerText = `${finalScoreCalc} / ${quizData.length}`;
+
+            quizContent.classList.add('hidden');
+            navBar.classList.add('hidden');
+            resultScreen.style.display = 'flex';
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            score = 0;
+            
+            quizContent.classList.remove('hidden');
+            navBar.classList.remove('hidden');
+            resultScreen.style.display = 'none';
+            
+            initQuiz();
+        }
+
+        initQuiz();
+    </script>
+</body>
+</html>
