@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hematology Morphology: 3-Section Exercise</title>
+    <style>
+        /* RESET & BASE STYLES */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #ffffff;
+            background-image: linear-gradient(#e0e0e0 1px, transparent 1px);
+            background-size: 100% 30px;
+            font-family: Arial, sans-serif;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        /* MAIN HEADER */
+        .main-header {
+            text-align: center;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .main-header h1 {
+            color: #0056b3;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* SECTION CONTAINER (CLIPBOARD STYLE) */
+        .section-container {
+            width: 100%;
+            max-width: 1100px;
+            background: #fff;
+            border: 1px solid #0056b3;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .section-title {
+            color: #0056b3;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+            margin-bottom: 5px;
+        }
+
+        /* SECTION PROGRESS & HEADER */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .section-progress-track {
+            flex-grow: 1;
+            height: 8px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            margin-right: 15px;
+        }
+
+        .section-progress-fill {
+            height: 100%;
+            background-color: #0056b3;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .section-score {
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        /* GAME AREA LAYOUT */
+        .game-wrapper {
+            position: relative;
+            overflow: hidden; /* For masking */
+        }
+
+        .game-area {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            overflow-y: auto; /* Scroll if items are too tall */
+            max-height: 600px; /* Limit height per section */
+            padding-right: 5px;
+            position: relative;
+        }
+
+        #connection-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .column {
+            display: flex;
+            flex-direction: column;
+            width: 48%;
+            gap: 12px;
+            padding-bottom: 50px;
+        }
+
+        .col-header {
+            text-align: center;
+            font-weight: bold;
+            color: #0056b3;
+            background: #f9fbff;
+            padding: 5px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            border: 1px solid #e0e0e0;
+            border-bottom: none;
+        }
+
+        /* ITEMS */
+        .item {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 10px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            line-height: 1.4;
+            position: relative;
+            z-index: 20;
+            transition: all 0.2s;
+        }
+
+        .def-item strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #0056b3;
+        }
+
+        .item:hover {
+            border-color: #0056b3;
+            background-color: #f9fbff;
+        }
+
+        .item.selected {
+            background-color: #e6f0ff;
+            border-color: #0056b3;
+            font-weight: bold;
+            box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+        }
+
+        .item.matched {
+            background-color: #dff0d8;
+            border-color: #3c763d;
+            color: #2c5e2e;
+            cursor: default;
+            opacity: 0.85;
+        }
+
+        .item.error {
+            animation: shake 0.5s;
+            background-color: #ffebee;
+            border-color: #d32f2f;
+            color: #d32f2f;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* CONTROLS & FOOTER */
+        .section-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 5px;
+        }
+
+        .btn {
+            font-family: Arial, sans-serif;
+            padding: 8px 20px;
+            font-size: 14px;
+            border: 1px solid #0056b3;
+            background: #0056b3;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #0056b3;
+        }
+        
+        .btn-outline:hover { background: #f0f0f0; }
+
+        /* BRANDING & SOCIAL */
+        .global-footer {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+            padding: 20px;
+            border: 1px solid #0056b3;
+            background: #fff;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .credit-text {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-style: italic;
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #0056b3;
+            background: transparent;
+            color: #0056b3;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .social-btn:hover {
+            background: #0056b3;
+            color: #fff;
+        }
+
+        /* MODAL (Reused for all sections) */
+        .modal-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-content {
+            background: white;
+            border: 2px solid #0056b3;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .modal-content h2 { color: #0056b3; font-family: Arial; margin-bottom: 10px; }
+        .modal-content p { font-family: Arial; margin-bottom: 20px; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #0056b3; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>Comprehensive Hematology Matching Exercise</h1>
+    </header>
+
+    <!-- SECTION 1 -->
+    <div class="section-container" id="section-1">
+        <div class="section-title">Section 1: Basic Morphology & RBC Shapes</div>
+        <div class="section-header">
+            <div class="section-progress-track"><div class="section-progress-fill" id="fill-1"></div></div>
+            <div class="section-score" id="score-1">0/5</div>
+        </div>
+        <div class="game-wrapper">
+            <div class="game-area" id="area-1">
+                <svg id="svg-1"></svg>
+                <div class="column" id="col-1-terms">
+                    <div class="col-header">Term</div>
+                </div>
+                <div class="column" id="col-1-defs">
+                    <div class="col-header">Definition</div>
+                </div>
+            </div>
+        </div>
+        <div class="section-footer">
+            <button class="btn btn-outline" onclick="initSection(1)">Reset Section</button>
+        </div>
+        <div class="modal-overlay" id="modal-1">
+            <div class="modal-content">
+                <h2>Section 1 Complete!</h2>
+                <p>You have mastered Basic Morphology.</p>
+                <button class="btn" onclick="closeModal(1)">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section-container" id="section-2">
+        <div class="section-title">Section 2: Specific Cell Shapes & Inclusions</div>
+        <div class="section-header">
+            <div class="section-progress-track"><div class="section-progress-fill" id="fill-2"></div></div>
+            <div class="section-score" id="score-2">0/6</div>
+        </div>
+        <div class="game-wrapper">
+            <div class="game-area" id="area-2">
+                <svg id="svg-2"></svg>
+                <div class="column" id="col-2-terms">
+                    <div class="col-header">Term</div>
+                </div>
+                <div class="column" id="col-2-defs">
+                    <div class="col-header">Definition</div>
+                </div>
+            </div>
+        </div>
+        <div class="section-footer">
+            <button class="btn btn-outline" onclick="initSection(2)">Reset Section</button>
+        </div>
+        <div class="modal-overlay" id="modal-2">
+            <div class="modal-content">
+                <h2>Section 2 Complete!</h2>
+                <p>Excellent work on Inclusions.</p>
+                <button class="btn" onclick="closeModal(2)">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section-container" id="section-3">
+        <div class="section-title">Section 3: WBC Abnormalities & Clinical Conditions</div>
+        <div class="section-header">
+            <div class="section-progress-track"><div class="section-progress-fill" id="fill-3"></div></div>
+            <div class="section-score" id="score-3">0/6</div>
+        </div>
+        <div class="game-wrapper">
+            <div class="game-area" id="area-3">
+                <svg id="svg-3"></svg>
+                <div class="column" id="col-3-terms">
+                    <div class="col-header">Term</div>
+                </div>
+                <div class="column" id="col-3-defs">
+                    <div class="col-header">Definition</div>
+                </div>
+            </div>
+        </div>
+        <div class="section-footer">
+            <button class="btn btn-outline" onclick="initSection(3)">Reset Section</button>
+        </div>
+        <div class="modal-overlay" id="modal-3">
+            <div class="modal-content">
+                <h2>Section 3 Complete!</h2>
+                <p>You have finished the entire exercise!</p>
+                <button class="btn" onclick="closeModal(3)">Review</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="global-footer">
+        <div class="credit-text">Prepared by BUNRETH Nihrantz</div>
+        <div class="social-bar">
+            <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" aria-label="Facebook">F</a>
+            <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" aria-label="Instagram">I</a>
+            <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" aria-label="Telegram">T</a>
+        </div>
+    </footer>
+
+    <script>
+        // DATA DIVISION
+        const data = {
+            1: [ // Section 1
+                { id: 1, term: "Erythrocyte Morphology", def: "<strong>The study of the shape, size, color, and internal structure of RBCs.</strong> Abnormalities indicate diseases like anemia or infection.", matchId: 1 },
+                { id: 2, term: "Anisocytosis", def: "<strong>Variation in RBC size.</strong> Presence of microcytes (small) and macrocytes (large). Seen in Iron/B12 deficiency.", matchId: 2 },
+                { id: 3, term: "Associated with Macrocytes", def: "<strong>Large RBCs (>100 fL).</strong> Caused by B12/Folate deficiency or liver disease. Leads to Megaloblastic Anemia.", matchId: 3 },
+                { id: 4, term: "Hypochromia", def: "<strong>Pale RBCs due to low hemoglobin.</strong> Central pallor is enlarged. Classic sign of Iron Deficiency Anemia.", matchId: 4 },
+                { id: 5, term: "Poikilocytosis", def: "<strong>Variety of abnormal RBC shapes.</strong> Includes teardrops, sickles, fragments. Indicates bone marrow stress.", matchId: 5 }
+            ],
+            2: [ // Section 2
+                { id: 6, term: "Schistocytes", def: "<strong>Fragmented RBCs ('helmet cells').</strong> Caused by physical shearing in vessels (DIC, HUS).", matchId: 6 },
+                { id: 7, term: "Target Cells (Codocytes)", def: "<strong>Bullseye appearance (dark center, light ring).</strong> Seen in liver disease, Thalassemia, or post-splenectomy.", matchId: 7 },
+                { id: 8, term: "Condition Associated with Drepanocytes", def: "<strong>Sickle Cell Disease.</strong> Drepanocytes are crescent-shaped due to abnormal hemoglobin.", matchId: 8 },
+                { id: 9, term: "Shape of Dacryocytes", def: "<strong>Teardrop Cells.</strong> Rounded end tapering to a point. Caused by Myelofibrosis.", matchId: 9 },
+                { id: 10, term: "Inclusion Body: Howell-Jolly Body", def: "<strong>Dark purple nuclear DNA remnants.</strong> Seen in asplenia (spleen removal).", matchId: 10 },
+                { id: 11, term: "Basophilic Stippling", def: "<strong>Blue-black granules (RNA aggregates).</strong> Indicates lead poisoning or Thalassemia.", matchId: 11 }
+            ],
+            3: [ // Section 3
+                { id: 12, term: "Pappenheimer Bodies", def: "<strong>Brownish-blue iron granules.</strong> Clumps of ferritin. Seen in sideroblastic anemia.", matchId: 12 },
+                { id: 13, term: "Cabot Rings", def: "<strong>Red/purple mitotic spindle remnants.</strong> Figure-eight shapes. Seen in leukemia or lead poisoning.", matchId: 13 },
+                { id: 14, term: "Heinz Bodies", def: "<strong>Denatured hemoglobin inclusions.</strong> Requires special stain. Caused by G6PD deficiency.", matchId: 14 },
+                { id: 15, term: "Causes of Eosinopenia", def: "<strong>Low eosinophil count.</strong> Caused by stress, corticosteroids, or Cushing's Syndrome.", matchId: 15 },
+                { id: 16, term: "Consequence of Lymphocytopenia", def: "<strong>Low lymphocyte count.</strong> Results in increased susceptibility to viral/fungal infections (e.g., HIV).", matchId: 16 },
+                { id: 17, term: "Leukocyte Abnormality", def: "<strong>Deviation in WBC number/shape.</strong> Includes Toxic Granulation, Döhle Bodies, Auer Rods, and Blasts.", matchId: 17 }
+            ]
+        };
+
+        // STATE TRACKERS
+        const state = {
+            1: { selectedTerm: null, matched: 0 },
+            2: { selectedTerm: null, matched: 0 },
+            3: { selectedTerm: null, matched: 0 }
+        };
+
+        // INITIALIZATION
+        function initSection(sectionId) {
+            const sData = data[sectionId];
+            state[sectionId] = { selectedTerm: null, matched: 0 };
+            
+            // UI Elements
+            const termsCol = document.getElementById(`col-${sectionId}-terms`);
+            const defsCol = document.getElementById(`col-${sectionId}-defs`);
+            const svgLayer = document.getElementById(`svg-${sectionId}`);
+            const area = document.getElementById(`area-${sectionId}`);
+            
+            // Clear contents (keep headers)
+            while (termsCol.children.length > 1) termsCol.removeChild(termsCol.lastChild);
+            while (defsCol.children.length > 1) defsCol.removeChild(defsCol.lastChild);
+            svgLayer.innerHTML = '';
+            document.getElementById(`modal-${sectionId}`).classList.remove('active');
+
+            // Prepare & Render
+            const terms = [...sData];
+            const definitions = [...sData].sort(() => Math.random() - 0.5);
+
+            terms.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'item term-item';
+                el.textContent = item.term;
+                el.dataset.id = item.matchId;
+                el.dataset.sec = sectionId;
+                el.onclick = () => handleTermClick(el);
+                termsCol.appendChild(el);
+            });
+
+            definitions.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'item def-item';
+                el.innerHTML = item.def;
+                el.dataset.id = item.matchId;
+                el.dataset.sec = sectionId;
+                el.onclick = () => handleDefClick(el);
+                defsCol.appendChild(el);
+            });
+
+            updateSectionUI(sectionId);
+            resizeSvg(sectionId);
+        }
+
+        // HANDLERS
+        function handleTermClick(el) {
+            if (el.classList.contains('matched')) return;
+            const secId = el.dataset.sec;
+            
+            // Deselect others in this section
+            document.querySelectorAll(`.term-item[data-sec="${secId}"]`).forEach(i => i.classList.remove('selected'));
+            el.classList.add('selected');
+            state[secId].selectedTerm = el;
+        }
+
+        function handleDefClick(el) {
+            if (el.classList.contains('matched')) return;
+            const secId = el.dataset.sec;
+            const termEl = state[secId].selectedTerm;
+
+            if (!termEl) return;
+
+            const termId = termEl.dataset.id;
+            const defId = el.dataset.id;
+
+            if (termId === defId) {
+                handleCorrectMatch(termEl, el, secId);
+            } else {
+                handleIncorrectMatch(termEl, el, secId);
+            }
+        }
+
+        function handleCorrectMatch(termEl, defEl, secId) {
+            termEl.classList.remove('selected');
+            termEl.classList.add('matched');
+            defEl.classList.add('matched');
+
+            drawConnection(termEl, defEl, secId);
+
+            state[secId].selectedTerm = null;
+            state[secId].matched++;
+            updateSectionUI(secId);
+
+            if (state[secId].matched === data[secId].length) {
+                setTimeout(() => {
+                    document.getElementById(`modal-${secId}`).classList.add('active');
+                }, 500);
+            }
+        }
+
+        function handleIncorrectMatch(termEl, defEl, secId) {
+            termEl.classList.add('error');
+            defEl.classList.add('error');
+
+            setTimeout(() => {
+                termEl.classList.remove('error');
+                defEl.classList.remove('error');
+                termEl.classList.remove('selected');
+                state[secId].selectedTerm = null;
+            }, 500);
+        }
+
+        function updateSectionUI(secId) {
+            const total = data[secId].length;
+            const matched = state[secId].matched;
+            document.getElementById(`score-${secId}`).textContent = `${matched}/${total}`;
+            document.getElementById(`fill-${secId}`).style.width = `${(matched/total)*100}%`;
+        }
+
+        function closeModal(secId) {
+            document.getElementById(`modal-${secId}`).classList.remove('active');
+        }
+
+        // DRAWING LOGIC
+        function resizeSvg(secId) {
+            const area = document.getElementById(`area-${secId}`);
+            const svg = document.getElementById(`svg-${secId}`);
+            svg.style.height = area.scrollHeight + "px";
+        }
+
+        function drawConnection(startElem, endElem, secId) {
+            const svg = document.getElementById(`svg-${secId}`);
+            const area = document.getElementById(`area-${secId}`);
+
+            const x1 = startElem.offsetLeft + startElem.offsetWidth;
+            const y1 = startElem.offsetTop + (startElem.offsetHeight / 2);
+            
+            const x2 = endElem.offsetLeft;
+            const y2 = endElem.offsetTop + (endElem.offsetHeight / 2);
+
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x2);
+            line.setAttribute('y2', y2);
+            line.setAttribute('stroke', '#0056b3');
+            line.setAttribute('stroke-width', '2');
+            
+            svg.appendChild(line);
+        }
+
+        // GLOBAL RESIZE HANDLER
+        window.addEventListener('resize', () => {
+            [1, 2, 3].forEach(secId => {
+                resizeSvg(secId);
+                redrawLines(secId);
+            });
+        });
+
+        function redrawLines(secId) {
+            const svg = document.getElementById(`svg-${secId}`);
+            svg.innerHTML = '';
+            const matchedTerms = document.querySelectorAll(`.term-item[data-sec="${secId}"].matched`);
+            
+            matchedTerms.forEach(term => {
+                const id = term.dataset.id;
+                const defs = document.querySelectorAll(`.def-item[data-sec="${secId}"]`);
+                for (let d of defs) {
+                    if (d.dataset.id === id && d.classList.contains('matched')) {
+                        drawConnection(term, d, secId);
+                        break;
+                    }
+                }
+            });
+        }
+
+        // Start
+        window.onload = () => {
+            initSection(1);
+            initSection(2);
+            initSection(3);
+        };
+
+    </script>
+</body>
+</html>
