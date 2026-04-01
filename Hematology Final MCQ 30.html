@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hematology Quiz Module</title>
+    <style>
+        /* --- RESET & BASE STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Sterile Background: White with subtle grey lines */
+            background-color: #ffffff;
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 30px; /* 30px line spacing */
+            font-family: Arial, sans-serif; /* Font Restriction: Arial */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- CONTAINER (Clipboard/Tablet Style) --- */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            /* Medical Blue Border */
+            border: 2px solid #0056b3; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- HEADER --- */
+        header {
+            border-bottom: 2px solid #0056b3;
+            padding: 15px 20px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 20px;
+            color: #0056b3;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-counter {
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        main {
+            padding: 30px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        /* Question Text */
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        /* Options List */
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Option Buttons: Rectangular, sharp/slightly rounded */
+        .option-btn {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 2px; /* 2px radius as requested */
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Hover Effect: Light Blue */
+        .option-btn:hover:not(:disabled) {
+            background-color: #e6f0fa; /* Light blue */
+            border-color: #0056b3;
+        }
+
+        /* Disabled State (after answer) */
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.9;
+        }
+
+        /* Feedback Styles */
+        .feedback-text {
+            font-weight: 900;
+            font-size: 16px;
+            margin-left: 15px;
+            min-width: 80px;
+            text-align: right;
+            display: none; /* Hidden by default */
+        }
+
+        .feedback-correct { color: #008000; /* Green */ }
+        .feedback-incorrect { color: #d32f2f; /* Red */ }
+
+        /* Styling based on correctness */
+        .option-item.correct .option-btn {
+            border-color: #008000;
+            background-color: #f0fff0;
+        }
+        .option-item.incorrect .option-btn {
+            border-color: #d32f2f;
+            background-color: #fff0f0;
+        }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #0056b3;
+            display: none; /* Hidden until answered */
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-box h4 {
+            color: #0056b3;
+            margin-bottom: 5px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .explanation-box p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        /* --- NAVIGATION FOOTER --- */
+        .nav-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background-color: #fff;
+            border: 1px solid #0056b3;
+            color: #0056b3;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background-color: #fff;
+            cursor: not-allowed;
+        }
+
+        .view-list-btn {
+            background: none;
+            border: none;
+            color: #0056b3;
+            text-decoration: underline;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        /* --- BRANDING & SOCIAL --- */
+        .branding-section {
+            padding: 10px 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-style: italic;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: block;
+            color: #333;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 35px;
+            height: 35px;
+            background-color: #0056b3; /* Medical Blue */
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px; /* Square with slight round */
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.2s;
+        }
+
+        .social-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* --- MODAL (PATIENT LIST) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95); /* White clinical overlay */
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #fff;
+            border: 2px solid #0056b3;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .grid-item {
+            width: 100%;
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 2px;
+        }
+
+        /* Grid Status Indicators */
+        .grid-item.current {
+            border: 2px solid #0056b3; /* Blue Border */
+        }
+        .grid-item.answered {
+            background-color: #dbeafe; /* Light Blue */
+            border-color: #0056b3;
+        }
+        .grid-item.unanswered {
+            background-color: #fff; /* White */
+        }
+
+        /* --- RESULT SCREEN --- */
+        .result-screen {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .result-title {
+            font-size: 24px;
+            color: #0056b3;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #0056b3;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .restart-btn {
+            padding: 12px 30px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        
+        .restart-btn:hover {
+            background-color: #004494;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Tweaks */
+        @media (max-width: 600px) {
+            header { flex-direction: column; gap: 5px; text-align: center; }
+            .nav-footer { flex-direction: column-reverse; gap: 15px; }
+            .nav-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- HEADER -->
+        <header>
+            <h1>Hematology Assessment</h1>
+            <div class="progress-counter">Question <span id="current-q-num">1</span> of <span id="total-q-num">30</span></div>
+        </header>
+
+        <!-- MAIN QUIZ AREA -->
+        <main id="quiz-main">
+            <div class="question-text" id="question-text">
+                Loading question...
+            </div>
+
+            <ul class="options-list" id="options-list">
+                <!-- Options injected via JS -->
+            </ul>
+
+            <div class="explanation-box" id="explanation-box">
+                <h4>Option Explanations:</h4>
+                <div id="explanation-content"></div>
+            </div>
+        </main>
+
+        <!-- RESULT SCREEN (Hidden by default) -->
+        <div id="result-screen" class="result-screen">
+            <h2 class="result-title">Test Result</h2>
+            <p>Your Score:</p>
+            <div class="result-score"><span id="score-val">0</span> / <span id="total-val">0</span></div>
+            <button class="restart-btn" onclick="quizApp.restartQuiz()">Retake Assessment</button>
+        </div>
+
+        <!-- NAVIGATION FOOTER -->
+        <footer class="nav-footer" id="nav-footer">
+            <button class="nav-btn" id="prev-btn" onclick="quizApp.prevQuestion()">Previous</button>
+            <button class="view-list-btn" onclick="quizApp.toggleModal(true)">View List</button>
+            <button class="nav-btn" id="next-btn" onclick="quizApp.nextQuestion()">Next</button>
+        </footer>
+
+        <!-- BRANDING & SOCIAL -->
+        <div class="branding-section">
+            <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- PATIENT LIST MODAL -->
+    <div class="modal-overlay" id="list-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Question Overview</h3>
+                <button class="close-modal" onclick="quizApp.toggleModal(false)">&times;</button>
+            </div>
+            <div class="question-grid" id="question-grid">
+                <!-- Grid items injected via JS -->
+            </div>
+            <button class="nav-btn" onclick="quizApp.toggleModal(false)">Close Overview</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA: QUESTIONS ---
+        const quizData = [
+            {
+                id: 1,
+                text: "What is the standard reference interval for platelets in peripheral blood?",
+                options: [
+                    { id: "A", text: "10 – 20 × 10⁹/L" },
+                    { id: "B", text: "150 – 200 × 10¹²/L" },
+                    { id: "C", text: "150 – 400 × 10⁹/L" },
+                    { id: "D", text: "400 – 600 × 10⁹/L" }
+                ],
+                correct: "C",
+                explanation: "• <b>A) Too low;</b> indicates severe thrombocytopenia (high bleeding risk).<br>• <b>B) Wrong unit;</b> this range applies to Red Blood Cells (RBCs), not platelets.<br>• <b>C) Correct.</b> This is the standard normal range for healthy adults.<br>• <b>D) High;</b> indicates thrombocytosis (risk of clotting)."
+            },
+            {
+                id: 2,
+                text: "Which hormone is released by the kidney in response to low oxygen levels to stimulate red blood cell production?",
+                options: [
+                    { id: "A", text: "Thrombopoietin" },
+                    { id: "B", text: "Erythropoietin" },
+                    { id: "C", text: "Interleukin-3" },
+                    { id: "D", text: "Interleukin-12" }
+                ],
+                correct: "B",
+                explanation: "• <b>A) Stimulates platelet production</b>, not red blood cells.<br>• <b>B) Correct.</b> Produced by kidneys during hypoxia to trigger erythropoiesis.<br>• <b>C) General growth factor</b> for many blood cells, but not the specific oxygen sensor.<br>• <b>D) Involved in immune defense</b> against pathogens, not RBC production."
+            },
+            {
+                id: 3,
+                text: "Leukocytosis is defined as an increase in which group of blood cells?",
+                options: [
+                    { id: "A", text: "Neutrophils, monocytes, and macrophages" },
+                    { id: "B", text: "Neutrophils, eosinophils, erythrocytes, and basophils" },
+                    { id: "C", text: "Neutrophils, eosinophils, basophils, monocytes, and lymphocytes" },
+                    { id: "D", text: "Neutrophils, eosinophils, basophils, monocytes, lymphocytes, and megakaryocytes" }
+                ],
+                correct: "C",
+                explanation: "• <b>A) Incomplete;</b> misses key leukocyte types like eosinophils and lymphocytes.<br>• <b>B) Incorrect;</b> includes \"erythrocytes\" (RBCs), which are not white blood cells.<br>• <b>C) Correct.</b> Lists all five types of leukocytes (WBCs).<br>• <b>D) Incorrect;</b> includes \"megakaryocytes,\" which are bone marrow precursors, not circulating WBCs."
+            },
+            {
+                id: 4,
+                text: "All of the following can function as Antigen-Presenting Cells (APCs) EXCEPT:",
+                options: [
+                    { id: "A", text: "Dendritic cells" },
+                    { id: "B", text: "Neutrophils" },
+                    { id: "C", text: "Macrophages" },
+                    { id: "D", text: "B lymphocytes" }
+                ],
+                correct: "B",
+                explanation: "• <b>A) Professional APCs;</b> best at activating T-cells.<br>• <b>B) Correct.</b> They kill bacteria directly but do not typically present antigens to T-cells.<br>• <b>C) Professional APCs;</b> ingest debris and present antigens effectively.<br>• <b>D) Can act as APCs</b> to activate helper T-cells."
+            },
+            {
+                id: 5,
+                text: "What is the normal lifespan of platelets in peripheral blood?",
+                options: [
+                    { id: "A", text: "8 hours" },
+                    { id: "B", text: "1 day" },
+                    { id: "C", text: "10 days" },
+                    { id: "D", text: "100 days" }
+                ],
+                correct: "C",
+                explanation: "• <b>A) Too short;</b> typical lifespan of neutrophils in tissues.<br>• <b>B) Too short;</b> average platelet life is longer.<br>• <b>C) Correct.</b> The standard lifespan is 7–10 days.<br>• <b>D) Too long;</b> close to the lifespan of Red Blood Cells (120 days)."
+            },
+            {
+                id: 6,
+                text: "CD surface markers, specifically CD8, are associated with which lymphocyte subclass?",
+                options: [
+                    { id: "A", text: "T helper cell" },
+                    { id: "B", text: "Cytotoxic T cell" },
+                    { id: "C", text: "B cell" },
+                    { id: "D", text: "Natural killer cell" }
+                ],
+                correct: "B",
+                explanation: "• <b>A) Marked by CD4</b>, not CD8.<br>• <b>B) Correct.</b> These cells express CD8 to recognize and kill infected cells.<br>• <b>C) Marked by CD19 and CD20.</b><br>• <b>D) Marked by CD56 and CD16;</b> usually lack CD8 expression."
+            },
+            {
+                id: 7,
+                text: "Which of the following is a primary characteristic of B lymphocytes?",
+                options: [
+                    { id: "A", text: "Regulate immune response" },
+                    { id: "B", text: "Synthesize antibody" },
+                    { id: "C", text: "Secrete cytokines" },
+                    { id: "D", text: "Are the majority of peripheral blood lymphocytes" }
+                ],
+                correct: "B",
+                explanation: "• <b>A) Primarily the job</b> of T-helper cells.<br>• <b>B) Correct.</b> Differentiated B cells (Plasma cells) produce antibodies.<br>• <b>C) While they do secrete some</b>, it is not their defining role compared to T-cells.<br>• <b>D) Incorrect;</b> T-cells are the majority (~70-80%); B-cells are ~10-20%."
+            },
+            {
+                id: 8,
+                text: "Which bone marrow cell is the direct precursor of platelets?",
+                options: [
+                    { id: "A", text: "Myeloblast" },
+                    { id: "B", text: "Erythroblast" },
+                    { id: "C", text: "Endothelial cell" },
+                    { id: "D", text: "Megakaryocyte" }
+                ],
+                correct: "D",
+                explanation: "• <b>A) Precursor for granulocytes</b> (neutrophils, etc.).<br>• <b>B) Precursor for Red Blood Cells.</b><br>• <b>C) Lines blood vessels;</b> does not make platelets.<br>• <b>D) Correct.</b> Giant cells that fragment to release platelets."
+            },
+            {
+                id: 9,
+                text: "Which of the following is a common cause of eosinophilia?",
+                options: [
+                    { id: "A", text: "Parasitic infection" },
+                    { id: "B", text: "Eosinophilic leukemia" },
+                    { id: "C", text: "Chronic Myeloid Leukemia (CML)" },
+                    { id: "D", text: "Acute hemorrhage" }
+                ],
+                correct: "A",
+                explanation: "• <b>A) Correct.</b> Eosinophils fight worms/parasites; counts rise significantly.<br>• <b>B) Rare;</b> parasitic infection is far more common.<br>• <b>C) Usually causes high neutrophils;</b> eosinophilia is less common here.<br>• <b>D) Typically causes neutrophilia</b> or reticulocytosis, not eosinophilia."
+            },
+            {
+                id: 10,
+                text: "Which RBC index indicates how filled the average RBC is with hemoglobin (weight per unit volume)?",
+                options: [
+                    { id: "A", text: "MCV" },
+                    { id: "B", text: "MCH" },
+                    { id: "C", text: "MCHC" },
+                    { id: "D", text: "RDW" }
+                ],
+                correct: "C",
+                explanation: "• <b>A) Measures average size (volume)</b> of the cell.<br>• <b>B) Measures average weight</b> of hemoglobin per cell.<br>• <b>C) Correct.</b> Measures concentration of hemoglobin per volume (color intensity).<br>• <b>D) Measures variation in cell size</b> (anisocytosis)."
+            },
+            {
+                id: 11,
+                text: "A peripheral blood smear showing a mix of normochromic and hypochromic erythrocytes is best described as:",
+                options: [
+                    { id: "A", text: "Poikilocytosis" },
+                    { id: "B", text: "Dichromic RBCs" },
+                    { id: "C", text: "Megaloblastosis" },
+                    { id: "D", text: "Anisocytosis" }
+                ],
+                correct: "B",
+                explanation: "• <b>A) Refers to abnormal shapes,</b> not colors.<br>• <b>B) Correct.</b> \"Di\" means two; implies two different color populations.<br>• <b>C) Refers to large, immature cells</b> due to B12/Folate deficiency.<br>• <b>D) Refers to variation in size,</b> not color."
+            },
+            {
+                id: 12,
+                text: "Which WBC morphology appears as dark blue/purple, round bodies near the cell membrane (DNA remnants)?",
+                options: [
+                    { id: "A", text: "Heinz bodies" },
+                    { id: "B", text: "Pappenheimer bodies" },
+                    { id: "C", text: "Howell-Jolly bodies" },
+                    { id: "D", text: "Basophilic stippling" }
+                ],
+                correct: "C",
+                explanation: "• <b>A) Invisible on Wright stain;</b> require special stain; denatured hemoglobin.<br>• <b>B) Clusters of iron granules;</b> usually multiple small dots.<br>• <b>C) Correct.</b> Single, round, dark purple DNA remnants near the edge.<br>• <b>D) Fine/coarse blue dots</b> scattered throughout cytoplasm, not single bodies."
+            },
+            {
+                id: 13,
+                text: "What is the main function of Natural Killer (NK) cells?",
+                options: [
+                    { id: "A", text: "Cell-mediated immunity" },
+                    { id: "B", text: "Antibody production" },
+                    { id: "C", text: "Regulation of the immune response" },
+                    { id: "D", text: "Cytotoxicity in innate immunity" }
+                ],
+                correct: "D",
+                explanation: "• <b>A) Broad term usually referring</b> to T-cells.<br>• <b>B) Function of B-cells/Plasma cells.</b><br>• <b>C) Function of T-regulatory cells.</b><br>• <b>D) Correct.</b> NK cells kill virus-infected/cancer cells immediately without prior sensitization."
+            },
+            {
+                id: 14,
+                text: "What is a common reason for neutropenia in hospitalized patients?",
+                options: [
+                    { id: "A", text: "Chronic myeloproliferative disorders (e.g., CML)" },
+                    { id: "B", text: "Chemotherapy and/or radiation treatment for Cancer" },
+                    { id: "C", text: "Childbirth" },
+                    { id: "D", text: "Lack of exercise" }
+                ],
+                correct: "B",
+                explanation: "• <b>A) Causes high white counts</b> (neutrophilia), not low.<br>• <b>B) Correct.</b> Drugs target rapidly dividing cells, destroying bone marrow precursors.<br>• <b>C) Usually causes mild stress leukocytosis</b> (high count).<br>• <b>D) Does not cause neutropenia.</b>"
+            },
+            {
+                id: 15,
+                text: "What is the mechanism of platelet formation and release by megakaryocytes?",
+                options: [
+                    { id: "A", text: "Dissolution of the cell membrane and release of preformed platelets" },
+                    { id: "B", text: "Release of individual reticulated platelets from the cytoplasm" },
+                    { id: "C", text: "Formation of proplatelet processes, which segment into individual platelets" },
+                    { id: "D", text: "Apoptotic cell death of the megakaryocyte" }
+                ],
+                correct: "C",
+                explanation: "• <b>A) Incorrect;</b> the cell remains intact while extending arms.<br>• <b>B) Platelets are not \"reticulated\"</b> when released.<br>• <b>C) Correct.</b> Long extensions break off like grapes to form platelets.<br>• <b>D) Incorrect;</b> the megakaryocyte survives to produce more platelets."
+            },
+            {
+                id: 16,
+                text: "What is the major effect of severe monocytopenia on the body?",
+                options: [
+                    { id: "A", text: "Increased risk of parasitic infections" },
+                    { id: "B", text: "Increased risk of bacterial infections" },
+                    { id: "C", text: "Increased risk of viral infections" },
+                    { id: "D", text: "Decreased risk of allergic reactions" }
+                ],
+                correct: "B",
+                explanation: "• <b>A) Associated with eosinophils.</b><br>• <b>B) Correct.</b> Monocytes become macrophages which phagocytose bacteria.<br>• <b>C) Primarily handled by T-cells</b> and NK cells.<br>• <b>D) Associated with eosinophils</b> and mast cells."
+            },
+            {
+                id: 17,
+                text: "What effect does Thrombopoietin (TPO) have on the megakaryocyte?",
+                options: [
+                    { id: "A", text: "It decreases ploidy level and platelet number" },
+                    { id: "B", text: "It increases size, DNA ploidy level, and cell number in bone marrow" },
+                    { id: "C", text: "It induces release of megakaryocytes to peripheral blood" },
+                    { id: "D", text: "It decreases endomitosis rate" }
+                ],
+                correct: "B",
+                explanation: "• <b>A) Incorrect;</b> TPO increases ploidy (DNA content).<br>• <b>B) Correct.</b> TPO drives the cell to grow larger and replicate DNA without dividing.<br>• <b>C) Incorrect;</b> mature megakaryocytes stay in marrow.<br>• <b>D) Incorrect;</b> TPO stimulates endomitosis."
+            },
+            {
+                id: 18,
+                text: "Endomitosis is defined as:",
+                options: [
+                    { id: "A", text: "Nuclear replication without cytoplasmic division" },
+                    { id: "B", text: "Fragmentation of megakaryocyte cytoplasm to produce platelets" },
+                    { id: "C", text: "Fusion of progenitor cells to produce polyploidy" },
+                    { id: "D", text: "General cell proliferation in bone marrow" }
+                ],
+                correct: "A",
+                explanation: "• <b>A) Correct.</b> The nucleus gets bigger (more DNA) but the cell doesn't split.<br>• <b>B) This is platelet release,</b> not endomitosis itself.<br>• <b>C) Cells do not fuse;</b> they duplicate DNA internally.<br>• <b>D) Too vague;</b> doesn't define the specific process."
+            },
+            {
+                id: 19,
+                text: "Which erythrocyte inclusions are composed of DNA and appear as small dark blue/purple granules?",
+                options: [
+                    { id: "A", text: "Siderotic granules" },
+                    { id: "B", text: "Heinz bodies" },
+                    { id: "C", text: "Howell-Jolly bodies" },
+                    { id: "D", text: "Basophilic stippling" }
+                ],
+                correct: "C",
+                explanation: "• <b>A) Made of Iron</b> (Pappenheimer bodies).<br>• <b>B) Made of Denatured Hemoglobin.</b><br>• <b>C) Correct.</b> Composed of residual nuclear DNA fragments.<br>• <b>D) Made of aggregated Ribosomal RNA.</b>"
+            },
+            {
+                id: 20,
+                text: "What is the most common cause of neutrophilia?",
+                options: [
+                    { id: "A", text: "Bacterial infection" },
+                    { id: "B", text: "Acute leukemia" },
+                    { id: "C", text: "Chemotherapy" },
+                    { id: "D", text: "Aplastic anemia" }
+                ],
+                correct: "A",
+                explanation: "• <b>A) Correct.</b> The most frequent trigger for increased neutrophil production.<br>• <b>B) Can cause high counts,</b> but infection is statistically more common.<br>• <b>C) Causes neutropenia</b> (low count), not neutrophilia.<br>• <b>D) Causes pancytopenia</b> (very low counts)."
+            },
+            {
+                id: 21,
+                text: "Which immunoglobulin heavy chain is produced first in maturing B lymphocytes?",
+                options: [
+                    { id: "A", text: "α" },
+                    { id: "B", text: "β" },
+                    { id: "C", text: "µ" },
+                    { id: "D", text: "γ" }
+                ],
+                correct: "C",
+                explanation: "• <b>A) Found in IgA</b> (produced later).<br>• <b>B) Not an immunoglobulin heavy chain</b> (part of T-cell receptor).<br>• <b>C) Correct.</b> Encodes IgM, the first antibody class made by B-cells.<br>• <b>D) Found in IgG</b> (produced after class switching)."
+            },
+            {
+                id: 22,
+                text: "Place these megakaryocyte precursors in the correct developmental sequence:",
+                options: [
+                    { id: "A", text: "BFU-Mk → CFU-Mk → megakaryoblast → granular megakaryocyte" },
+                    { id: "B", text: "CFU-Mk → BFU-Mk → basophilic megakaryocyte → granular megakaryocyte" },
+                    { id: "C", text: "BFU-Mk → CFU-Mk → basophilic megakaryocyte → megakaryoblast" },
+                    { id: "D", text: "CFU-Mk → BFU-Mk → megakaryoblast → basophilic megakaryocyte" }
+                ],
+                correct: "A",
+                explanation: "• <b>A) Correct Sequence.</b> Burst Forming Unit → Colony Forming Unit → Blasts → Granular/Mature.<br>• <b>B & D) Swapped BFU/CFU;</b> BFU comes before CFU.<br>• <b>C) Wrong Order;</b> Megakaryoblast must come before basophilic megakaryocyte."
+            },
+            {
+                id: 23,
+                text: "Which WBC variation shows a neutrophil nucleus with more than five lobes?",
+                options: [
+                    { id: "A", text: "Hypersegmentation cell" },
+                    { id: "B", text: "Pelger-Huët Anomaly" },
+                    { id: "C", text: "Döhle bodies" },
+                    { id: "D", text: "Pyknotic Nucleus" }
+                ],
+                correct: "A",
+                explanation: "• <b>A) Correct.</b> Defined as >5 lobes; seen in B12/Folate deficiency.<br>• <b>B) Defect causing fewer lobes</b> (bi-lobed).<br>• <b>C) Cytoplasmic inclusions (RNA),</b> not nuclear shape.<br>• <b>D) Shrunken, dead nucleus.</b>"
+            },
+            {
+                id: 24,
+                text: "Hemostasis is best defined as:",
+                options: [
+                    { id: "A", text: "Process of maintaining body temperature" },
+                    { id: "B", text: "Process maintaining blood fluidity and arresting bleeding after injury" },
+                    { id: "C", text: "Process of forming a hematoma" },
+                    { id: "D", text: "Regulation of kidney function" }
+                ],
+                correct: "B",
+                explanation: "• <b>A) Thermoregulation.</b><br>• <b>B) Correct.</b> Stops bleeding while keeping blood liquid elsewhere.<br>• <b>C) A result of bleeding,</b> not the definition of stopping it.<br>• <b>D) Renal regulation.</b>"
+            },
+            {
+                id: 25,
+                text: "After a blood vessel injury, what initiates hemostasis?",
+                options: [
+                    { id: "A", text: "Platelets" },
+                    { id: "B", text: "Plasma" },
+                    { id: "C", text: "Coagulation factors" },
+                    { id: "D", text: "Lymphocyte" }
+                ],
+                correct: "A",
+                explanation: "• <b>A) Correct.</b> They adhere to the injury site first (primary hemostasis).<br>• <b>B) Contains factors</b> but doesn't initiate the physical plug.<br>• <b>C) Follows platelet plug formation</b> (secondary hemostasis).<br>• <b>D) Immune cell,</b> not involved in immediate clotting."
+            },
+            {
+                id: 26,
+                text: "Which major cytokine regulates both megakaryocyte and platelet production?",
+                options: [
+                    { id: "A", text: "TPO (Thrombopoietin)" },
+                    { id: "B", text: "IL-11" },
+                    { id: "C", text: "SCF (Stem Cell Factor)" },
+                    { id: "D", text: "IL-6" }
+                ],
+                correct: "A",
+                explanation: "• <b>A) Correct.</b> Thrombopoietin is the primary regulator.<br>• <b>B) Supports but is secondary</b> to TPO.<br>• <b>C) Supports early stages</b> of stem cells.<br>• <b>D) Inflammatory cytokine;</b> minor role here."
+            },
+            {
+                id: 27,
+                text: "All of the following are functions of platelets EXCEPT:",
+                options: [
+                    { id: "A", text: "Forming hemostatic plug" },
+                    { id: "B", text: "Vascular wall repair" },
+                    { id: "C", text: "Phagocytosis of bacteria" },
+                    { id: "D", text: "Assisting in immune response" }
+                ],
+                correct: "C",
+                explanation: "• <b>A) Primary function.</b><br>• <b>B) They release growth factors</b> for healing.<br>• <b>C) Correct.</b> Platelets cannot engulf bacteria; neutrophils/macrophages do this.<br>• <b>D) They release antimicrobial peptides.</b>"
+            },
+            {
+                id: 28,
+                text: "Platelets are derived from which cell type?",
+                options: [
+                    { id: "A", text: "Lymphoblasts" },
+                    { id: "B", text: "Monoblasts" },
+                    { id: "C", text: "Pronormoblasts" },
+                    { id: "D", text: "Megakaryocytes" }
+                ],
+                correct: "D",
+                explanation: "• <b>A) Make lymphocytes.</b><br>• <b>B) Make monocytes.</b><br>• <b>C) Make red blood cells.</b><br>• <b>D) Correct.</b> Large cells that shed platelets."
+            },
+            {
+                id: 29,
+                text: "Pre-B cells are characterized by the presence of which marker?",
+                options: [
+                    { id: "A", text: "CD4" },
+                    { id: "B", text: "CD8" },
+                    { id: "C", text: "CD19" },
+                    { id: "D", text: "CD3" }
+                ],
+                correct: "C",
+                explanation: "• <b>A) Marker for T-helper cells.</b><br>• <b>B) Marker for Cytotoxic T cells.</b><br>• <b>C) Correct.</b> Pan-B cell marker found on Pre-B, B, and plasma cells.<br>• <b>D) Marker for T cells.</b>"
+            },
+            {
+                id: 30,
+                text: "Which statement best describes the normal morphology of platelets on a blood smear?",
+                options: [
+                    { id: "A", text: "They are smaller than erythrocytes." },
+                    { id: "B", text: "They are larger than erythrocytes." },
+                    { id: "C", text: "They are light blue without granules." },
+                    { id: "D", text: "They have large nuclei." }
+                ],
+                correct: "A",
+                explanation: "• <b>A) Correct.</b> Platelets are tiny fragments (2-3 µm) vs RBCs (7-8 µm).<br>• <b>B) Incorrect;</b> they are much smaller.<br>• <b>C) Incorrect;</b> they have visible granules (purple/red).<br>• <b>D) Incorrect;</b> they are anucleated (no nucleus)."
+            }
+        ];
+
+        // --- APPLICATION LOGIC ---
+        const quizApp = {
+            currentIndex: 0,
+            userAnswers: new Array(quizData.length).fill(null), // Stores answers (null, true, or false relative to correctness)
+            scores: 0,
+            
+            // DOM Elements
+            dom: {
+                questionText: document.getElementById('question-text'),
+                optionsList: document.getElementById('options-list'),
+                currentQNum: document.getElementById('current-q-num'),
+                totalQNum: document.getElementById('total-q-num'),
+                prevBtn: document.getElementById('prev-btn'),
+                nextBtn: document.getElementById('next-btn'),
+                explanationBox: document.getElementById('explanation-box'),
+                explanationContent: document.getElementById('explanation-content'),
+                quizMain: document.getElementById('quiz-main'),
+                navFooter: document.getElementById('nav-footer'),
+                resultScreen: document.getElementById('result-screen'),
+                scoreVal: document.getElementById('score-val'),
+                totalVal: document.getElementById('total-val'),
+                modal: document.getElementById('list-modal'),
+                grid: document.getElementById('question-grid')
+            },
+
+            init() {
+                this.dom.totalQNum.textContent = quizData.length;
+                this.renderQuestion();
+                this.updateNavButtons();
+            },
+
+            renderQuestion() {
+                const q = quizData[this.currentIndex];
+                
+                // Update Header
+                this.dom.currentQNum.textContent = this.currentIndex + 1;
+                
+                // Update Text
+                this.dom.questionText.textContent = q.text;
+                
+                // Clear Previous Options
+                this.dom.optionsList.innerHTML = '';
+                
+                // Hide Explanation
+                this.dom.explanationBox.style.display = 'none';
+
+                // Determine if already answered
+                const isAnswered = this.userAnswers[this.currentIndex] !== null;
+
+                // Generate Options
+                q.options.forEach(opt => {
+                    const li = document.createElement('li');
+                    li.className = 'option-item';
+                    
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerHTML = `<span>${opt.id}) ${opt.text}</span>`;
+                    
+                    // Feedback Span
+                    const feedback = document.createElement('span');
+                    feedback.className = 'feedback-text';
+
+                    if (isAnswered) {
+                        btn.disabled = true;
+                        feedback.style.display = 'block';
+
+                        const isCorrect = opt.id === q.correct;
+                        const isSelected = this.userAnswers[this.currentIndex].selectedId === opt.id;
+                        
+                        if (isCorrect) {
+                            li.classList.add('correct');
+                            feedback.textContent = 'CORRECT';
+                            feedback.classList.add('feedback-correct');
+                        } else if (isSelected && !isCorrect) {
+                            li.classList.add('incorrect');
+                            feedback.textContent = 'INCORRECT';
+                            feedback.classList.add('feedback-incorrect');
+                        }
+                    } else {
+                        btn.onclick = () => this.handleAnswer(opt.id, li);
+                    }
+
+                    li.appendChild(btn);
+                    li.appendChild(feedback);
+                    this.dom.optionsList.appendChild(li);
+                });
+
+                // Show explanation if answered
+                if (isAnswered) {
+                    this.dom.explanationContent.innerHTML = q.explanation;
+                    this.dom.explanationBox.style.display = 'block';
+                }
+
+                this.updateNavButtons();
+            },
+
+            handleAnswer(selectedId, liElement) {
+                const q = quizData[this.currentIndex];
+                const isCorrect = (selectedId === q.correct);
+                
+                // Record Answer
+                this.userAnswers[this.currentIndex] = {
+                    selectedId: selectedId,
+                    isCorrect: isCorrect
+                };
+
+                if (isCorrect) {
+                    this.scores++;
+                }
+
+                // Update UI immediately
+                // Find the button inside the clicked li
+                const btn = liElement.querySelector('.option-btn');
+                btn.disabled = true;
+
+                // Add classes
+                if (isCorrect) {
+                    liElement.classList.add('correct');
+                } else {
+                    liElement.classList.add('incorrect');
+                }
+
+                // Show Feedback Text
+                const feedback = liElement.querySelector('.feedback-text');
+                feedback.style.display = 'block';
+                feedback.textContent = isCorrect ? 'CORRECT' : 'INCORRECT';
+                feedback.className = 'feedback-text ' + (isCorrect ? 'feedback-correct' : 'feedback-incorrect');
+
+                // Highlight the actual correct answer if user was wrong
+                if (!isCorrect) {
+                    const allItems = this.dom.optionsList.querySelectorAll('.option-item');
+                    allItems.forEach(item => {
+                        const itemBtnText = item.querySelector('span').textContent;
+                        if (itemBtnText.startsWith(q.correct + ')')) {
+                            item.classList.add('correct');
+                            item.querySelector('.option-btn').disabled = true;
+                            const fb = item.querySelector('.feedback-text');
+                            fb.style.display = 'block';
+                            fb.textContent = 'CORRECT';
+                            fb.classList.add('feedback-correct');
+                        }
+                    });
+                }
+
+                // Show Explanation
+                this.dom.explanationContent.innerHTML = q.explanation;
+                this.dom.explanationBox.style.display = 'block';
+
+                this.updateNavButtons();
+            },
+
+            nextQuestion() {
+                if (this.currentIndex < quizData.length - 1) {
+                    this.currentIndex++;
+                    this.renderQuestion();
+                } else {
+                    this.showResults();
+                }
+            },
+
+            prevQuestion() {
+                if (this.currentIndex > 0) {
+                    this.currentIndex--;
+                    this.renderQuestion();
+                }
+            },
+
+            jumpToQuestion(index) {
+                this.currentIndex = index;
+                this.renderQuestion();
+                this.toggleModal(false);
+            },
+
+            updateNavButtons() {
+                this.dom.prevBtn.disabled = this.currentIndex === 0;
+                
+                const isLast = this.currentIndex === quizData.length - 1;
+                const isAnswered = this.userAnswers[this.currentIndex] !== null;
+
+                if (isLast) {
+                    this.dom.nextBtn.textContent = 'Finish';
+                    this.dom.nextBtn.disabled = !isAnswered;
+                } else {
+                    this.dom.nextBtn.textContent = 'Next';
+                    // Optional: Force answer to proceed? The prompt implies "Full Navigation Freedom", 
+                    // so we usually allow skipping unless specified. 
+                    // However, "Next" logic usually implies moving forward. 
+                    // Let's allow Next regardless of answer status for freedom, but disable Finish.
+                    this.dom.nextBtn.disabled = false;
+                }
+            },
+
+            showResults() {
+                this.dom.quizMain.style.display = 'none';
+                this.dom.navFooter.style.display = 'none';
+                this.dom.resultScreen.style.display = 'block';
+                this.dom.scoreVal.textContent = this.scores;
+                this.dom.totalVal.textContent = quizData.length;
+            },
+
+            restartQuiz() {
+                this.currentIndex = 0;
+                this.userAnswers.fill(null);
+                this.scores = 0;
+                this.dom.quizMain.style.display = 'block';
+                this.dom.navFooter.style.display = 'flex';
+                this.dom.resultScreen.style.display = 'none';
+                this.renderQuestion();
+            },
+
+            toggleModal(show) {
+                if (show) {
+                    this.renderGrid();
+                    this.dom.modal.classList.add('active');
+                } else {
+                    this.dom.modal.classList.remove('active');
+                }
+            },
+
+            renderGrid() {
+                this.dom.grid.innerHTML = '';
+                quizData.forEach((q, index) => {
+                    const btn = document.createElement('div');
+                    btn.textContent = index + 1;
+                    
+                    // Base Class
+                    btn.className = 'grid-item';
+                    
+                    // Logic for Status Colors
+                    if (index === this.currentIndex) {
+                        btn.classList.add('current');
+                    }
+                    
+                    if (this.userAnswers[index] !== null) {
+                        btn.classList.add('answered');
+                    } else {
+                        btn.classList.add('unanswered');
+                    }
+
+                    btn.onclick = () => this.jumpToQuestion(index);
+                    this.dom.grid.appendChild(btn);
+                });
+            }
+        };
+
+        // Initialize Quiz
+        quizApp.init();
+
+    </script>
+</body>
+</html>
