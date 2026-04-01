@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hematology Theory: Lesson 3</title>
+    <style>
+        /* --- RESET & BASE STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Sterile Background: White with subtle grey lines */
+            background-color: #ffffff;
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 30px;
+            font-family: Arial, sans-serif; /* Font Restriction: Arial */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- CONTAINER (Clipboard/Tablet Style) --- */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            /* Medical Blue Border */
+            border: 2px solid #0056b3; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- HEADER --- */
+        header {
+            border-bottom: 2px solid #0056b3;
+            padding: 15px 20px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 18px;
+            color: #0056b3;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-counter {
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        main {
+            padding: 30px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        /* Question Text */
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        /* Options List */
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Option Buttons: Rectangular, sharp/slightly rounded */
+        .option-btn {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Hover Effect: Light Blue */
+        .option-btn:hover:not(:disabled) {
+            background-color: #e6f0fa;
+            border-color: #0056b3;
+        }
+
+        /* Disabled State */
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.9;
+        }
+
+        /* Feedback Styles */
+        .feedback-text {
+            font-weight: 900;
+            font-size: 16px;
+            margin-left: 15px;
+            min-width: 80px;
+            text-align: right;
+            display: none;
+        }
+
+        .feedback-correct { color: #008000; }
+        .feedback-incorrect { color: #d32f2f; }
+
+        /* Styling based on correctness */
+        .option-item.correct .option-btn {
+            border-color: #008000;
+            background-color: #f0fff0;
+        }
+        .option-item.incorrect .option-btn {
+            border-color: #d32f2f;
+            background-color: #fff0f0;
+        }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #0056b3;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-box h4 {
+            color: #0056b3;
+            margin-bottom: 5px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .explanation-box p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        /* --- NAVIGATION FOOTER --- */
+        .nav-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background-color: #fff;
+            border: 1px solid #0056b3;
+            color: #0056b3;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background-color: #fff;
+            cursor: not-allowed;
+        }
+
+        .view-list-btn {
+            background: none;
+            border: none;
+            color: #0056b3;
+            text-decoration: underline;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        /* --- BRANDING & SOCIAL --- */
+        .branding-section {
+            padding: 10px 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-style: italic;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: block;
+            color: #333;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 35px;
+            height: 35px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.2s;
+        }
+
+        .social-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* --- MODAL (PATIENT LIST) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #fff;
+            border: 2px solid #0056b3;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .grid-item {
+            width: 100%;
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 2px;
+        }
+
+        .grid-item.current {
+            border: 2px solid #0056b3;
+        }
+        .grid-item.answered {
+            background-color: #dbeafe;
+            border-color: #0056b3;
+        }
+        .grid-item.unanswered {
+            background-color: #fff;
+        }
+
+        /* --- RESULT SCREEN --- */
+        .result-screen {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .result-title {
+            font-size: 24px;
+            color: #0056b3;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #0056b3;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .restart-btn {
+            padding: 12px 30px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        
+        .restart-btn:hover {
+            background-color: #004494;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Tweaks */
+        @media (max-width: 600px) {
+            header { flex-direction: column; gap: 5px; text-align: center; }
+            .nav-footer { flex-direction: column-reverse; gap: 15px; }
+            .nav-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- HEADER -->
+        <header>
+            <h1>Hematology Theory: Lesson 3</h1>
+            <div class="progress-counter">Question <span id="current-q-num">1</span> of <span id="total-q-num">40</span></div>
+        </header>
+
+        <!-- MAIN QUIZ AREA -->
+        <main id="quiz-main">
+            <div class="question-text" id="question-text">
+                Loading question...
+            </div>
+
+            <ul class="options-list" id="options-list">
+                <!-- Options injected via JS -->
+            </ul>
+
+            <div class="explanation-box" id="explanation-box">
+                <h4>Explanation:</h4>
+                <div id="explanation-content"></div>
+            </div>
+        </main>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="result-screen">
+            <h2 class="result-title">Test Result</h2>
+            <p>Your Score:</p>
+            <div class="result-score"><span id="score-val">0</span> / <span id="total-val">0</span></div>
+            <button class="restart-btn" onclick="quizApp.restartQuiz()">Retake Assessment</button>
+        </div>
+
+        <!-- NAVIGATION FOOTER -->
+        <footer class="nav-footer" id="nav-footer">
+            <button class="nav-btn" id="prev-btn" onclick="quizApp.prevQuestion()">Previous</button>
+            <button class="view-list-btn" onclick="quizApp.toggleModal(true)">View List</button>
+            <button class="nav-btn" id="next-btn" onclick="quizApp.nextQuestion()">Next</button>
+        </footer>
+
+        <!-- BRANDING & SOCIAL -->
+        <div class="branding-section">
+            <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL OVERLAY -->
+    <div class="modal-overlay" id="list-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Question Overview</h3>
+                <button class="close-modal" onclick="quizApp.toggleModal(false)">&times;</button>
+            </div>
+            <div class="question-grid" id="question-grid">
+                <!-- Grid items injected via JS -->
+            </div>
+            <button class="nav-btn" onclick="quizApp.toggleModal(false)">Close Overview</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA: QUESTIONS ---
+        const quizData = [
+            // Section 1: Introduction & Classification of Leukocytes
+            {
+                id: 1,
+                text: "Which of the following is NOT a granulocyte?",
+                options: [{id:"A",text:"Neutrophil"},{id:"B",text:"Eosinophil"},{id:"C",text:"Basophil"},{id:"D",text:"Lymphocyte"}],
+                correct: "D",
+                explanation: "Granulocytes include neutrophils, eosinophils, and basophils. Lymphocytes are agranulocytes, along with monocytes."
+            },
+            {
+                id: 2,
+                text: "All leukocytes originate from:",
+                options: [{id:"A",text:"Common Lymphoid Progenitor only"},{id:"B",text:"Myeloblasts"},{id:"C",text:"Hematopoietic stem cells (HSCs)"},{id:"D",text:"Reticulocytes"}],
+                correct: "C",
+                explanation: "HSCs in bone marrow give rise to both myeloid and lymphoid lineages via CMP and CLP, respectively."
+            },
+            {
+                id: 3,
+                text: "Which progenitor gives rise to neutrophils, eosinophils, basophils, and monocytes?",
+                options: [{id:"A",text:"Common Lymphoid Progenitor (CLP)"},{id:"B",text:"Common Myeloid Progenitor (CMP)"},{id:"C",text:"BFU-E"},{id:"D",text:"Megakaryocyte progenitor"}],
+                correct: "B",
+                explanation: "The CMP is the source of all myeloid-derived WBCs, including granulocytes and monocytes."
+            },
+            {
+                id: 4,
+                text: "What structural feature distinguishes granulocytes from agranulocytes?",
+                options: [{id:"A",text:"Presence of a single nucleus"},{id:"B",text:"Lack of cytoplasm"},{id:"C",text:"Polymorphonuclear nuclei and prominent cytoplasmic granules"},{id:"D",text:"Smaller cell size"}],
+                correct: "C",
+                explanation: "Granulocytes have multi-lobed nuclei and enzyme-filled granules, while agranulocytes (monocytes, lymphocytes) are mononuclear and lack prominent granules."
+            },
+            // Section 2: WBC Counts & Reference Ranges
+            {
+                id: 5,
+                text: "What is the normal WBC count range in healthy adults (×10³/μL)?",
+                options: [{id:"A",text:"1.0 – 4.0"},{id:"B",text:"4.5 – 11.0"},{id:"C",text:"9.0 – 30.0"},{id:"D",text:"15.0 – 25.0"}],
+                correct: "B",
+                explanation: "Adult reference interval is 4.5–11.0 ×10³/μL. Newborns have higher counts (9–30)."
+            },
+            {
+                id: 6,
+                text: "Presence of immature granulocytes in peripheral blood is considered normal:",
+                options: [{id:"A",text:"Only in adults during exercise"},{id:"B",text:"In newborns during the first few days of life"},{id:"C",text:"In all pregnant women"},{id:"D",text:"Never"}],
+                correct: "B",
+                explanation: "It’s normal in neonates due to active marrow output, but abnormal in older children/adults unless due to pathology."
+            },
+            {
+                id: 7,
+                text: "Which WBC type is the most abundant in adult peripheral blood?",
+                options: [{id:"A",text:"Lymphocytes"},{id:"B",text:"Monocytes"},{id:"C",text:"Neutrophils"},{id:"D",text:"Basophils"}],
+                correct: "C",
+                explanation: "Neutrophils constitute 40–80% of total WBCs—making them the most numerous."
+            },
+            {
+                id: 8,
+                text: "Absolute basophilia is defined as a basophil count greater than:",
+                options: [{id:"A",text:"0.05 ×10³/μL"},{id:"B",text:"0.1 ×10³/μL"},{id:"C",text:"0.2 ×10³/μL"},{id:"D",text:"0.5 ×10³/μL"}],
+                correct: "C",
+                explanation: "Normal basophil count is 0–0.2 ×10³/μL; values >0.2 are clinically significant and may indicate CML or allergy."
+            },
+            {
+                id: 9,
+                text: "The absolute reference range for monocytes in adults is:",
+                options: [{id:"A",text:"0.01–0.5 ×10³/μL"},{id:"B",text:"0.1–0.8 ×10³/μL"},{id:"C",text:"1.0–3.0 ×10³/μL"},{id:"D",text:"2.0–5.0 ×10³/μL"}],
+                correct: "B",
+                explanation: "Monocytes normally range from 0.1 to 0.8 ×10³/μL (2–10% of total WBCs)."
+            },
+            // Section 3: Immune Functions
+            {
+                id: 10,
+                text: "Which immune response is rapid, non-specific, and lacks memory?",
+                options: [{id:"A",text:"Adaptive immunity"},{id:"B",text:"Humoral immunity"},{id:"C",text:"Innate immunity"},{id:"D",text:"Cell-mediated immunity"}],
+                correct: "C",
+                explanation: "Innate immunity acts within hours, targets general pathogen patterns, and does not retain memory."
+            },
+            {
+                id: 11,
+                text: "Which cell is primarily responsible for antibody production?",
+                options: [{id:"A",text:"T cell"},{id:"B",text:"Neutrophil"},{id:"C",text:"B cell"},{id:"D",text:"Basophil"}],
+                correct: "C",
+                explanation: "B lymphocytes differentiate into plasma cells that produce antigen-specific antibodies."
+            },
+            {
+                id: 12,
+                text: "Monocytes contribute to adaptive immunity by acting as:",
+                options: [{id:"A",text:"Cytotoxic killers"},{id:"B",text:"Antigen-presenting cells (APCs)"},{id:"C",text:"Histamine releasers"},{id:"D",text:"Oxygen carriers"}],
+                correct: "B",
+                explanation: "Monocytes become dendritic cells/macrophages that present antigens to T cells, bridging innate and adaptive immunity."
+            },
+            {
+                id: 13,
+                text: "NK cells are primarily classified under which immune system?",
+                options: [{id:"A",text:"Adaptive only"},{id:"B",text:"Innate"},{id:"C",text:"Humoral only"},{id:"D",text:"Complement system"}],
+                correct: "B",
+                explanation: "Natural Killer (NK) cells are part of innate immunity, though they can influence adaptive responses."
+            },
+            // Section 4: Neutrophil Biology
+            {
+                id: 14,
+                text: "The first morphologically identifiable cell in granulopoiesis is the:",
+                options: [{id:"A",text:"Promyelocyte"},{id:"B",text:"Myelocyte"},{id:"C",text:"Myeloblast"},{id:"D",text:"Metamyelocyte"}],
+                correct: "C",
+                explanation: "The myeloblast is the earliest recognizable precursor with round nucleus, nucleoli, and basophilic cytoplasm."
+            },
+            {
+                id: 15,
+                text: "Primary (azurophilic) granules in neutrophils are formed during which stage?",
+                options: [{id:"A",text:"Myeloblast"},{id:"B",text:"Promyelocyte"},{id:"C",text:"Myelocyte"},{id:"D",text:"Band"}],
+                correct: "B",
+                explanation: "Promyelocytes synthesize primary granules containing myeloperoxidase, elastase, and defensins."
+            },
+            {
+                id: 16,
+                text: "Which neutrophil stage is the last capable of cell division?",
+                options: [{id:"A",text:"Promyelocyte"},{id:"B",text:"Myelocyte"},{id:"C",text:"Metamyelocyte"},{id:"D",text:"Segmented neutrophil"}],
+                correct: "B",
+                explanation: "The myelocyte is the final mitotic stage; all later stages undergo terminal differentiation without division."
+            },
+            {
+                id: 17,
+                text: "A “left shift” in WBC differential refers to an increase in:",
+                options: [{id:"A",text:"Lymphocytes"},{id:"B",text:"Mature segmented neutrophils"},{id:"C",text:"Band neutrophils"},{id:"D",text:"Basophils"}],
+                correct: "C",
+                explanation: "Elevated bands indicate accelerated marrow release, often due to acute infection or inflammation."
+            },
+            {
+                id: 18,
+                text: "How long do mature neutrophils typically circulate in blood?",
+                options: [{id:"A",text:"1–2 hours"},{id:"B",text:"3–12 hours"},{id:"C",text:"24–48 hours"},{id:"D",text:"5–7 days"}],
+                correct: "B",
+                explanation: "Neutrophils have a very short half-life in circulation (3–12 hours) before migrating into tissues."
+            },
+            {
+                id: 19,
+                text: "Which granule type contains lactoferrin and collagenase?",
+                options: [{id:"A",text:"Primary"},{id:"B",text:"Secondary (specific)"},{id:"C",text:"Tertiary"},{id:"D",text:"Secretory vesicles"}],
+                correct: "B",
+                explanation: "Secondary granules, formed in the myelocyte stage, contain lactoferrin (iron-binding) and collagenase (tissue penetration)."
+            },
+            {
+                id: 20,
+                text: "The respiratory burst in neutrophils generates:",
+                options: [{id:"A",text:"Antibodies"},{id:"B",text:"Histamine"},{id:"C",text:"Reactive oxygen species (ROS)"},{id:"D",text:"Complement proteins"}],
+                correct: "C",
+                explanation: "During phagolysosome formation, NADPH oxidase produces ROS to kill ingested microbes."
+            },
+            // Section 5: Eosinophil Biology
+            {
+                id: 21,
+                text: "Mature eosinophils typically have how many nuclear lobes?",
+                options: [{id:"A",text:"1"},{id:"B",text:"2"},{id:"C",text:"4–5"},{id:"D",text:"None"}],
+                correct: "B",
+                explanation: "Eosinophils usually have a bi-lobed nucleus, less segmented than neutrophils."
+            },
+            {
+                id: 22,
+                text: "Which protein is NOT found in eosinophil specific granules?",
+                options: [{id:"A",text:"Major Basic Protein (MBP)"},{id:"B",text:"Eosinophil Cationic Protein (ECP)"},{id:"C",text:"Myeloperoxidase (MPO)"},{id:"D",text:"Eosinophil-Derived Neurotoxin (EDN)"}],
+                correct: "C",
+                explanation: "MPO is in neutrophil primary granules, not eosinophils. Eosinophils contain MBP, ECP, EDN, and EPO (eosinophil peroxidase)."
+            },
+            {
+                id: 23,
+                text: "Eosinophils survive in tissues for:",
+                options: [{id:"A",text:"Hours"},{id:"B",text:"1–2 days"},{id:"C",text:"Several weeks"},{id:"D",text:"Months"}],
+                correct: "C",
+                explanation: "While their blood half-life is ~18 hours, tissue eosinophils can persist for weeks, especially in mucosal areas."
+            },
+            {
+                id: 24,
+                text: "Charcot-Leyden crystals are derived from which eosinophil protein?",
+                options: [{id:"A",text:"MBP"},{id:"B",text:"Galectin-10 (Charcot-Leyden crystal protein)"},{id:"C",text:"EDN"},{id:"D",text:"Lactoferrin"}],
+                correct: "B",
+                explanation: "Galectin-10 forms Charcot-Leyden crystals in sputum or stool during eosinophilic inflammation (e.g., asthma)."
+            },
+            {
+                id: 25,
+                text: "Eosinophilia is commonly associated with all EXCEPT:",
+                options: [{id:"A",text:"Helminth infection"},{id:"B",text:"Allergic asthma"},{id:"C",text:"Bacterial pneumonia"},{id:"D",text:"Drug hypersensitivity"}],
+                correct: "C",
+                explanation: "Bacterial infections typically cause neutrophilia, not eosinophilia. Eosinophilia points to parasites, allergies, or certain cancers."
+            },
+            // Section 6: Basophil Biology
+            {
+                id: 26,
+                text: "Basophil granules are described as metachromatic because they:",
+                options: [{id:"A",text:"Appear blue with Wright stain"},{id:"B",text:"Stain differently than expected due to heparin content"},{id:"C",text:"Are invisible under light microscopy"},{id:"D",text:"Change color over time"}],
+                correct: "B",
+                explanation: "Metachromasia means the granules appear purple-black instead of red/blue due to heparin binding dyes abnormally."
+            },
+            {
+                id: 27,
+                text: "Which mediator in basophil granules causes bronchoconstriction and vasodilation?",
+                options: [{id:"A",text:"Heparin"},{id:"B",text:"Cathepsin G"},{id:"C",text:"Histamine"},{id:"D",text:"Lactoferrin"}],
+                correct: "C",
+                explanation: "Histamine is pre-formed in granules and released during Type I hypersensitivity, causing classic allergy symptoms."
+            },
+            {
+                id: 28,
+                text: "Basophils play a key role in defense against:",
+                options: [{id:"A",text:"Viruses"},{id:"B",text:"Intracellular bacteria"},{id:"C",text:"Helminths"},{id:"D",text:"Fungi"}],
+                correct: "C",
+                explanation: "Like eosinophils, basophils help combat multicellular parasites, though they are more famous for allergic roles."
+            },
+            {
+                id: 29,
+                text: "Normal basophil percentage in adult blood is:",
+                options: [{id:"A",text:"1–5%"},{id:"B",text:"5–10%"},{id:"C",text:"0–1%"},{id:"D",text:"10–20%"}],
+                correct: "C",
+                explanation: "Basophils are the least common WBC, making up 0–1% of total leukocytes."
+            },
+            // Section 7: Monocyte Biology
+            {
+                id: 30,
+                text: "Monocytes are the largest normal WBC, measuring:",
+                options: [{id:"A",text:"8–10 µm"},{id:"B",text:"10–12 µm"},{id:"C",text:"12–20 µm"},{id:"D",text:"20–30 µm"}],
+                correct: "C",
+                explanation: "Monocytes range from 12–20 µm, about twice the size of an RBC."
+            },
+            {
+                id: 31,
+                text: "After entering tissues, monocytes differentiate into all EXCEPT:",
+                options: [{id:"A",text:"Macrophages"},{id:"B",text:"Dendritic cells"},{id:"C",text:"Neutrophils"},{id:"D",text:"Kupffer cells"}],
+                correct: "C",
+                explanation: "Monocytes become macrophages or dendritic cells, but never neutrophils (which follow a separate granulocytic path)."
+            },
+            {
+                id: 32,
+                text: "Microglia are tissue-resident macrophages located in the:",
+                options: [{id:"A",text:"Liver"},{id:"B",text:"Lungs"},{id:"C",text:"Brain"},{id:"D",text:"Bone"}],
+                correct: "C",
+                explanation: "Microglia are CNS macrophages; Kupffer cells (liver), osteoclasts (bone), and alveolar macrophages (lungs) are other examples."
+            },
+            {
+                id: 33,
+                text: "Monocytes circulate in blood for approximately:",
+                options: [{id:"A",text:"2–6 hours"},{id:"B",text:"20–40 hours"},{id:"C",text:"3–5 days"},{id:"D",text:"1 week"}],
+                correct: "B",
+                explanation: "Monocytes spend 20–40 hours in circulation before migrating into tissues for long-term residence."
+            },
+            {
+                id: 34,
+                text: "Which function is UNIQUE to dendritic cells among myeloid cells?",
+                options: [{id:"A",text:"Phagocytosis"},{id:"B",text:"Cytokine secretion"},{id:"C",text:"Activation of naïve T cells"},{id:"D",text:"ROS production"}],
+                correct: "C",
+                explanation: "Only dendritic cells can prime naïve T cells, making them essential for initiating adaptive immunity."
+            },
+            // Section 8: Integrated Concepts & Clinical Correlations
+            {
+                id: 35,
+                text: "Which granulocyte has the shortest tissue lifespan?",
+                options: [{id:"A",text:"Eosinophil"},{id:"B",text:"Basophil"},{id:"C",text:"Neutrophil"},{id:"D",text:"Monocyte"}],
+                correct: "B",
+                explanation: "Basophils survive only hours to days in tissues, while eosinophils last weeks and monocytes/macrophages live months."
+            },
+            {
+                id: 36,
+                text: "Tertiary granules in neutrophils appear during which stage?",
+                options: [{id:"A",text:"Promyelocyte"},{id:"B",text:"Myelocyte"},{id:"C",text:"Metamyelocyte"},{id:"D",text:"Band"}],
+                correct: "C",
+                explanation: "Tertiary granules (containing gelatinase and lysozyme) form in the metamyelocyte stage."
+            },
+            {
+                id: 37,
+                text: "Secretory vesicles in neutrophils primarily help with:",
+                options: [{id:"A",text:"Microbial digestion"},{id:"B",text:"Rapid surface receptor mobilization"},{id:"C",text:"DNA extrusion"},{id:"D",text:"Iron transport"}],
+                correct: "B",
+                explanation: "Secretory vesicles fuse quickly with the plasma membrane to deliver receptors (e.g., integrins) during activation."
+            },
+            {
+                id: 38,
+                text: "Which cell releases Major Basic Protein (MBP) in BOTH eosinophils and basophils?",
+                options: [{id:"A",text:"True"},{id:"B",text:"False"}],
+                correct: "A",
+                explanation: "MBP is present in both eosinophil and basophil granules, contributing to anti-parasitic and pro-inflammatory effects."
+            },
+            {
+                id: 39,
+                text: "Which statement about band neutrophils is TRUE?",
+                options: [{id:"A",text:"They cannot leave the bone marrow"},{id:"B",text:"They are never seen in healthy blood"},{id:"C",text:"Small numbers are normal in peripheral blood"},{id:"D",text:"They have fully segmented nuclei"}],
+                correct: "C",
+                explanation: "Bands are occasionally present in healthy individuals; significant increases signal \"left shift\"."
+            },
+            {
+                id: 40,
+                text: "Which of the following cells is derived from the CMP but is NOT a granulocyte?",
+                options: [{id:"A",text:"Neutrophil"},{id:"B",text:"Eosinophil"},{id:"C",text:"Monocyte"},{id:"D",text:"Basophil"}],
+                correct: "C",
+                explanation: "Monocytes arise from the CMP but are agranulocytes, unlike the three granulocyte types."
+            }
+        ];
+
+        // --- APPLICATION LOGIC ---
+        const quizApp = {
+            currentIndex: 0,
+            userAnswers: new Array(quizData.length).fill(null), 
+            scores: 0,
+            
+            // DOM Elements
+            dom: {
+                questionText: document.getElementById('question-text'),
+                optionsList: document.getElementById('options-list'),
+                currentQNum: document.getElementById('current-q-num'),
+                totalQNum: document.getElementById('total-q-num'),
+                prevBtn: document.getElementById('prev-btn'),
+                nextBtn: document.getElementById('next-btn'),
+                explanationBox: document.getElementById('explanation-box'),
+                explanationContent: document.getElementById('explanation-content'),
+                quizMain: document.getElementById('quiz-main'),
+                navFooter: document.getElementById('nav-footer'),
+                resultScreen: document.getElementById('result-screen'),
+                scoreVal: document.getElementById('score-val'),
+                totalVal: document.getElementById('total-val'),
+                modal: document.getElementById('list-modal'),
+                grid: document.getElementById('question-grid')
+            },
+
+            init() {
+                this.dom.totalQNum.textContent = quizData.length;
+                this.renderQuestion();
+                this.updateNavButtons();
+            },
+
+            renderQuestion() {
+                const q = quizData[this.currentIndex];
+                
+                // Update Header
+                this.dom.currentQNum.textContent = this.currentIndex + 1;
+                
+                // Update Text
+                this.dom.questionText.textContent = q.text;
+                
+                // Clear Previous Options
+                this.dom.optionsList.innerHTML = '';
+                
+                // Hide Explanation
+                this.dom.explanationBox.style.display = 'none';
+
+                // Determine if already answered
+                const isAnswered = this.userAnswers[this.currentIndex] !== null;
+
+                // Generate Options
+                q.options.forEach(opt => {
+                    const li = document.createElement('li');
+                    li.className = 'option-item';
+                    
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerHTML = `<span>${opt.id}) ${opt.text}</span>`;
+                    
+                    // Feedback Span
+                    const feedback = document.createElement('span');
+                    feedback.className = 'feedback-text';
+
+                    if (isAnswered) {
+                        btn.disabled = true;
+                        feedback.style.display = 'block';
+
+                        const isCorrect = opt.id === q.correct;
+                        const isSelected = this.userAnswers[this.currentIndex].selectedId === opt.id;
+                        
+                        if (isCorrect) {
+                            li.classList.add('correct');
+                            feedback.textContent = 'CORRECT';
+                            feedback.classList.add('feedback-correct');
+                        } else if (isSelected && !isCorrect) {
+                            li.classList.add('incorrect');
+                            feedback.textContent = 'INCORRECT';
+                            feedback.classList.add('feedback-incorrect');
+                        }
+                    } else {
+                        btn.onclick = () => this.handleAnswer(opt.id, li);
+                    }
+
+                    li.appendChild(btn);
+                    li.appendChild(feedback);
+                    this.dom.optionsList.appendChild(li);
+                });
+
+                // Show explanation if answered
+                if (isAnswered) {
+                    this.dom.explanationContent.innerHTML = q.explanation;
+                    this.dom.explanationBox.style.display = 'block';
+                }
+
+                this.updateNavButtons();
+            },
+
+            handleAnswer(selectedId, liElement) {
+                const q = quizData[this.currentIndex];
+                const isCorrect = (selectedId === q.correct);
+                
+                // Record Answer
+                this.userAnswers[this.currentIndex] = {
+                    selectedId: selectedId,
+                    isCorrect: isCorrect
+                };
+
+                if (isCorrect) {
+                    this.scores++;
+                }
+
+                // Update UI immediately
+                // Find the button inside the clicked li
+                const btn = liElement.querySelector('.option-btn');
+                btn.disabled = true;
+
+                // Add classes
+                if (isCorrect) {
+                    liElement.classList.add('correct');
+                } else {
+                    liElement.classList.add('incorrect');
+                }
+
+                // Show Feedback Text
+                const feedback = liElement.querySelector('.feedback-text');
+                feedback.style.display = 'block';
+                feedback.textContent = isCorrect ? 'CORRECT' : 'INCORRECT';
+                feedback.className = 'feedback-text ' + (isCorrect ? 'feedback-correct' : 'feedback-incorrect');
+
+                // Highlight the actual correct answer if user was wrong
+                if (!isCorrect) {
+                    const allItems = this.dom.optionsList.querySelectorAll('.option-item');
+                    allItems.forEach(item => {
+                        const itemBtnText = item.querySelector('span').textContent;
+                        if (itemBtnText.startsWith(q.correct + ')')) {
+                            item.classList.add('correct');
+                            item.querySelector('.option-btn').disabled = true;
+                            const fb = item.querySelector('.feedback-text');
+                            fb.style.display = 'block';
+                            fb.textContent = 'CORRECT';
+                            fb.classList.add('feedback-correct');
+                        }
+                    });
+                }
+
+                // Show Explanation
+                this.dom.explanationContent.innerHTML = q.explanation;
+                this.dom.explanationBox.style.display = 'block';
+
+                this.updateNavButtons();
+            },
+
+            nextQuestion() {
+                if (this.currentIndex < quizData.length - 1) {
+                    this.currentIndex++;
+                    this.renderQuestion();
+                } else {
+                    this.showResults();
+                }
+            },
+
+            prevQuestion() {
+                if (this.currentIndex > 0) {
+                    this.currentIndex--;
+                    this.renderQuestion();
+                }
+            },
+
+            jumpToQuestion(index) {
+                this.currentIndex = index;
+                this.renderQuestion();
+                this.toggleModal(false);
+            },
+
+            updateNavButtons() {
+                this.dom.prevBtn.disabled = this.currentIndex === 0;
+                
+                const isLast = this.currentIndex === quizData.length - 1;
+                const isAnswered = this.userAnswers[this.currentIndex] !== null;
+
+                if (isLast) {
+                    this.dom.nextBtn.textContent = 'Finish';
+                    this.dom.nextBtn.disabled = !isAnswered;
+                } else {
+                    this.dom.nextBtn.textContent = 'Next';
+                    this.dom.nextBtn.disabled = false;
+                }
+            },
+
+            showResults() {
+                this.dom.quizMain.style.display = 'none';
+                this.dom.navFooter.style.display = 'none';
+                this.dom.resultScreen.style.display = 'block';
+                this.dom.scoreVal.textContent = this.scores;
+                this.dom.totalVal.textContent = quizData.length;
+            },
+
+            restartQuiz() {
+                this.currentIndex = 0;
+                this.userAnswers.fill(null);
+                this.scores = 0;
+                this.dom.quizMain.style.display = 'block';
+                this.dom.navFooter.style.display = 'flex';
+                this.dom.resultScreen.style.display = 'none';
+                this.renderQuestion();
+            },
+
+            toggleModal(show) {
+                if (show) {
+                    this.renderGrid();
+                    this.dom.modal.classList.add('active');
+                } else {
+                    this.dom.modal.classList.remove('active');
+                }
+            },
+
+            renderGrid() {
+                this.dom.grid.innerHTML = '';
+                quizData.forEach((q, index) => {
+                    const btn = document.createElement('div');
+                    btn.textContent = index + 1;
+                    
+                    // Base Class
+                    btn.className = 'grid-item';
+                    
+                    // Logic for Status Colors
+                    if (index === this.currentIndex) {
+                        btn.classList.add('current');
+                    }
+                    
+                    if (this.userAnswers[index] !== null) {
+                        btn.classList.add('answered');
+                    } else {
+                        btn.classList.add('unanswered');
+                    }
+
+                    btn.onclick = () => this.jumpToQuestion(index);
+                    this.dom.grid.appendChild(btn);
+                });
+            }
+        };
+
+        // Initialize Quiz
+        quizApp.init();
+
+    </script>
+</body>
+</html>
