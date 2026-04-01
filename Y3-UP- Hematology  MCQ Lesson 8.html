@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hematology Theory: Abnormal Leukocyte Morphology</title>
+    <style>
+        /* --- RESET & BASIC SETUP --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- CLINICAL CONTAINER --- */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #ffffff;
+            border: 2px solid #0056b3; /* Medical Blue */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 85vh;
+            overflow: hidden;
+        }
+
+        /* Medical Chart Paper Background Effect */
+        .chart-bg {
+            flex-grow: 1;
+            padding: 40px;
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 30px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* --- TYPOGRAPHY & HEADER --- */
+        h1 {
+            color: #0056b3;
+            font-size: 22px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        h2 {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: #0056b3;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        p {
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            color: #222;
+        }
+
+        /* --- QUESTION & OPTIONS --- */
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 12px 15px;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            position: relative;
+            outline: none;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #e6f0ff;
+            border-color: #0056b3;
+        }
+
+        .option-btn.correct {
+            border: 2px solid #28a745;
+            background-color: #f0fff4;
+        }
+
+        .option-btn.incorrect {
+            border: 2px solid #dc3545;
+            background-color: #fff5f5;
+        }
+
+        .feedback-badge {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .feedback-correct { color: #28a745; }
+        .feedback-incorrect { color: #dc3545; }
+
+        .explanation-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0056b3;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #444;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- NAVIGATION BAR --- */
+        .nav-bar {
+            border-top: 1px solid #0056b3;
+            padding: 15px 40px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background-color: #fff;
+            border: 1px solid #0056b3;
+            color: #0056b3;
+            padding: 8px 20px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .view-list-btn {
+            border: 1px solid #ccc;
+            color: #555;
+        }
+        .view-list-btn:hover {
+            background-color: #eee;
+            color: #000;
+            border-color: #555;
+        }
+
+        /* --- BRANDING & SOCIAL --- */
+        .branding-footer {
+            border-top: 1px solid #ddd;
+            padding: 15px 40px;
+            background-color: #fff;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-style: italic;
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .social-btn:hover {
+            background-color: #004494;
+        }
+
+        /* --- OVERVIEW MODAL --- */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            display: none;
+            flex-direction: column;
+            z-index: 20;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+
+        .modal-title {
+            color: #0056b3;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            font-size: 30px;
+            color: #0056b3;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 15px;
+        }
+
+        .grid-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ddd;
+            background-color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .grid-item.current {
+            border-color: #0056b3;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+        }
+
+        .grid-item.answered {
+            background-color: #cce5ff;
+            border-color: #cce5ff;
+        }
+
+        .grid-item:hover {
+            transform: scale(1.1);
+            z-index: 2;
+        }
+
+        /* --- RESULT SCREEN --- */
+        .result-screen {
+            text-align: center;
+            padding: 40px;
+            display: none;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 30px;
+        }
+
+        .result-title {
+            font-size: 28px;
+            color: #0056b3;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #0056b3;
+        }
+
+        .score-display {
+            font-size: 60px;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .score-label {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- Main Quiz Area -->
+        <div class="chart-bg" id="quiz-content">
+            <h1>Hematology Theory</h1>
+            <h2>Lesson 8: Abnormal Leukocyte Morphology</h2>
+            <hr style="border: 0; border-top: 1px solid #ccc; margin: 15px 0;">
+            
+            <div id="question-container">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div class="result-screen" id="result-screen">
+            <h1 class="result-title">Test Result</h1>
+            <div class="score-display" id="final-score">0 / 40</div>
+            <div class="score-label">Score</div>
+            <button class="nav-btn" onclick="restartQuiz()" style="margin-top: 30px; font-size: 16px; padding: 10px 30px;">Retake Test</button>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="nav-bar" id="nav-bar">
+            <button class="nav-btn" id="prev-btn" onclick="changeQuestion(-1)">Previous</button>
+            <button class="nav-btn view-list-btn" onclick="toggleModal()">View List</button>
+            <button class="nav-btn" id="next-btn" onclick="changeQuestion(1)">Next</button>
+        </div>
+
+        <!-- Branding & Social -->
+        <div class="branding-footer">
+            <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </div>
+
+        <!-- Overview Modal -->
+        <div class="modal-overlay" id="overview-modal">
+            <div class="modal-header">
+                <span class="modal-title">Question Overview</span>
+                <button class="close-modal-btn" onclick="toggleModal()">×</button>
+            </div>
+            <div style="margin-bottom: 15px; font-size: 14px; color: #666;">
+                <span style="display:inline-block; width: 15px; height: 15px; border: 2px solid #0056b3; vertical-align: middle; margin-right: 5px;"></span> Current
+                <span style="display:inline-block; width: 15px; height: 15px; background: #cce5ff; border: 2px solid #cce5ff; vertical-align: middle; margin-left: 15px; margin-right: 5px;"></span> Answered
+                <span style="display:inline-block; width: 15px; height: 15px; border: 2px solid #ddd; vertical-align: middle; margin-left: 15px; margin-right: 5px;"></span> Unanswered
+            </div>
+            <div class="question-grid" id="question-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                section: "Section A: General Concepts & Introduction",
+                question: "Q1. Why is manual microscopic evaluation of peripheral blood smears essential in hematology?",
+                options: ["A. To confirm automated analyzer calibration", "B. To detect morphologic abnormalities missed by analyzers", "C. To count reticulocytes accurately", "D. To measure serum iron levels"],
+                correct: 1,
+                explanation: "Automated hematology analyzers cannot assess structural details like nuclear shape or cytoplasmic inclusions. Only manual microscopy allows identification of abnormal leukocyte morphology (e.g., Pelger-Huét, Döhle bodies). This is critical for diagnosing infections, genetic disorders, and malignancies like MDS or leukemia."
+            },
+            {
+                section: "Section A: General Concepts & Introduction",
+                question: "Q2. Which of the following is a limitation of automated hematology analyzers?",
+                options: ["A. Inability to perform WBC differentials", "B. Inability to detect cytoplasmic or nuclear morphologic abnormalities", "C. Inability to measure hemoglobin concentration", "D. Inability to process EDTA samples"],
+                correct: 1,
+                explanation: "Analyzers provide quantitative data (counts, indices) but no qualitative assessment of cell structure. Morphologic changes (e.g., toxic granulation, hypersegmentation) require microscopic review."
+            },
+            {
+                section: "Section B: Pelger-Huét Anomaly",
+                question: "Q3. A neutrophil with a bilobed “pince-nez” nucleus is most characteristic of:",
+                options: ["A. Hypersegmented neutrophils", "B. Pelger-Huét anomaly", "C. May-Hegglin anomaly", "D. Chédiak-Higashi syndrome"],
+                correct: 1,
+                explanation: "Pelger-Huét anomaly features hyposegmented nuclei: bilobed ('spectacle-like') or unilobed. Cytoplasm may show hypogranularity due to deficient secondary granules."
+            },
+            {
+                section: "Section B: Pelger-Huét Anomaly",
+                question: "Q4. Which statement about Pelger-Huét anomaly is TRUE?",
+                options: ["A. Always indicates acute leukemia", "B. Is always acquired and pathologic", "C. The hereditary form is benign and autosomal dominant", "D. Causes severe immunodeficiency"],
+                correct: 2,
+                explanation: "Hereditary Pelger-Huét: autosomal dominant, benign, no clinical consequences. Acquired (pseudo-Pelger-Huét): seen in MDS, AML, and other marrow disorders → pathologic."
+            },
+            {
+                section: "Section B: Pelger-Huét Anomaly",
+                question: "Q5. Pseudo-Pelger-Huét anomaly is most commonly associated with:",
+                options: ["A. Vitamin B12 deficiency", "B. Myelodysplastic syndromes (MDS)", "C. Chronic granulomatous disease", "D. Iron deficiency anemia"],
+                correct: 1,
+                explanation: "Pseudo-Pelger-Huét is an acquired dysplastic change in neutrophils. Strongly linked to MDS and AML → red flag for bone marrow pathology."
+            },
+            {
+                section: "Section C: Hypersegmented Neutrophils",
+                question: "Q6. Hypersegmented neutrophils are defined as having:",
+                options: ["A. 2 nuclear lobes", "B. 3–4 nuclear lobes", "C. ≥5 nuclear lobes", "D. No nuclear lobes"],
+                correct: 2,
+                explanation: "Normal neutrophils: 2–4 lobes. Hypersegmented: ≥5 lobes → hallmark of megaloblastic anemia."
+            },
+            {
+                section: "Section C: Hypersegmented Neutrophils",
+                question: "Q7. Hypersegmented neutrophils are most specific for:",
+                options: ["A. Iron deficiency anemia", "B. Hemolytic anemia", "C. Megaloblastic anemia due to B12/folate deficiency", "D. Sickle cell disease"],
+                correct: 2,
+                explanation: "Caused by impaired DNA synthesis → delayed nuclear maturation while cytoplasm matures normally. Seen with macro-ovalocytes and Howell-Jolly bodies in RBCs."
+            },
+            {
+                section: "Section C: Hypersegmented Neutrophils",
+                question: "Q8. The pathophysiology of hypersegmented neutrophils involves:",
+                options: ["A. Excessive granule production", "B. Accelerated nuclear segmentation due to infection", "C. Delayed nuclear maturation with normal cytoplasmic maturation", "D. Defective phagocytosis"],
+                correct: 2,
+                explanation: "In B12/folate deficiency, DNA replication slows → nucleus lags behind cytoplasm → excessive lobulation."
+            },
+            {
+                section: "Section D: Pyknotic Nucleus",
+                question: "Q9. A pyknotic neutrophil nucleus appears:",
+                options: ["A. Large and pale with open chromatin", "B. Small, dense, and deeply stained", "C. Hypersegmented with 6 lobes", "D. Bilobed with clear cytoplasm"],
+                correct: 1,
+                explanation: "Pyknosis = nuclear condensation during apoptosis. Appears as small, dark, spherical mass; may fragment (karyorrhexis)."
+            },
+            {
+                section: "Section D: Pyknotic Nucleus",
+                question: "Q10. Pyknotic nuclei in neutrophils are most likely due to:",
+                options: ["A. Active bacterial infection", "B. Cellular aging or sample degradation", "C. Genetic storage disease", "D. Autoimmune hemolysis"],
+                correct: 1,
+                explanation: "Common in old blood samples or during high neutrophil turnover (e.g., severe infection). Not disease-specific, but indicates cell death or stress."
+            },
+            {
+                section: "Section E: Döhle Bodies",
+                question: "Q11. Döhle bodies are composed of:",
+                options: ["A. Lysosomal enzymes", "B. Aggregated ribosomes", "C. Remnants of rough endoplasmic reticulum (rER)", "D. Undegraded mucopolysaccharides"],
+                correct: 2,
+                explanation: "Light blue-gray cytoplasmic inclusions near cell periphery. Made of rER remnants → sign of toxic/atypical stimulation."
+            },
+            {
+                section: "Section E: Döhle Bodies",
+                question: "Q12. Döhle bodies are commonly seen in all EXCEPT:",
+                options: ["A. Severe bacterial infection", "B. Pregnancy", "C. Chronic granulomatous disease", "D. Burns"],
+                correct: 2,
+                explanation: "Seen in infection, burns, pregnancy, Fanconi syndrome, G-CSF use. CGD affects function (oxidative burst), not morphology → no Döhle bodies."
+            },
+            {
+                section: "Section E: Döhle Bodies",
+                question: "Q13. Döhle bodies often co-occur with:",
+                options: ["A. Howell-Jolly bodies", "B. Toxic granulation and cytoplasmic vacuoles", "C. Target cells", "D. Schistocytes"],
+                correct: 1,
+                explanation: "Part of “toxic changes” in neutrophils: Döhle bodies + toxic granulation + vacuoles."
+            },
+            {
+                section: "Section F: Toxic Granulation",
+                question: "Q14. Toxic granulation results from:",
+                options: ["A. Loss of primary granules", "B. Persistence of primary (azurophilic) granules due to accelerated granulopoiesis", "C. Deficiency of myeloperoxidase", "D. Accumulation of glycogen"],
+                correct: 1,
+                explanation: "During stress/infection, immature neutrophils released early → retain dark primary granules. Stain dark blue-black with Wright-Giemsa."
+            },
+            {
+                section: "Section F: Toxic Granulation",
+                question: "Q15. Which condition is LEAST associated with toxic granulation?",
+                options: ["A. Sepsis", "B. Rheumatoid arthritis", "C. Vitamin B12 deficiency", "D. Chemotherapy"],
+                correct: 2,
+                explanation: "Toxic granulation = reactive/toxic state (infection, inflammation, drugs). B12 deficiency causes hypersegmentation, not toxic changes."
+            },
+            {
+                section: "Section G: Cytoplasmic Vacuoles",
+                question: "Q16. Cytoplasmic vacuoles in neutrophils may represent all EXCEPT:",
+                options: ["A. Phagolysosomes containing bacteria", "B. Lipid droplets", "C. Ribosomal aggregates", "D. Autodigestive enzyme spaces"],
+                correct: 2,
+                explanation: "Vacuoles = clear spaces from phagocytosis, autodigestion, or lipids. Ribosomal aggregates = Döhle bodies or May-Hegglin inclusions, not vacuoles."
+            },
+            {
+                section: "Section G: Cytoplasmic Vacuoles",
+                question: "Q17. Artifactual vacuoles can form if:",
+                options: ["A. Blood is collected in citrate", "B. Smear is prepared too soon after draw", "C. Blood sits too long before smear preparation", "D. Patient is fasting"],
+                correct: 2,
+                explanation: "Delayed processing → autolysis → artifactual vacuolation. Always correlate with clinical context!"
+            },
+            {
+                section: "Section H: Alder-Reilly Anomaly",
+                question: "Q18. Alder-Reilly granules are found in:",
+                options: ["A. Only neutrophils", "B. All leukocyte types", "C. Only lymphocytes", "D. Erythrocytes and platelets"],
+                correct: 1,
+                explanation: "Coarse, purplish granules in neutrophils, lymphocytes, monocytes. Due to mucopolysaccharide accumulation from lysosomal enzyme deficiency."
+            },
+            {
+                section: "Section H: Alder-Reilly Anomaly",
+                question: "Q19. Alder-Reilly anomaly is associated with:",
+                options: ["A. Chronic granulomatous disease", "B. Mucopolysaccharidoses (e.g., Hurler syndrome)", "C. Leukocyte adhesion deficiency", "D. Iron overload"],
+                correct: 1,
+                explanation: "Marker for lysosomal storage diseases like Hurler (α-L-iduronidase deficiency) or Hunter syndrome."
+            },
+            {
+                section: "Section H: Alder-Reilly Anomaly",
+                question: "Q20. Unlike toxic granulation, Alder-Reilly granules:",
+                options: ["A. Occur only during sepsis", "B. Are present in all WBCs without infection", "C. Cause immunodeficiency", "D. Stain pink with Wright-Giemsa"],
+                correct: 1,
+                explanation: "Not infection-related; present constitutively in storage diseases. Leukocyte function is normal."
+            },
+            {
+                section: "Section I: Chédiak-Higashi Syndrome (CHS)",
+                question: "Q21. Giant gray-green cytoplasmic inclusions in neutrophils are diagnostic of:",
+                options: ["A. May-Hegglin anomaly", "B. Alder-Reilly anomaly", "C. Chédiak-Higashi syndrome", "D. Pelger-Huét anomaly"],
+                correct: 2,
+                explanation: "CHS: giant lysosomal granules in all granulocytes, monocytes, even platelets. Due to LYST gene mutation → defective vesicle trafficking."
+            },
+            {
+                section: "Section I: Chédiak-Higashi Syndrome (CHS)",
+                question: "Q22. Which triad is classic for Chédiak-Higashi syndrome?",
+                options: ["A. Thrombocytopenia, giant platelets, bleeding", "B. Albinism, immunodeficiency, neurological impairment", "C. Hypersegmentation, macrocytosis, glossitis", "D. Leukocytosis, no pus, delayed cord separation"],
+                correct: 1,
+                explanation: "Partial albinism (silvery hair), recurrent infections, neurologic decline. Functional defect: failed phagosome-lysosome fusion."
+            },
+            {
+                section: "Section I: Chédiak-Higashi Syndrome (CHS)",
+                question: "Q23. In CHS, why do patients suffer recurrent infections despite normal phagocytosis?",
+                options: ["A. Neutrophils cannot migrate to tissues", "B. Granules fail to fuse with phagosomes → no microbial killing", "C. Oxidative burst is absent", "D. Complement is deficient"],
+                correct: 1,
+                explanation: "Phagocytosis intact, but granules can’t deliver enzymes → ingested bacteria survive."
+            },
+            {
+                section: "Section J: May-Hegglin Anomaly",
+                question: "Q24. May-Hegglin anomaly is characterized by:",
+                options: ["A. Purple granules in lymphocytes", "B. Giant Döhle-like inclusions in granulocytes", "C. Hypogranular neutrophils", "D. Bilobed nuclei"],
+                correct: 1,
+                explanation: "Large, pale blue cytoplasmic inclusions (ribosomal RNA + myosin). Much larger than typical Döhle bodies."
+            },
+            {
+                section: "Section J: May-Hegglin Anomaly",
+                question: "Q25. Patients with May-Hegglin anomaly typically have:",
+                options: ["A. Severe immunodeficiency", "B. Recurrent fungal infections", "C. Thrombocytopenia and giant platelets", "D. Hypersegmented neutrophils"],
+                correct: 2,
+                explanation: "Associated with macrothrombocytopenia (like Bernard-Soulier). No infection risk — leukocyte function is normal."
+            },
+            {
+                section: "Section J: May-Hegglin Anomaly",
+                question: "Q26. May-Hegglin anomaly is inherited as:",
+                options: ["A. X-linked recessive", "B. Autosomal recessive", "C. Autosomal dominant", "D. Mitochondrial"],
+                correct: 2,
+                explanation: "Autosomal dominant mutation in MYH9 gene (non-muscle myosin)."
+            },
+            {
+                section: "Section K: Chronic Granulomatous Disease (CGD)",
+                question: "Q27. CGD is caused by a defect in:",
+                options: ["A. Myeloperoxidase production", "B. NADPH oxidase complex", "C. LYST gene", "D. CD18 integrin"],
+                correct: 1,
+                explanation: "NADPH oxidase needed for superoxide production (respiratory burst). Mutations in CYBB (X-linked) or NCF1/2 (autosomal recessive)."
+            },
+            {
+                section: "Section K: Chronic Granulomatous Disease (CGD)",
+                question: "Q28. Patients with CGD are particularly susceptible to infections with:",
+                options: ["A. Streptococcus pneumoniae", "B. Escherichia coli", "C. Catalase-positive organisms (e.g., Staphylococcus aureus, Aspergillus)", "D. Mycobacterium tuberculosis"],
+                correct: 2,
+                explanation: "Catalase-positive bugs destroy their own H₂O₂ → rely on host ROS for killing. Catalase-negative (e.g., Strep) produce H₂O₂ → can still be killed via non-oxidative pathways."
+            },
+            {
+                section: "Section K: Chronic Granulomatous Disease (CGD)",
+                question: "Q29. Granuloma formation in CGD results from:",
+                options: ["A. Autoimmune reaction", "B. Persistent microbes that cannot be eliminated", "C. Iron deposition", "D. Platelet dysfunction"],
+                correct: 1,
+                explanation: "Body walls off persistent pathogens → granulomas in lungs, GI tract, liver."
+            },
+            {
+                section: "Section K: Chronic Granulomatous Disease (CGD)",
+                question: "Q30. The definitive test for CGD is:",
+                options: ["A. Peripheral smear", "B. Serum immunoglobulin levels", "C. Dihydrorhodamine (DHR) flow test", "D. Bone marrow biopsy"],
+                correct: 2,
+                explanation: "DHR or NBT test shows absent oxidative burst in neutrophils."
+            },
+            {
+                section: "Section L: Myeloperoxidase (MPO) Deficiency",
+                question: "Q31. MPO deficiency is:",
+                options: ["A. Always symptomatic", "B. The rarest phagocyte disorder", "C. The most common inherited phagocyte defect", "D. X-linked"],
+                correct: 2,
+                explanation: "Most common inherited phagocyte defect, but usually asymptomatic."
+            },
+            {
+                section: "Section L: Myeloperoxidase (MPO) Deficiency",
+                question: "Q32. MPO converts H₂O₂ into:",
+                options: ["A. Superoxide", "B. Nitric oxide", "C. Hypochlorous acid (bleach)", "D. Hydroxyl radical"],
+                correct: 2,
+                explanation: "MPO + H₂O₂ + Cl⁻ → HOCl (potent microbicide). Deficiency → impaired fungal killing, especially Candida."
+            },
+            {
+                section: "Section L: Myeloperoxidase (MPO) Deficiency",
+                question: "Q33. Disseminated candidiasis in MPO deficiency is most likely in patients with:",
+                options: ["A. Hypertension", "B. Diabetes mellitus", "C. Asthma", "D. Hypothyroidism"],
+                correct: 1,
+                explanation: "High glucose impairs alternative killing pathways → systemic Candida risk."
+            },
+            {
+                section: "Section M: Leukocyte Adhesion Deficiency (LAD)",
+                question: "Q34. In LAD type I, the molecular defect involves:",
+                options: ["A. NADPH oxidase", "B. Myeloperoxidase", "C. CD18 (β₂-integrin)", "D. LYST protein"],
+                correct: 2,
+                explanation: "CD18 deficiency → impaired LFA-1/Mac-1 → neutrophils can’t adhere to endothelium."
+            },
+            {
+                section: "Section M: Leukocyte Adhesion Deficiency (LAD)",
+                question: "Q35. A hallmark of LAD is:",
+                options: ["A. Neutropenia", "B. Marked leukocytosis with no tissue migration", "C. Hypersegmented neutrophils", "D. Toxic granulation"],
+                correct: 1,
+                explanation: "WBCs accumulate in blood (can’t extravasate) → leukocytosis >25,000/μL. No pus at infection sites."
+            },
+            {
+                section: "Section M: Leukocyte Adhesion Deficiency (LAD)",
+                question: "Q36. Delayed umbilical cord separation (>30 days) is characteristic of:",
+                options: ["A. CGD", "B. MPO deficiency", "C. LAD", "D. May-Hegglin"],
+                correct: 2,
+                explanation: "Classic neonatal sign of LAD due to impaired neutrophil recruitment."
+            },
+            {
+                section: "Section N: Comparative & Integrative Questions",
+                question: "Q37. Which disorder shows normal leukocyte morphology but abnormal function?",
+                options: ["A. Pelger-Huét", "B. Alder-Reilly", "C. Chronic granulomatous disease", "D. May-Hegglin"],
+                correct: 2,
+                explanation: "CGD: cells look normal, but no oxidative burst. Others have visible morphologic changes."
+            },
+            {
+                section: "Section N: Comparative & Integrative Questions",
+                question: "Q38. Which condition is associated with albinism and giant granules?",
+                options: ["A. Alder-Reilly", "B. Chédiak-Higashi", "C. May-Hegglin", "D. LAD"],
+                correct: 1,
+                explanation: "CHS: albinism + giant lysosomes."
+            },
+            {
+                section: "Section N: Comparative & Integrative Questions",
+                question: "Q39. Which anomaly is autosomal dominant and causes bleeding but no infection risk?",
+                options: ["A. CGD", "B. LAD", "C. May-Hegglin", "D. CHS"],
+                correct: 2,
+                explanation: "May-Hegglin: AD, thrombocytopenia, normal immunity."
+            },
+            {
+                section: "Section N: Comparative & Integrative Questions",
+                question: "Q40. Which finding is most specific for megaloblastic anemia?",
+                options: ["A. Toxic granulation", "B. Döhle bodies", "C. Hypersegmented neutrophils", "D. Pyknotic nuclei"],
+                correct: 2,
+                explanation: "Hypersegmented neutrophils = earliest and most specific sign of B12/folate deficiency."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let score = 0;
+
+        const questionContainer = document.getElementById('question-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const overviewModal = document.getElementById('overview-modal');
+        const questionGrid = document.getElementById('question-grid');
+        const quizContent = document.getElementById('quiz-content');
+        const navBar = document.getElementById('nav-bar');
+        const resultScreen = document.getElementById('result-screen');
+        const finalScore = document.getElementById('final-score');
+
+        function initQuiz() {
+            renderQuestion();
+            renderGrid();
+            updateNavButtons();
+        }
+
+        function renderQuestion() {
+            const data = quizData[currentQuestionIndex];
+            const savedAnswer = userAnswers[currentQuestionIndex];
+            
+            let optionsHtml = '';
+            data.options.forEach((opt, index) => {
+                let className = 'option-btn';
+                let feedbackHtml = '';
+                
+                if (savedAnswer !== null) {
+                    className += ' disabled';
+                    
+                    if (index === data.correct) {
+                        className += ' correct';
+                        feedbackHtml = '<span class="feedback-badge feedback-correct">CORRECT</span>';
+                    } else if (index === savedAnswer) {
+                        className += ' incorrect';
+                        feedbackHtml = '<span class="feedback-badge feedback-incorrect">INCORRECT</span>';
+                    }
+                }
+
+                optionsHtml += `
+                    <button class="${className}" onclick="selectAnswer(${index})" ${savedAnswer !== null ? 'disabled' : ''}>
+                        ${opt}
+                        ${feedbackHtml}
+                    </button>
+                `;
+            });
+
+            const explanationHtml = savedAnswer !== null 
+                ? `<div class="explanation-box" style="display:block;"><strong>📘 Explanation:</strong><br>${data.explanation}</div>` 
+                : `<div class="explanation-box" id="explanation-${currentQuestionIndex}"></div>`;
+
+            questionContainer.innerHTML = `
+                <div class="section-title">${data.section}</div>
+                <div class="question-text">${data.question}</div>
+                <div class="options-grid">${optionsHtml}</div>
+                ${explanationHtml}
+            `;
+
+            renderGrid();
+        }
+
+        function selectAnswer(selectedIndex) {
+            if (userAnswers[currentQuestionIndex] !== null) return; 
+
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            
+            if (selectedIndex === quizData[currentQuestionIndex].correct) {
+                score++;
+            }
+
+            renderQuestion();
+            updateNavButtons();
+            renderGrid();
+        }
+
+        function changeQuestion(direction) {
+            const newIndex = currentQuestionIndex + direction;
+            if (newIndex >= 0 && newIndex < quizData.length) {
+                currentQuestionIndex = newIndex;
+                renderQuestion();
+                updateNavButtons();
+            }
+        }
+
+        function jumpToQuestion(index) {
+            currentQuestionIndex = index;
+            renderQuestion();
+            updateNavButtons();
+            toggleModal();
+        }
+
+        function updateNavButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.innerText = "Finish";
+                nextBtn.onclick = showResults;
+            } else {
+                nextBtn.innerText = "Next";
+                nextBtn.onclick = () => changeQuestion(1);
+            }
+        }
+
+        function toggleModal() {
+            const isVisible = overviewModal.style.display === 'flex';
+            overviewModal.style.display = isVisible ? 'none' : 'flex';
+            renderGrid();
+        }
+
+        function renderGrid() {
+            questionGrid.innerHTML = '';
+            quizData.forEach((q, index) => {
+                const item = document.createElement('div');
+                item.className = 'grid-item';
+                item.innerText = index + 1;
+
+                if (index === currentQuestionIndex) {
+                    item.classList.add('current');
+                } else if (userAnswers[index] !== null) {
+                    item.classList.add('answered');
+                }
+
+                item.onclick = () => jumpToQuestion(index);
+                questionGrid.appendChild(item);
+            });
+        }
+
+        function showResults() {
+            let finalScoreCalc = 0;
+            userAnswers.forEach((ans, idx) => {
+                if (ans === quizData[idx].correct) finalScoreCalc++;
+            });
+
+            finalScore.innerText = `${finalScoreCalc} / ${quizData.length}`;
+
+            quizContent.classList.add('hidden');
+            navBar.classList.add('hidden');
+            resultScreen.style.display = 'flex';
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            score = 0;
+            
+            quizContent.classList.remove('hidden');
+            navBar.classList.remove('hidden');
+            resultScreen.style.display = 'none';
+            
+            initQuiz();
+        }
+
+        initQuiz();
+    </script>
+</body>
+</html>
