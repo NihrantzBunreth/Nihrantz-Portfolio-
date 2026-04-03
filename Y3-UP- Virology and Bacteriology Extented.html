@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General Virology & Bacteriology MCQs</title>
+    <style>
+        /* --- RESET & BASE STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            /* Sterile Background: White with subtle grey lines */
+            background-color: #ffffff;
+            background-image: linear-gradient(#e5e5e5 1px, transparent 1px);
+            background-size: 100% 30px;
+            font-family: Arial, sans-serif; /* Font Restriction: Arial */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- CONTAINER (Clipboard/Tablet Style) --- */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background: #ffffff;
+            /* Medical Blue Border */
+            border: 2px solid #0056b3; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- HEADER --- */
+        header {
+            border-bottom: 2px solid #0056b3;
+            padding: 15px 20px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 18px;
+            color: #0056b3;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-counter {
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        main {
+            padding: 30px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        /* Question Text */
+        .question-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        /* Options List */
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Option Buttons: Rectangular, sharp/slightly rounded */
+        .option-btn {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Hover Effect: Light Blue */
+        .option-btn:hover:not(:disabled) {
+            background-color: #e6f0fa;
+            border-color: #0056b3;
+        }
+
+        /* Disabled State */
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.9;
+        }
+
+        /* Feedback Styles */
+        .feedback-text {
+            font-weight: 900;
+            font-size: 16px;
+            margin-left: 15px;
+            min-width: 80px;
+            text-align: right;
+            display: none;
+        }
+
+        .feedback-correct { color: #008000; }
+        .feedback-incorrect { color: #d32f2f; }
+
+        /* Styling based on correctness */
+        .option-item.correct .option-btn {
+            border-color: #008000;
+            background-color: #f0fff0;
+        }
+        .option-item.incorrect .option-btn {
+            border-color: #d32f2f;
+            background-color: #fff0f0;
+        }
+
+        /* Explanation Box */
+        .explanation-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #0056b3;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .explanation-box h4 {
+            color: #0056b3;
+            margin-bottom: 5px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .explanation-box p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        /* --- NAVIGATION FOOTER --- */
+        .nav-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background-color: #fff;
+            border: 1px solid #0056b3;
+            color: #0056b3;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .nav-btn:disabled {
+            border-color: #ccc;
+            color: #ccc;
+            background-color: #fff;
+            cursor: not-allowed;
+        }
+
+        .view-list-btn {
+            background: none;
+            border: none;
+            color: #0056b3;
+            text-decoration: underline;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        /* --- BRANDING & SOCIAL --- */
+        .branding-section {
+            padding: 10px 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .credit-text {
+            font-style: italic;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: block;
+            color: #333;
+        }
+
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 35px;
+            height: 35px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.2s;
+        }
+
+        .social-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* --- MODAL (PATIENT LIST) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #fff;
+            border: 2px solid #0056b3;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .grid-item {
+            width: 100%;
+            aspect-ratio: 1;
+            border: 1px solid #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+            border-radius: 2px;
+        }
+
+        .grid-item.current {
+            border: 2px solid #0056b3;
+        }
+        .grid-item.answered {
+            background-color: #dbeafe;
+            border-color: #0056b3;
+        }
+        .grid-item.unanswered {
+            background-color: #fff;
+        }
+
+        /* --- RESULT SCREEN --- */
+        .result-screen {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .result-title {
+            font-size: 24px;
+            color: #0056b3;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #0056b3;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .restart-btn {
+            padding: 12px 30px;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        
+        .restart-btn:hover {
+            background-color: #004494;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Tweaks */
+        @media (max-width: 600px) {
+            header { flex-direction: column; gap: 5px; text-align: center; }
+            .nav-footer { flex-direction: column-reverse; gap: 15px; }
+            .nav-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <!-- HEADER -->
+        <header>
+            <h1>General Virology & Bacteriology</h1>
+            <div class="progress-counter">Question <span id="current-q-num">1</span> of <span id="total-q-num">100</span></div>
+        </header>
+
+        <!-- MAIN QUIZ AREA -->
+        <main id="quiz-main">
+            <div class="question-text" id="question-text">
+                Loading question...
+            </div>
+
+            <ul class="options-list" id="options-list">
+                <!-- Options injected via JS -->
+            </ul>
+
+            <div class="explanation-box" id="explanation-box">
+                <h4>Explanation:</h4>
+                <div id="explanation-content"></div>
+            </div>
+        </main>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="result-screen">
+            <h2 class="result-title">Test Result</h2>
+            <p>Your Score:</p>
+            <div class="result-score"><span id="score-val">0</span> / <span id="total-val">0</span></div>
+            <button class="restart-btn" onclick="quizApp.restartQuiz()">Retake Assessment</button>
+        </div>
+
+        <!-- NAVIGATION FOOTER -->
+        <footer class="nav-footer" id="nav-footer">
+            <button class="nav-btn" id="prev-btn" onclick="quizApp.prevQuestion()">Previous</button>
+            <button class="view-list-btn" onclick="quizApp.toggleModal(true)">View List</button>
+            <button class="nav-btn" id="next-btn" onclick="quizApp.nextQuestion()">Next</button>
+        </footer>
+
+        <!-- BRANDING & SOCIAL -->
+        <div class="branding-section">
+            <span class="credit-text">Prepared by BUNRETH Nihrantz</span>
+            <div class="social-bar">
+                <a href="https://www.facebook.com/nihrantz/" target="_blank" class="social-btn" title="Facebook">F</a>
+                <a href="https://www.instagram.com/nihrantz?igsh=ODB2NzhocHgxc2Fw" target="_blank" class="social-btn" title="Instagram">I</a>
+                <a href="https://t.me/Nihrantz" target="_blank" class="social-btn" title="Telegram">T</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL OVERLAY -->
+    <div class="modal-overlay" id="list-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Question Overview</h3>
+                <button class="close-modal" onclick="quizApp.toggleModal(false)">&times;</button>
+            </div>
+            <div class="question-grid" id="question-grid">
+                <!-- Grid items injected via JS -->
+            </div>
+            <button class="nav-btn" onclick="quizApp.toggleModal(false)">Close Overview</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATA: QUESTIONS ---
+        const quizData = [
+            // --- VIROLOGY 1-10 ---
+            { id: 1, text: "Which of the following best describes a fundamental characteristic that distinguishes viruses from living cells?", options: [{id:"A",text:"Presence of both DNA and RNA"},{id:"B",text:"Ability to generate ATP independently"},{id:"C",text:"Obligate intracellular parasitism due to lack of ribosomes"},{id:"D",text:"Binary fission as a mode of reproduction"}], correct: "C", explanation: "Viruses lack ribosomes, metabolic enzymes, and energy-producing machinery, making them obligate intracellular parasites. Cells possess both DNA and RNA, make ATP, and divide via binary fission or mitosis." },
+            { id: 2, text: "A newly discovered virus has an icosahedral capsid, is non-enveloped, and contains double-stranded RNA. Which human pathogen shares this structural profile?", options: [{id:"A",text:"Influenza virus"},{id:"B",text:"Herpes simplex virus"},{id:"C",text:"Rotavirus"},{id:"D",text:"HIV"}], correct: "C", explanation: "Rotavirus is a non-enveloped, dsRNA virus with an icosahedral capsid. Influenza and HIV are enveloped; HSV is dsDNA and enveloped." },
+            { id: 3, text: "According to the Baltimore classification, which viral group requires reverse transcriptase to produce mRNA?", options: [{id:"A",text:"Group III (dsRNA)"},{id:"B",text:"Group IV ((+)ssRNA)"},{id:"C",text:"Group VI ((+)ssRNA-RT)"},{id:"D",text:"Group I (dsDNA)"}], correct: "C", explanation: "Group VI viruses (e.g., HIV) carry (+)ssRNA and reverse transcriptase. They convert RNA → DNA, which integrates into the host genome and is transcribed to mRNA." },
+            { id: 4, text: "Which capsid symmetry is characteristic of the rabies virus nucleocapsid?", options: [{id:"A",text:"Icosahedral"},{id:"B",text:"Complex"},{id:"C",text:"Helical"},{id:"D",text:"Cubic"}], correct: "C", explanation: "Rabies virus has a helical nucleocapsid (spiral tube shape), typical of rhabdoviruses. Its bullet-shaped virion results from this internal helical structure wrapped in an envelope." },
+            { id: 5, text: "Why are naked viruses generally more stable in the environment than enveloped viruses?", options: [{id:"A",text:"They replicate faster"},{id:"B",text:"Their lipid envelope resists desiccation"},{id:"C",text:"Their protein capsid protects against heat, drying, and detergents"},{id:"D",text:"They contain reverse transcriptase"}], correct: "C", explanation: "Naked viruses lack a fragile lipid envelope and rely on a robust protein capsid, allowing survival on surfaces, in water, and through stomach acid. Enveloped viruses are easily disrupted by soap, alcohol, and drying." },
+            { id: 6, text: "Which enzyme is essential for the replication of negative-sense single-stranded RNA viruses but absent in host cells?", options: [{id:"A",text:"DNA polymerase"},{id:"B",text:"Reverse transcriptase"},{id:"C",text:"RNA-dependent RNA polymerase (RdRp)"},{id:"D",text:"Integrase"}], correct: "C", explanation: "(–)ssRNA viruses must carry RdRp in the virion to synthesize (+)mRNA upon entry. Host cells lack RdRp, so the virus supplies it." },
+            { id: 7, text: "A virus isolated from a patient’s stool is resistant to ether treatment and survives boiling for 1 minute. It most likely belongs to which category?", options: [{id:"A",text:"Enveloped DNA virus"},{id:"B",text:"Naked RNA virus"},{id:"C",text:"Enveloped RNA virus"},{id:"D",text:"Retrovirus"}], correct: "B", explanation: "Ether dissolves lipid envelopes, so resistance indicates a naked virus. Heat stability further supports this (e.g., norovirus, poliovirus)." },
+            { id: 8, text: "In the ICTV taxonomy, which level corresponds to “Herpesviridae”?", options: [{id:"A",text:"Order"},{id:"B",text:"Family"},{id:"C",text:"Genus"},{id:"D",text:"Species"}], correct: "B", explanation: "ICTV hierarchy: Order (-virales), Family (-viridae), Subfamily (-virinae), Genus (-virus), Species. Herpesviridae is the family." },
+            { id: 9, text: "Which historical milestone confirmed that viruses could behave like chemicals?", options: [{id:"A",text:"Ivanovsky’s filtration experiment (1892)"},{id:"B",text:"Beijerinck’s “contagious living fluid” concept (1898)"},{id:"C",text:"Stanley’s crystallization of TMV (1935)"},{id:"D",text:"First electron micrograph of influenza (1940s)"}], correct: "C", explanation: "Wendell Stanley crystallized tobacco mosaic virus (TMV), proving viruses could exist as inert particles—blurring the line between life and chemistry." },
+            { id: 10, text: "Which feature is shared by ALL viruses?", options: [{id:"A",text:"Lipid envelope"},{id:"B",text:"Icosahedral symmetry"},{id:"C",text:"Nucleocapsid"},{id:"D",text:"Reverse transcriptase"}], correct: "C", explanation: "All viruses have a nucleocapsid = genome + capsid. Envelopes, symmetry types, and enzymes vary by virus family." },
+            
+            // VIROLOGY 11-20
+            { id: 11, text: "During which phase of the one-step growth curve are no intact virions detectable inside or outside the infected cell?", options: [{id:"A",text:"Latent period"},{id:"B",text:"Eclipse period"},{id:"C",text:"Rise period"},{id:"D",text:"Burst period"}], correct: "B", explanation: "The eclipse period is when the virus is uncoating and synthesizing components—but no complete virions exist yet." },
+            { id: 12, text: "HIV enters CD4+ T cells primarily through which mechanism?", options: [{id:"A",text:"Direct membrane fusion"},{id:"B",text:"Endocytosis followed by pH-dependent uncoating"},{id:"C",text:"Pore formation in the plasma membrane"},{id:"D",text:"Phagocytosis"}], correct: "A", explanation: "Enveloped viruses like HIV use glycoprotein spikes (gp120/gp41) to fuse directly with the host cell membrane, releasing the capsid into the cytoplasm." },
+            { id: 13, text: "Which step in viral replication is targeted by amantadine?", options: [{id:"A",text:"Attachment"},{id:"B",text:"Uncoating"},{id:"C",text:"Genome replication"},{id:"D",text:"Budding"}], correct: "B", explanation: "Amantadine blocks the M2 ion channel of influenza A, preventing acidification and uncoating in endosomes." },
+            { id: 14, text: "What determines the tissue tropism of a virus?", options: [{id:"A",text:"Size of the viral genome"},{id:"B",text:"Presence of specific host cell surface receptors"},{id:"C",text:"Stability of the capsid"},{id:"D",text:"Type of polymerase used"}], correct: "B", explanation: "Tropism is dictated by receptor compatibility (e.g., SARS-CoV-2 binds ACE2; HIV binds CD4/CCR5). Without the right receptor, the virus cannot attach." },
+            { id: 15, text: "Which virus replicates its DNA genome in the host cell cytoplasm rather than the nucleus?", options: [{id:"A",text:"Adenovirus"},{id:"B",text:"Herpes simplex virus"},{id:"C",text:"Poxvirus"},{id:"D",text:"Papillomavirus"}], correct: "C", explanation: "Poxviruses carry their own DNA-dependent RNA polymerase and replicate entirely in the cytoplasm—unlike most DNA viruses that require nuclear machinery." },
+            { id: 16, text: "The burst size of a virus refers to:", options: [{id:"A",text:"The time between infection and lysis"},{id:"B",text:"The number of virions released per infected cell"},{id:"C",text:"The diameter of the viral capsid"},{id:"D",text:"The rate of antigenic drift"}], correct: "B", explanation: "Burst size = total infectious virions produced by one cell before lysis." },
+            { id: 17, text: "Persistent viral infections differ from latent infections in that persistent infections:", options: [{id:"A",text:"Involve integration of viral DNA into host chromosomes"},{id:"B",text:"Produce no viral particles over time"},{id:"C",text:"Continuously release infectious virions without immediate cell death"},{id:"D",text:"Occur only in neurons"}], correct: "C", explanation: "Persistent infections (e.g., HCV, HIV chronic phase) involve ongoing low-level replication and virion release. Latent infections (e.g., HSV) have no virion production until reactivation." },
+            { id: 18, text: "Which antiviral drug class inhibits the final cleavage of viral polyproteins during maturation?", options: [{id:"A",text:"Neuraminidase inhibitors"},{id:"B",text:"Protease inhibitors"},{id:"C",text:"Nucleoside analogs"},{id:"D",text:"Fusion inhibitors"}], correct: "B", explanation: "Protease inhibitors (e.g., for HIV) block the cleavage of Gag-Pol polyproteins into functional units, yielding non-infectious immature virions." },
+            { id: 19, text: "Non-enveloped viruses like poliovirus are typically released from host cells by:", options: [{id:"A",text:"Budding"},{id:"B",text:"Exocytosis"},{id:"C",text:"Lysis"},{id:"D",text:"Apoptosis without rupture"}], correct: "C", explanation: "Naked viruses accumulate intracellularly until the cell bursts (lysis), releasing all virions at once. Enveloped viruses use budding to exit gradually." },
+            { id: 20, text: "Retroviruses require which host process to complete their lifecycle?", options: [{id:"A",text:"Ribosomal translation in the cytoplasm"},{id:"B",text:"Integration into host chromosomal DNA"},{id:"C",text:"Endosomal acidification"},{id:"D",text:"Ciliary transport in respiratory epithelium"}], correct: "B", explanation: "After reverse transcription, HIV DNA integrates into host DNA via integrase, forming a provirus that is transcribed lifelong—even during latency." },
+
+            // VIROLOGY 21-30
+            { id: 21, text: "A patient presents with fever, confusion, and seizures. MRI shows inflammation in the temporal lobe. Which virus is the most likely cause of this sporadic fatal encephalitis?", options: [{id:"A",text:"West Nile Virus"},{id:"B",text:"Herpes Simplex Virus (HSV-1)"},{id:"C",text:"Rabies Virus"},{id:"D",text:"Japanese Encephalitis Virus"}], correct: "B", explanation: "HSV-1 is the leading cause of sporadic fatal viral encephalitis, typically affecting the temporal lobes. It requires immediate IV acyclovir treatment." },
+            { id: 22, text: "Which component of the host immune system is primarily responsible for clearing intracellular viral infections by killing infected cells?", options: [{id:"A",text:"IgG antibodies"},{id:"B",text:"CD8+ Cytotoxic T Cells"},{id:"C",text:"Neutrophils"},{id:"D",text:"Complement system"}], correct: "B", explanation: "CD8+ T cells (cytotoxic lymphocytes) recognize viral peptides presented on MHC Class I molecules and induce apoptosis in infected cells." },
+            { id: 23, text: "In the context of viral pathogenesis, what does \"Antigenic Drift\" refer to?", options: [{id:"A",text:"Major reassortment of genome segments causing pandemics"},{id:"B",text:"Small point mutations in surface proteins allowing evasion of existing immunity"},{id:"C",text:"The integration of viral DNA into the host genome"},{id:"D",text:"The transition from lytic to latent infection"}], correct: "B", explanation: "Antigenic drift involves minor mutations (point mutations) in genes encoding surface antigens (like Hemagglutinin). This allows the virus to partially escape pre-existing antibodies." },
+            { id: 24, text: "Which of the following best describes the mechanism of \"Cytopathic Effects\" (CPE)?", options: [{id:"A",text:"The host cell's immune response destroying the virus without cell death"},{id:"B",text:"Direct damage to the cell caused by viral replication or viral protein expression"},{id:"C",text:"The virus hiding within the nucleus without producing new virions"},{id:"D",text:"The formation of a protective biofilm around the virus"}], correct: "B", explanation: "CPE refers to visible structural changes in host cells due to viral infection, such as rounding, syncytia formation (fusion), inclusion bodies, or cell lysis." },
+            { id: 25, text: "A mosquito bites a human who has recovered from a previous Dengue infection (Type 1). The human is then bitten by a mosquito carrying Dengue Type 2. Why might the second infection be more severe?", options: [{id:"A",text:"The virus mutates to become more virulent immediately"},{id:"B",text:"Pre-existing non-neutralizing antibodies facilitate viral entry via Fc receptors (ADE)"},{id:"C",text:"The immune system becomes completely suppressed"},{id:"D",text:"The mosquito vector becomes more efficient at transmission"}], correct: "B", explanation: "This is Antibody-Dependent Enhancement (ADE). Antibodies from the first infection bind to the new serotype but fail to neutralize it. Instead, they act as a bridge, helping the virus enter macrophages via Fc receptors." },
+            { id: 26, text: "Which barrier is the first line of defense against respiratory viruses like influenza?", options: [{id:"A",text:"Systemic IgG production"},{id:"B",text:"Mucociliary escalator and secretory IgA"},{id:"C",text:"CD4+ Helper T cells"},{id:"D",text:"Fever induction"}], correct: "B", explanation: "The mucociliary escalator physically traps and sweeps away pathogens, while secretory IgA (found in mucus) neutralizes viruses before they attach to epithelial cells." },
+            { id: 27, text: "What is the primary reason why Hepatitis B virus (HBV) is difficult to cure completely?", options: [{id:"A",text:"It replicates too fast for drugs to catch up"},{id:"B",text:"It forms a stable covalently closed circular DNA (cccDNA) reservoir in the nucleus"},{id:"C",text:"It lacks a reverse transcriptase enzyme"},{id:"D",text:"It only infects red blood cells"}], correct: "B", explanation: "HBV converts its relaxed circular DNA into cccDNA, which persists in the nucleus of hepatocytes even when viral replication is suppressed. Current antivirals cannot easily eliminate cccDNA." },
+            { id: 28, text: "Which clinical outcome describes a situation where the virus enters a cell but fails to replicate due to a lack of necessary host machinery?", options: [{id:"A",text:"Lytic infection"},{id:"B",text:"Abortive infection"},{id:"C",text:"Persistent infection"},{id:"D",text:"Latent infection"}], correct: "B", explanation: "In an abortive infection, the virus may attach and enter (susceptible) but cannot complete its lifecycle because the cell lacks specific factors (non-permissive)." },
+            { id: 29, text: "During the acute phase of a viral infection, which diagnostic test is most appropriate if the goal is to detect the presence of the virus itself?", options: [{id:"A",text:"IgG Serology"},{id:"B",text:"PCR (Polymerase Chain Reaction)"},{id:"C",text:"Western Blot"},{id:"D",text:"Passive hemagglutination"}], correct: "B", explanation: "PCR detects viral genetic material (DNA/RNA) and is the gold standard for diagnosing active infections during the acute phase when viral loads are high." },
+            { id: 30, text: "Which type of interferon is primarily produced by virus-infected cells to signal neighboring cells to enter an antiviral state?", options: [{id:"A",text:"Type II (Interferon-gamma)"},{id:"B",text:"Type I (Interferon-alpha/beta)"},{id:"C",text:"Type III (Interferon-lambda)"},{id:"D",text:"Interleukin-1"}], correct: "B", explanation: "Type I interferons (IFN-α and IFN-β) are the primary alarm signals released by infected cells. They bind to receptors on nearby uninfected cells, inducing the expression of hundreds of antiviral genes." },
+
+            // VIROLOGY 31-40
+            { id: 31, text: "A patient returns from travel with fever and jaundice. To distinguish between acute Hepatitis A and past exposure, which test is definitive?", options: [{id:"A",text:"Anti-HAV IgG"},{id:"B",text:"Anti-HAV IgM"},{id:"C",text:"HAV RNA PCR"},{id:"D",text:"Liver biopsy"}], correct: "B", explanation: "Anti-HAV IgM indicates a recent or acute infection. Anti-HAV IgG indicates past infection or vaccination." },
+            { id: 32, text: "Why is the Tzanck smear considered less specific than PCR for diagnosing Herpes Simplex Virus (HSV)?", options: [{id:"A",text:"It cannot detect the virus in neurons"},{id:"B",text:"It cannot distinguish between HSV and Varicella-Zoster Virus (VZV)"},{id:"C",text:"It requires a long incubation period"},{id:"D",text:"It only works for enveloped viruses"}], correct: "B", explanation: "The Tzanck smear looks for multinucleated giant cells, which are characteristic of both HSV and VZV infections. It cannot differentiate between the two types." },
+            { id: 33, text: "In Dengue diagnosis, the NS1 antigen test is most useful during which timeframe?", options: [{id:"A",text:"Days 1–5 (Early acute phase)"},{id:"B",text:"Days 7–10 (Recovery phase)"},{id:"C",text:"Months after infection"},{id:"D",text:"Only during chronic infection"}], correct: "A", explanation: "The NS1 antigen is present in the blood during the early viremic phase (days 1–5) before antibodies appear." },
+            { id: 34, text: "Which laboratory technique is considered the \"Gold Standard\" for confirming HIV infection after a positive ELISA screen?", options: [{id:"A",text:"Rapid lateral flow test"},{id:"B",text:"Western Blot"},{id:"C",text:"Viral Culture"},{id:"D",text:"CD4 Count"}], correct: "B", explanation: "Historically, Western Blot was the confirmatory test to rule out false positives from ELISA by detecting antibodies against specific viral proteins." },
+            { id: 35, text: "A researcher wants to determine the exact genetic sequence of a novel SARS-CoV-2 variant to track its spread. Which method is best?", options: [{id:"A",text:"RT-PCR"},{id:"B",text:"Hemagglutination Assay"},{id:"C",text:"Whole Genome Sequencing"},{id:"D",text:"Electron Microscopy"}], correct: "C", explanation: "Whole genome sequencing reads the entire genetic code of the virus, allowing for precise identification of mutations and variants." },
+            { id: 36, text: "Which test relies on the ability of certain viruses to clump red blood cells (RBCs)?", options: [{id:"A",text:"ELISA"},{id:"B",text:"Hemagglutination (HA)"},{id:"C",text:"Neutralization Test"},{id:"D",text:"Plaque Assay"}], correct: "B", explanation: "Some viruses (e.g., Influenza, Measles) have surface proteins that bind to sialic acid receptors on RBCs, causing them to agglutinate (clump)." },
+            { id: 37, text: "For a patient with suspected meningitis caused by Enterovirus, what is the preferred specimen for PCR testing?", options: [{id:"A",text:"Blood serum"},{id:"B",text:"Throat swab"},{id:"C",text:"Cerebrospinal Fluid (CSF)"},{id:"D",text:"Urine"}], correct: "C", explanation: "CSF is the gold standard specimen for diagnosing CNS infections like viral meningitis. It provides direct evidence of central nervous system involvement." },
+            { id: 38, text: "Why is virus culture rarely used as a first-line diagnostic tool in modern clinical settings?", options: [{id:"A",text:"It is too expensive"},{id:"B",text:"It is slow (days to weeks) and many viruses do not grow in culture"},{id:"C",text:"It cannot detect live viruses"},{id:"D",text:"It requires electron microscopy equipment"}], correct: "B", explanation: "Virus culture is the \"gold standard\" for viability but is labor-intensive, slow, and many clinically relevant viruses do not grow well in standard cell lines." },
+            { id: 39, text: "Which test result would indicate that a patient has been vaccinated against Hepatitis B rather than naturally infected?", options: [{id:"A",text:"HBsAg positive"},{id:"B",text:"Anti-HBc IgM positive"},{id:"C",text:"Anti-HBs positive AND Anti-HBc negative"},{id:"D",text:"Anti-HBs negative"}], correct: "C", explanation: "Vaccination induces Anti-HBs (surface antibody) but does not introduce the core antigen, so Anti-HBc will be negative. Natural infection results in both Anti-HBs and Anti-HBc positivity." },
+            { id: 40, text: "What is the primary advantage of Quantitative PCR (qPCR) over standard PCR in managing HIV patients?", options: [{id:"A",text:"It identifies the viral species"},{id:"B",text:"It measures the viral load (amount of virus) to monitor treatment efficacy"},{id:"C",text:"It distinguishes between drug-resistant strains automatically"},{id:"D",text:"It is cheaper and faster"}], correct: "B", explanation: "qPCR allows for the quantification of viral RNA copies per milliliter. This \"viral load\" is critical for monitoring how well antiretroviral therapy is working." },
+
+            // VIROLOGY 41-50
+            { id: 41, text: "A pregnant woman in her third trimester contracts Hepatitis E. What is the major risk associated with this infection?", options: [{id:"A",text:"Congenital malformations (birth defects)"},{id:"B",text:"High mortality rate (fulminant hepatitis)"},{id:"C",text:"Chronic liver failure"},{id:"D",text:"Transmission to the fetus is impossible"}], correct: "B", explanation: "Hepatitis E infection in pregnant women (especially in the third trimester) carries a very high mortality rate (up to 20–30%) due to fulminant hepatic failure." },
+            { id: 42, text: "Which statement about Hepatitis D Virus (HDV) is true?", options: [{id:"A",text:"It can replicate independently of other viruses"},{id:"B",text:"It causes chronic infection in 90% of cases regardless of HBV status"},{id:"C",text:"It requires the Hepatitis B Surface Antigen (HBsAg) to form its envelope"},{id:"D",text:"There is a specific vaccine for HDV alone"}], correct: "C", explanation: "HDV is a defective satellite virus that lacks the genes to make its own envelope. It must \"steal\" the HBsAg coat from Hepatitis B to assemble infectious particles." },
+            { id: 43, text: "Which influenza virus protein acts as the \"scissors\" to release newly formed virions from the host cell surface?", options: [{id:"A",text:"Hemagglutinin (HA)"},{id:"B",text:"Neuraminidase (NA)"},{id:"C",text:"Matrix Protein (M1)"},{id:"D",text:"Polymerase (PB1)"}], correct: "B", explanation: "Neuraminidase cleaves sialic acid residues on the host cell surface, preventing the newly formed virus from sticking back to the cell or to other virions, thus allowing release." },
+            { id: 44, text: "A patient presents with severe joint pain (\"breakbone fever\") and rash after traveling to Southeast Asia. Which vector is most likely responsible?", options: [{id:"A",text:"Anopheles mosquito"},{id:"B",text:"Aedes aegypti mosquito"},{id:"C",text:"Ixodes tick"},{id:"D",text:"Sandfly"}], correct: "B", explanation: "Chikungunya and Dengue are transmitted by Aedes aegypti mosquitoes. Anopheles transmits malaria, Ixodes transmits Lyme disease, and sandflies transmit Leishmaniasis." },
+            { id: 45, text: "Why should NSAIDs (like ibuprofen or aspirin) be avoided in the treatment of suspected Dengue fever?", options: [{id:"A",text:"They cause kidney failure"},{id:"B",text:"They increase the risk of bleeding due to thrombocytopenia"},{id:"C",text:"They interfere with the effectiveness of acetaminophen"},{id:"D",text:"They trigger antigenic shift in the virus"}], correct: "B", explanation: "Dengue often causes low platelet counts (thrombocytopenia) and vascular leakage. NSAIDs inhibit platelet aggregation and can worsen bleeding risks." },
+            { id: 46, text: "Which feature distinguishes Influenza A from Influenza B regarding pandemic potential?", options: [{id:"A",text:"Influenza A infects humans only; Influenza B infects birds"},{id:"B",text:"Influenza A has animal reservoirs (birds, pigs) allowing for antigenic shift"},{id:"C",text:"Influenza B is an RNA virus; Influenza A is a DNA virus"},{id:"D",text:"Influenza A does not mutate"}], correct: "B", explanation: "Influenza A infects multiple species (birds, pigs, humans), allowing gene segment reassortment (antigenic shift) which can create novel strains with pandemic potential." },
+            { id: 47, text: "In the lifecycle of HSV, where does the virus establish latency?", options: [{id:"A",text:"Epithelial cells of the skin"},{id:"B",text:"Sensory nerve ganglia (Trigeminal or Sacral)"},{id:"C",text:"Lymph nodes"},{id:"D",text:"Liver hepatocytes"}], correct: "B", explanation: "After primary infection, HSV travels retrograde along sensory nerves to the ganglia (Trigeminal for HSV-1, Sacral for HSV-2), where it establishes lifelong latency." },
+            { id: 48, text: "Which of the following is a key difference between Hepatitis B (HBV) and Hepatitis C (HCV) regarding treatment?", options: [{id:"A",text:"HBV is curable with DAAs; HCV is managed with nucleoside analogs"},{id:"B",text:"HBV is rarely chronic; HCV is always chronic"},{id:"C",text:"HCV is highly curable (>95%) with Direct-Acting Antivirals (DAAs); HBV is usually managed long-term"},{id:"D",text:"Both are cured by the same vaccine"}], correct: "C", explanation: "HCV can now be cured in >95% of cases with oral DAAs. HBV currently has no cure (due to cccDNA) and requires long-term suppressive therapy." },
+            { id: 49, text: "What is the primary mode of transmission for Hepatitis G (Human Pegivirus)?", options: [{id:"A",text:"Fecal-oral route"},{id:"B",text:"Vector-borne (mosquito)"},{id:"C",text:"Bloodborne (IV drug use, transfusion)"},{id:"D",text:"Respiratory droplets"}], correct: "C", explanation: "Hepatitis G (Pegivirus) is primarily bloodborne. However, unlike other hepatitis viruses, it is considered harmless and is not associated with liver disease." },
+            { id: 50, text: "A student asks why the flu vaccine must be updated every year. What is the best explanation based on viral evolution?", options: [{id:"A",text:"The virus mutates rapidly (drift), changing surface antigens enough to evade prior immunity"},{id:"B",text:"The vaccine loses potency over time in storage"},{id:"C",text:"The host immune system forgets the virus after one year"},{id:"D",text:"The virus changes its genome from RNA to DNA annually"}], correct: "A", explanation: "Influenza viruses undergo continuous antigenic drift (mutations in HA/NA genes). These small changes allow the virus to escape recognition by antibodies generated from previous infections or vaccinations." },
+
+            // BACTERIOLOGY 1-10
+            { id: 51, text: "Which structural feature is unique to Gram-negative bacteria and contributes to septic shock in systemic infections?", options: [{id:"A",text:"Thick peptidoglycan layer"},{id:"B",text:"Teichoic acids"},{id:"C",text:"Lipopolysaccharide (LPS) in the outer membrane"},{id:"D",text:"Protein A"}], correct: "C", explanation: "LPS (specifically its Lipid A component) is an endotoxin found only in the outer membrane of Gram-negative bacteria. It triggers massive cytokine release, leading to fever, hypotension, and septic shock." },
+            { id: 52, text: "A bacterium lacks a nucleus, mitochondria, and membrane-bound organelles but can synthesize its own ATP and replicate independently. It is best classified as a:", options: [{id:"A",text:"Virus"},{id:"B",text:"Fungus"},{id:"C",text:"Prokaryote"},{id:"D",text:"Protozoan"}], correct: "C", explanation: "Prokaryotes (bacteria) are living cells without a nucleus or organelles but possess metabolic machinery for energy production and binary fission." },
+            { id: 53, text: "Which bacterial structure is most directly responsible for resistance to phagocytosis in Streptococcus pneumoniae?", options: [{id:"A",text:"Pili"},{id:"B",text:"Flagella"},{id:"C",text:"Capsule"},{id:"D",text:"Peptidoglycan"}], correct: "C", explanation: "The polysaccharide capsule is anti-phagocytic—it prevents opsonization and engulfment by neutrophils and macrophages." },
+            { id: 54, text: "Endospores produced by Bacillus anthracis are highly resistant to all of the following EXCEPT:", options: [{id:"A",text:"Boiling water"},{id:"B",text:"UV radiation"},{id:"C",text:"Autoclaving at 121°C for 15 minutes"},{id:"D",text:"Desiccation"}], correct: "C", explanation: "Only autoclaving (steam under pressure at 121°C for ≥15 min) reliably kills endospores. Boiling, drying, and radiation may not destroy them." },
+            { id: 55, text: "Which antibiotic class specifically targets the 30S ribosomal subunit in bacteria?", options: [{id:"A",text:"Macrolides"},{id:"B",text:"Tetracyclines"},{id:"C",text:"Vancomycin"},{id:"D",text:"Polymyxins"}], correct: "B", explanation: "Tetracyclines (and aminoglycosides) bind the 30S subunit to block protein synthesis. Macrolides target 50S; vancomycin inhibits cell wall synthesis; polymyxins disrupt membranes." },
+            { id: 56, text: "The presence of porins is a characteristic feature of which bacterial group?", options: [{id:"A",text:"Gram-positive cocci"},{id:"B",text:"Acid-fast bacilli"},{id:"C",text:"Gram-negative rods"},{id:"D",text:"Mycoplasma"}], correct: "C", explanation: "Porins are channel proteins in the outer membrane of Gram-negative bacteria that allow passive diffusion of small molecules (including some antibiotics like penicillins)." },
+            { id: 57, text: "Plasmids that carry multiple antibiotic resistance genes are called:", options: [{id:"A",text:"F plasmids"},{id:"B",text:"R plasmids"},{id:"C",text:"Virulence plasmids"},{id:"D",text:"Transposons"}], correct: "B", explanation: "R (resistance) plasmids harbor genes encoding enzymes that inactivate antibiotics (e.g., β-lactamases)." },
+            { id: 58, text: "Which component of the Gram-positive cell wall anchors it to the cytoplasmic membrane?", options: [{id:"A",text:"Lipopolysaccharide"},{id:"B",text:"Lipoteichoic acid"},{id:"C",text:"O-antigen"},{id:"D",text:"Peptidoglycan alone"}], correct: "B", explanation: "Lipoteichoic acid embeds in the membrane and extends through the thick peptidoglycan, providing structural stability and contributing to inflammation." },
+            { id: 59, text: "A bacterial colony appears smooth and mucoid on agar. This morphology most likely indicates the presence of a:", options: [{id:"A",text:"Flagellum"},{id:"B",text:"Sex pilus"},{id:"C",text:"Capsule"},{id:"D",text:"Endospore"}], correct: "C", explanation: "Capsules create a glistening, smooth (\"S\") colony appearance due to their hydrated polysaccharide matrix." },
+            { id: 60, text: "Which statement about bacterial ribosomes is TRUE?", options: [{id:"A",text:"They are 80S, like human ribosomes"},{id:"B",text:"They are composed of 50S and 30S subunits"},{id:"C",text:"They are insensitive to antibiotics"},{id:"D",text:"They are located inside a nucleus"}], correct: "B", explanation: "Bacterial ribosomes are 70S (50S + 30S), distinct from human 80S ribosomes. This difference allows selective targeting by antibiotics." },
+
+            // BACTERIOLOGY 11-20
+            { id: 61, text: "A patient with gas gangrene is infected with Clostridium perfringens. This organism is best described as a(n):", options: [{id:"A",text:"Obligate aerobe"},{id:"B",text:"Facultative anaerobe"},{id:"C",text:"Obligate anaerobe"},{id:"D",text:"Microaerophile"}], correct: "C", explanation: "Clostridium species are obligate anaerobes—they lack superoxide dismutase and catalase, so oxygen is toxic." },
+            { id: 62, text: "During which phase of the bacterial growth curve are cells most susceptible to β-lactam antibiotics?", options: [{id:"A",text:"Lag phase"},{id:"B",text:"Log (exponential) phase"},{id:"C",text:"Stationary phase"},{id:"D",text:"Death phase"}], correct: "B", explanation: "β-lactams inhibit peptidoglycan cross-linking during active cell wall synthesis, which occurs primarily during rapid division in the log phase." },
+            { id: 63, text: "Human pathogens are typically classified as:", options: [{id:"A",text:"Photoautotrophs"},{id:"B",text:"Chemoorganotrophs"},{id:"C",text:"Lithoautotrophs"},{id:"D",text:"Photolithotrophs"}], correct: "B", explanation: "Chemoorganotrophs obtain energy from organic compounds (e.g., glucose, amino acids)—abundant in the human body." },
+            { id: 64, text: "Which enzyme allows Staphylococcus aureus to survive in aerobic environments?", options: [{id:"A",text:"DNA gyrase"},{id:"B",text:"Reverse transcriptase"},{id:"C",text:"Catalase"},{id:"D",text:"Neuraminidase"}], correct: "C", explanation: "Catalase breaks down hydrogen peroxide (a toxic oxygen byproduct) into water and oxygen. S. aureus is catalase-positive." },
+            { id: 65, text: "Fastidious bacteria like Haemophilus influenzae require which growth factors in culture media?", options: [{id:"A",text:"Glucose and salt"},{id:"B",text:"X factor (hemin) and V factor (NAD)"},{id:"C",text:"Iron and magnesium"},{id:"D",text:"Lactose and bile salts"}], correct: "B", explanation: "H. influenzae needs hemin (X factor) for cytochromes and NAD (V factor) for metabolism. Chocolate agar provides both." },
+            { id: 66, text: "The generation time of E. coli is approximately 20 minutes under optimal conditions. How many cells will result from one cell after 2 hours?", options: [{id:"A",text:"64"},{id:"B",text:"128"},{id:"C",text:"256"},{id:"D",text:"512"}], correct: "A", explanation: "2 hours = 120 min → 120/20 = 6 generations. Final count = 1 × 2⁶ = 64 cells." },
+            { id: 67, text: "Which physical condition would most likely inhibit the growth of Lactobacillus species?", options: [{id:"A",text:"pH 4.0"},{id:"B",text:"pH 7.0"},{id:"C",text:"High salt concentration"},{id:"D",text:"Anaerobic environment"}], correct: "B", explanation: "Lactobacillus is an acidophile—it thrives in acidic environments (e.g., vagina, yogurt). Neutral pH (7.0) is suboptimal." },
+            { id: 68, text: "In fermentation, the final electron acceptor is:", options: [{id:"A",text:"Oxygen"},{id:"B",text:"Nitrate"},{id:"C",text:"An organic molecule (e.g., pyruvate)"},{id:"D",text:"Sulfate"}], correct: "C", explanation: "Fermentation uses an organic molecule (like pyruvate or acetaldehyde) as the final electron acceptor, yielding minimal ATP compared to respiration." },
+            { id: 69, text: "Which nutrient is considered a micronutrient required for bacterial enzyme function?", options: [{id:"A",text:"Carbon"},{id:"B",text:"Nitrogen"},{id:"C",text:"Iron"},{id:"D",text:"Phosphorus"}], correct: "C", explanation: "Iron is a trace element (micronutrient) essential for cytochromes and catalase. Macronutrients (C, N, P, S) are needed in larger amounts." },
+            { id: 70, text: "What is the primary purpose of the stationary phase in bacterial growth?", options: [{id:"A",text:"Rapid cell division"},{id:"B",text:"Sporulation and antibiotic production"},{id:"C",text:"DNA replication initiation"},{id:"D",text:"Flagellar synthesis"}], correct: "B", explanation: "In stationary phase, nutrient depletion and waste accumulation halt net growth. Some bacteria form spores (Bacillus) or produce secondary metabolites like antibiotics (Streptomyces)." },
+
+            // BACTERIOLOGY 21-30
+            { id: 71, text: "A patient with Neisseria gonorrhoeae infection develops resistance to penicillin after acquiring a plasmid from another bacterium. This mechanism of gene transfer is known as:", options: [{id:"A",text:"Transformation"},{id:"B",text:"Transduction"},{id:"C",text:"Conjugation"},{id:"D",text:"Transposition"}], correct: "C", explanation: "Conjugation involves the direct transfer of DNA (usually plasmids) between bacteria via physical contact (sex pilus)." },
+            { id: 72, text: "Which process describes the uptake of \"naked\" DNA fragments from the environment by a competent bacterium?", options: [{id:"A",text:"Conjugation"},{id:"B",text:"Transformation"},{id:"C",text:"Generalized Transduction"},{id:"D",text:"Specialized Transduction"}], correct: "B", explanation: "Transformation occurs when bacteria take up free-floating DNA released by lysed cells." },
+            { id: 73, text: "Why is combination antibiotic therapy (using two drugs) effective in preventing resistance in tuberculosis treatment?", options: [{id:"A",text:"It doubles the speed of bacterial killing"},{id:"B",text:"The probability of simultaneous mutations for both drugs is extremely low"},{id:"C",text:"One drug activates the other"},{id:"D",text:"It prevents the bacteria from forming biofilms"}], correct: "B", explanation: "The chance of a bacterium mutating to resist Drug A AND Drug B simultaneously is negligible, preventing resistance." },
+            { id: 74, text: "A bacteriophage accidentally packages a fragment of host bacterial DNA instead of viral DNA and transfers it to a new host. This is called:", options: [{id:"A",text:"Generalized Transduction"},{id:"B",text:"Specialized Transduction"},{id:"C",text:"Lysogenic Conversion"},{id:"D",text:"Conjugation"}], correct: "A", explanation: "In generalized transduction, any random piece of bacterial DNA can be transferred because the phage makes a packaging error during assembly." },
+            { id: 75, text: "What is the role of Transposons (\"jumping genes\") in multidrug resistance?", options: [{id:"A",text:"They replicate the entire bacterial chromosome"},{id:"B",text:"They move resistance genes from the chromosome to plasmids"},{id:"C",text:"They destroy antibiotic molecules directly"},{id:"D",text:"They inhibit bacterial conjugation"}], correct: "B", explanation: "Transposons can \"jump\" within the genome. When they carry resistance genes and insert themselves into a plasmid, that plasmid can then be easily shared with other bacteria via conjugation." },
+            { id: 76, text: "Which type of genetic variation is NOT heritable?", options: [{id:"A",text:"Point mutation in chromosomal DNA"},{id:"B",text:"Acquisition of an R-plasmid"},{id:"C",text:"Induction of enzyme production in response to substrate presence"},{id:"D",text:"Integration of a prophage"}], correct: "C", explanation: "This is phenotypic variation (adaptation), not genotypic. The bacteria temporarily produce more enzymes to handle a specific nutrient but do not pass this trait to offspring if the nutrient is removed." },
+            { id: 77, text: "Streptococcus pneumoniae becomes virulent after taking up DNA from a dead, encapsulated strain. This classic experiment demonstrated:", options: [{id:"A",text:"Conjugation"},{id:"B",text:"Transformation"},{id:"C",text:"Transduction"},{id:"D",text:"Binary Fission"}], correct: "B", explanation: "Griffith’s experiment showed that non-virulent (Rough) bacteria could become virulent (Smooth) by taking up DNA from heat-killed virulent bacteria." },
+            { id: 78, text: "Which enzyme is required for a bacterium to integrate foreign DNA into its chromosome during transformation?", options: [{id:"A",text:"DNA Polymerase"},{id:"B",text:"Recombinase"},{id:"C",text:"RNA Polymerase"},{id:"D",text:"Ligase"}], correct: "B", explanation: "Recombinases facilitate homologous recombination, allowing the incoming linear DNA fragment to replace or insert into the host’s circular chromosome." },
+            { id: 79, text: "A \"Superbug\" like MRSA often acquires resistance via the mecA gene located on a mobile genetic element called:", options: [{id:"A",text:"A transposon"},{id:"B",text:"Staphylococcal Cassette Chromosome mec (SCCmec)"},{id:"C",text:"A bacteriophage"},{id:"D",text:"A ribosome"}], correct: "B", explanation: "SCCmec is a large mobile genetic element that carries the mecA gene (encoding altered penicillin-binding protein PBP2a)." },
+            { id: 80, text: "Why do bacteria remain haploid, and how does this affect mutation expression?", options: [{id:"A",text:"They have two copies of each gene, masking mutations"},{id:"B",text:"They have one copy of each gene, so mutations are expressed immediately"},{id:"C",text:"They do not undergo mutation"},{id:"D",text:"They repair all mutations instantly"}], correct: "B", explanation: "Bacteria are haploid (one chromosome). Unlike diploid eukaryotes, there is no second allele to mask a recessive mutation." },
+
+            // BACTERIOLOGY 31-40
+            { id: 81, text: "Which toxin is responsible for the fever, hypotension, and disseminated intravascular coagulation (DIC) seen in Gram-negative sepsis?", options: [{id:"A",text:"Exotoxin A"},{id:"B",text:"Endotoxin (Lipid A)"},{id:"C",text:"Tetanus Toxin"},{id:"D",text:"Botulinum Toxin"}], correct: "B", explanation: "Endotoxin (Lipid A component of LPS) triggers massive release of cytokines (TNF-α, IL-1, IL-6) from macrophages, leading to systemic inflammation, vascular collapse (shock), and clotting abnormalities." },
+            { id: 82, text: "Clostridium tetani produces a toxin that causes muscle spasms. This toxin is classified as a(n):", options: [{id:"A",text:"Endotoxin"},{id:"B",text:"Exotoxin (Neurotoxin)"},{id:"C",text:"Enterotoxin"},{id:"D",text:"Cytotoxin"}], correct: "B", explanation: "Tetanus toxin (tetanospasmin) is an exotoxin produced by Gram-positive Clostridium. It travels retrograde up nerves to the CNS, blocking inhibitory neurotransmitters." },
+            { id: 83, text: "What is the primary function of Coagulase produced by Staphylococcus aureus?", options: [{id:"A",text:"Dissolves blood clots to spread infection"},{id:"B",text:"Clots plasma to hide bacteria from immune cells"},{id:"C",text:"Breaks down hyaluronic acid in connective tissue"},{id:"D",text:"Neutralizes stomach acid"}], correct: "B", explanation: "Coagulase converts fibrinogen to fibrin, creating a clot around the bacteria. This \"fibrin coat\" protects S. aureus from phagocytosis." },
+            { id: 84, text: "Which host defense mechanism is primarily responsible for killing intracellular pathogens like Mycobacterium tuberculosis?", options: [{id:"A",text:"Antibody neutralization"},{id:"B",text:"Cell-mediated immunity (Activated Macrophages via IFN-γ)"},{id:"C",text:"Complement lysis"},{id:"D",text:"Mucociliary clearance"}], correct: "B", explanation: "M. tuberculosis survives inside macrophages. Control requires Th1 cells to release Interferon-gamma (IFN-γ), which activates macrophages to kill the ingested bacteria." },
+            { id: 85, text: "A patient receives a vaccine containing inactivated tetanus toxin. This vaccine induces immunity against:", options: [{id:"A",text:"Endotoxin"},{id:"B",text:"Exotoxin (Toxoid)"},{id:"C",text:"Capsular polysaccharide"},{id:"D",text:"Flagellar antigen"}], correct: "B", explanation: "Tetanus toxin is an exotoxin. When chemically inactivated, it becomes a \"toxoid,\" which retains immunogenicity but loses toxicity." },
+            { id: 86, text: "Which cell type acts as the \"bridge\" between innate and adaptive immunity by presenting antigens to T-cells?", options: [{id:"A",text:"Neutrophil"},{id:"B",text:"Eosinophil"},{id:"C",text:"Dendritic Cell"},{id:"D",text:"Basophil"}], correct: "C", explanation: "Dendritic cells capture pathogens in tissues, migrate to lymph nodes, and present processed antigens on MHC molecules to naïve T-cells." },
+            { id: 87, text: "Opsonization enhances phagocytosis by coating bacteria with:", options: [{id:"A",text:"Histamine"},{id:"B",text:"IgG antibodies or C3b complement"},{id:"C",text:"Interferons"},{id:"D",text:"Lysozyme"}], correct: "B", explanation: "Phagocytes have receptors for the Fc region of IgG and for C3b. Coating (opsonizing) bacteria with these molecules makes them \"tasty\" and easier for neutrophils/macrophages to engulf." },
+            { id: 88, text: "Fever is beneficial during infection because it:", options: [{id:"A",text:"Directly kills all bacteria instantly"},{id:"B",text:"Increases iron availability for bacteria"},{id:"C",text:"Enhances immune cell activity and inhibits microbial growth"},{id:"D",text:"Suppresses the production of interferons"}], correct: "C", explanation: "Moderate fever increases the metabolic rate of immune cells (enhancing phagocytosis and lymphocyte proliferation) and creates a suboptimal temperature for many pathogens." },
+            { id: 89, text: "Which virulence factor allows Helicobacter pylori to survive in the acidic environment of the stomach?", options: [{id:"A",text:"Capsule"},{id:"B",text:"Urease enzyme"},{id:"C",text:"Coagulase"},{id:"D",text:"Hyaluronidase"}], correct: "B", explanation: "H. pylori produces urease, which converts urea into ammonia and CO₂. The ammonia neutralizes stomach acid locally, creating a protective cloud." },
+            { id: 90, text: "The LD₅₀ (Lethal Dose 50%) of Bacillus anthracis is very low compared to Salmonella. This indicates that:", options: [{id:"A",text:"Bacillus is less virulent"},{id:"B",text:"Bacillus is more virulent"},{id:"C",text:"Salmonella produces more toxins"},{id:"D",text:"Bacillus is harder to culture"}], correct: "B", explanation: "Virulence is inversely related to LD₅₀. A lower LD₅₀ means fewer organisms are needed to kill 50% of hosts, indicating higher virulence." },
+
+            // BACTERIOLOGY 41-50
+            { id: 91, text: "In epidemiology, the term \"Prevalence\" refers to:", options: [{id:"A",text:"The number of new cases in a year"},{id:"B",text:"The total number of existing cases at a specific time"},{id:"C",text:"The death rate from a disease"},{id:"D",text:"The rate of transmission"}], correct: "B", explanation: "Prevalence = Total Cases (New + Old). It measures the burden of disease. Incidence measures only new cases." },
+            { id: 92, text: "A disease that is constantly present at a baseline level in a specific geographic area is termed:", options: [{id:"A",text:"Epidemic"},{id:"B",text:"Pandemic"},{id:"C",text:"Endemic"},{id:"D",text:"Sporadic"}], correct: "C", explanation: "Endemic diseases (e.g., Malaria in parts of Africa) have a predictable, steady occurrence. An epidemic is a sudden spike above the expected baseline." },
+            { id: 93, text: "Which diagnostic test has high Specificity?", options: [{id:"A",text:"A test that rarely gives false positives"},{id:"B",text:"A test that rarely gives false negatives"},{id:"C",text:"A test that detects all true positives"},{id:"D",text:"A test used for screening"}], correct: "A", explanation: "Specificity = True Negatives / (True Negatives + False Positives). High specificity means a positive result is likely a true positive." },
+            { id: 94, text: "Why is Culture still considered the gold standard for bacterial diagnosis despite the speed of PCR?", options: [{id:"A",text:"It is faster than PCR"},{id:"B",text:"It allows for Antibiotic Susceptibility Testing (AST)"},{id:"C",text:"It detects viral co-infections"},{id:"D",text:"It requires less equipment"}], correct: "B", explanation: "PCR detects genetic material (dead or alive) but cannot determine if the bacteria are susceptible to antibiotics. Culture provides live organisms for AST (Antibiogram)." },
+            { id: 95, text: "Clostridioides difficile infection typically occurs after antibiotic use because:", options: [{id:"A",text:"Antibiotics activate C. diff spores directly"},{id:"B",text:"Antibiotics kill normal flora, reducing colonization resistance"},{id:"C",text:"C. diff is resistant to all antibiotics"},{id:"D",text:"Antibiotics increase gut pH"}], correct: "B", explanation: "Normal gut flora competes with C. diff for nutrients and space (colonization resistance). Broad-spectrum antibiotics wipe out this protective flora." },
+            { id: 96, text: "Which body site is normally sterile in a healthy individual?", options: [{id:"A",text:"Skin surface"},{id:"B",text:"Upper respiratory tract"},{id:"C",text:"Cerebrospinal Fluid (CSF)"},{id:"D",text:"Distal urethra"}], correct: "C", explanation: "CSF, blood, deep tissues, and the lower respiratory tract (lungs) are normally sterile. Finding bacteria in CSF indicates meningitis." },
+            { id: 97, text: "Transmission of Mycobacterium tuberculosis occurs primarily via:", options: [{id:"A",text:"Fecal-oral route"},{id:"B",text:"Airborne droplet nuclei (<5 µm)"},{id:"C",text:"Vector-borne (mosquito)"},{id:"D",text:"Direct sexual contact"}], correct: "B", explanation: "TB is airborne. Tiny droplet nuclei remain suspended in air for hours and can be inhaled deep into the alveoli." },
+            { id: 98, text: "Lactobacillus species in the vagina protect against yeast infections by:", options: [{id:"A",text:"Producing hydrogen peroxide and lactic acid"},{id:"B",text:"Consuming all available oxygen"},{id:"C",text:"Producing antibiotics like penicillin"},{id:"D",text:"Engulfing Candida cells"}], correct: "A", explanation: "Lactobacillus ferments glycogen to lactic acid, maintaining a low pH (~4.5) that inhibits the growth of pathogens like Candida albicans." },
+            { id: 99, text: "A \"Carrier\" state in epidemiology refers to:", options: [{id:"A",text:"A person who is sick and symptomatic"},{id:"B",text:"A person who harbors the pathogen without symptoms and can transmit it"},{id:"C",text:"A person who is immune due to vaccination"},{id:"D",text:"A vector like a mosquito"}], correct: "B", explanation: "Carriers (e.g., \"Typhoid Mary\") harbor and shed pathogens without showing signs of disease. They are significant reservoirs for spread." },
+            { id: 100, text: "Which method is best for identifying Mycobacterium tuberculosis in sputum samples rapidly?", options: [{id:"A",text:"Gram Stain"},{id:"B",text:"Acid-Fast Stain (Ziehl-Neelsen)"},{id:"C",text:"India Ink Stain"},{id:"D",text:"Simple Stain"}], correct: "B", explanation: "M. tuberculosis has a waxy, mycolic acid-rich cell wall that resists Gram staining. Acid-fast stains use heat and strong dyes to penetrate this wall." }
+        ];
+
+        // --- APPLICATION LOGIC ---
+        const quizApp = {
+            currentIndex: 0,
+            userAnswers: new Array(quizData.length).fill(null), 
+            scores: 0,
+            
+            // DOM Elements
+            dom: {
+                questionText: document.getElementById('question-text'),
+                optionsList: document.getElementById('options-list'),
+                currentQNum: document.getElementById('current-q-num'),
+                totalQNum: document.getElementById('total-q-num'),
+                prevBtn: document.getElementById('prev-btn'),
+                nextBtn: document.getElementById('next-btn'),
+                explanationBox: document.getElementById('explanation-box'),
+                explanationContent: document.getElementById('explanation-content'),
+                quizMain: document.getElementById('quiz-main'),
+                navFooter: document.getElementById('nav-footer'),
+                resultScreen: document.getElementById('result-screen'),
+                scoreVal: document.getElementById('score-val'),
+                totalVal: document.getElementById('total-val'),
+                modal: document.getElementById('list-modal'),
+                grid: document.getElementById('question-grid')
+            },
+
+            init() {
+                this.dom.totalQNum.textContent = quizData.length;
+                this.renderQuestion();
+                this.updateNavButtons();
+            },
+
+            renderQuestion() {
+                const q = quizData[this.currentIndex];
+                
+                // Update Header
+                this.dom.currentQNum.textContent = this.currentIndex + 1;
+                
+                // Update Text
+                this.dom.questionText.textContent = q.text;
+                
+                // Clear Previous Options
+                this.dom.optionsList.innerHTML = '';
+                
+                // Hide Explanation
+                this.dom.explanationBox.style.display = 'none';
+
+                // Determine if already answered
+                const isAnswered = this.userAnswers[this.currentIndex] !== null;
+
+                // Generate Options
+                q.options.forEach(opt => {
+                    const li = document.createElement('li');
+                    li.className = 'option-item';
+                    
+                    const btn = document.createElement('button');
+                    btn.className = 'option-btn';
+                    btn.innerHTML = `<span>${opt.id}) ${opt.text}</span>`;
+                    
+                    // Feedback Span
+                    const feedback = document.createElement('span');
+                    feedback.className = 'feedback-text';
+
+                    if (isAnswered) {
+                        btn.disabled = true;
+                        feedback.style.display = 'block';
+
+                        const isCorrect = opt.id === q.correct;
+                        const isSelected = this.userAnswers[this.currentIndex].selectedId === opt.id;
+                        
+                        if (isCorrect) {
+                            li.classList.add('correct');
+                            feedback.textContent = 'CORRECT';
+                            feedback.classList.add('feedback-correct');
+                        } else if (isSelected && !isCorrect) {
+                            li.classList.add('incorrect');
+                            feedback.textContent = 'INCORRECT';
+                            feedback.classList.add('feedback-incorrect');
+                        }
+                    } else {
+                        btn.onclick = () => this.handleAnswer(opt.id, li);
+                    }
+
+                    li.appendChild(btn);
+                    li.appendChild(feedback);
+                    this.dom.optionsList.appendChild(li);
+                });
+
+                // Show explanation if answered
+                if (isAnswered) {
+                    this.dom.explanationContent.innerHTML = q.explanation;
+                    this.dom.explanationBox.style.display = 'block';
+                }
+
+                this.updateNavButtons();
+            },
+
+            handleAnswer(selectedId, liElement) {
+                const q = quizData[this.currentIndex];
+                const isCorrect = (selectedId === q.correct);
+                
+                // Record Answer
+                this.userAnswers[this.currentIndex] = {
+                    selectedId: selectedId,
+                    isCorrect: isCorrect
+                };
+
+                if (isCorrect) {
+                    this.scores++;
+                }
+
+                // Update UI immediately
+                const btn = liElement.querySelector('.option-btn');
+                btn.disabled = true;
+
+                if (isCorrect) {
+                    liElement.classList.add('correct');
+                } else {
+                    liElement.classList.add('incorrect');
+                }
+
+                const feedback = liElement.querySelector('.feedback-text');
+                feedback.style.display = 'block';
+                feedback.textContent = isCorrect ? 'CORRECT' : 'INCORRECT';
+                feedback.className = 'feedback-text ' + (isCorrect ? 'feedback-correct' : 'feedback-incorrect');
+
+                if (!isCorrect) {
+                    const allItems = this.dom.optionsList.querySelectorAll('.option-item');
+                    allItems.forEach(item => {
+                        const itemBtnText = item.querySelector('span').textContent;
+                        if (itemBtnText.startsWith(q.correct + ')')) {
+                            item.classList.add('correct');
+                            item.querySelector('.option-btn').disabled = true;
+                            const fb = item.querySelector('.feedback-text');
+                            fb.style.display = 'block';
+                            fb.textContent = 'CORRECT';
+                            fb.classList.add('feedback-correct');
+                        }
+                    });
+                }
+
+                this.dom.explanationContent.innerHTML = q.explanation;
+                this.dom.explanationBox.style.display = 'block';
+
+                this.updateNavButtons();
+            },
+
+            nextQuestion() {
+                if (this.currentIndex < quizData.length - 1) {
+                    this.currentIndex++;
+                    this.renderQuestion();
+                } else {
+                    this.showResults();
+                }
+            },
+
+            prevQuestion() {
+                if (this.currentIndex > 0) {
+                    this.currentIndex--;
+                    this.renderQuestion();
+                }
+            },
+
+            jumpToQuestion(index) {
+                this.currentIndex = index;
+                this.renderQuestion();
+                this.toggleModal(false);
+            },
+
+            updateNavButtons() {
+                this.dom.prevBtn.disabled = this.currentIndex === 0;
+                
+                const isLast = this.currentIndex === quizData.length - 1;
+                const isAnswered = this.userAnswers[this.currentIndex] !== null;
+
+                if (isLast) {
+                    this.dom.nextBtn.textContent = 'Finish';
+                    this.dom.nextBtn.disabled = !isAnswered;
+                } else {
+                    this.dom.nextBtn.textContent = 'Next';
+                    this.dom.nextBtn.disabled = false;
+                }
+            },
+
+            showResults() {
+                this.dom.quizMain.style.display = 'none';
+                this.dom.navFooter.style.display = 'none';
+                this.dom.resultScreen.style.display = 'block';
+                this.dom.scoreVal.textContent = this.scores;
+                this.dom.totalVal.textContent = quizData.length;
+            },
+
+            restartQuiz() {
+                this.currentIndex = 0;
+                this.userAnswers.fill(null);
+                this.scores = 0;
+                this.dom.quizMain.style.display = 'block';
+                this.dom.navFooter.style.display = 'flex';
+                this.dom.resultScreen.style.display = 'none';
+                this.renderQuestion();
+            },
+
+            toggleModal(show) {
+                if (show) {
+                    this.renderGrid();
+                    this.dom.modal.classList.add('active');
+                } else {
+                    this.dom.modal.classList.remove('active');
+                }
+            },
+
+            renderGrid() {
+                this.dom.grid.innerHTML = '';
+                quizData.forEach((q, index) => {
+                    const btn = document.createElement('div');
+                    btn.textContent = index + 1;
+                    
+                    btn.className = 'grid-item';
+                    
+                    if (index === this.currentIndex) {
+                        btn.classList.add('current');
+                    }
+                    
+                    if (this.userAnswers[index] !== null) {
+                        btn.classList.add('answered');
+                    } else {
+                        btn.classList.add('unanswered');
+                    }
+
+                    btn.onclick = () => this.jumpToQuestion(index);
+                    this.dom.grid.appendChild(btn);
+                });
+            }
+        };
+
+        // Initialize Quiz
+        quizApp.init();
+    </script>
+</body>
+</html>
